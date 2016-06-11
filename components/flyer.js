@@ -76,7 +76,7 @@ class Flyer extends React.Component {
       <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
         activeOpacity={1.0}>
       <Animated.Image
-        source={require("./components/frames/green_dragon04.png")}
+        source={require("./frames/green_dragon04.png")}
         style={{
           flex: 1,
           transform: [
