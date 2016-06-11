@@ -7,6 +7,9 @@
   },
   "dependencies": {
     "react": "^15.1.0",
-    "react-native": "^0.27.1"
+    "react-mixin": "^2.0.2",
+    "react-motion": "^0.4.4",
+    "react-native": "^0.27.2",
+    "react-timer-mixin": "^0.13.3"
   }
 }

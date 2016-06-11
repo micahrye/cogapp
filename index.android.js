@@ -5,7 +5,10 @@
 
 import React, { Component } from 'react';
 import {
+  Alert,
+  Animated,
   AppRegistry,
+  Navigator,
   Image,
   StyleSheet,
   Text,
@@ -15,48 +18,47 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 
-import AnimatedSprite from "./components/animatedSprite";
+var reactMixin = require('react-mixin');
+import {Motion, spring} from 'react-motion';
+import TimerMixin from 'react-timer-mixin';
 
-class CogApp extends Component {
+//import AnimatedSprite from "./components/animatedSprite";
+import Main from "./main";
+import Flyer from "./flyer";
+
+class CogApp extends React.Component {
   constructor(props){
     super(props);
-    this.state = {};
+
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+
+  }
 
   render() {
     return (
-      <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
-        style={styles.container}
-        activeOpacity={1.0}>
-        <View style={styles.container}>
-          <AnimatedSprite />
-        </View>
-      </TouchableOpacity>
+      <Navigator
+  initialRoute={{name: 'My First Scene', id: 0}}
+  renderScene={(route, navigator) => {
+      return this.renderScene(route, navigator);
+    }
+  }
+/>
     );
   }
 
+  renderScene(route, navigator){
+    if(route.id === 0){
+      return <Main navigator={navigator} />
+    }else if(route.id === 1){
+      return <Flyer navigator={navigator} />
+    }
+  }
 }
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: "row",
-      //justifyContent: 'center',
-      //alignItems: 'center',
-      backgroundColor: '#ff00ff',
-      borderStyle: 'dashed',
-    },
-    box: {
-      borderColor: 'red',
-      backgroundColor: '#fff',
-      borderWidth: 1,
-      padding: 10,
-      width: 100,
-      height: 100
-    }
-  });
+reactMixin.onClass(CogApp, TimerMixin);
+
 
 
 AppRegistry.registerComponent('CogApp', () => CogApp);
