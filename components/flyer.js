@@ -22,7 +22,7 @@ var reactMixin = require('react-mixin');
 import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
-import AnimatedSprite from "./components/animatedSprite";
+import AnimatedSprite from "./animatedSprite";
 
 class Flyer extends React.Component {
   constructor(props){

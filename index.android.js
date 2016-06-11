@@ -23,8 +23,8 @@ import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 //import AnimatedSprite from "./components/animatedSprite";
-import Main from "./main";
-import Flyer from "./flyer";
+import Main from "./components/main";
+import Flyer from "./components/flyer";
 
 class CogApp extends React.Component {
   constructor(props){
