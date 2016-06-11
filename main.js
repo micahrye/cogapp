@@ -76,6 +76,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#cce6ff',
   },
+  button : {
+    backgroundColor: '#4d94ff',
+    borderRadius: 10,
+    margin: 100,
+    height: 200,
+    width: 200,
+    justifyContent: 'center',
+  },
   box: {
     borderColor: 'red',
     backgroundColor: '#fff',

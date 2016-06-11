@@ -59,7 +59,7 @@ class Flyer extends React.Component {
     const bv = this.state.bounceValue;
     return (
 
-    <View>
+    <View style={styles.mainContainer}>
       <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
         style={styles.container}
         activeOpacity={1.0}>
@@ -68,8 +68,12 @@ class Flyer extends React.Component {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
+      <TouchableOpacity
+        onPress={ (evt) => { this._handelPress() } }>
+        <Text>Press me lama</Text>
+      </TouchableOpacity>
 
+      <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
         activeOpacity={1.0}>
       <Animated.Image
         source={require("./components/frames/green_dragon04.png")}
@@ -80,11 +84,6 @@ class Flyer extends React.Component {
           ]
         }}
         />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={ (evt) => { this._handelPress() } }>
-        <Text>Press me mama</Text>
       </TouchableOpacity>
     </View>
     );
@@ -104,6 +103,14 @@ let style = {
 */
 
 const styles = StyleSheet.create({
+  mainContainer:{
+    flex: 1,
+    flexDirection: "column",
+    //justifyContent: 'center',
+    //alignItems: 'center',
+    backgroundColor: '#ff00ff',
+    borderStyle: 'dashed',
+  },
   container: {
     flex: 1,
     flexDirection: "row",
