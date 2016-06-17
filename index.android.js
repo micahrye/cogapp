@@ -26,6 +26,8 @@ import TimerMixin from 'react-timer-mixin';
 import Main from "./components/main";
 import Flyer from "./components/flyer";
 import DragDragon from "./components/DragDragon";
+import GamePage from './GamePage';
+import GameWinPage from './GameWinPage';
 
 class CogApp extends React.Component {
   constructor(props){
@@ -40,7 +42,7 @@ class CogApp extends React.Component {
   render() {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 2}}
+  initialRoute={{name: 'My First Scene', id: 0}}
   renderScene={(route, navigator) => {
       return this.renderScene(route, navigator);
     }
@@ -56,6 +58,10 @@ class CogApp extends React.Component {
       return <Flyer navigator={navigator} />
     }else if(route.id === 2){
       return <DragDragon />
+    }if (route.id === 3) {
+      return <GamePage navigator={navigator} />
+    } else if (route.id === 4){
+      return <GameWinPage navigator={navigator} route={route}/>
     }
   }
 }

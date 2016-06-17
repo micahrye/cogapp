@@ -42,12 +42,30 @@ class Main extends React.Component {
     //Alert.alert("Alert Title", "msg");
   }
 
+  goToGame = () => {
+    this.props.navigator.push({id: 3});
+  }
+
+  goToDragon = () => {
+    this.props.navigator.push({id: 2});
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={(evt)=>{this._handelPress(evt);}}>
           <View style={styles.button}>
             <Text style={styles.text}>Hello You :)</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.goToGame}>
+          <View style={styles.button}>
+            <Text style={styles.text}>Go To Game</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.goToDragon}>
+          <View style={styles.button}>
+            <Text style={styles.text}>Go To Dragon</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -70,7 +88,7 @@ let style = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#cce6ff',
@@ -78,7 +96,7 @@ const styles = StyleSheet.create({
   button : {
     backgroundColor: '#4d94ff',
     borderRadius: 10,
-    margin: 100,
+    margin: 10,
     height: 200,
     width: 200,
     justifyContent: 'center',
