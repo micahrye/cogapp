@@ -7,8 +7,9 @@ import React, { Component } from 'react';
 import {
   Alert,
   Animated,
-  AppRegistry,
+  PanResponder,
   Navigator,
+  Easing,
   Image,
   StyleSheet,
   Text,
@@ -16,38 +17,86 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback
 } from 'react-native';
 
-var reactMixin = require('react-mixin');
+
+import reactMixin from 'react-mixin';
 import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from "./animatedSprite";
+
+var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
 class Flyer extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       bounceValue: new Animated.Value(0),
+      bounceValue2: new Animated.Value(0),
+      tweenValue: new Animated.Value(0),
+      tweenValue2: new Animated.Value(0),
+      left: 10,
+      opacity: 1,
     };
+    this._animateOpacity = this._animateOpacity.bind(this);
+    this._panResponder = {};
   }
 
   componentDidMount() {
+
     /*
     this.setTimeout(()=>{
       Alert.alert("Alert Title", "msg");
     }, 1000);
     */
+    /*
+    this._panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
+      onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
+      onPanResponderGrant: this._handlePanResponderGrant,
+      onPanResponderMove: this._handlePanResponderMove,
+      onPanResponderRelease: this._handlePanResponderEnd,
+      onPanResponderTerminate: this._handlePanResponderEnd,
+    });
+    */
   }
   outerTouch(evt){
-    this.state.bounceValue.setValue(1.5);     // Start large
+
+    this.state.bounceValue.setValue(0.5);     // Start large
+    /*
     Animated.spring(                          // Base: spring, decay, timing
     this.state.bounceValue,                 // Animate `bounceValue`
       {
-        toValue: 0.8,                         // Animate to smaller size
+        toValue: 1,                         // Animate to smaller size
         friction: 1,                          // Bouncier spring
       }
     ).start();
+    */
+    Animated.timing(          // Uses easing functions
+       this.state.bounceValue,    // The value to drive
+       {toValue: 1,
+       duration: 5000, }            // Configuration
+     ).start();
+
+     this.state.tweenValue.setValue(10);
+     Animated.timing(          // Uses easing functions
+        this.state.tweenValue,    // The value to drive
+        {toValue: 100,
+           easing: Easing.elastic(2),
+        duration: 1000, }            // Configuration
+      ).start();
+  }
+
+  touchMe(evt){
+    this.state.tweenValue2.setValue(10);
+    Animated.timing(          // Uses easing functions
+       this.state.tweenValue2,    // The value to drive
+       {toValue: 100,
+         easing: Easing.elastic(2),
+       duration: 1000, }            // Configuration
+     ).start();
   }
 
   _handelPress(evt){
@@ -55,37 +104,60 @@ class Flyer extends React.Component {
     this.props.navigator.pop();
   }
 
+  _animateOpacity() {
+
+  }
+
   render() {
-    const bv = this.state.bounceValue;
+    const dragonStyle = {width: 100, height: 95,
+        borderWidth: 2, borderColor: '#00ff00'};
+
     return (
+      <View style={styles.mainContainer}>
+          <View style={styles.container}>
+            <AnimatedSprite />
+          </View>
 
-    <View style={styles.mainContainer}>
-      <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
-        style={styles.container}
-        activeOpacity={1.0}>
-        <View style={styles.container}>
-          <AnimatedSprite />
+        <View style={styles.container2}>
+
+          <TouchableOpacity
+            onPress={ (evt) => { this._handelPress() } }>
+            <Text>Press me lama</Text>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
+            activeOpacity={1.0}
+            style={{top: this.state.tweenValue, ...dragonStyle}}
+            key={1}>
+          <Animated.Image
+            source={require("./frames/green_dragon04.png")}
+            style={{
+              flex: 1,
+              opacity: this.state.bounceValue,
+              ...dragonStyle
+            }}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={(evt) => this.touchMe(evt) }
+            activeOpacity={1.0}
+            style={{top: this.state.tweenValue2,
+                    left: this.state.tweenValue2,
+                    ...dragonStyle }}
+            key={2}>
+
+          <Animated.Image
+            source={require("./frames/green_dragon01.png")}
+            style={{
+              flex: 1,
+              opacity: 1,
+              ...dragonStyle
+            }}/>
+          </TouchableOpacity>
+
         </View>
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={ (evt) => { this._handelPress() } }>
-        <Text>Press me lama</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
-        activeOpacity={1.0}>
-      <Animated.Image
-        source={require("./frames/green_dragon04.png")}
-        style={{
-          flex: 1,
-          transform: [
-            {scale: bv},
-          ]
-        }}
-        />
-      </TouchableOpacity>
-    </View>
+      </View>
     );
   }
 }
@@ -108,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     //justifyContent: 'center',
     //alignItems: 'center',
-    backgroundColor: '#ff00ff',
+    backgroundColor: '#ff0000',
     borderStyle: 'dashed',
   },
   container: {
@@ -116,8 +188,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     //justifyContent: 'center',
     //alignItems: 'center',
-    backgroundColor: '#ff00ff',
+    backgroundColor: '#0000ff',
     borderStyle: 'dashed',
+    height: 200,
+  },
+  container2: {
+    flex: 1,
+    flexDirection: "row",
+    //justifyContent: 'center',
+    //alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderStyle: 'dashed',
+
   },
   box: {
     borderColor: 'red',
@@ -126,7 +208,9 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 100,
     height: 100
-  }
+  },
+  dragonStyle: {width: 200, height: 195,
+      borderWidth: 2, borderColor: '#00ff00'},
 });
 
 

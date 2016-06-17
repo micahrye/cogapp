@@ -18,13 +18,14 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 
-var reactMixin = require('react-mixin');
+import reactMixin from 'react-mixin';
 import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 //import AnimatedSprite from "./components/animatedSprite";
 import Main from "./components/main";
 import Flyer from "./components/flyer";
+import DragDragon from "./components/DragDragon";
 
 class CogApp extends React.Component {
   constructor(props){
@@ -39,7 +40,7 @@ class CogApp extends React.Component {
   render() {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 0}}
+  initialRoute={{name: 'My First Scene', id: 2}}
   renderScene={(route, navigator) => {
       return this.renderScene(route, navigator);
     }
@@ -53,6 +54,8 @@ class CogApp extends React.Component {
       return <Main navigator={navigator} />
     }else if(route.id === 1){
       return <Flyer navigator={navigator} />
+    }else if(route.id === 2){
+      return <DragDragon />
     }
   }
 }
