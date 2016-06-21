@@ -1,3 +1,4 @@
+
 /**
 * Sample React Native App
 * https://github.com/facebook/react-native
@@ -20,12 +21,14 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
+import SAT from 'sat';
 
 import reactMixin from 'react-mixin';
 import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from "./animatedSprite";
+import greenDragonMeta from "./frames/greenDragonMeta";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
@@ -37,7 +40,9 @@ class Flyer extends React.Component {
       bounceValue2: new Animated.Value(0),
       tweenValue: new Animated.Value(0),
       tweenValue2: new Animated.Value(0),
-      left: 10,
+      tweenValue3: new Animated.Value(0),
+      lefty: 10,
+      topy: 20,
       opacity: 1,
     };
     this._animateOpacity = this._animateOpacity.bind(this);
@@ -90,6 +95,11 @@ class Flyer extends React.Component {
   }
 
   touchMe(evt){
+    //this.setState({topy: 30, lefty: 50});
+
+    //let lefty = this.state.tweenValue2 + Math.floor(Math.random()*10);
+    //this.setState({tweenValue3: new Animated.Value(99)})
+
     this.state.tweenValue2.setValue(10);
     Animated.timing(          // Uses easing functions
        this.state.tweenValue2,    // The value to drive
@@ -97,6 +107,14 @@ class Flyer extends React.Component {
          easing: Easing.elastic(2),
        duration: 1000, }            // Configuration
      ).start();
+
+     this.state.tweenValue3.setValue(10);
+     Animated.timing(          // Uses easing functions
+        this.state.tweenValue3,    // The value to drive
+        {toValue: 100,
+          easing: Easing.inOut(Easing.poly(2)),
+        duration: 1000, }            // Configuration
+      ).start();
   }
 
   _handelPress(evt){
@@ -107,6 +125,24 @@ class Flyer extends React.Component {
   _animateOpacity() {
 
   }
+
+  getStyle(){
+    const dragonStyle = {width: 100, height: 95,
+        borderWidth: 2, borderColor: '#00ff00'};
+    let lefty = this.state.tweenValue2;
+
+    debugger;
+    //this.state.tweenValue3 = Math.floor(Math.random()*100);
+    //this.setState({tweenValue3: Math.floor(Math.random()*100)})
+    return (
+      {
+        top: this.state.tweenValue2,
+        left: this.state.tweenValue3,
+        ...dragonStyle
+      }
+    );
+  }
+
 
   render() {
     const dragonStyle = {width: 100, height: 95,
@@ -120,10 +156,12 @@ class Flyer extends React.Component {
 
         <View style={styles.container2}>
 
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={ (evt) => { this._handelPress() } }>
-            <Text>Press me lama</Text>
-          </TouchableOpacity>
+            <View>
+              <Text>Press me lama</Text>
+            </View>
+          </TouchableWithoutFeedback>
 
 
           <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
@@ -141,19 +179,21 @@ class Flyer extends React.Component {
 
           <TouchableOpacity onPress={(evt) => this.touchMe(evt) }
             activeOpacity={1.0}
-            style={{top: this.state.tweenValue2,
-                    left: this.state.tweenValue2,
-                    ...dragonStyle }}
+            style={ this.getStyle() }
             key={2}>
 
-          <Animated.Image
-            source={require("./frames/green_dragon01.png")}
-            style={{
-              flex: 1,
-              opacity: 1,
-              ...dragonStyle
-            }}/>
+            <Animated.Image
+              source={greenDragonMeta.idel[0]}
+              style={{
+                flex: 1,
+                opacity: 1,
+                ...dragonStyle
+              }}
+            />
+
+
           </TouchableOpacity>
+
 
         </View>
 

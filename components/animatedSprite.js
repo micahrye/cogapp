@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import {Motion, spring} from 'react-motion';
+import greenDragonMeta from "./frames/greenDragonMeta";
 
 class AnimatedSprite extends React.Component{
   constructor(props){
@@ -24,49 +25,8 @@ class AnimatedSprite extends React.Component{
       bounceValue: new Animated.Value(0),
     };
 
-    this.animateURI = [
-      require("./frames/green_dragon01.png"),
-      require("./frames/green_dragon02.png"),
-      require("./frames/green_dragon03.png"),
-      require("./frames/green_dragon04.png"),
-      require("./frames/green_dragon04.png"),
-      require("./frames/green_dragon03.png"),
-      require("./frames/green_dragon02.png"),
-      require("./frames/green_dragon01.png"),
-      require("./frames/gd_wings01.png"),
-      require("./frames/gd_wings02.png"),
-      require("./frames/gd_wings03.png"),
-      require("./frames/gd_wings04.png"),
-      require("./frames/gd_wings05.png"),
-      require("./frames/gd_wings06.png")
-    ];
-    // not properly structured yet.
-    this.animationInfo = require("./greenDragonAnimation.json");
-    /*
-    give above animationInfo populate animateURI.
-    */
-    this._animation = {
-      name: "greanDragon",
-      normal: [
-        require("./frames/green_dragon01.png"),
-        require("./frames/green_dragon02.png"),
-        require("./frames/green_dragon03.png"),
-        require("./frames/green_dragon04.png"),
-        require("./frames/green_dragon04.png"),
-        require("./frames/green_dragon03.png"),
-        require("./frames/green_dragon02.png"),
-        require("./frames/green_dragon01.png"),
-      ],
-      touch: [
-        require("./frames/gd_wings01.png"),
-        require("./frames/gd_wings02.png"),
-        require("./frames/gd_wings03.png"),
-        require("./frames/gd_wings04.png"),
-        require("./frames/gd_wings05.png"),
-        require("./frames/gd_wings06.png"),
-      ],
-    };
-    this._animationKey = 'normal';
+    this._animation = greenDragonMeta;
+    this._animationKey = 'idel';
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = 0;
     this.animationInterval = undefined;
@@ -91,17 +51,18 @@ class AnimatedSprite extends React.Component{
   }
 
   innerTouch(evt){
-    /*
+
     console.log(`INNER ${evt.nativeEvent.locationX}`);
-    if(this._animationKey === 'normal'){
+    if(this._animationKey === 'idel'){
       this._animationKey = 'touch';
     }else{
-      this._animationKey = 'normal'
+      this._animationKey = 'idel'
     }
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = 0;
     //clearInterval(this.animationInterval);
-    */
+
+
     this.state.bounceValue.setValue(1.5);     // Start large
     Animated.spring(                          // Base: spring, decay, timing
     this.state.bounceValue,                 // Animate `bounceValue`
