@@ -14,7 +14,7 @@ import GameWinPage from './GameWinPage';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 5;
+let NUM_BUBBLES = 10;
 let bubbles = []; // maybe another way to do this instead of it being a global variable?
 
 class GamePage extends React.Component {
@@ -45,8 +45,10 @@ class GamePage extends React.Component {
     // populate array of bubbles
     createBubbles(numBubbles) {
         bubbles = [];
+        console.log(bubbles);
         for(let i=0; i < numBubbles; i++){
-            bubbles.push( <Bubble text={i} key={i} handlePress={this.popBubble.bind(null, i)}/>);
+            delete bubbles[i];
+            bubbles.push( <Bubble text={i} key={i} id={i} handlePress={this.popBubble.bind(null, i)}/>);
         }
     }
 
@@ -82,8 +84,7 @@ class GamePage extends React.Component {
         this.setState({score: 0});
         newScore = 0;
         this.saveScore(newScore);
-        numBubbles = this.state.score;
-        this.createBubbles(numBubbles);
+        this.createBubbles(NUM_BUBBLES);
     };
 
     render(){
@@ -96,7 +97,9 @@ class GamePage extends React.Component {
                         <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
                         <Text>SCORE: {this.state.score}</Text>
                     </View>
+                    <View style={styles.gameWorld}>
                     {bubbles}
+                    </View>
                 </View>
             </View>
         );
@@ -113,17 +116,15 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 2,
         alignItems: 'center',
+        flex: 1,
     },
     gameWorld :{
-        height: SCREEN_HEIGHT - 120,
-        width: SCREEN_WIDTH - 70,
+        width: SCREEN_WIDTH - 30,
         borderStyle: 'solid',
         borderWidth: 2,
-        alignItems: 'center',
-        padding: 20,
-    },
-    textComponent :{
-        padding: 5,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        flex: .87,
     },
     topBar: {
         alignItems: 'center',
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
         height: 80,
         borderStyle: 'solid',
         borderWidth: 2,
+        flex: .13,
     },
 });
 
