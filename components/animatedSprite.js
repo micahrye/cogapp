@@ -142,8 +142,6 @@ class AnimatedSprite extends React.Component{
     }
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = 0;
-    //clearInterval(this.animationInterval);
-
 
     this.state._scale.setValue(0.90);     // Start large
     Animated.spring(                          // Base: spring, decay, timing
@@ -152,7 +150,7 @@ class AnimatedSprite extends React.Component{
         toValue: 1,                       // Animate to smaller size
         friction: 2.5,                          // Bouncier spring
       }
-    ).start();      
+    ).start();
   }
 
   render() {
@@ -187,9 +185,7 @@ class AnimatedSprite extends React.Component{
                 height: this.state._height,
               }}/>
           </TouchableOpacity>
-
         </Animated.View>
-
     );
   }
 
