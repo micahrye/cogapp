@@ -1,38 +1,84 @@
-
+"use strict";
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   Animated,
-  Image,
+  PanResponder,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
 } from 'react-native';
 
-import {Motion, spring} from 'react-motion';
-import greenDragonMeta from "./frames/greenDragonMeta";
 
 class AnimatedSprite extends React.Component{
   constructor(props){
     super(props);
+
     this.state = {
       movies: null,
       animate: false,
-      bounceValue: new Animated.Value(0),
+      _scale: new Animated.Value(0),
+      _x: props.coordinates.x,
+      _y: props.coordinates.y,
+      _width: 100,
+      _height: 100,
     };
 
-    this._animation = greenDragonMeta;
+    this.character = undefined;
+    this._charactertyles =  {};
+    this._initialX = this.state._x;
+    this._initialY = this.state._y;
+    this.isDraggable = false;
+    this._panResponder = {};
+
+    this._animation = this.props.character;
     this._animationKey = 'idel';
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = 0;
     this.animationInterval = undefined;
   }
 
+  componentWillMount() {
+    if(this.isDraggable){
+      this._panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant:
+          (e, gestureState) =>{ this._handlePanResponderGrant(e, gestureState)},
+          onPanResponderMove:
+          (e, gestureState) => {this._handlePanResponderMove(e, gestureState)},
+          onPanResponderRelease:
+          (e, gestureState) => { this._handlePanResponderEnd(e, gestureState)},
+          onPanResponderTerminate:
+          (e, gestureState) => { this._handlePanResponderEnd(e, gestureState)},
+        });
+
+        this._previousLeft =  this._initialX;
+        this._previousTop = this._initialY;
+        this._characterStyles = {
+          style: {
+            left: this._previousLeft,
+            top: this._previousTop,
+          }
+        };
+    }
+
+  }
+
   componentDidMount() {
+    this.setAnimationInterval();
+    // have to set xy
+    if(this.isDraggable){
+      this.character && this.character.setNativeProps(this._characterStyles)
+    }
+  }
+
+  componentWillUnmount(){
+    // Make sure to clear any intervals that have been set.
+    clearInterval(this.animationInterval);
+  }
+
+  setAnimationInterval(){
     this.animationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
@@ -42,12 +88,45 @@ class AnimatedSprite extends React.Component{
       }
       //console.log("move please");
     }, 100);
-    //debugger;
   }
 
-  componentWillUnmount(){
-    console.log("clearing interval");
-    clearInterval(this.animationInterval);
+  _highlight() {
+    //this._characterStyles.style.backgroundColor = 'blue';
+    this._updateNativeStyles();
+  }
+
+  _unHighlight() {
+    //this._characterStyles.style.backgroundColor = 'green';
+    this._updateNativeStyles();
+  }
+
+  _updateNativeStyles() {
+    this.character && this.character.setNativeProps(this._characterStyles);
+  }
+
+  _handleStartShouldSetPanResponder(e, gestureState) {
+    // Should we become active when the user presses down on the circle?
+    return true;
+  }
+
+  _handleMoveShouldSetPanResponder(e, gestureState) {
+    return true;
+  }
+
+  _handlePanResponderGrant(e, gestureState) {
+    this._highlight();
+  }
+
+  _handlePanResponderMove(e, gestureState) {
+    this._characterStyles.style.left = this._previousLeft + gestureState.dx;
+    this._characterStyles.style.top = this._previousTop + gestureState.dy;
+    this._updateNativeStyles();
+  }
+
+  _handlePanResponderEnd(e, gestureState) {
+    this._unHighlight();
+    this._previousLeft += gestureState.dx;
+    this._previousTop += gestureState.dy;
   }
 
   innerTouch(evt){
@@ -63,11 +142,11 @@ class AnimatedSprite extends React.Component{
     //clearInterval(this.animationInterval);
 
 
-    this.state.bounceValue.setValue(1.5);     // Start large
+    this.state._scale.setValue(1.5);     // Start large
     Animated.spring(                          // Base: spring, decay, timing
-    this.state.bounceValue,                 // Animate `bounceValue`
+    this.state._scale,                 // Animate `_scale`
       {
-        toValue: 0.8,                         // Animate to smaller size
+        toValue: 0.8,                       // Animate to smaller size
         friction: 1,                          // Bouncier spring
       }
     ).start();
@@ -75,45 +154,44 @@ class AnimatedSprite extends React.Component{
     console.log("that tickles");
   }
 
-  outerTouch(evt){
-    let tmp = {eggs: "green", ham: "pigs"};
-    console.log(`OUTER ${evt.nativeEvent.locationX}`);
-    console.log(`OUTER touch`);
-
-  }
-
   render() {
-    const top = Math.floor(Math.random() * 100);
-    const left = Math.floor(Math.random() * 100);
+
     const dragonStyle = {width: 200, height: 195,
         borderWidth: 2, borderColor: '#00ff00'};
-    //this.frameIndex = this.frameIndex === this.numFrames-1 ? 0 : this.frameIndex++;
-    //this.frameIndex = this.frameIndex ? 0 : 1;
-    const bv = this.state.bounceValue;
+
+    const bv = this.state._scale;
     return(
-        <TouchableOpacity onPress={(evt) => this.outerTouch(evt) }
-          style={styles.container}
-          activeOpacity={1.0}>
-          <View style={styles.container} >
 
-            <TouchableOpacity
-              activeOpacity={1.0}
-              style={dragonStyle}
-              onPress={(evt) => this.innerTouch(evt)}>
-              <Animated.Image
-                ref="dragon"
-                source={this._animation[this._animationKey][this.frameIndex]}
-                style={{
-                  flex: 1,
-                  transform: [
-                    {scale: bv},
-                  ],
-                  ...dragonStyle
-                }}/>
-            </TouchableOpacity>
+        <Animated.View
+          {...this._panResponder.panHandlers}
+          style={{
+            position: 'absolute',
+            borderWidth: 2,
+            borderColor: '#ff00ff',
+            width: dragonStyle.width,
+            height: dragonStyle.height,
+            transform: [
+              {scale: bv},
+            ]
+          }}
+          ref={(character) => {
+            this.character = character;
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={1.0}
 
-          </View>
-        </TouchableOpacity>
+            onPress={(evt) => this.innerTouch(evt)}>
+            <Animated.Image
+              ref="dragon"
+              source={this._animation[this._animationKey][this.frameIndex]}
+              style={{
+                ...dragonStyle
+              }}/>
+          </TouchableOpacity>
+
+        </Animated.View>
+
     );
   }
 
@@ -129,3 +207,18 @@ const styles = StyleSheet.create({
 
 
 export default AnimatedSprite;
+
+
+/*
+style={{
+  top: this.state._y,
+  left: this.state._x,
+  borderWidth: 2,
+  borderColor: '#ff00ff',
+  width: dragonStyle.width,
+  height: dragonStyle.height,
+  transform: [
+    {scale: bv},
+  ]
+}}
+*/

@@ -11,6 +11,8 @@ var {
 } = ReactNative;
 
 import AnimatedSprite from "./animatedSprite";
+import greenDragonCharacter from "./frames/greenDragonCharacter";
+
 
 var CIRCLE_SIZE = 200;
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -29,7 +31,7 @@ var DragDragon = React.createClass({
   circle: (null : ?{ setNativeProps(props: Object): void }),
 
   componentWillMount: function() {
-    Alert.alert("Titel", `screen ${SCREEN_WIDTH}`);
+    //Alert.alert("Titel", `screen ${SCREEN_WIDTH}`);
 
     // make isDraggable a prop and whala
     const isDraggable = true;
@@ -63,7 +65,6 @@ var DragDragon = React.createClass({
       <View
         style={styles.container}>
 
-
         <View
           ref={(circle) => {
             this.circle = circle;
@@ -71,20 +72,26 @@ var DragDragon = React.createClass({
           style={styles.circle}
           {...this._panResponder.panHandlers}
         >
-        <AnimatedSprite/>
         </View>
+
+        <AnimatedSprite coordinates={{x:50, y:100}}
+          character={greenDragonCharacter} />
+
+        <AnimatedSprite coordinates={{x:50, y:100}}
+          character={greenDragonCharacter} />
+
       </View>
     );
   },
 
   _highlight: function() {
-    this._circleStyles.style.backgroundColor = 'blue';
-    this._updateNativeStyles();
+    //this._circleStyles.style.backgroundColor = 'blue';
+    //this._updateNativeStyles();
   },
 
   _unHighlight: function() {
-    this._circleStyles.style.backgroundColor = 'green';
-    this._updateNativeStyles();
+    //this._circleStyles.style.backgroundColor = 'green';
+    //this._updateNativeStyles();
   },
 
   _updateNativeStyles: function() {
@@ -114,6 +121,7 @@ var DragDragon = React.createClass({
     this._previousLeft += gestureState.dx;
     this._previousTop += gestureState.dy;
   },
+
 });
 
 var styles = StyleSheet.create({

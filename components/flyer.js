@@ -28,7 +28,7 @@ import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from "./animatedSprite";
-import greenDragonMeta from "./frames/greenDragonMeta";
+import greenDragonCharacter from "./frames/greenDragonCharacter";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
@@ -39,10 +39,8 @@ class Flyer extends React.Component {
       bounceValue: new Animated.Value(0),
       bounceValue2: new Animated.Value(0),
       tweenValue: new Animated.Value(0),
-      tweenValue2: new Animated.Value(0),
-      tweenValue3: new Animated.Value(0),
-      lefty: 10,
-      topy: 20,
+      _top: new Animated.Value(10),
+      _left: new Animated.Value(200),
       opacity: 1,
     };
     this._animateOpacity = this._animateOpacity.bind(this);
@@ -100,18 +98,18 @@ class Flyer extends React.Component {
     //let lefty = this.state.tweenValue2 + Math.floor(Math.random()*10);
     //this.setState({tweenValue3: new Animated.Value(99)})
 
-    this.state.tweenValue2.setValue(10);
+    this.state._top.setValue(10);
     Animated.timing(          // Uses easing functions
-       this.state.tweenValue2,    // The value to drive
-       {toValue: 100,
+       this.state._top,    // The value to drive
+       {toValue: 10+100,
          easing: Easing.elastic(2),
        duration: 1000, }            // Configuration
      ).start();
 
-     this.state.tweenValue3.setValue(10);
+     this.state._left.setValue(160);
      Animated.timing(          // Uses easing functions
-        this.state.tweenValue3,    // The value to drive
-        {toValue: 100,
+        this.state._left,    // The value to drive
+        {toValue: 160+100,
           easing: Easing.inOut(Easing.poly(2)),
         duration: 1000, }            // Configuration
       ).start();
@@ -128,16 +126,15 @@ class Flyer extends React.Component {
 
   getStyle(){
     const dragonStyle = {width: 100, height: 95,
-        borderWidth: 2, borderColor: '#00ff00'};
-    let lefty = this.state.tweenValue2;
+        borderWidth: 2, borderColor: '#00ff00', position: 'absolute'};
 
     debugger;
     //this.state.tweenValue3 = Math.floor(Math.random()*100);
     //this.setState({tweenValue3: Math.floor(Math.random()*100)})
     return (
       {
-        top: this.state.tweenValue2,
-        left: this.state.tweenValue3,
+        top: this.state._top,
+        left: this.state._left,
         ...dragonStyle
       }
     );
@@ -150,16 +147,18 @@ class Flyer extends React.Component {
 
     return (
       <View style={styles.mainContainer}>
-          <View style={styles.container}>
-            <AnimatedSprite />
-          </View>
+
+        <View style={styles.container}>
+          <AnimatedSprite coordinates={{x:50, y:100}}
+            character={greenDragonCharacter} />
+        </View>
 
         <View style={styles.container2}>
 
           <TouchableWithoutFeedback
             onPress={ (evt) => { this._handelPress() } }>
             <View>
-              <Text>Press me lama</Text>
+              <Text>Press MEMEME lama</Text>
             </View>
           </TouchableWithoutFeedback>
 
@@ -183,7 +182,7 @@ class Flyer extends React.Component {
             key={2}>
 
             <Animated.Image
-              source={greenDragonMeta.idel[0]}
+              source={greenDragonCharacter.idel[0]}
               style={{
                 flex: 1,
                 opacity: 1,
@@ -204,15 +203,6 @@ class Flyer extends React.Component {
 
 reactMixin.onClass(Flyer, TimerMixin);
 
-/*
-let style = {
-  position: 'absolute',
-  top: Number((val.x * 2.5).toFixed(2)),
-  left: Number((val.x * 3).toFixed(2)),
-  backgroundColor: '#0000ff',
-  color: '#fff'
-};
-*/
 
 const styles = StyleSheet.create({
   mainContainer:{

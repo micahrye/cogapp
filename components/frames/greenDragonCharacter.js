@@ -6,8 +6,9 @@
   a JS file as the loader and meta data file for the animation character.
 */
 
-const greenDragonMeta = {
+const greenDragonCharacter = {
   name:"greenDragon",
+
   idel:[
     require("./green_dragon01.png"),
     require("./green_dragon02.png"),
@@ -18,6 +19,7 @@ const greenDragonMeta = {
     require("./green_dragon02.png"),
     require("./green_dragon01.png"),
   ],
+
   touch:[
     require("./gd_wings01.png"),
     require("./gd_wings02.png"),
@@ -26,6 +28,7 @@ const greenDragonMeta = {
     require("./gd_wings05.png"),
     require("./gd_wings06.png"),
   ]
+
 };
 
-export default greenDragonMeta;
+export default greenDragonCharacter;
