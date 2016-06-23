@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import {
+  Alert,
   Animated,
   PanResponder,
   StyleSheet,
@@ -20,15 +21,16 @@ class AnimatedSprite extends React.Component{
       _scale: new Animated.Value(0),
       _x: props.coordinates.x,
       _y: props.coordinates.y,
-      _width: 100,
-      _height: 100,
+      _width: props.size.width,
+      _height: props.size.height,
     };
 
     this.character = undefined;
+    this.soul = undefined;
     this._charactertyles =  {};
     this._initialX = this.state._x;
     this._initialY = this.state._y;
-    this.isDraggable = false;
+    this.isDraggable = props.draggable;
     this._panResponder = {};
 
     this._animation = this.props.character;
@@ -43,34 +45,35 @@ class AnimatedSprite extends React.Component{
       this._panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant:
-          (e, gestureState) =>{ this._handlePanResponderGrant(e, gestureState)},
-          onPanResponderMove:
-          (e, gestureState) => {this._handlePanResponderMove(e, gestureState)},
-          onPanResponderRelease:
-          (e, gestureState) => { this._handlePanResponderEnd(e, gestureState)},
-          onPanResponderTerminate:
-          (e, gestureState) => { this._handlePanResponderEnd(e, gestureState)},
+        onPanResponderGrant:(e, gestureState) => {
+          this._handlePanResponderGrant(e, gestureState)},
+        onPanResponderMove: (e, gestureState) => {
+          this._handlePanResponderMove(e, gestureState)},
+        onPanResponderRelease: (e, gestureState) => {
+          this._handlePanResponderEnd(e, gestureState)},
+        onPanResponderTerminate:
+          (e, gestureState) => {
+          this._handlePanResponderEnd(e, gestureState)},
         });
-
-        this._previousLeft =  this._initialX;
-        this._previousTop = this._initialY;
-        this._characterStyles = {
-          style: {
-            left: this._previousLeft,
-            top: this._previousTop,
-          }
-        };
+      debugger;
     }
-
+    this._previousLeft =  this._initialX;
+    this._previousTop = this._initialY;
+    this._characterStyles = {
+      style: {
+        left: this._previousLeft,
+        top: this._previousTop,
+        width: this.state._width,
+        height: this.state._height,
+      },
+    };
   }
 
   componentDidMount() {
     this.setAnimationInterval();
     // have to set xy
-    if(this.isDraggable){
-      this.character && this.character.setNativeProps(this._characterStyles)
-    }
+    this.character && this.character.setNativeProps(this._characterStyles)
+
   }
 
   componentWillUnmount(){
@@ -129,7 +132,7 @@ class AnimatedSprite extends React.Component{
     this._previousTop += gestureState.dy;
   }
 
-  innerTouch(evt){
+  handlePress(evt){
 
     console.log(`INNER ${evt.nativeEvent.locationX}`);
     if(this._animationKey === 'idel'){
@@ -142,24 +145,18 @@ class AnimatedSprite extends React.Component{
     //clearInterval(this.animationInterval);
 
 
-    this.state._scale.setValue(1.5);     // Start large
+    this.state._scale.setValue(0.90);     // Start large
     Animated.spring(                          // Base: spring, decay, timing
     this.state._scale,                 // Animate `_scale`
       {
-        toValue: 0.8,                       // Animate to smaller size
-        friction: 1,                          // Bouncier spring
+        toValue: 1,                       // Animate to smaller size
+        friction: 2.5,                          // Bouncier spring
       }
-    ).start();
-
-    console.log("that tickles");
+    ).start();      
   }
 
   render() {
 
-    const dragonStyle = {width: 200, height: 195,
-        borderWidth: 2, borderColor: '#00ff00'};
-
-    const bv = this.state._scale;
     return(
 
         <Animated.View
@@ -168,10 +165,8 @@ class AnimatedSprite extends React.Component{
             position: 'absolute',
             borderWidth: 2,
             borderColor: '#ff00ff',
-            width: dragonStyle.width,
-            height: dragonStyle.height,
             transform: [
-              {scale: bv},
+              {scale: this.state._scale},
             ]
           }}
           ref={(character) => {
@@ -180,13 +175,16 @@ class AnimatedSprite extends React.Component{
         >
           <TouchableOpacity
             activeOpacity={1.0}
-
-            onPress={(evt) => this.innerTouch(evt)}>
+            onPress={(evt) => this.handlePress(evt)}>
             <Animated.Image
-              ref="dragon"
+              ref={(soul) => {
+                this.soul = soul;
+              }}
               source={this._animation[this._animationKey][this.frameIndex]}
               style={{
-                ...dragonStyle
+                ...styles.character,
+                width: this.state._width,
+                height: this.state._height,
               }}/>
           </TouchableOpacity>
 
@@ -197,28 +195,16 @@ class AnimatedSprite extends React.Component{
 
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    borderStyle: 'dashed',
+const styles = {
+  character: {
+    borderWidth: 2,
+    borderColor: '#00ff00'
   },
-});
+  animator:{
+    borderWidth: 2,
+    borderColor: '#ff00ff',
+  },
+};
 
 
 export default AnimatedSprite;
-
-
-/*
-style={{
-  top: this.state._y,
-  left: this.state._x,
-  borderWidth: 2,
-  borderColor: '#ff00ff',
-  width: dragonStyle.width,
-  height: dragonStyle.height,
-  transform: [
-    {scale: bv},
-  ]
-}}
-*/

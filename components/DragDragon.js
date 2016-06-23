@@ -75,9 +75,13 @@ var DragDragon = React.createClass({
         </View>
 
         <AnimatedSprite coordinates={{x:50, y:100}}
+          size={{width: 100, height: 95}}
+          draggable={false}
           character={greenDragonCharacter} />
 
         <AnimatedSprite coordinates={{x:50, y:100}}
+          size={{width: 200, height: 195}}
+          draggable={true}
           character={greenDragonCharacter} />
 
       </View>
