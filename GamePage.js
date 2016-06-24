@@ -7,22 +7,26 @@ import {
     TouchableWithoutFeedback,
     AsyncStorage,
     Navigator,
+    Image,
 } from 'react-native';
+
 
 import Bubble from './Bubble';
 import GameWinPage from './GameWinPage';
 
+import NextGamePage from './NextGamePage';
+
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 10;
+let NUM_BUBBLES = 15;
 let bubbles = []; // maybe another way to do this instead of it being a global variable?
 
 class GamePage extends React.Component {
-
     constructor(props){
         super(props);
         this.state = {
             score: 0,
+            popTime: 0,
         };
         this.createBubbles(NUM_BUBBLES);
     }
@@ -30,30 +34,42 @@ class GamePage extends React.Component {
     componentDidMount(){
         // get value of score from async storage
         AsyncStorage.getItem('score').then((value) => {
-        this.setUpOldScene(JSON.parse(value));
+            this.setUpScene(JSON.parse(value));
         }).done();
     }
 
     // set up old scene from async storage on app reopen
-    setUpOldScene (score) {
+    setUpScene (score) {
         if(score > 0){
             this.createBubbles(NUM_BUBBLES - score);
             this.setState({score: score});
         }
+        this.youLost();
     };
 
     // populate array of bubbles
     createBubbles(numBubbles) {
         bubbles = [];
-        console.log(bubbles);
         for(let i=0; i < numBubbles; i++){
-            delete bubbles[i];
-            bubbles.push( <Bubble text={i} key={i} id={i} handlePress={this.popBubble.bind(null, i)}/>);
+            if(i%2 == 0){
+                bubbles.push(
+                    <Bubble key={i} id={i} size={40} x={i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 2} startTime={Date.now()}
+                        handlePress={this.popBubble.bind(null, i)}/>
+                );
+            }
+            else{
+                bubbles.push(
+                    <Bubble key={i} id={i} size={60} x={(i)*((SCREEN_WIDTH-120)/NUM_BUBBLES) + 2} startTime={Date.now()}
+                        handlePress={this.popBubble.bind(null, i)}/>
+                );
+            }
         }
+
     }
 
     // delete bubble from array when popped
-    popBubble = (bubblePos) => {
+    popBubble = (bubblePos, popTime) => {
+        this.setState({popTime: popTime});
         delete bubbles[bubblePos];
         this.updateScore();
     }
@@ -69,22 +85,34 @@ class GamePage extends React.Component {
                 id: 4,
                 callback: this.resetGame,
             });
-            return <GameWinPage />;
+            clearTimeout(timeout);
         }
     };
 
     // save score in async storage
     saveScore = (data) => {
         AsyncStorage.setItem('score', JSON.stringify(data));
-        
+
     };
 
+    // game timeout
+    youLost(){
+        timeout = setTimeout ( () => {
+            this.props.navigator.push({
+                id: 5,
+                callback: this.resetGame,
+            });
+            return <NextGamePage />;
+        }, 10000);
+    }
+
     // reset score and bubbles once game has been won
-    resetGame = () => {    
+    resetGame = () => {
         this.setState({score: 0});
         newScore = 0;
         this.saveScore(newScore);
         this.createBubbles(NUM_BUBBLES);
+        this.youLost();
     };
 
     render(){
@@ -95,10 +123,10 @@ class GamePage extends React.Component {
                     <View style={styles.topBar}>
                         <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
                         <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
-                        <Text>SCORE: {this.state.score}</Text>
+                        <Text>SCORE: {this.state.score} Seconds to Pop: {this.state.popTime}</Text>
                     </View>
                     <View style={styles.gameWorld}>
-                    {bubbles}
+                        {bubbles}
                     </View>
                 </View>
             </View>
@@ -118,13 +146,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
     },
-    gameWorld :{
+    gameWorld: {
         width: SCREEN_WIDTH - 30,
         borderStyle: 'solid',
         borderWidth: 2,
         flexDirection: 'row',
         flexWrap: 'wrap',
         flex: .87,
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
+        opacity: .1,
     },
     topBar: {
         alignItems: 'center',
