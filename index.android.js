@@ -28,6 +28,7 @@ import Flyer from "./components/flyer";
 import DragDragon from "./components/DragDragon";
 import GamePage from './GamePage';
 import GameWinPage from './GameWinPage';
+import NextGamePage from './NextGamePage';
 
 class CogApp extends React.Component {
   constructor(props){
@@ -62,7 +63,9 @@ class CogApp extends React.Component {
       return <GamePage navigator={navigator} />
     } else if (route.id === 4){
       return <GameWinPage navigator={navigator} route={route}/>
-    }
+    } else if (route.id === 5){
+      return <NextGamePage navigator={navigator} route={route}/>
+    } 
   }
 }
 
