@@ -29,6 +29,7 @@ import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "./frames/greenDragonCharacter";
+import Animator from "./Animator";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
@@ -45,25 +46,11 @@ class Flyer extends React.Component {
     };
     this._animateOpacity = this._animateOpacity.bind(this);
     this._panResponder = {};
+
   }
 
   componentDidMount() {
 
-    /*
-    this.setTimeout(()=>{
-      Alert.alert("Alert Title", "msg");
-    }, 1000);
-    */
-    /*
-    this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
-      onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
-      onPanResponderGrant: this._handlePanResponderGrant,
-      onPanResponderMove: this._handlePanResponderMove,
-      onPanResponderRelease: this._handlePanResponderEnd,
-      onPanResponderTerminate: this._handlePanResponderEnd,
-    });
-    */
   }
   outerTouch(evt){
 
@@ -128,7 +115,6 @@ class Flyer extends React.Component {
     const dragonStyle = {width: 100, height: 95,
         borderWidth: 2, borderColor: '#00ff00', position: 'absolute'};
 
-    debugger;
     //this.state.tweenValue3 = Math.floor(Math.random()*100);
     //this.setState({tweenValue3: Math.floor(Math.random()*100)})
     return (
@@ -138,6 +124,7 @@ class Flyer extends React.Component {
         ...dragonStyle
       }
     );
+
   }
 
 
@@ -145,13 +132,46 @@ class Flyer extends React.Component {
     const dragonStyle = {width: 100, height: 95,
         borderWidth: 2, borderColor: '#00ff00'};
 
+    const tweenOpts01 = {
+      tweenType: "sine-wave",
+      startXY: [110, 250],
+      xTo: [160, 60, 160],
+      yTo: [0],
+      duration: 2000,
+      repeatable: true,
+    };
+
+    const tweenOpts02 = {
+      tweenType: "sine-wave",
+      startXY: [210, 100],
+      xTo: [0],
+      yTo: [150, 50, 150],
+      duration: 2000,
+      repeatable: true,
+    };
+
     return (
       <View style={styles.mainContainer}>
 
         <View style={styles.container}>
-          <AnimatedSprite coordinates={{x:50, y:100}}
+          <AnimatedSprite coordinates={{x:10, y:100}}
+            size={{width: 100, height: 95}}
+            draggable={true}
             character={greenDragonCharacter} />
+
+          <AnimatedSprite coordinates={{x:110, y:250}}
+              size={{width: 100, height: 95}}
+              draggable={false}
+              character={greenDragonCharacter}
+              touchTween={tweenOpts01} />
+
+            <AnimatedSprite coordinates={{x:210, y:100}}
+              size={{width: 100, height: 95}}
+              draggable={false}
+              character={greenDragonCharacter}
+              touchTween={tweenOpts02} />
         </View>
+
 
         <View style={styles.container2}>
 
@@ -189,10 +209,7 @@ class Flyer extends React.Component {
                 ...dragonStyle
               }}
             />
-
-
           </TouchableOpacity>
-
 
         </View>
 
@@ -206,30 +223,24 @@ reactMixin.onClass(Flyer, TimerMixin);
 
 const styles = StyleSheet.create({
   mainContainer:{
-    flex: 1,
-    flexDirection: "column",
-    //justifyContent: 'center',
-    //alignItems: 'center',
     backgroundColor: '#ff0000',
     borderStyle: 'dashed',
   },
   container: {
-    flex: 1,
-    flexDirection: "row",
     //justifyContent: 'center',
     //alignItems: 'center',
     backgroundColor: '#0000ff',
     borderStyle: 'dashed',
-    height: 200,
+    height: 350,
   },
   container2: {
-    flex: 1,
-    flexDirection: "row",
     //justifyContent: 'center',
     //alignItems: 'center',
+    borderWidth: 2,
     backgroundColor: '#ffffff',
+    borderColor: '#ff00ff',
     borderStyle: 'dashed',
-
+    height: 300,
   },
   box: {
     borderColor: 'red',

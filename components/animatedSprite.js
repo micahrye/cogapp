@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import Animator from "./Animator";
+
 
 class AnimatedSprite extends React.Component{
   constructor(props){
@@ -19,8 +21,8 @@ class AnimatedSprite extends React.Component{
       movies: null,
       animate: false,
       _scale: new Animated.Value(0),
-      _x: props.coordinates.x,
-      _y: props.coordinates.y,
+      _x: new Animated.Value(props.coordinates.x),
+      _y: new Animated.Value(props.coordinates.y),
       _width: props.size.width,
       _height: props.size.height,
     };
@@ -28,9 +30,8 @@ class AnimatedSprite extends React.Component{
     this.character = undefined;
     this.soul = undefined;
     this._charactertyles =  {};
-    this._initialX = this.state._x;
-    this._initialY = this.state._y;
-    this.isDraggable = props.draggable;
+    this._initialX = this.state._x._value;
+    this._initialY = this.state._y._value;
     this._panResponder = {};
 
     this._animation = this.props.character;
@@ -38,10 +39,13 @@ class AnimatedSprite extends React.Component{
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = 0;
     this.animationInterval = undefined;
+
+    this._Animator = Animator();
+    this._hasTweened = 0;
   }
 
   componentWillMount() {
-    if(this.isDraggable){
+    if(this.props.draggable){
       this._panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
@@ -55,7 +59,6 @@ class AnimatedSprite extends React.Component{
           (e, gestureState) => {
           this._handlePanResponderEnd(e, gestureState)},
         });
-      debugger;
     }
     this._previousLeft =  this._initialX;
     this._previousTop = this._initialY;
@@ -130,27 +133,51 @@ class AnimatedSprite extends React.Component{
     this._unHighlight();
     this._previousLeft += gestureState.dx;
     this._previousTop += gestureState.dy;
+    this.state._y = this._characterStyles.style.top;
+    this.state._x = this._characterStyles.style.left;
+  }
+
+  getStyle(){
+    return (
+      {
+        top: this.state._y,
+        left: this.state._x,
+        position: 'absolute',
+        borderWidth: 2,
+        borderColor: '#ff00ff',
+        transform: [
+          {scale: this.state._scale},
+        ]
+      }
+    );
+
   }
 
   handlePress(evt){
-
-    console.log(`INNER ${evt.nativeEvent.locationX}`);
-    if(this._animationKey === 'idel'){
-      this._animationKey = 'touch';
-    }else{
-      this._animationKey = 'idel'
+    if(this.props.draggable){
+      return;
     }
-    this.numFrames = this._animation[this._animationKey].length-1;
-    this.frameIndex = 0;
 
-    this.state._scale.setValue(0.90);     // Start large
-    Animated.spring(                          // Base: spring, decay, timing
-    this.state._scale,                 // Animate `_scale`
-      {
-        toValue: 1,                       // Animate to smaller size
-        friction: 2.5,                          // Bouncier spring
+    this._Animator["bounceAnimator"]({
+      startScale: 0.95,
+      endScale: 1.0,
+      friction: 2.5,
+    }, {scale: this.state._scale});
+
+    if(this.props.touchTween){
+      if(!this.props.touchTween.repeatable && this._hasTweened){
+        return;
       }
-    ).start();
+      this._hasTweened++;
+      const tweenType = this.props.touchTween.tweenType;
+      const tweenOptions = this.props.touchTween;
+      const tweenState = {
+        top: this.state._y,
+        left: this.state._x,
+      }
+      this._Animator[tweenType](tweenOptions, tweenState);
+    }
+
   }
 
   render() {
@@ -159,14 +186,7 @@ class AnimatedSprite extends React.Component{
 
         <Animated.View
           {...this._panResponder.panHandlers}
-          style={{
-            position: 'absolute',
-            borderWidth: 2,
-            borderColor: '#ff00ff',
-            transform: [
-              {scale: this.state._scale},
-            ]
-          }}
+          style={this.getStyle()}
           ref={(character) => {
             this.character = character;
           }}
