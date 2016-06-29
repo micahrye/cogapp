@@ -13,8 +13,10 @@ import {
 
 import Bubble from './Bubble';
 import GameWinPage from './GameWinPage';
-
+import AnimatedSprite from './components/animatedSprite';
 import NextGamePage from './NextGamePage';
+import Tweener from './components/Tweener'
+import greenDragonCharacter from "./sprites/dragon/greenDragonCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -24,28 +26,13 @@ let bubbles = []; // maybe another way to do this instead of it being a global v
 class GamePage extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            score: 0,
-            popTime: 0,
-        };
+        
         this.createBubbles(NUM_BUBBLES);
     }
 
     componentDidMount(){
-        // get value of score from async storage
-        AsyncStorage.getItem('score').then((value) => {
-            this.setUpScene(JSON.parse(value));
-        }).done();
-    }
 
-    // set up old scene from async storage on app reopen
-    setUpScene (score) {
-        if(score > 0){
-            this.createBubbles(NUM_BUBBLES - score);
-            this.setState({score: score});
-        }
-        this.youLost();
-    };
+    }
 
     // populate array of bubbles
     createBubbles(numBubbles) {
@@ -53,77 +40,26 @@ class GamePage extends React.Component {
         for(let i=0; i < numBubbles; i++){
             if(i%2 == 0){
                 bubbles.push(
-                    <Bubble key={i} id={i} size={40} x={i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 2} startTime={Date.now()}
-                        handlePress={this.popBubble.bind(null, i)}/>
+                    
                 );
             }
             else{
                 bubbles.push(
-                    <Bubble key={i} id={i} size={60} x={(i)*((SCREEN_WIDTH-120)/NUM_BUBBLES) + 2} startTime={Date.now()}
-                        handlePress={this.popBubble.bind(null, i)}/>
+                    
                 );
             }
         }
 
     }
 
-    // delete bubble from array when popped
-    popBubble = (bubblePos, popTime) => {
-        this.setState({popTime: popTime});
-        delete bubbles[bubblePos];
-        this.updateScore();
-    }
-
-    // update score on bubble pop
-    updateScore = () => {
-        newScore = this.state.score + 1;
-        this.setState({score: newScore});
-        this.saveScore(newScore);
-
-        if(newScore > NUM_BUBBLES - 1){ // navigate to win page if all bubbles are popped
-            this.props.navigator.push({
-                id: 4,
-                callback: this.resetGame,
-            });
-            clearTimeout(timeout);
-        }
-    };
-
-    // save score in async storage
-    saveScore = (data) => {
-        AsyncStorage.setItem('score', JSON.stringify(data));
-
-    };
-
-    // game timeout
-    youLost(){
-        timeout = setTimeout ( () => {
-            this.props.navigator.push({
-                id: 5,
-                callback: this.resetGame,
-            });
-            return <NextGamePage />;
-        }, 10000);
-    }
-
-    // reset score and bubbles once game has been won
-    resetGame = () => {
-        this.setState({score: 0});
-        newScore = 0;
-        this.saveScore(newScore);
-        this.createBubbles(NUM_BUBBLES);
-        this.youLost();
-    };
 
     render(){
         return (
              <View style={styles.topLevel}>
-                <Text>Top Level</Text>
                 <View style={styles.sceneLevel}>
                     <View style={styles.topBar}>
                         <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
                         <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
-                        <Text>SCORE: {this.state.score} Seconds to Pop: {this.state.popTime}</Text>
                     </View>
                     <View style={styles.gameWorld}>
                         {bubbles}
