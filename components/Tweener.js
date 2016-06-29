@@ -2,7 +2,7 @@
 
 import { Animated, Easing } from 'react-native';
 
-const Animator = function () {
+const Tweener = function () {
 
   const bounce = function(options, state) {
 
@@ -76,11 +76,11 @@ const Animator = function () {
 
   return (
     {
-      "bounceAnimator": bounce,
-      "slip-slide": move,
+      'bounce': bounce,
+      'slip-slide': move,
       'sine-wave': sineWave,
     }
   );
 };
 
-export default Animator;
+export default Tweener;

@@ -16,8 +16,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
   TouchableWithoutFeedback
 } from 'react-native';
 
@@ -27,9 +25,9 @@ import reactMixin from 'react-mixin';
 import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
-import AnimatedSprite from "./animatedSprite";
-import greenDragonCharacter from "./frames/greenDragonCharacter";
-import Animator from "./Animator";
+import AnimatedSprite from "./AnimatedSprite";
+import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
+import Tweener from "./Tweener";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
@@ -154,18 +152,18 @@ class Flyer extends React.Component {
       <View style={styles.mainContainer}>
 
         <View style={styles.container}>
-          <AnimatedSprite coordinates={{x:10, y:100}}
+          <AnimatedSprite coordinates={{top:100, left:10}}
             size={{width: 100, height: 95}}
             draggable={true}
             character={greenDragonCharacter} />
 
-          <AnimatedSprite coordinates={{x:110, y:250}}
+          <AnimatedSprite coordinates={{top:250, left:110}}
               size={{width: 100, height: 95}}
               draggable={false}
               character={greenDragonCharacter}
               touchTween={tweenOpts01} />
 
-            <AnimatedSprite coordinates={{x:210, y:100}}
+            <AnimatedSprite coordinates={{top:100, left:210}}
               size={{width: 100, height: 95}}
               draggable={false}
               character={greenDragonCharacter}
@@ -188,7 +186,7 @@ class Flyer extends React.Component {
             style={{top: this.state.tweenValue, ...dragonStyle}}
             key={1}>
           <Animated.Image
-            source={require("./frames/green_dragon04.png")}
+            source={require("../sprites/dragon/green_dragon04.png")}
             style={{
               flex: 1,
               opacity: this.state.bounceValue,

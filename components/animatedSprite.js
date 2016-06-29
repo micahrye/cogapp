@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Animator from "./Animator";
+import Tweener from "./Tweener";
 
 
 class AnimatedSprite extends React.Component{
@@ -21,8 +21,8 @@ class AnimatedSprite extends React.Component{
       movies: null,
       animate: false,
       _scale: new Animated.Value(0),
-      _x: new Animated.Value(props.coordinates.x),
-      _y: new Animated.Value(props.coordinates.y),
+      _top: new Animated.Value(props.coordinates.top),
+      _left: new Animated.Value(props.coordinates.left),
       _width: props.size.width,
       _height: props.size.height,
     };
@@ -30,8 +30,8 @@ class AnimatedSprite extends React.Component{
     this.character = undefined;
     this.soul = undefined;
     this._charactertyles =  {};
-    this._initialX = this.state._x._value;
-    this._initialY = this.state._y._value;
+    this._initialX = this.state._left._value;
+    this._initialY = this.state._top._value;
     this._panResponder = {};
 
     this._animation = this.props.character;
@@ -40,12 +40,14 @@ class AnimatedSprite extends React.Component{
     this.frameIndex = 0;
     this.animationInterval = undefined;
 
-    this._Animator = Animator();
+    this._Tweener = Tweener();
     this._hasTweened = 0;
   }
 
   componentWillMount() {
     if(this.props.draggable){
+      // note that with PanResponder we setNativeProps for performance reasons,
+      // as stated by FB.
       this._panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
@@ -96,16 +98,6 @@ class AnimatedSprite extends React.Component{
     }, 100);
   }
 
-  _highlight() {
-    //this._characterStyles.style.backgroundColor = 'blue';
-    this._updateNativeStyles();
-  }
-
-  _unHighlight() {
-    //this._characterStyles.style.backgroundColor = 'green';
-    this._updateNativeStyles();
-  }
-
   _updateNativeStyles() {
     this.character && this.character.setNativeProps(this._characterStyles);
   }
@@ -120,7 +112,7 @@ class AnimatedSprite extends React.Component{
   }
 
   _handlePanResponderGrant(e, gestureState) {
-    this._highlight();
+    // do something on grant
   }
 
   _handlePanResponderMove(e, gestureState) {
@@ -130,18 +122,18 @@ class AnimatedSprite extends React.Component{
   }
 
   _handlePanResponderEnd(e, gestureState) {
-    this._unHighlight();
+    // do anything you want onPanResponderRelease
     this._previousLeft += gestureState.dx;
     this._previousTop += gestureState.dy;
-    this.state._y = this._characterStyles.style.top;
-    this.state._x = this._characterStyles.style.left;
+    this.state._top = this._characterStyles.style.top;
+    this.state._left = this._characterStyles.style.left;
   }
 
   getStyle(){
     return (
       {
-        top: this.state._y,
-        left: this.state._x,
+        top: this.state._top,
+        left: this.state._left,
         position: 'absolute',
         borderWidth: 2,
         borderColor: '#ff00ff',
@@ -155,10 +147,11 @@ class AnimatedSprite extends React.Component{
 
   handlePress(evt){
     if(this.props.draggable){
+      // no tweening for draggables
       return;
     }
 
-    this._Animator["bounceAnimator"]({
+    this._Tweener["bounce"]({
       startScale: 0.95,
       endScale: 1.0,
       friction: 2.5,
@@ -172,10 +165,10 @@ class AnimatedSprite extends React.Component{
       const tweenType = this.props.touchTween.tweenType;
       const tweenOptions = this.props.touchTween;
       const tweenState = {
-        top: this.state._y,
-        left: this.state._x,
+        top: this.state._top,
+        left: this.state._left,
       }
-      this._Animator[tweenType](tweenOptions, tweenState);
+      this._Tweener[tweenType](tweenOptions, tweenState);
     }
 
   }
@@ -210,6 +203,20 @@ class AnimatedSprite extends React.Component{
   }
 
 }
+
+
+
+AnimatedSprite.propTypes = {
+  coordinates: React.PropTypes.object.isRequired,
+  size: React.PropTypes.object.isRequired,
+  draggable: React.PropTypes.bool.isRequired,
+  character: React.PropTypes.object.isRequired,
+  touchTween: React.PropTypes.object,
+};
+
+AnimatedSprite.defaultProps = {
+  initialCount: 0,
+};
 
 const styles = {
   character: {
