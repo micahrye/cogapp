@@ -17,10 +17,12 @@ import AnimatedSprite from './components/animatedSprite';
 import NextGamePage from './NextGamePage';
 import Tweener from './components/Tweener'
 import greenDragonCharacter from "./sprites/dragon/greenDragonCharacter";
+import bubbleCharacter from './sprites/bubble/bubbleCharacter';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 15;
+let NUM_BUBBLES = 10;
+let BUBBLE_SIZE = 60;
 let bubbles = []; // maybe another way to do this instead of it being a global variable?
 
 class GamePage extends React.Component {
@@ -34,18 +36,38 @@ class GamePage extends React.Component {
 
     }
 
-    // populate array of bubbles
+   // populate array of bubbles
     createBubbles(numBubbles) {
         bubbles = [];
         for(let i=0; i < numBubbles; i++){
+            let startX = i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 2;
+            let startY = SCREEN_HEIGHT - 153 - BUBBLE_SIZE;
+
+            const tweenOpts01 = {
+              tweenType: "sine-wave",
+              startXY: [startX, startY],
+              xTo: [startX + 40, startX, startX + 40, startX],
+              yTo: [0],
+              duration: 3000,
+              repeatable: true,
+            };
+
             if(i%2 == 0){
                 bubbles.push(
-                    
+                    <AnimatedSprite key={i} coordinates={{top:startY, left: startX}}
+                    size={{width: BUBBLE_SIZE, height: BUBBLE_SIZE}}
+                    draggable={false}
+                    character={bubbleCharacter} 
+                    touchTween={tweenOpts01} />
                 );
             }
             else{
                 bubbles.push(
-                    
+                    <AnimatedSprite key={i} coordinates={{top:startY, left: startX}}
+                    size={{width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}}
+                    draggable={false}
+                    character={bubbleCharacter} 
+                    touchTween={tweenOpts01} />
                 );
             }
         }
@@ -54,6 +76,8 @@ class GamePage extends React.Component {
 
 
     render(){
+        
+
         return (
              <View style={styles.topLevel}>
                 <View style={styles.sceneLevel}>
@@ -84,11 +108,11 @@ const styles = StyleSheet.create({
     },
     gameWorld: {
         width: SCREEN_WIDTH - 30,
+        height: SCREEN_HEIGHT - 153,
         borderStyle: 'solid',
         borderWidth: 2,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        flex: .87,
     },
     backgroundImage: {
         flex: 1,
@@ -99,10 +123,9 @@ const styles = StyleSheet.create({
     topBar: {
         alignItems: 'center',
         width: SCREEN_WIDTH - 30,
-        height: 80,
+        height: SCREEN_HEIGHT - 600,
         borderStyle: 'solid',
         borderWidth: 2,
-        flex: .13,
     },
 });
 
