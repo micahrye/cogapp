@@ -10,7 +10,7 @@ var {
   processColor,
 } = ReactNative;
 
-import AnimatedSprite from "./AnimatedSprite";
+import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 
 

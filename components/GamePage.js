@@ -11,13 +11,10 @@ import {
 } from 'react-native';
 
 
-import Bubble from './Bubble';
 import GameWinPage from './GameWinPage';
-import AnimatedSprite from './components/animatedSprite';
+import AnimatedSprite from './animatedSprite';
 import NextGamePage from './NextGamePage';
-import Tweener from './components/Tweener'
-import greenDragonCharacter from "./sprites/dragon/greenDragonCharacter";
-import bubbleCharacter from './sprites/bubble/bubbleCharacter';
+import bubbleCharacter from '../sprites/bubble/bubbleCharacter';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -58,7 +55,8 @@ class GamePage extends React.Component {
                     size={{width: BUBBLE_SIZE, height: BUBBLE_SIZE}}
                     draggable={false}
                     character={bubbleCharacter} 
-                    touchTween={tweenOpts01} />
+                    touchTween={tweenOpts01} 
+                    autoMove={true}/>
                 );
             }
             else{
@@ -67,7 +65,8 @@ class GamePage extends React.Component {
                     size={{width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}}
                     draggable={false}
                     character={bubbleCharacter} 
-                    touchTween={tweenOpts01} />
+                    touchTween={tweenOpts01} 
+                    autoMove={true}/>
                 );
             }
         }

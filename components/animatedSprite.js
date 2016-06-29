@@ -79,6 +79,9 @@ class AnimatedSprite extends React.Component{
     // have to set xy
     this.character && this.character.setNativeProps(this._characterStyles)
 
+    if(this.props.autoMove && this.props.touchTween){
+      this.startAnimation();
+    }
   }
 
   componentWillUnmount(){
@@ -135,8 +138,8 @@ class AnimatedSprite extends React.Component{
         top: this.state._top,
         left: this.state._left,
         position: 'absolute',
-        borderWidth: 2,
-        borderColor: '#ff00ff',
+       // borderWidth: 2,
+       // borderColor: '#ff00ff',
         transform: [
           {scale: this.state._scale},
         ]
@@ -146,8 +149,9 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    if(this.props.draggable){
+    if(this.props.draggable || this.props.autoMove){
       // no tweening for draggables
+      // no tweening on touch for components with autoMove
       return;
     }
 
@@ -158,19 +162,23 @@ class AnimatedSprite extends React.Component{
     }, {scale: this.state._scale});
 
     if(this.props.touchTween){
-      if(!this.props.touchTween.repeatable && this._hasTweened){
-        return;
-      }
-      this._hasTweened++;
-      const tweenType = this.props.touchTween.tweenType;
-      const tweenOptions = this.props.touchTween;
-      const tweenState = {
-        top: this.state._top,
-        left: this.state._left,
-      }
-      this._Tweener[tweenType](tweenOptions, tweenState);
+      this.startAnimation();
     }
 
+  }
+
+  startAnimation() {
+    if(!this.props.touchTween.repeatable && this._hasTweened){
+      return;
+    }
+    this._hasTweened++;
+    const tweenType = this.props.touchTween.tweenType;
+    const tweenOptions = this.props.touchTween;
+    const tweenState = {
+      top: this.state._top,
+      left: this.state._left,
+    }
+    this._Tweener[tweenType](tweenOptions, tweenState);
   }
 
   render() {
@@ -219,14 +227,14 @@ AnimatedSprite.defaultProps = {
 };
 
 const styles = {
-  character: {
-    borderWidth: 2,
-    borderColor: '#00ff00'
-  },
-  animator:{
-    borderWidth: 2,
-    borderColor: '#ff00ff',
-  },
+  // character: {
+  //   borderWidth: 2,
+  //   borderColor: '#00ff00'
+  // },
+  // animator:{
+  //   borderWidth: 2,
+  //   borderColor: '#ff00ff',
+  // },
 };
 
 

@@ -26,9 +26,9 @@ import TimerMixin from 'react-timer-mixin';
 import Main from "./components/main";
 import Flyer from "./components/flyer";
 import DragDragon from "./components/DragDragon";
-import GamePage from './GamePage';
-import GameWinPage from './GameWinPage';
-import NextGamePage from './NextGamePage';
+import GamePage from './components/GamePage';
+import GameWinPage from './components/GameWinPage';
+import NextGamePage from './components/NextGamePage';
 
 class CogApp extends React.Component {
   constructor(props){
