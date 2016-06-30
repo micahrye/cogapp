@@ -79,7 +79,7 @@ class AnimatedSprite extends React.Component{
     // have to set xy
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    if(this.props.autoMove && this.props.touchTween){
+    if(this.props.tweenStart == "auto"){
       this.startAnimation();
     }
   }
@@ -160,22 +160,22 @@ class AnimatedSprite extends React.Component{
       friction: 2.5,
     }, {scale: this.state._scale});
 
-    if(this.props.touchTween && !this.props.autoMove){
+    if(this.props.tweenStart == "touch"){
       this.startAnimation();
     }
-    if(this.props.remove){
+    else if(this.props.remove){
       this.props.remove((Date.now() - this.props.renderTime) / 1000);
     }
 
   }
 
   startAnimation() {
-    if(!this.props.touchTween.repeatable && this._hasTweened){
+    if(!this.props.tween.repeatable && this._hasTweened){
       return;
     }
     this._hasTweened++;
-    const tweenType = this.props.touchTween.tweenType;
-    const tweenOptions = this.props.touchTween;
+    const tweenType = this.props.tween.tweenType;
+    const tweenOptions = this.props.tween;
     const tweenState = {
       top: this.state._top,
       left: this.state._left,
@@ -221,7 +221,7 @@ AnimatedSprite.propTypes = {
   size: React.PropTypes.object.isRequired,
   draggable: React.PropTypes.bool.isRequired,
   character: React.PropTypes.object.isRequired,
-  touchTween: React.PropTypes.object,
+  tween: React.PropTypes.object,
 };
 
 AnimatedSprite.defaultProps = {

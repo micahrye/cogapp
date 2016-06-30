@@ -39,25 +39,41 @@ const Tweener = function () {
 
     state.top.setValue(options.startXY[1]);
     state.left.setValue(options.startXY[0]);
-    Animated.parallel(
-      [
-        Animated.sequence(_getSequenceX(options, state)),
-        Animated.sequence(_getSequenceY(options, state)),
-      ]
-    ).start();
+    // if (options.repeatable){
+    //   startAndRepeat(options, state);
+    // }
+    // else{ 
+      Animated.parallel(
+        [
+          Animated.sequence(_getSequenceX(options, state)),
+          Animated.sequence(_getSequenceY(options, state)),
+        ]
+      ).start();
+    //}
+  }
 
+  const startAndRepeat = function(options, state){
+    triggerAnimation(options, state, startAndRepeat);
+  }
+
+  const triggerAnimation = function(options, state, cb){
+    Animated.parallel(
+        [
+          Animated.sequence(_getSequenceX(options, state)),
+          Animated.sequence(_getSequenceY(options, state)),
+        ]
+      ).start(cb);
   }
 
   const _getSequenceX = function (options, state) {
     const duration = options.duration;
     const numTrasitions = options.xTo.length;
     return options.xTo.map((x, index, array)=>{
-      console.log(`X = ${x}`);
       return Animated.timing(state.left, {
           duration: duration / numTrasitions,
           toValue: x,
           easing: Easing.sin,
-      })
+      });
     });
   }
 
