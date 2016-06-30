@@ -149,9 +149,8 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    if(this.props.draggable || this.props.autoMove){
+    if(this.props.draggable){
       // no tweening for draggables
-      // no tweening on touch for components with autoMove
       return;
     }
 
@@ -161,8 +160,11 @@ class AnimatedSprite extends React.Component{
       friction: 2.5,
     }, {scale: this.state._scale});
 
-    if(this.props.touchTween){
+    if(this.props.touchTween && !this.props.autoMove){
       this.startAnimation();
+    }
+    if(this.props.remove){
+      this.props.remove((Date.now() - this.props.renderTime) / 1000);
     }
 
   }

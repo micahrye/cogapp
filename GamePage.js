@@ -11,15 +11,14 @@ import {
 } from 'react-native';
 
 
+import Bubble from './Bubble';
 import GameWinPage from './GameWinPage';
-import AnimatedSprite from './animatedSprite';
+
 import NextGamePage from './NextGamePage';
-import bubbleCharacter from '../sprites/bubble/bubbleCharacter';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let NUM_BUBBLES = 15;
-let BUBBLE_SIZE = 60;
 let bubbles = []; // maybe another way to do this instead of it being a global variable?
 
 class GamePage extends React.Component {
@@ -28,92 +27,54 @@ class GamePage extends React.Component {
         this.state = {
             score: 0,
             popTime: 0,
-        }
+        };
         this.createBubbles(NUM_BUBBLES);
     }
 
-    componentDidMount () {
+    componentDidMount(){
+        // get value of score from async storage
         AsyncStorage.getItem('score').then((value) => {
             this.setUpScene(JSON.parse(value));
         }).done();
     }
 
+    // set up old scene from async storage on app reopen
     setUpScene (score) {
-        if (score > 0){
+        if(score > 0){
             this.createBubbles(NUM_BUBBLES - score);
-            this.setState({score});
+            this.setState({score: score});
         }
         this.youLost();
-    }
+    };
 
-    youLost = () => {
-        timeout = setTimeout ( () => {
-            this.props.navigator.push({
-                id: 5,
-                callback: this.resetGame,
-            });
-            return <NextGamePage />;
-        }, 10000);
-    }
-
-   // populate array of bubbles
+    // populate array of bubbles
     createBubbles(numBubbles) {
         bubbles = [];
         for(let i=0; i < numBubbles; i++){
-            let startLeft = i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 2;
-            let startTop = this.getStartTop();
-
-            const tweenOpts01 = {
-              tweenType: "sine-wave",
-              startXY: [startLeft, startTop],
-              xTo: [startLeft + 40, startLeft, startLeft + 40, startLeft],
-              yTo: [0],
-              duration: this.getDuration(),
-              repeatable: true,
-            };
-
             if(i%2 == 0){
                 bubbles.push(
-                    <AnimatedSprite key={i} coordinates={{top:startTop, left: startLeft}}
-                    size={{width: BUBBLE_SIZE, height: BUBBLE_SIZE}}
-                    draggable={false}
-                    character={bubbleCharacter} 
-                    touchTween={tweenOpts01} 
-                    autoMove={true}
-                    renderTime={Date.now()}                    
-                    remove={this.popBubble.bind(null, i)}/>
+                    <Bubble key={i} id={i} size={40} x={i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 2} startTime={Date.now()}
+                        handlePress={this.popBubble.bind(null, i)}/>
                 );
             }
             else{
                 bubbles.push(
-                    <AnimatedSprite key={i} coordinates={{top:startTop, left: startLeft}}
-                    size={{width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}}
-                    draggable={false}
-                    character={bubbleCharacter} 
-                    touchTween={tweenOpts01} 
-                    autoMove={true}
-                    renderTime={Date.now()}
-                    remove={this.popBubble.bind(null, i)}/>
+                    <Bubble key={i} id={i} size={60} x={(i)*((SCREEN_WIDTH-120)/NUM_BUBBLES) + 2} startTime={Date.now()}
+                        handlePress={this.popBubble.bind(null, i)}/>
                 );
             }
         }
 
     }
 
-    getStartTop () {
-        return (Math.random() * ((SCREEN_HEIGHT+(NUM_BUBBLES*10)) - (SCREEN_HEIGHT - 153 - BUBBLE_SIZE)) + (SCREEN_HEIGHT - 153 - BUBBLE_SIZE));
-    }
-
-    getDuration () {
-        return( Math.random() *  (NUM_BUBBLES*300 - (NUM_BUBBLES*1000)/5) + (NUM_BUBBLES*1000)/5 );
-    }
-
+    // delete bubble from array when popped
     popBubble = (bubblePos, popTime) => {
         this.setState({popTime: popTime});
         delete bubbles[bubblePos];
         this.updateScore();
     }
 
+    // update score on bubble pop
     updateScore = () => {
         newScore = this.state.score + 1;
         this.setState({score: newScore});
@@ -126,10 +87,23 @@ class GamePage extends React.Component {
             });
             clearTimeout(timeout);
         }
-    }
+    };
 
+    // save score in async storage
     saveScore = (data) => {
         AsyncStorage.setItem('score', JSON.stringify(data));
+
+    };
+
+    // game timeout
+    youLost(){
+        timeout = setTimeout ( () => {
+            this.props.navigator.push({
+                id: 5,
+                callback: this.resetGame,
+            });
+            return <NextGamePage />;
+        }, 10000);
     }
 
     // reset score and bubbles once game has been won
@@ -142,16 +116,14 @@ class GamePage extends React.Component {
     };
 
     render(){
-        
-      //  AsyncStorage.clear();
         return (
              <View style={styles.topLevel}>
+                <Text>Top Level</Text>
                 <View style={styles.sceneLevel}>
                     <View style={styles.topBar}>
                         <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
                         <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
-                        <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-
+                        <Text>SCORE: {this.state.score} Seconds to Pop: {this.state.popTime}</Text>
                     </View>
                     <View style={styles.gameWorld}>
                         {bubbles}
@@ -176,11 +148,11 @@ const styles = StyleSheet.create({
     },
     gameWorld: {
         width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 153,
         borderStyle: 'solid',
         borderWidth: 2,
         flexDirection: 'row',
         flexWrap: 'wrap',
+        flex: .87,
     },
     backgroundImage: {
         flex: 1,
@@ -191,9 +163,10 @@ const styles = StyleSheet.create({
     topBar: {
         alignItems: 'center',
         width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 600,
+        height: 80,
         borderStyle: 'solid',
         borderWidth: 2,
+        flex: .13,
     },
 });
 
