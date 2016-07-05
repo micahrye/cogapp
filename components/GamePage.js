@@ -97,7 +97,7 @@ class GamePage extends React.Component {
                 tween={tweenSettings} 
                 tweenStart="auto"
                 renderTime={Date.now()}                    
-                remove={this.popBubble.bind(null, i)}/>
+                onPress={this.popBubble.bind(null, i)}/>
             );
         }
 

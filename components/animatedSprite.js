@@ -163,8 +163,9 @@ class AnimatedSprite extends React.Component{
     if(this.props.tweenStart == "touch"){
       this.startAnimation();
     }
-    else if(this.props.remove){
-      this.props.remove((Date.now() - this.props.renderTime) / 1000);
+    else if(this.props.onPress){
+      this.props.onPress((Date.now() - this.props.renderTime) / 1000);
+      // binds time of press to prop function
     }
 
   }
