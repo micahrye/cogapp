@@ -39,30 +39,26 @@ const Tweener = function () {
 
     state.top.setValue(options.startXY[1]);
     state.left.setValue(options.startXY[0]);
-    // if (options.repeatable){
-    //   startAndRepeat(options, state);
-    // }
-    // else{ 
+    if (options.repeatable){
+      triggerRepeatable(options, state);
+    }
+    else{ 
       Animated.parallel(
         [
           Animated.sequence(_getSequenceX(options, state)),
           Animated.sequence(_getSequenceY(options, state)),
         ]
       ).start();
-    //}
+    }
   }
 
-  const startAndRepeat = function(options, state){
-    triggerAnimation(options, state, startAndRepeat);
-  }
-
-  const triggerAnimation = function(options, state, cb){
+  const triggerRepeatable = function(options, state){
     Animated.parallel(
         [
           Animated.sequence(_getSequenceX(options, state)),
           Animated.sequence(_getSequenceY(options, state)),
         ]
-      ).start(cb);
+      ).start( () => {triggerRepeatable(options, state);});
   }
 
   const _getSequenceX = function (options, state) {

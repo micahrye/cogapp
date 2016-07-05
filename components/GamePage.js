@@ -20,6 +20,7 @@ let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let NUM_BUBBLES = 15;
 let BUBBLE_SIZE = 60;
+let OFFSET = 40;
 
 class GamePage extends React.Component {
     constructor(props){
@@ -64,19 +65,19 @@ class GamePage extends React.Component {
         for(let i=0; i < numBubbles; i++){
             let size = {};
             let sequence = [];
-            let startLeft = i*((SCREEN_WIDTH-110)/NUM_BUBBLES) + 27;
+            let startLeft = i*((SCREEN_WIDTH-15-OFFSET-BUBBLE_SIZE)/NUM_BUBBLES);
             let startTop = this.getStartTop();
         
-           if(i%2 == 0){ 
+            if(i%2 == 0){ 
                 size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
-                sequence = [startLeft + 20, startLeft - 20, startLeft + 20, startLeft - 20, startLeft + 20, startLeft - 20, startLeft + 20, startLeft - 20];
+                sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft];
                 // vary bubble's x transition sequence
             }
             else{
                 size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}
                 for(let i=0; i < 4; i++){
-                    sequence.push(startLeft - 25);
-                    sequence.push(startLeft + 25);
+                    sequence.push(startLeft);
+                    sequence.push(startLeft + OFFSET);
                 } // not sure if this or the above sequence assignment is better...both seem weird
             }
 
@@ -131,7 +132,7 @@ class GamePage extends React.Component {
                 id: 4,
                 callback: this.resetGame,
             });
-            clearTimeout(timeout); // reset the game timer
+          //  clearTimeout(timeout); // reset the game timer
         }
     }
 
@@ -141,6 +142,7 @@ class GamePage extends React.Component {
 
     // reset score, bubbles and game timer once game has been won
     resetGame = () => {
+        this.setState({popTime: 0});
         this.setState({score: 0});
         newScore = 0;
         this.saveScore(newScore);
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     topLevel :{
         alignItems: 'center',
     },
-    sceneLevel :{
+    sceneLevel : {
         height: SCREEN_HEIGHT - 70,
         width: SCREEN_WIDTH - 30,
         borderStyle: 'solid',
