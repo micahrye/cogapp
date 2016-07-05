@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 
-import GameWinPage from './GameWinPage';
+import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from './animatedSprite';
 import NextGamePage from './NextGamePage';
 import bubbleImage from '../sprites/bubble/bubbleCharacter';
@@ -22,7 +22,7 @@ let NUM_BUBBLES = 15;
 let BUBBLE_SIZE = 60;
 let OFFSET = 40;
 
-class GamePage extends React.Component {
+class BubblePop extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -132,7 +132,7 @@ class GamePage extends React.Component {
                 id: 4,
                 callback: this.resetGame,
             });
-          //  clearTimeout(timeout); // reset the game timer
+            clearTimeout(timeout); // reset the game timer
         }
     }
 
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GamePage;
+export default BubblePop;

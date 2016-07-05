@@ -26,8 +26,8 @@ import TimerMixin from 'react-timer-mixin';
 import Main from "./components/main";
 import Flyer from "./components/flyer";
 import DragDragon from "./components/DragDragon";
-import GamePage from './components/GamePage';
-import GameWinPage from './components/GameWinPage';
+import BubblePop from './components/BubblePop';
+import BubblePopWinPage from './components/BubblePopWinPage';
 import NextGamePage from './components/NextGamePage';
 
 class CogApp extends React.Component {
@@ -60,9 +60,9 @@ class CogApp extends React.Component {
     }else if(route.id === 2){
       return <DragDragon />
     }if (route.id === 3) {
-      return <GamePage navigator={navigator} />
+      return <BubblePop navigator={navigator} />
     } else if (route.id === 4){
-      return <GameWinPage navigator={navigator} route={route}/>
+      return <BubblePopWinPage navigator={navigator} route={route}/>
     } else if (route.id === 5){
       return <NextGamePage navigator={navigator} route={route}/>
     } 
