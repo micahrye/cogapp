@@ -149,18 +149,22 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
+    if(this._animation['touch'] !== null){
+      this.touchSprite();
+    }
+
     if(this.props.draggable){
       // no tweening for draggables
       return;
     }
 
-    this._Tweener["bounce"]({
-      startScale: 0.95,
-      endScale: 1.0,
-      friction: 2.5,
-    }, {scale: this.state._scale});
+    // this._Tweener["bounce"]({
+    //   startScale: 0.95,
+    //   endScale: 1.0,
+    //   friction: 2.5,
+    // }, {scale: this.state._scale});
 
-    if(this.props.tweenStart == "touch"){
+    if(this.props.tweenStart === "touch"){
       this.startAnimation();
     }
     else if(this.props.onPress){
@@ -168,6 +172,26 @@ class AnimatedSprite extends React.Component{
       // binds time of press to prop function
     }
 
+  }
+
+  touchSprite() {
+      clearInterval(this.animationInterval);
+      this._animationKey = 'touch';
+      this.numFrames = this._animation[this._animationKey].length-1;
+      this.frameIndex = 0;
+      this.touchAnimationInterval = setInterval(()=>{
+          this.frameIndex++;
+          if(this.frameIndex > this.numFrames){
+              clearInterval(this.touchAnimationInterval);
+              this._animationKey = ['idel'];
+              this.frameIndex = 0;
+              this.numFrames = this._animation[this._animationKey].length-1;
+              this.setAnimationInterval();
+              return;
+          }else{
+            this.setState({animate: true});
+          }
+      }, 100);
   }
 
   startAnimation() {

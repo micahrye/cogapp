@@ -42,12 +42,16 @@ class Main extends React.Component {
     //Alert.alert("Alert Title", "msg");
   }
 
-  goToGame = () => {
+  goToBubblePop = () => {
     this.props.navigator.push({id: 3});
   }
 
   goToDragon = () => {
     this.props.navigator.push({id: 2});
+  }
+
+  goToBugZap = () => {
+    this.props.navigator.push({id: 6});
   }
 
   render() {
@@ -58,14 +62,19 @@ class Main extends React.Component {
             <Text style={styles.text}>Hello You :)</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToGame}>
+        <TouchableOpacity onPress={this.goToBubblePop}>
           <View style={styles.button}>
-            <Text style={styles.text}>Go To Game</Text>
+            <Text style={styles.text}>Go To BubblePop</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.goToDragon}>
           <View style={styles.button}>
             <Text style={styles.text}>Go To Dragon</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.goToBugZap}>
+          <View style={styles.button}>
+            <Text style={styles.text}>Go To BugZap</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -97,7 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4d94ff',
     borderRadius: 10,
     margin: 10,
-    height: 200,
+    height: 100,
     width: 200,
     justifyContent: 'center',
   },

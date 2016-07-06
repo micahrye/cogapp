@@ -29,6 +29,7 @@ import DragDragon from "./components/DragDragon";
 import BubblePop from './components/BubblePop';
 import BubblePopWinPage from './components/BubblePopWinPage';
 import NextGamePage from './components/NextGamePage';
+import BugZap from './components/BugZap';
 
 class CogApp extends React.Component {
   constructor(props){
@@ -65,7 +66,9 @@ class CogApp extends React.Component {
       return <BubblePopWinPage navigator={navigator} route={route}/>
     } else if (route.id === 5){
       return <NextGamePage navigator={navigator} route={route}/>
-    } 
+    } else if (route.id === 6){
+      return <BugZap navigator={navigator} />
+    }
   }
 }
 
