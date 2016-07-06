@@ -5,10 +5,11 @@ import {
     Text,
     View,
     TouchableOpacity,
+    Image,
+    Navigator,
 } from 'react-native';
 
 import frogCharacter from "../sprites/frog/frogCharacter";
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import AnimatedSprite from "./animatedSprite";
 import Background from '../backgrounds/Game_1_Background_1280.png';
 
@@ -21,13 +22,25 @@ class BugZap extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape();
     }
+
+    buttonPress = () => {
+        this.props.navigator.push({
+            id: 7,
+        });
+    }
+
     render(){
         return (
             <View style={styles.container}>
-                <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 300, left: SCREEN_WIDTH - 200}}
-                    size={{width: 256, height: 256}}
-                    draggable={false}
-                    character={frogCharacter} />
+                <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+                        <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                            <Text>Go to Level 2</Text>        
+                        </TouchableOpacity>
+                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                            size={{width: 256, height: 256}}
+                            draggable={false}
+                            character={frogCharacter} />
+                </Image>
             </View>
         );
     }
@@ -37,8 +50,20 @@ class BugZap extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-    }
+        backgroundColor: 'black',
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
+    },
+    button: {
+        backgroundColor: '#4d94ff',
+        borderRadius: 10,
+        width: 90,
+        height: 30,
+        
+    },
 });
 
 export default BugZap;
