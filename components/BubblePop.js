@@ -87,7 +87,7 @@ class BubblePop extends React.Component {
                 xTo: sequence,
                 yTo: [0, startTop],
                 duration: this.getDuration(),
-                repeatable: true,
+                loop: true,
             };
 
             bubbleCharacters.push(
