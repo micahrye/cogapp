@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import frogCharacter from "../sprites/frog/frogCharacter";
+import bugCharacter from '../sprites/bug/bugCharacter';
 import AnimatedSprite from "./animatedSprite";
 import Background from '../backgrounds/Game_1_Background_1280.png';
 
@@ -30,12 +31,27 @@ class BugZap extends React.Component {
     }
 
     render(){
+        const tweenSettings = {
+                tweenType: "sine-wave",
+                startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
+                xTo: [0],
+                yTo: [0, 100, 0, 100],
+                duration: 5000,
+                loop: true,
+        };
+
         return (
             <View style={styles.container}>
                 <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
                         <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                             <Text>Go to Level 2</Text>        
                         </TouchableOpacity>
+                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                            size={{width: 128, height: 128}}
+                            draggable={false}
+                            character={bugCharacter}
+                            tween={tweenSettings} 
+                            tweenStart="auto" />
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 256, height: 256}}
                             draggable={false}
