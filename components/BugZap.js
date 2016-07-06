@@ -10,6 +10,7 @@ import {
 import frogCharacter from "../sprites/frog/frogCharacter";
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import AnimatedSprite from "./animatedSprite";
+import Background from '../backgrounds/Game_1_Background_1280.png';
 
 let Orientation = require('react-native-orientation');
 
@@ -18,13 +19,13 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap extends React.Component {
     componentDidMount() {
-       // Orientation.lockToLandscape();
+        Orientation.lockToLandscape();
     }
     render(){
         return (
             <View style={styles.container}>
-                <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 200, left: SCREEN_WIDTH - 150}}
-                    size={{width: 150, height: 150}}
+                <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 300, left: SCREEN_WIDTH - 200}}
+                    size={{width: 256, height: 256}}
                     draggable={false}
                     character={frogCharacter} />
             </View>
