@@ -32,18 +32,12 @@ class GameTwo extends Component {
 
     const tweenOpts01 = {
       tweenType: "hop",
-      startXY: [40, 110],
+      startXY: [40, 400],
       repeatable: true,
       loop: true,
     };
 
-    // <AnimatedSprite
-    //     coordinates={{top:110, left:40}}
-    //     size={{width: 100, height: 100}}
-    //     draggable={false}
-    //     character={greenDragonCharacter}
-    //     tweenStart="touch"
-    //     tween={tweenOpts01}/>
+
 
 
 
@@ -55,6 +49,13 @@ class GameTwo extends Component {
                       width: 100, backgroundColor: 'blue'}}>
         </View>
       </TouchableOpacity>
+      <AnimatedSprite
+          coordinates={{top:400, left:40}}
+          size={{width: 100, height: 100}}
+          draggable={false}
+          character={greenDragonCharacter}
+          tweenStart="touch"
+          tween={tweenOpts01}/>
       </View>
     );
   }

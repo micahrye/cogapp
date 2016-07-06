@@ -143,8 +143,8 @@ class AnimatedSprite extends React.Component{
         top: this.state._top,
         left: this.state._left,
         position: 'absolute',
-       // borderWidth: 2,
-       // borderColor: '#ff00ff',
+        borderWidth: 2,
+        borderColor: '#ff00ff',
         transform: [
           {scale: this.state._scale},
           {rotate: ro},
@@ -155,9 +155,9 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    // if(this._animation['touch'] !== undefined){
-    //   this.touchSprite();
-    // }
+    if(this._animation['touch'] !== undefined){
+      this.touchSprite();
+    }
 
     if(this.props.draggable){
       // no tweening for draggables
