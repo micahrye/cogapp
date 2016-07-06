@@ -68,6 +68,8 @@ class CogApp extends React.Component {
       return <NextGamePage navigator={navigator} route={route}/>
     } else if (route.id === 6){
       return <BugZap navigator={navigator} />
+    } else if (route.id === 7){
+      return <Game2 navigator={navigator} />
     }
   }
 }
