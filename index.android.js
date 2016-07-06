@@ -30,6 +30,14 @@ import BubblePop from './components/BubblePop';
 import BubblePopWinPage from './components/BubblePopWinPage';
 import NextGamePage from './components/NextGamePage';
 import BugZap from './components/BugZap';
+import BugZapLevel1 from './components/BugZap1';
+import BugZapLevel2 from './components/BugZap2';
+import BugZapLevel3 from './components/BugZap3';
+import GameTwo from './components/GameTwo';
+import GameTwoLevel1 from './components/GameTwo1';
+import GameTwoLevel2 from './components/GameTwo2';
+import GameTwoLevel3 from './components/GameTwo3';
+
 
 class CogApp extends React.Component {
   constructor(props){
@@ -69,7 +77,19 @@ class CogApp extends React.Component {
     } else if (route.id === 6){
       return <BugZap navigator={navigator} />
     } else if (route.id === 7){
-      return <Game2 navigator={navigator} />
+      return <BugZapLevel1 navigator={navigator} />
+    } else if (route.id === 8){
+      return <BugZapLevel2 navigator={navigator} />
+    } else if (route.id === 9){
+      return <BugZapLevel3 navigator={navigator} />
+    } else if (route.id === 10){
+      return <GameTwo navigator={navigator} />
+    } else if (route.id === 11){
+      return <GameTwoLevel1 navigator={navigator} />
+    } else if (route.id === 12){
+      return <GameTwoLevel2 navigator={navigator} />
+    } else if (route.id === 13){
+      return <GameTwoLevel3 navigator={navigator} />
     }
   }
 }

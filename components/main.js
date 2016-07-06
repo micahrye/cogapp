@@ -54,6 +54,10 @@ class Main extends React.Component {
     this.props.navigator.push({id: 6});
   }
 
+  goToGameTwo = () => {
+    this.props.navigator.push({id: 10});
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -75,6 +79,11 @@ class Main extends React.Component {
         <TouchableOpacity onPress={this.goToBugZap}>
           <View style={styles.button}>
             <Text style={styles.text}>Go To BugZap</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.goToGameTwo}>
+          <View style={styles.button}>
+            <Text style={styles.text}>Go To Game Two</Text>
           </View>
         </TouchableOpacity>
       </View>
