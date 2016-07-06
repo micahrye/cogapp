@@ -23,6 +23,7 @@ class AnimatedSprite extends React.Component{
       _scale: new Animated.Value(0),
       _top: new Animated.Value(props.coordinates.top),
       _left: new Animated.Value(props.coordinates.left),
+      _rotation: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
     };
@@ -133,6 +134,10 @@ class AnimatedSprite extends React.Component{
   }
 
   getStyle(){
+    let ro = this.state._rotation.interpolate({
+      inputRange: [0,100],
+      outputRange: ['0deg','360deg']
+    });
     return (
       {
         top: this.state._top,
@@ -142,6 +147,7 @@ class AnimatedSprite extends React.Component{
        // borderColor: '#ff00ff',
         transform: [
           {scale: this.state._scale},
+          {rotate: ro},
         ]
       }
     );
@@ -158,11 +164,16 @@ class AnimatedSprite extends React.Component{
       return;
     }
 
-    // this._Tweener["bounce"]({
-    //   startScale: 0.95,
-    //   endScale: 1.0,
-    //   friction: 2.5,
-    // }, {scale: this.state._scale});
+
+    // put this in an if statement so scale is not being being told to go
+    // in 2 different directions simultaneously
+    // if (this.props.touchTween.tweenType !== "pulse") {
+    //   this._Tweener["bounce"]({
+    //     startScale: 0.95,
+    //     endScale: 1.0,
+    //     friction: 2.5,
+    //   }, {scale: this.state._scale});
+    //  }
 
     if(this.props.tweenStart === "touch"){
       this.startAnimation();
@@ -203,8 +214,10 @@ class AnimatedSprite extends React.Component{
     const tweenState = {
       top: this.state._top,
       left: this.state._left,
+      scale: this.state._scale,
+      rotation: this.state._rotation,
     }
-    this._Tweener[tweenType](tweenOptions, tweenState);
+    this._Tweener["Looper"](tweenOptions, tweenState, tweenType);
   }
 
   render() {
