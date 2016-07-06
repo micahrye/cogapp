@@ -155,9 +155,9 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    if(this._animation['touch'] !== undefined){
-      this.touchSprite();
-    }
+    // if(this._animation['touch'] !== undefined){
+    //   this.touchSprite();
+    // }
 
     if(this.props.draggable){
       // no tweening for draggables

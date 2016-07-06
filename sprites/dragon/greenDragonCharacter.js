@@ -19,15 +19,15 @@ const greenDragonCharacter = {
     require("./green_dragon02.png"),
     require("./green_dragon01.png"),
   ],
-
-  touch:[
-    require("./gd_wings01.png"),
-    require("./gd_wings02.png"),
-    require("./gd_wings03.png"),
-    require("./gd_wings04.png"),
-    require("./gd_wings05.png"),
-    require("./gd_wings06.png"),
-  ]
+  //
+  // touch:[
+  //   require("./gd_wings01.png"),
+  //   require("./gd_wings02.png"),
+  //   require("./gd_wings03.png"),
+  //   require("./gd_wings04.png"),
+  //   require("./gd_wings05.png"),
+  //   require("./gd_wings06.png"),
+  // ]
 
 };
 
