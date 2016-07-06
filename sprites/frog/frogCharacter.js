@@ -5,11 +5,6 @@ const frogCharacter = {
 
   idel:[
     require("./frog_celebrate01.png"),
-    require("./frog_celebrate02.png"),
-    require("./frog_celebrate03.png"),
-    require("./frog_celebrate03.png"),
-    require("./frog_celebrate02.png"),
-    require("./frog_celebrate01.png"),
   ],
   
   touch:[
