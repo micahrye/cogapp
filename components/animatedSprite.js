@@ -171,7 +171,6 @@ class AnimatedSprite extends React.Component{
       this.props.onPress((Date.now() - this.props.renderTime) / 1000);
       // binds time of press to prop function
     }
-
   }
 
   touchSprite() {
