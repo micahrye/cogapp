@@ -19,12 +19,9 @@ import {
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
-import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
-//import AnimatedSprite from "./components/animatedSprite";
 import Main from "./components/main";
-import Flyer from "./components/flyer";
 import DragDragon from "./components/DragDragon";
 import BubblePop from './components/BubblePop';
 import BubblePopWinPage from './components/BubblePopWinPage';
@@ -64,8 +61,6 @@ class CogApp extends React.Component {
   renderScene(route, navigator){
     if(route.id === 0){
       return <Main navigator={navigator} />
-    }else if(route.id === 1){
-      return <Flyer navigator={navigator} />
     }else if(route.id === 2){
       return <DragDragon />
     }if (route.id === 3) {

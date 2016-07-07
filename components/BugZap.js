@@ -14,15 +14,12 @@ import bugCharacter from '../sprites/bug/bugCharacter';
 import AnimatedSprite from "./animatedSprite";
 import Background from '../backgrounds/Game_1_Background_1280.png';
 
-let Orientation = require('react-native-orientation');
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap extends React.Component {
-    componentDidMount() {
-        Orientation.lockToLandscape();
-    }
+    componentDidMount() { }
 
     buttonPress = () => {
         this.props.navigator.push({
@@ -35,7 +32,7 @@ class BugZap extends React.Component {
                 tweenType: "sine-wave",
                 startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
                 xTo: [0],
-                yTo: [0, 100, 0, 100],
+                yTo: [0, 120, 40, 100, 10],
                 duration: 5000,
                 loop: true,
         };
@@ -44,13 +41,13 @@ class BugZap extends React.Component {
             <View style={styles.container}>
                 <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
                         <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                            <Text>Go to Level 2</Text>        
+                            <Text>Go to Level 2</Text>
                         </TouchableOpacity>
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 128, height: 128}}
                             draggable={false}
                             character={bugCharacter}
-                            tween={tweenSettings} 
+                            tween={tweenSettings}
                             tweenStart="auto" />
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 256, height: 256}}
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 90,
         height: 30,
-        
+
     },
 });
 
