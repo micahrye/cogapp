@@ -14,7 +14,8 @@ import {
 import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from './animatedSprite';
 import NextGamePage from './NextGamePage';
-import bubbleImage from '../sprites/bubble/bubbleCharacter';
+import bubbleCharacterLarge from '../sprites/bubble/bubbleCharacterLarge';
+import bubbleCharacterSmall from '../sprites/bubble/bubbleCharacterSmall';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -93,7 +94,7 @@ class BubblePop extends React.Component {
                 <AnimatedSprite key={i} coordinates={{top:500, left: startLeft}}
                 size={size}
                 draggable={false}
-                character={bubbleImage} 
+                character={bubbleCharacterLarge} 
                 tween={tweenSettings} 
                 tweenStart="auto"
                 renderTime={Date.now()}                    
@@ -150,13 +151,12 @@ class BubblePop extends React.Component {
 
     render(){
         return (
-             <View style={styles.topLevel}>
+            <View style={styles.topLevel}>
                 <View style={styles.sceneLevel}>
                     <View style={styles.topBar}>
                         <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
                         <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
                         <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-
                     </View>
                     <View style={styles.gameWorld}>
                         {bubbleCharacters}
