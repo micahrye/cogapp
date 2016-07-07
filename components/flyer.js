@@ -152,6 +152,7 @@ class Flyer extends React.Component {
       <View style={styles.mainContainer}>
 
         <View style={styles.container}>
+
           <AnimatedSprite coordinates={{top:100, left:10}}
             size={{width: 100, height: 95}}
             draggable={true}
