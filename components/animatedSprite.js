@@ -98,9 +98,8 @@ class AnimatedSprite extends React.Component{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
-      }else{
-        this.setState({animate: true});
       }
+      this.setState({animate: true});   
       //console.log("move please");
     }, 100);
   }
