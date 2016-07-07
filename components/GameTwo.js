@@ -26,36 +26,21 @@ class GameTwo extends Component {
     super(props);
   }
 
+  buttonPress = () => {
+      this.props.navigator.push({
+          id: 7,
+      });
+  }
+
   render() {
 
-
-
-    const tweenOpts01 = {
-      tweenType: "hop",
-      startXY: [40, 400],
-      repeatable: true,
-      loop: true,
-    };
-
-
-
-
-
     return (
-      <View>
-      <TouchableOpacity style={styles.container}
-                        hitSlop={{top:0,left:0,bottom:-150,right:-150}}>
-        <View style={{left: 0, top: 0, height: 100,
-                      width: 100, backgroundColor: 'blue'}}>
-        </View>
-      </TouchableOpacity>
-      <AnimatedSprite
-          coordinates={{top:400, left:40}}
-          size={{width: 100, height: 100}}
-          draggable={false}
-          character={greenDragonCharacter}
-          tweenStart="touch"
-          tween={tweenOpts01}/>
+      <View style={styles.container}>
+        <Image source={require('../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+                <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                    <Text>Go to Level 2</Text>
+                </TouchableOpacity>
+        </Image>
       </View>
     );
   }
@@ -63,12 +48,20 @@ class GameTwo extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    top: 20,
-    left: 20,
-    width: 250,
-    height: 250,
-    borderWidth: 3,
-    borderColor: 'red',
+      flex: 1,
+      backgroundColor: 'black',
+  },
+  backgroundImage: {
+      flex: 1,
+      width: null,
+      height: null,
+  },
+  button: {
+      backgroundColor: '#4d94ff',
+      borderRadius: 10,
+      width: 90,
+      height: 30,
+
   },
 })
 
