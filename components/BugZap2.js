@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
     Image,
     Navigator,
-    Modal,
 } from 'react-native';
 
 import frogCharacter from "../sprites/frog/frogCharacter";
@@ -20,6 +19,9 @@ import Background from '../backgrounds/Game_1_Background_1280.png';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+let blackout = [];
+let spotLight = [];
+let bug = [];
 
 class BugZap2 extends React.Component {
     constructor(props){
@@ -27,33 +29,42 @@ class BugZap2 extends React.Component {
         this.state = {
             blackout: false,
         }
-        let blackout = [];
-        let spotLight = [];
+        
         this.setBlackout();
     }
     componentDidMount() { }
 
-    // timeout sequence: show blackout, show spotlight, hide spotlight, hide blackout
-    setBlackout = () => {
-        blackout = [];
-        spotLight = [];
+    setBlackout() {
         timeout = setTimeout ( () => {
             blackout.push(<View key={0} style={styles.blackout}></View>);
             this.setState({blackout: true});
-            timeout2 = setTimeout ( () => {
-                spotLight.push(<View key={0} style={styles.spotLight}></View>);
+            this.flashSpotLight();
+        }, 3500);
+    }
+
+    flashSpotLight() {
+        timeout2 = setTimeout ( () => {
+            spotLight.push(<View key={0} style={styles.spotLight}></View>);
+            this.setState({blackout: true});
+            timeout3 = setTimeout ( () => {
+                delete spotLight[0];
                 this.setState({blackout: true});
-                timeout3 = setTimeout ( () => {
-                    delete spotLight[0];
-                    this.setState({blackout: true});
-                    timeout4 = setTimeout ( () => {
-                        delete blackout[0];
-                        this.setState({blackout: false});
-                    }, 200);
-                }, 500);
-            }, 1000);
-      }, 3500);
-        
+                this.removeBlackout();
+            }, 500);
+        }, 1000);
+    }
+
+    removeBlackout() {
+        timeout4 = setTimeout ( () => {
+            delete blackout[0];
+            bug.push(
+                <AnimatedSprite key={0} coordinates={{top: SCREEN_HEIGHT - 300, left: SCREEN_WIDTH - 200}}
+                size={{width: 128, height: 128}}
+                draggable={false}
+                character={bugCharacter}/>
+            );
+            this.setState({blackout: false});
+        }, 200);
     }
 
     buttonPress = () => {
@@ -72,7 +83,10 @@ class BugZap2 extends React.Component {
         };
         return (
                 <View style={styles.container}>
-                    <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>   
+                    <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+                            <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                                <Text>Go to Level 3</Text>
+                            </TouchableOpacity>   
                             <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
                                 size={{width: 128, height: 128}}
                                 draggable={false}
@@ -92,6 +106,9 @@ class BugZap2 extends React.Component {
                             </View>
                             <View>
                                 {spotLight}
+                            </View>
+                            <View>
+                                {bug}
                             </View>
                     </Image>
                 </View>       
@@ -115,6 +132,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 90,
         height: 30,
+        position: 'absolute',
     },
     blackout: {
         flex: 1,
@@ -126,9 +144,9 @@ const styles = StyleSheet.create({
     spotLight: {
         flex: 1,
         backgroundColor: 'white',
-        height: 200,
-        width: 200,
-        left: 200,
+        height: 150,
+        width: 150,
+        left: 400,
         top: 100,
         position: 'absolute',
         borderRadius: 100,
