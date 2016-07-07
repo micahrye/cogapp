@@ -19,6 +19,9 @@ import TimerMixin from 'react-timer-mixin';
 import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import Tweener from "./Tweener";
+import frogCharacter from "../sprites/frog/frogCharacter";
+
+const Window = Dimensions.get('window');
 
 class GameTwo1 extends Component {
 
@@ -40,6 +43,10 @@ class GameTwo1 extends Component {
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>Go to Level 3</Text>
                 </TouchableOpacity>
+                <AnimatedSprite coordinates={{top: Window.height - 275, left: Window.width - 200}}
+                    size={{width: 256, height: 256}}
+                    draggable={false}
+                    character={frogCharacter} />
         </Image>
       </View>
     );
