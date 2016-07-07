@@ -145,8 +145,8 @@ class AnimatedSprite extends React.Component{
         top: this.state._top,
         left: this.state._left,
         position: 'absolute',
-        borderWidth: 2,
-        borderColor: '#ff00ff',
+        // borderWidth: 2,
+        // borderColor: '#ff00ff',
         transform: [
           {scale: this.state._scale},
           {rotate: ro},

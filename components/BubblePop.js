@@ -28,6 +28,7 @@ class BubblePop extends React.Component {
         this.state = {
             score: 0,
             popTime: 0,
+            bubblesAdded: false,
         }
         let bubbleCharacters = [];
         this.createBubbles(NUM_BUBBLES);
@@ -56,7 +57,7 @@ class BubblePop extends React.Component {
                 callback: this.resetGame,
             });
             return <NextGamePage />;
-        }, 10000);
+        }, 30000);
     }
 
     // populate array of bubbles
@@ -66,11 +67,11 @@ class BubblePop extends React.Component {
             let size = {};
             let sequence = [];
             let startLeft = i*((SCREEN_WIDTH-15-OFFSET-BUBBLE_SIZE)/NUM_BUBBLES);
-            let startTop = this.getStartTop();
+            let startTop = SCREEN_HEIGHT - 153;
         
             if(i%2 == 0){ 
                 size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
-                sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft];
+                sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
                 // vary bubble's x transition sequence
             }
             else{
@@ -89,7 +90,6 @@ class BubblePop extends React.Component {
                 duration: this.getDuration(),
                 loop: true,
             };
-
             bubbleCharacters.push(
                 <AnimatedSprite key={i} coordinates={{top:500, left: startLeft}}
                 size={size}
@@ -101,7 +101,6 @@ class BubblePop extends React.Component {
                 onPress={this.popBubble.bind(null, i)}/>
             );
         }
-
     }
 
     // random value for y starting location
@@ -112,7 +111,7 @@ class BubblePop extends React.Component {
 
     // random duration
     getDuration () {
-        return( Math.random() *  (10000 - 4000) + 4000 );
+        return( Math.random() *  (11000 - 3000) + 3000 );
     }
 
     // remove bubble and record time it took to pop it
@@ -151,6 +150,7 @@ class BubblePop extends React.Component {
     };
 
     render(){
+        AsyncStorage.clear();
         return (
              <View style={styles.topLevel}>
                 <View style={styles.sceneLevel}>
