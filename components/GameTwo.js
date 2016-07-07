@@ -28,7 +28,7 @@ class GameTwo extends Component {
 
   buttonPress = () => {
       this.props.navigator.push({
-          id: 7,
+          id: 11,
       });
   }
 
