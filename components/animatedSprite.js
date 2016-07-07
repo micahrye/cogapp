@@ -93,7 +93,7 @@ class AnimatedSprite extends React.Component{
 
   setAnimationInterval(){
     // NOTE: making assumption there is an idel animation. Maybe change if only
-    // one frame fro idel don't run interval. 
+    // one frame fro idel don't run interval.
     this.animationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
@@ -190,14 +190,15 @@ class AnimatedSprite extends React.Component{
   }
 
   touchSprite() {
+      // TOOD: rework this 
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
       this.numFrames = this._animation[this._animationKey].length-1;
       this.frameIndex = 0;
-      this.touchAnimationInterval = setInterval(()=>{
+      this.animationInterval = setInterval(()=>{
           this.frameIndex++;
           if(this.frameIndex > this.numFrames){
-              clearInterval(this.touchAnimationInterval);
+              clearInterval(this.animationInterval);
               this._animationKey = ['idel'];
               this.frameIndex = 0;
               this.numFrames = this._animation[this._animationKey].length-1;
@@ -207,6 +208,7 @@ class AnimatedSprite extends React.Component{
             this.setState({animate: true});
           }
       }, 100);
+
   }
 
   startAnimation() {
