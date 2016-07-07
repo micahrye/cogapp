@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
-import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 
