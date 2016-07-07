@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
-import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 //import AnimatedSprite from "./components/animatedSprite";
@@ -65,7 +64,7 @@ class CogApp extends React.Component {
       return <GameWinPage navigator={navigator} route={route}/>
     } else if (route.id === 5){
       return <NextGamePage navigator={navigator} route={route}/>
-    } 
+    }
   }
 }
 

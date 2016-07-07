@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
-import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
 
@@ -113,22 +112,3 @@ const styles = StyleSheet.create({
 
 
 export default Main;
-
-
-/*
-<Motion defaultStyle={{x: 0}} style={{x: spring(100)}}>
-  {val => {
-    let style = {
-      position: 'absolute',
-      top: val.x * 2.5,
-      left: val.x * 3,
-      backgroundColor: '#0000ff',
-      color: '#fff'
-    };
-    return (
-      <Animatable.View ref="view">
-    <Text style={style}>{val.x}</Text>
-  </Animatable.View>
-      )}}
-</Motion>
-*/

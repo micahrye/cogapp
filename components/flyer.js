@@ -16,18 +16,19 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TouchableHighlight,
+  TouchableNativeFeedback,
   TouchableWithoutFeedback
 } from 'react-native';
 
 import SAT from 'sat';
 
 import reactMixin from 'react-mixin';
-import {Motion, spring} from 'react-motion';
 import TimerMixin from 'react-timer-mixin';
 
-import AnimatedSprite from "./AnimatedSprite";
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
-import Tweener from "./Tweener";
+import AnimatedSprite from "./animatedSprite";
+import greenDragonCharacter from "./frames/greenDragonCharacter";
+import Animator from "./Animator";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 
@@ -152,19 +153,18 @@ class Flyer extends React.Component {
       <View style={styles.mainContainer}>
 
         <View style={styles.container}>
-
-          <AnimatedSprite coordinates={{top:100, left:10}}
+          <AnimatedSprite coordinates={{x:10, y:100}}
             size={{width: 100, height: 95}}
             draggable={true}
             character={greenDragonCharacter} />
 
-          <AnimatedSprite coordinates={{top:250, left:110}}
+          <AnimatedSprite coordinates={{x:110, y:250}}
               size={{width: 100, height: 95}}
               draggable={false}
               character={greenDragonCharacter}
               touchTween={tweenOpts01} />
 
-            <AnimatedSprite coordinates={{top:100, left:210}}
+            <AnimatedSprite coordinates={{x:210, y:100}}
               size={{width: 100, height: 95}}
               draggable={false}
               character={greenDragonCharacter}
@@ -187,7 +187,7 @@ class Flyer extends React.Component {
             style={{top: this.state.tweenValue, ...dragonStyle}}
             key={1}>
           <Animated.Image
-            source={require("../sprites/dragon/green_dragon04.png")}
+            source={require("./frames/green_dragon04.png")}
             style={{
               flex: 1,
               opacity: this.state.bounceValue,
@@ -255,22 +255,3 @@ const styles = StyleSheet.create({
 
 
 export default Flyer;
-
-
-/*
-<Motion defaultStyle={{x: 0}} style={{x: spring(100)}}>
-  {val => {
-    let style = {
-      position: 'absolute',
-      top: val.x * 2.5,
-      left: val.x * 3,
-      backgroundColor: '#0000ff',
-      color: '#fff'
-    };
-    return (
-      <Animatable.View ref="view">
-    <Text style={style}>{val.x}</Text>
-  </Animatable.View>
-      )}}
-</Motion>
-*/
