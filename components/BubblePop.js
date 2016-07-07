@@ -28,7 +28,6 @@ class BubblePop extends React.Component {
         this.state = {
             score: 0,
             popTime: 0,
-            bubblesAdded: false,
         }
         let bubbleCharacters = [];
         this.createBubbles(NUM_BUBBLES);
@@ -150,7 +149,6 @@ class BubblePop extends React.Component {
     };
 
     render(){
-        AsyncStorage.clear();
         return (
              <View style={styles.topLevel}>
                 <View style={styles.sceneLevel}>
