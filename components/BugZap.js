@@ -46,7 +46,9 @@ class BugZap extends React.Component {
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 128, height: 128}}
                             draggable={false}
-                            character={bugCharacter}/>
+                            character={bugCharacter}
+                            tween={tweenSettings}
+                            tweenStart="auto"/>
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 256, height: 256}}
                             draggable={false}

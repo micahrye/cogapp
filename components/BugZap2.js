@@ -1,0 +1,138 @@
+import React, { Component } from 'react';
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Image,
+    Navigator,
+    Modal,
+} from 'react-native';
+
+import frogCharacter from "../sprites/frog/frogCharacter";
+import frogCharacterFlipped from '../sprites/frog/frogCharacterFlipped';
+import bugCharacter from '../sprites/bug/bugCharacter';
+import lightbulbCharacter from '../sprites/lightbulb/lightbulbCharacter';
+import AnimatedSprite from "./animatedSprite";
+import Background from '../backgrounds/Game_1_Background_1280.png';
+
+
+let SCREEN_WIDTH = require('Dimensions').get('window').width;
+let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+
+class BugZap2 extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            blackout: false,
+        }
+        let blackout = [];
+        let spotLight = [];
+        this.setBlackout();
+    }
+    componentDidMount() { }
+
+    // timeout sequence: show blackout, show spotlight, hide spotlight, hide blackout
+    setBlackout = () => {
+        blackout = [];
+        spotLight = [];
+        timeout = setTimeout ( () => {
+            blackout.push(<View key={0} style={styles.blackout}></View>);
+            this.setState({blackout: true});
+            timeout2 = setTimeout ( () => {
+                spotLight.push(<View key={0} style={styles.spotLight}></View>);
+                this.setState({blackout: true});
+                timeout3 = setTimeout ( () => {
+                    delete spotLight[0];
+                    this.setState({blackout: true});
+                    timeout4 = setTimeout ( () => {
+                        delete blackout[0];
+                        this.setState({blackout: false});
+                    }, 200);
+                }, 500);
+            }, 1000);
+      }, 3500);
+        
+    }
+
+    buttonPress = () => {
+        this.props.navigator.push({
+            id: 9,
+        });
+    }
+
+    render(){
+        const tweenSettings = {
+                tweenType: "bounce-drop",
+                startXY: [SCREEN_WIDTH-400, -128],
+                endXY: [SCREEN_WIDTH-400, 0],
+                duration: 3000,
+                loop: false,
+        };
+        return (
+                <View style={styles.container}>
+                    <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>   
+                            <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
+                                size={{width: 128, height: 128}}
+                                draggable={false}
+                                character={lightbulbCharacter}
+                                tween={tweenSettings}
+                                tweenStart="auto"/>
+                            <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                                size={{width: 256, height: 256}}
+                                draggable={false}
+                                character={frogCharacter} />
+                            <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
+                                size={{width: 256, height: 256}}
+                                draggable={false}
+                                character={frogCharacterFlipped} />
+                            <View>
+                                {blackout}
+                            </View>
+                            <View>
+                                {spotLight}
+                            </View>
+                    </Image>
+                </View>       
+        );
+    }
+}
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor:'black',
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
+    },
+    button: {
+        backgroundColor: '#4d94ff',
+        borderRadius: 10,
+        width: 90,
+        height: 30,
+    },
+    blackout: {
+        flex: 1,
+        backgroundColor: 'black',
+        height: SCREEN_HEIGHT,
+        width: SCREEN_WIDTH,
+        position: 'absolute',
+    },
+    spotLight: {
+        flex: 1,
+        backgroundColor: 'white',
+        height: 200,
+        width: 200,
+        left: 200,
+        top: 100,
+        position: 'absolute',
+        borderRadius: 100,
+    },
+});
+
+export default BugZap2;
