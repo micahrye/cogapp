@@ -19,6 +19,7 @@ const greenDragonCharacter = {
     require("./green_dragon02.png"),
     require("./green_dragon01.png"),
   ],
+  // COMM: why is this commented out? 
   //
   // touch:[
   //   require("./gd_wings01.png"),

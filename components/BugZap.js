@@ -32,7 +32,7 @@ class BugZap extends React.Component {
                 tweenType: "sine-wave",
                 startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
                 xTo: [0],
-                yTo: [0, 100, 0, 100],
+                yTo: [0, 120, 40, 100, 10],
                 duration: 5000,
                 loop: true,
         };

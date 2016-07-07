@@ -63,6 +63,7 @@ class AnimatedSprite extends React.Component{
           this._handlePanResponderEnd(e, gestureState)},
         });
     }
+
     this._previousLeft =  this._initialX;
     this._previousTop = this._initialY;
     this._characterStyles = {
@@ -77,7 +78,7 @@ class AnimatedSprite extends React.Component{
 
   componentDidMount() {
     this.setAnimationInterval();
-    // have to set xy
+    // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
     if(this.props.tweenStart == "auto"){
@@ -91,6 +92,8 @@ class AnimatedSprite extends React.Component{
   }
 
   setAnimationInterval(){
+    // NOTE: making assumption there is an idel animation. Maybe change if only
+    // one frame fro idel don't run interval. 
     this.animationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
@@ -155,12 +158,12 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
+    // COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
     }
 
     if(this.props.draggable){
-      // no tweening for draggables
       return;
     }
 
@@ -179,8 +182,10 @@ class AnimatedSprite extends React.Component{
       this.startAnimation();
     }
     else if(this.props.onPress){
+      // COMM: wonder if onPress is right name?
+      // also does renderTime need to be a prop? Would a createdAtTime in
+      // componentDidMount work?
       this.props.onPress((Date.now() - this.props.renderTime) / 1000);
-      // binds time of press to prop function
     }
   }
 
