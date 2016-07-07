@@ -27,6 +27,10 @@ class GameTwo1 extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      rotation : new Animated.Value(16),
+    }
   }
 
   buttonPress = () => {
@@ -35,7 +39,34 @@ class GameTwo1 extends Component {
       });
   }
 
+  leverPress = () => {
+    Animated.timing(
+      this.state.rotation,
+      {
+        toValue: 75,
+        easing: Easing.linear,
+        duration: 500,
+      }
+    ).start();
+  }
+
   render() {
+
+    ro = this.state.rotation.interpolate({
+      inputRange: [0,100],
+      outputRange: ['0deg','180deg']
+    })
+
+    const leverStyle = {
+      height: 150,
+      width: 20,
+      borderColor: 'red',
+      borderWidth: 3,
+      backgroundColor: 'blue',
+      top: 40,
+      left: 0,
+      transform: [{rotate:ro}]
+    };
 
     return (
       <View style={styles.container}>
@@ -47,6 +78,12 @@ class GameTwo1 extends Component {
                     size={{width: 256, height: 256}}
                     draggable={false}
                     character={frogCharacter} />
+                <Animated.View>
+                  <TouchableOpacity
+                    onPress={this.leverPress.bind(this)}
+                    style={{...leverStyle}}>
+                  </TouchableOpacity>
+                </Animated.View>
         </Image>
       </View>
     );
@@ -68,7 +105,6 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       width: 90,
       height: 30,
-
   },
 })
 
