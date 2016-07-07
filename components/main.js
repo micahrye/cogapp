@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   TouchableNativeFeedback,
+  ScrollView,
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
@@ -61,6 +62,7 @@ class Main extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <ScrollView>
         <TouchableOpacity onPress={(evt)=>{this._handelPress(evt);}}>
           <View style={styles.button}>
             <Text style={styles.text}>Hello You :)</Text>
@@ -86,6 +88,7 @@ class Main extends React.Component {
             <Text style={styles.text}>Go To Game Two</Text>
           </View>
         </TouchableOpacity>
+        </ScrollView>
       </View>
     );
   }
