@@ -20,8 +20,14 @@ import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import Tweener from "./Tweener";
 import frogCharacter from "../sprites/frog/frogCharacter";
+import canCharacter from "../sprites/can/canCharacter";
+import appleCharacter from "../sprites/apple/appleCharacter";
 
 const Window = Dimensions.get('window');
+const endCoordinates = [480,250];
+const sprite1Start = [150,20];
+const sprite2Start = [250,20];
+const sprite3Start = [350,20];
 
 class GameTwo extends Component {
 
@@ -49,7 +55,36 @@ class GameTwo extends Component {
     ).start();
   }
 
+
+
   render() {
+
+    const tweenOpts01 = {
+      tweenType: "bounce-drop",
+      startXY: sprite1Start ,
+      endXY: endCoordinates,
+      duration: 600,
+      repeatable: false,
+      loop: false,
+    };
+
+    const tweenOpts02 = {
+      tweenType: "bounce-drop",
+      startXY: sprite2Start,
+      endXY: endCoordinates,
+      duration: 600,
+      repeatable: false,
+      loop: false,
+    };
+
+    const tweenOpts03 = {
+      tweenType: "bounce-drop",
+      startXY: sprite3Start,
+      endXY: endCoordinates,
+      duration: 600,
+      repeatable: false,
+      loop: false,
+    };
 
     ro = this.state.rotation.interpolate({
       inputRange: [0,100],
@@ -83,6 +118,24 @@ class GameTwo extends Component {
                     style={{...leverStyle}}>
                   </TouchableOpacity>
                 </Animated.View>
+                <AnimatedSprite coordinates={{top: 20, left: 150}}
+                    size={{width: 60, height: 60}}
+                    draggable={false}
+                    character={appleCharacter}
+                    tweenStart="touch"
+                    tween={tweenOpts01}/>
+                <AnimatedSprite coordinates={{top: 20, left: 250}}
+                    size={{width: 60, height: 60}}
+                    draggable={false}
+                    character={canCharacter}
+                    tweenStart="touch"
+                    tween={tweenOpts02}/>
+                <AnimatedSprite coordinates={{top: 20, left: 350}}
+                    size={{width: 60, height: 60}}
+                    draggable={false}
+                    character={canCharacter}
+                    tweenStart="touch"
+                    tween={tweenOpts03}/>
         </Image>
       </View>
     );
