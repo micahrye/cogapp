@@ -223,6 +223,9 @@ const Tweener = function () {
        if (options.loop === false) {
          looping = false;
        }
+       if (options.destroy) {
+         state.opacity.setValue(0);
+       }
        bounceDrop(options, state);
      });
    }
