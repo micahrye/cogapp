@@ -363,25 +363,9 @@ const Tweener = function () {
            Animated.timing(
              state.left,
              {
-               toValue: options.endXY[0]/4,
-               easing: Easing.sin,
-               duration: 1000,
-             }
-           ),
-           Animated.timing(
-             state.left,
-             {
                toValue: options.endXY[0]/2,
                easing: Easing.sin,
-               duration: 1000,
-             }
-           ),
-           Animated.timing(
-             state.left,
-             {
-               toValue: options.endXY[0]*(3/4),
-               easing: Easing.sin,
-               duration: 1000,
+               duration: options.duration/2,
              }
            ),
            Animated.timing(
@@ -389,7 +373,8 @@ const Tweener = function () {
              {
                toValue: options.endXY[0],
                easing: Easing.sin,
-               duration: 1000,
+               duration: options.duration/2,
+               delay: 100,
              }
            ),
         ]),
@@ -398,32 +383,33 @@ const Tweener = function () {
              state.top,
              {
                toValue: options.yTo[0],
-               easing: Easing.sin,
-               duration: 1000,
+               easing: Easing.linear,
+               duration: options.duration/4,
              }
             ),
             Animated.timing(
              state.top,
              {
                toValue: options.startXY[1],
-               easing: Easing.sin,
-               duration: 1000,
+               easing: Easing.linear,
+               duration: options.duration/4,
              }
            ),
            Animated.timing(
              state.top,
              {
                toValue: options.yTo[0],
-               easing: Easing.sin,
-               duration: 1000,
+               easing: Easing.linear,
+               duration: options.duration/4,
+               delay: 100,
              }
             ),
             Animated.timing(
              state.top,
              {
                toValue: options.startXY[1],
-               easing: Easing.sin,
-               duration: 1000,
+               easing: Easing.linear,
+               duration: options.duration/4,
              }
            ),
         ]),

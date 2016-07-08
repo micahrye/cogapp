@@ -22,10 +22,10 @@ class GameThree extends React.Component {
         const tweenSettings = {
             tweenType: "hop-forward",
                 startXY: [-20, 0],
-                endXY:[400],
+                endXY:[450],
                 yTo: [-100],
-                duration: 1000,
-                loop: true,
+                duration: 3000,
+                loop: false,
         }
         return(
             <View style={styles.container}>
