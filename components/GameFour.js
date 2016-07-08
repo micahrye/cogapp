@@ -4,13 +4,13 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity,
     Image,
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
 import bubbleCharacter from "../sprites/bubble/bubbleCharacterLarge";
 import frogCharacter from "../sprites/frog/frogCharacter";
+import squareCharacter from "../sprites/square/squareCharacter";
 
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -36,28 +36,28 @@ class GameFour extends React.Component {
             }
             else{
                 numberBoxes.push(
-                    <AnimatedSprite key={i} coordinates={{top: 300, left: ((i-9)*80) + 10}}
+                    <AnimatedSprite style={this.testStyle} key={i} coordinates={{top: 300, left: ((i-9)*90) + 10}}
                     size={{width: 60, height: 60}}
                     draggable={true} 
-                    character={bubbleCharacter}/>
+                    character={squareCharacter}/>
                 );
             }
         }
     }
 
-    getBoxStyles(xOffset) {
-        let yOffset = xOffset;
-        if(yOffset%3 === 0){
-            yOffset = 0;
-        }
-        else if (yOffset > 3 && yOffset <= 6){
-            yOffset = xOffset - 3;
-        }
-        else if(yOffset > 6){
-            yOffset = xOffset - 6;
-        }
+    getBoxStyles(boxNum) {
+        // let xOffset = yOffset;
+        // if(xOffset%3 === 0){
+        //     xOffset = 0;
+        // }
+        // else if (xOffset > 3 && xOffset <= 6){
+        //     xOffset = yOffset - 3;
+        // }
+        // else if(yOffset > 6){
+        //     xOffset = yOffset - 6;
+        // }
 
-        if(xOffset === 8){
+        if(boxNum === 8){
             borderStyle = 'dashed';
         }
         else{
@@ -70,9 +70,9 @@ class GameFour extends React.Component {
             height: 60,
             margin: 15,
             alignItems: 'center',
-            position: "absolute",
-            left: yOffset*(80),
-            top: (Math.floor(xOffset/3)*(80)),
+            //position: "absolute",
+            // left: xOffset*(90),
+            // top: (Math.floor(yOffset/3)*(90)),
         }
     }
 
@@ -102,9 +102,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'center',
-        width: 260,
+        width: 280,
         borderWidth: 3,
-        left: SCREEN_WIDTH/2 - 130,
+        left: SCREEN_WIDTH/2 - 140,
     },
     box: {
         borderWidth: 2,
@@ -112,22 +112,15 @@ const styles = StyleSheet.create({
         height: 60,
         margin: 15,
         alignItems: 'center',
-       // position: "absolute",
     },
     text: {
         fontSize: 45,
     },
-    emptyBox: {
-        top: 198,
-        left: 402,
+    testStyle: {
         borderWidth: 2,
-        width: 60,
-        height: 60,
-        margin: 15,
-        alignItems: 'center',
-        borderStyle: 'dashed',
-        position: 'absolute',
-    },
+        width: 10,
+        height: 10,
+    }
 });
 
 export default GameFour;
