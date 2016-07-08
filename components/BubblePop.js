@@ -127,6 +127,7 @@ class BubblePop extends React.Component {
         this.saveScore(newScore);
 
         if(newScore > NUM_BUBBLES - 1){ // navigate to win page if all bubbles are popped
+            clearTimeout(timeout); // reset the game timer            
             this.props.navigator.push({
                 id: 4,
                 callback: this.resetGame,
@@ -184,8 +185,6 @@ const styles = StyleSheet.create({
         height: SCREEN_HEIGHT - 153,
         borderStyle: 'solid',
         borderWidth: 2,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
     },
     backgroundImage: {
         flex: 1,
