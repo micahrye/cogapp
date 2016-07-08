@@ -21,7 +21,7 @@ let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let NUM_BUBBLES = 15;
 let BUBBLE_SIZE = 60;
-let OFFSET = 40;
+let OFFSET = 60;
 
 class BubblePop extends React.Component {
     constructor(props){
@@ -66,8 +66,7 @@ class BubblePop extends React.Component {
         for(let i=0; i < numBubbles; i++){
             let size = {};
             let sequence = [];
-            let startLeft = i*((SCREEN_WIDTH-15-OFFSET-BUBBLE_SIZE)/NUM_BUBBLES);
-            let startTop = SCREEN_HEIGHT - 153;
+            let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES);
         
             if(i%2 == 0){ 
                 size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
@@ -84,14 +83,14 @@ class BubblePop extends React.Component {
 
             const tweenSettings = {
                 tweenType: "sine-wave",
-                startXY: [startLeft, startTop],
+                startXY: [startLeft, SCREEN_HEIGHT],
                 xTo: sequence,
-                yTo: [0, startTop],
+                yTo: [0, SCREEN_HEIGHT],
                 duration: this.getDuration(),
                 loop: true,
             };
             bubbleCharacters.push(
-                <AnimatedSprite key={i} coordinates={{top:500, left: startLeft}}
+                <AnimatedSprite key={i} coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
                 size={size}
                 draggable={false}
                 character={bubbleCharacterLarge} 
@@ -103,15 +102,9 @@ class BubblePop extends React.Component {
         }
     }
 
-    // random value for y starting location
-    getStartTop () {
-        let startTop = Math.random() * ((SCREEN_HEIGHT+(NUM_BUBBLES*10)) - (SCREEN_HEIGHT - 70)) + (SCREEN_HEIGHT - 70);
-        return (startTop);
-    }
-
     // random duration
     getDuration () {
-        return( Math.random() *  (11000 - 3000) + 3000 );
+        return( Math.random() *  (12000 - 4000) + 4000 );
     }
 
     // remove bubble and record time it took to pop it
@@ -152,18 +145,14 @@ class BubblePop extends React.Component {
 
     render(){
         return (
-            <View style={styles.topLevel}>
-                <View style={styles.sceneLevel}>
-                    <View style={styles.topBar}>
-                        <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
-                        <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
-                        <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-                    </View>
-                    <View style={styles.gameWorld}>
-                        {bubbleCharacters}
-                    </View>
-                </View>
-            </View>
+            <Image source={require('../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
+                        <View style={styles.topBar}>
+                            <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
+                        </View>
+                        <View style={styles.gameWorld}>
+                            {bubbleCharacters}
+                        </View>
+            </Image>
         );
     }
 }
@@ -172,17 +161,17 @@ const styles = StyleSheet.create({
     topLevel :{
         alignItems: 'center',
     },
-    sceneLevel : {
-        height: SCREEN_HEIGHT - 70,
-        width: SCREEN_WIDTH - 30,
-        borderStyle: 'solid',
-        borderWidth: 2,
-        alignItems: 'center',
-        flex: 1,
-    },
+    // sceneLevel : {
+    //     height: SCREEN_HEIGHT - 70,
+    //     width: SCREEN_WIDTH - 30,
+    //     borderStyle: 'solid',
+    //     borderWidth: 2,
+    //     alignItems: 'center',
+    //     flex: 1,
+    // },
     gameWorld: {
-        width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 153,
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT,
         borderStyle: 'solid',
         borderWidth: 2,
     },
@@ -190,12 +179,11 @@ const styles = StyleSheet.create({
         flex: 1,
         width: null,
         height: null,
-        opacity: .1,
     },
     topBar: {
         alignItems: 'center',
-        width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 600,
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT - 700,
         borderStyle: 'solid',
         borderWidth: 2,
     },
