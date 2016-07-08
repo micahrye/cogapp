@@ -36,6 +36,8 @@ const Tweener = function () {
          tumbleOff(options, state);
        } else if (anim === 'spin') {
          spin(options, state);
+       } else if (anim === 'hop-forward') {
+          hopForward(options, state)
        }
 
      }
@@ -350,7 +352,88 @@ const Tweener = function () {
      });
    }
 
-  // comment
+   const hopForward = function(options, state) {
+     if (looping === false) {
+       return;
+     }
+     state.left.setValue(options.startXY[0]);
+     state.top.setValue(options.startXY[1]);
+     Animated.parallel([
+        Animated.sequence([
+           Animated.timing(
+             state.left,
+             {
+               toValue: options.endXY[0]/4,
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+           Animated.timing(
+             state.left,
+             {
+               toValue: options.endXY[0]/2,
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+           Animated.timing(
+             state.left,
+             {
+               toValue: options.endXY[0]*(3/4),
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+           Animated.timing(
+             state.left,
+             {
+               toValue: options.endXY[0],
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+        ]),
+        Animated.sequence([
+            Animated.timing(
+             state.top,
+             {
+               toValue: options.yTo[0],
+               easing: Easing.sin,
+               duration: 1000,
+             }
+            ),
+            Animated.timing(
+             state.top,
+             {
+               toValue: options.startXY[1],
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+           Animated.timing(
+             state.top,
+             {
+               toValue: options.yTo[0],
+               easing: Easing.sin,
+               duration: 1000,
+             }
+            ),
+            Animated.timing(
+             state.top,
+             {
+               toValue: options.startXY[1],
+               easing: Easing.sin,
+               duration: 1000,
+             }
+           ),
+        ]),
+     ]).start(() => {
+       if (options.loop === false) {
+         looping = false;
+       }
+       hopForward(options, state);
+     });
+   }
 
   return (
     {
@@ -365,6 +448,7 @@ const Tweener = function () {
       'hop': hop,
       'tumble-off': tumbleOff,
       'spin': spin,
+      'hop-forward': hopForward,
     }
   );
 };
