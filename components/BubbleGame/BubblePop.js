@@ -12,10 +12,10 @@ import {
 
 
 import BubblePopWinPage from './BubblePopWinPage';
-import AnimatedSprite from './animatedSprite';
-import NextGamePage from './NextGamePage';
-import bubbleCharacterLarge from '../sprites/bubble/bubbleCharacterLarge';
-import bubbleCharacterSmall from '../sprites/bubble/bubbleCharacterSmall';
+import AnimatedSprite from '../animatedSprite';
+import NextGamePage from '../NextGamePage';
+import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
+import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -67,8 +67,8 @@ class BubblePop extends React.Component {
             let size = {};
             let sequence = [];
             let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES);
-        
-            if(i%2 == 0){ 
+
+            if(i%2 == 0){
                 size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
                 sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
                 // vary bubble's x transition sequence
@@ -90,14 +90,19 @@ class BubblePop extends React.Component {
                 loop: true,
             };
             bubbleCharacters.push(
-                <AnimatedSprite key={i} coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
-                size={size}
-                draggable={false}
-                character={bubbleCharacterLarge} 
-                tween={tweenSettings} 
-                tweenStart="auto"
-                renderTime={Date.now()}                    
-                onPress={this.popBubble.bind(null, i)}/>
+                <AnimatedSprite
+                  key={i}
+                  spriteKey={i}
+                  coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
+                  size={size}
+                  draggable={false}
+                  character={bubbleCharacterLarge}
+                  tween={tweenSettings}
+                  tweenStart="auto"
+                  timeSinceMounted={
+                    (spriteKey, duration)=>this.popBubble(spriteKey, duration)
+                  }
+                />
             );
         }
     }
@@ -120,7 +125,7 @@ class BubblePop extends React.Component {
         this.saveScore(newScore);
 
         if(newScore > NUM_BUBBLES - 1){ // navigate to win page if all bubbles are popped
-            clearTimeout(timeout); // reset the game timer            
+            clearTimeout(timeout); // reset the game timer
             this.props.navigator.push({
                 id: 4,
                 callback: this.resetGame,
@@ -145,13 +150,13 @@ class BubblePop extends React.Component {
 
     render(){
         return (
-            <Image source={require('../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
-                        <View style={styles.topBar}>
-                            <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-                        </View>
-                        <View style={styles.gameWorld}>
-                            {bubbleCharacters}
-                        </View>
+            <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
+              <View style={styles.topBar}>
+                <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
+              </View>
+              <View style={styles.gameWorld}>
+                {bubbleCharacters}
+              </View>
             </Image>
         );
     }

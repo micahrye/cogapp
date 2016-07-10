@@ -9,11 +9,11 @@ import {
     Navigator,
 } from 'react-native';
 
-import frogCharacter from "../sprites/frog/frogCharacter";
-import frogCharacterFlipped from '../sprites/frog/frogCharacterFlipped';
-import bugCharacter from '../sprites/bug/bugCharacter';
-import AnimatedSprite from "./animatedSprite";
-import Background from '../backgrounds/Game_1_Background_1280.png';
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import frogCharacterFlipped from '../../sprites/frog/frogCharacterFlipped';
+import bugCharacter from '../../sprites/bug/bugCharacter';
+import AnimatedSprite from "../animatedSprite";
+import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -39,7 +39,7 @@ class BugZap1 extends React.Component {
         };
         return (
             <View style={styles.container}>
-                <Image source={require('../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+                <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
                         <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                             <Text>Go to Level 2</Text>
                         </TouchableOpacity>

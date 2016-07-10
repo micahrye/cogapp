@@ -13,9 +13,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
+
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
@@ -23,13 +21,13 @@ import TimerMixin from 'react-timer-mixin';
 
 import Main from "./components/main";
 import DragDragon from "./components/DragDragon";
-import BubblePop from './components/BubblePop';
-import BubblePopWinPage from './components/BubblePopWinPage';
+import BubblePop from './components/BubbleGame/BubblePop';
+import BubblePopWinPage from './components/BubbleGame/BubblePopWinPage';
 import NextGamePage from './components/NextGamePage';
-import BugZap from './components/BugZap';
-import BugZapLevel1 from './components/BugZap1';
-import BugZapLevel2 from './components/BugZap2';
-import BugZapLevel3 from './components/BugZap3';
+import BugZap from './components/BugZapGame/BugZap';
+import BugZapLevel1 from './components/BugZapGame/BugZap1';
+import BugZapLevel2 from './components/BugZapGame/BugZap2';
+import BugZapLevel3 from './components/BugZapGame/BugZap3';
 import GameTwo from './components/GameTwo';
 import GameTwoLevel1 from './components/GameTwo1';
 import GameTwoLevel2 from './components/GameTwo2';
@@ -106,12 +104,10 @@ class CogApp extends React.Component {
       return <GameThreeLevel4 navigator={navigator} />
     } else if (route.id === 19){
       return <GameFour navigator={navigator} />
-    } 
+    }
   }
 }
 
 reactMixin.onClass(CogApp, TimerMixin);
-
-
 
 AppRegistry.registerComponent('CogApp', () => CogApp);
