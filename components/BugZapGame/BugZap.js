@@ -37,6 +37,22 @@ class BugZap extends React.Component {
                 loop: true,
         };
 
+        let flies = [];
+        for(let i = 0; i < 5; i++){
+          const tweens = {...tweenSettings};
+          tweens.yTo = [0, 10*i, 40+i*5, 100*4*i, 10];
+          flies.push(
+            <AnimatedSprite
+              key={i}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+              size={{width: 128, height: 128}}
+              draggable={false}
+              character={bugCharacter}
+              tween={tweens}
+              tweenStart="auto"/>
+          );
+        }
+
         return (
             <View style={styles.container}>
                 <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
@@ -51,6 +67,9 @@ class BugZap extends React.Component {
                       character={bugCharacter}
                       tween={tweenSettings}
                       tweenStart="auto"/>
+
+                    {flies}
+
                     <AnimatedSprite
                       coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                       size={{width: 256, height: 256}}

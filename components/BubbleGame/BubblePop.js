@@ -8,6 +8,8 @@ import {
     AsyncStorage,
     Navigator,
     Image,
+    InteractionManager,
+    TouchableOpacity,
 } from 'react-native';
 
 
@@ -29,15 +31,22 @@ class BubblePop extends React.Component {
         this.state = {
             score: 0,
             popTime: 0,
+            bubbleCharacters: [],
+            renderPlaceholderOnly: true,
         }
-        let bubbleCharacters = [];
-        this.createBubbles(NUM_BUBBLES);
+        //let bubbleCharacters = [];
+
+
+
     }
 
     componentDidMount () {
-        AsyncStorage.getItem('score').then((value) => {
-            this.setUpScene(JSON.parse(value));
-        }).done();
+
+      AsyncStorage.getItem('score').then((value) => {
+        this.setUpScene(JSON.parse(value));
+      }).done();
+
+      this.createBubbles(NUM_BUBBLES);
     }
 
     // set up old scene from storage
@@ -62,7 +71,7 @@ class BubblePop extends React.Component {
 
     // populate array of bubbles
     createBubbles(numBubbles) {
-        bubbleCharacters = [];
+        let bubbles = [];
         for(let i=0; i < numBubbles; i++){
             let size = {};
             let sequence = [];
@@ -89,7 +98,7 @@ class BubblePop extends React.Component {
                 duration: this.getDuration(),
                 loop: true,
             };
-            bubbleCharacters.push(
+            bubbles.push(
                 <AnimatedSprite
                   key={i}
                   spriteKey={i}
@@ -105,6 +114,7 @@ class BubblePop extends React.Component {
                 />
             );
         }
+        this.setState({bubbleCharacters: bubbles});
     }
 
     // random duration
@@ -114,8 +124,20 @@ class BubblePop extends React.Component {
 
     // remove bubble and record time it took to pop it
     popBubble = (bubblePos, popTime) => {
-        this.setState({popTime: popTime});
-        delete bubbleCharacters[bubblePos];
+
+        // TODO: fix this, this is very wrong!!!!!!!
+        //delete bubbleCharacters[bubblePos];
+        //debugger;
+        let bubbles = [];
+
+        this.state.bubbleCharacters.forEach((item)=>{
+          if(bubblePos !== item.props.spriteKey){
+            bubbles.push(item)
+          }
+        });
+
+
+        this.setState({bubbleCharacters: bubbles, popTime: popTime});
         this.updateScore();
     }
 
@@ -148,16 +170,34 @@ class BubblePop extends React.Component {
         this.youLost();
     };
 
+    buttonPress = () => {
+        //this.props.navigator.pop();
+    }
+
     render(){
-        return (
-            <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
-              <View style={styles.topBar}>
+      //if (this.state.renderPlaceholderOnly) {
+      //  return this._renderPlaceholderView();
+      //}
+
+      return (
+          <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
+            <View style={styles.topBar} >
+              <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                 <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-              </View>
-              <View style={styles.gameWorld}>
-                {bubbleCharacters}
-              </View>
-            </Image>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.gameWorld}>
+              {this.state.bubbleCharacters}
+            </View>
+          </Image>
+      );
+    }
+
+    _renderPlaceholderView() {
+      return (
+        <View>
+          <Text style={{color:"red"}}>Loading...</Text>
+          </View>
         );
     }
 }

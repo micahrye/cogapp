@@ -106,7 +106,6 @@ class AnimatedSprite extends React.Component{
         this.frameIndex = 0;
       }
       this.setState({animate: true});
-      //console.log("move please");
     }, 100);
   }
 
@@ -142,10 +141,6 @@ class AnimatedSprite extends React.Component{
   }
 
   getStyle(){
-    let ro = this.state._rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','360deg']
-    });
     return (
       {
         top: this.state._top,
@@ -153,10 +148,6 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-        transform: [
-          {scale: this.state._scale},
-          {rotate: ro},
-        ]
       }
     );
 
@@ -200,16 +191,14 @@ class AnimatedSprite extends React.Component{
         this.frameIndex++;
         // run once and go back to idel
         if(this.frameIndex > this.numFrames){
-            clearInterval(this.touchAnimationInterval);
-            this.startIdelAnimation();
-            return;
+          clearInterval(this.touchAnimationInterval);
+          this.startIdelAnimation();
+          return;
         }else{
           this.setState({animate: true});
         }
     }, 100);
   }
-
-
 
   startTween() {
     if(!this.props.tween.repeatable && this._hasTweened){
@@ -230,7 +219,6 @@ class AnimatedSprite extends React.Component{
   render() {
 
     return(
-
         <Animated.View
           {...this._panResponder.panHandlers}
           style={this.getStyle()}

@@ -73,7 +73,6 @@ const Tweener = function () {
     const duration = options.duration;
     const numTrasitions = options.xTo.length;
     return options.xTo.map((x, index, array)=>{
-      console.log(`X = ${x}`);
       return Animated.timing(state.left, {
           duration: duration / numTrasitions,
           toValue: x,
