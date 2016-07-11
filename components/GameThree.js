@@ -15,7 +15,7 @@ let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class GameThree extends React.Component {
-    
+
 
 
     render(){
@@ -32,14 +32,14 @@ class GameThree extends React.Component {
                 <AnimatedSprite coordinates={{top: 0, left: -20}}
                 size={{width: 256, height: 256}}
                 draggable={false}
-                character={frogCharacterFlipped} 
+                character={frogCharacterFlipped}
                 tween={tweenSettings}
                 tweenStart="auto"/>
 
                 <View style={styles.tile}></View>
             </View>
         );
-       
+
     }
 }
 
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         width: 200,
         borderWidth: 2,
         top: (SCREEN_HEIGHT/2) - 50,
+        transform: [{rotateX: '10deg'}],
     }
 });
 

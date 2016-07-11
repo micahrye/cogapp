@@ -9,11 +9,12 @@ import {
     Navigator,
 } from 'react-native';
 
+// imports
+import AnimatedSprite from "../animatedSprite";
+// import characters for animatedsprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
-import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
-
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -39,7 +40,9 @@ class BugZap extends React.Component {
                 loop: true,
         };
 
+        // array holding fly sprites
         let flies = [];
+        // declare 5 fly variables, store them in flies
         for(let i = 0; i < 5; i++){
           const tweens = {...tweenSettings};
           tweens.yTo = [i*10, 20*i, 40+(i*5), 100+(4*i), 10];
