@@ -21,6 +21,7 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 class BugZap extends React.Component {
     componentDidMount() { }
 
+    // go to next level
     buttonPress = () => {
         this.props.navigator.push({
             id: 7,
@@ -28,6 +29,7 @@ class BugZap extends React.Component {
     }
 
     render(){
+        // automatic sine wave from right to left across screen
         const tweenSettings = {
                 tweenType: "sine-wave",
                 startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
@@ -40,7 +42,7 @@ class BugZap extends React.Component {
         let flies = [];
         for(let i = 0; i < 5; i++){
           const tweens = {...tweenSettings};
-          tweens.yTo = [0, 10*i, 40+i*5, 100*4*i, 10];
+          tweens.yTo = [i*10, 20*i, 40+(i*5), 100+(4*i), 10];
           flies.push(
             <AnimatedSprite
               key={i}

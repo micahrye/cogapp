@@ -34,6 +34,7 @@ class BugZap2 extends React.Component {
     }
     componentDidMount() { }
 
+    // screen goes black after tiemout
     setBlackout() {
         timeout = setTimeout ( () => {
             blackout.push(<View key={0} style={styles.blackout}></View>);
@@ -42,6 +43,7 @@ class BugZap2 extends React.Component {
         }, 3500);
     }
 
+    // spotlight is flashed briefly after blackout
     flashSpotLight() {
         timeout2 = setTimeout ( () => {
             spotLight.push(<View key={0} style={styles.spotLight}></View>);
@@ -54,6 +56,7 @@ class BugZap2 extends React.Component {
         }, 1000);
     }
 
+    // screen goes back to normal and bug appears 
     removeBlackout() {
         timeout4 = setTimeout ( () => {
             delete blackout[0];

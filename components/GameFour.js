@@ -15,49 +15,46 @@ import squareCharacter from "../sprites/square/squareCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let numberBoxes = [];
+let fixedBoxes = [];
 
 class GameFour extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            moveableBoxes: [],
+        }
+    }
 
+    componentDidMount() { 
         this.createBoxes();
     }
 
-    componentDidMount() { }
-
     createBoxes() {
-        for(let i=0; i < 12; i++){
-            if(i < 8){
-                numberBoxes.push(<View key={i} style={this.getBoxStyles(i)}><Text style={styles.text}>{i}</Text></View>);
+        // create fixed boxes
+        for(let i=0; i < 9; i++){
+            if(i < 8){ // put text in first 8 boxes
+                fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}><Text style={styles.text}>{i}</Text></View>);
             }
             else if(i === 8){
-                numberBoxes.push(<View key={i} style={this.getBoxStyles(i)}></View>);
+                fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}></View>);
             }
-            else{
-                numberBoxes.push(
-                    <AnimatedSprite style={this.testStyle} key={i} coordinates={{top: 300, left: ((i-9)*90) + 10}}
+        }
+
+        // create moveable boxes at bottom
+        let boxes = [];
+        for(let i=0; i < 3; i++){
+            boxes.push(
+                    <AnimatedSprite style={this.testStyle} key={i} coordinates={{top: 300, left: (i*90) + 10}}
                     size={{width: 60, height: 60}}
                     draggable={true} 
                     character={squareCharacter}/>
                 );
-            }
         }
+        this.setState({moveableBoxes: boxes});
     }
 
     getBoxStyles(boxNum) {
-        // let xOffset = yOffset;
-        // if(xOffset%3 === 0){
-        //     xOffset = 0;
-        // }
-        // else if (xOffset > 3 && xOffset <= 6){
-        //     xOffset = yOffset - 3;
-        // }
-        // else if(yOffset > 6){
-        //     xOffset = yOffset - 6;
-        // }
-
-        if(boxNum === 8){
+        if(boxNum === 8){ // last fixed box is dashed
             borderStyle = 'dashed';
         }
         else{
@@ -70,9 +67,6 @@ class GameFour extends React.Component {
             height: 60,
             margin: 15,
             alignItems: 'center',
-            //position: "absolute",
-            // left: xOffset*(90),
-            // top: (Math.floor(yOffset/3)*(90)),
         }
     }
 
@@ -80,7 +74,8 @@ class GameFour extends React.Component {
         return(
             <View style={styles.container}>
                 <View style={styles.boxContainer}>
-                    {numberBoxes}     
+                    {fixedBoxes}
+                    {this.state.moveableBoxes}    
                 </View>
                 <AnimatedSprite coordinates={{top: 100, left: SCREEN_WIDTH-200}}
                         size={{width: 256, height: 256}}

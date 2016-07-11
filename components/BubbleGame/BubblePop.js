@@ -21,7 +21,7 @@ import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 15;
+let NUM_BUBBLES = 5;
 let BUBBLE_SIZE = 60;
 let OFFSET = 60;
 
@@ -36,28 +36,26 @@ class BubblePop extends React.Component {
         }
     }
 
+
     componentDidMount () {
-
-      AsyncStorage.getItem('score').then((value) => {
+        // get old score from storage if there is one and set up the scene
+        AsyncStorage.getItem('score').then((value) => {
         this.setUpScene(JSON.parse(value));
-      }).done();
+        }).done();
 
-      this.createBubbles(NUM_BUBBLES);
     }
 
-    // set up old scene from storage
+    // set up scene based on score from storage
     setUpScene (score) {
-        if (score > 0){
-            this.createBubbles(NUM_BUBBLES - score);
-            this.setState({score});
-        }
+        this.createBubbles(NUM_BUBBLES - score);
+        this.setState({score});
         this.youLost(); // start game timeout
     }
 
     // game timeout
     youLost = () => {
         timeout = setTimeout ( () => {
-            this.props.navigator.push({
+            this.props.navigator.push({ // go to NextGamePage after game timeout
                 id: 5,
                 callback: this.resetGame,
             });
@@ -73,10 +71,9 @@ class BubblePop extends React.Component {
             let sequence = [];
             let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES);
 
-            if(i%2 == 0){
-                size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
+            if(i%2 == 0){ // every other bubble gets different size and x transition sequence
+                size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE}
                 sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
-                // vary bubble's x transition sequence
             }
             else{
                 size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}
@@ -159,15 +156,14 @@ class BubblePop extends React.Component {
         this.youLost();
     };
 
-    buttonPress = () => {
-        //this.props.navigator.pop();
-    }
+    // buttonPress = () => {
+    //     //this.props.navigator.pop();
+    // }
 
     render(){
       //if (this.state.renderPlaceholderOnly) {
       //  return this._renderPlaceholderView();
       //}
-
       return (
           <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
             <View style={styles.topBar} >
