@@ -18,7 +18,6 @@ class AnimatedSprite extends React.Component{
     super(props);
 
     this.state = {
-      counter: 0,
       movies: null,
       animate: false,
       _scale: new Animated.Value(0),
