@@ -59,46 +59,49 @@ class Main extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+
         <ScrollView style={{height:Dimensions.get('window').height,
-                            width:Dimensions.get('window').width}}>
-        <TouchableOpacity onPress={(evt)=>{this._handelPress(evt);}}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Hello You :)</Text>
+                            width:Dimensions.get('window').width}}
+        >
+        <View style={styles.container}>
+          <View style={styles.column}>
+            <TouchableOpacity onPress={this.goToBubblePop}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To BubblePop</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToDragon}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Dragon</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToBugZap}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To BugZap</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToBubblePop}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To BubblePop</Text>
+
+          <View style={styles.column}>
+            <TouchableOpacity onPress={this.goToGameTwo}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Two</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameThree}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Three</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameFour}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Four</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToDragon}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Dragon</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToBugZap}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To BugZap</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToGameTwo}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Game Two</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToGameThree}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Game Three</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToGameFour}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Game Four</Text>
-          </View>
-        </TouchableOpacity>
         </ScrollView>
-      </View>
+
     );
   }
 }

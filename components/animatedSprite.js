@@ -7,7 +7,7 @@ import {
   PanResponder,
   StyleSheet,
   View,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Tweener from "./Tweener";
@@ -18,7 +18,6 @@ class AnimatedSprite extends React.Component{
     super(props);
 
     this.state = {
-      movies: null,
       animate: false,
       _scale: new Animated.Value(0),
       _top: new Animated.Value(props.coordinates.top),
@@ -30,20 +29,22 @@ class AnimatedSprite extends React.Component{
     };
 
     this.character = undefined;
-    this.soul = undefined;
+    this.refAnimatedImage = undefined;
     this._charactertyles =  {};
-    this._initialX = this.state._left._value;
-    this._initialY = this.state._top._value;
+    this._initialLeft = this.state._left._value;
+    this._initialLefTop = this.state._top._value;
     this._panResponder = {};
 
     this._animation = this.props.character;
     this._animationKey = 'idel';
     this.numFrames = this._animation[this._animationKey].length-1;
-    this.frameIndex = 0;
-    this.animationInterval = undefined;
+    this.frameIndex = -1;
+    this.idelAnimationInterval = undefined;
+    this.touchAnimationInterval = undefined;
 
     this._Tweener = Tweener();
     this._hasTweened = 0;
+    this.renderTime = 0;
   }
 
   componentWillMount() {
@@ -65,8 +66,8 @@ class AnimatedSprite extends React.Component{
         });
     }
 
-    this._previousLeft =  this._initialX;
-    this._previousTop = this._initialY;
+    this._previousLeft =  this._initialLeft;
+    this._previousTop = this._initialLefTop;
     this._characterStyles = {
       style: {
         left: this._previousLeft,
@@ -78,30 +79,38 @@ class AnimatedSprite extends React.Component{
   }
 
   componentDidMount() {
-    this.setAnimationInterval();
+    this.startIdelAnimation();
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
     if(this.props.tweenStart == "auto"){
-      this.startAnimation();
+      this.startTween();
     }
+    this.renderTime = Date.now();
   }
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
-    clearInterval(this.animationInterval);
+    clearInterval(this.idelAnimationInterval);
   }
 
-  setAnimationInterval(){
+  startIdelAnimation(){
     // NOTE: making assumption there is an idel animation. Maybe change if only
     // one frame fro idel don't run interval.
-    this.animationInterval = setInterval(()=>{
+    this._animationKey = ['idel'];
+    this.numFrames = this._animation[this._animationKey].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.idelAnimationInterval);
+    this.idelAnimationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
       }
       this.setState({animate: true});
+<<<<<<< HEAD
       //console.log("move please");
+=======
+>>>>>>> origin/GameScenes
     }, 100);
   }
 
@@ -137,10 +146,6 @@ class AnimatedSprite extends React.Component{
   }
 
   getStyle(){
-    let ro = this.state._rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','360deg']
-    });
     return (
       {
         top: this.state._top,
@@ -148,11 +153,14 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
+<<<<<<< HEAD
         opacity: this.state._opacity,
         transform: [
           {scale: this.state._scale},
           {rotate: ro},
         ]
+=======
+>>>>>>> origin/GameScenes
       }
     );
 
@@ -168,30 +176,21 @@ class AnimatedSprite extends React.Component{
       return;
     }
 
-
-    // put this in an if statement so scale is not being being told to go
-    // in 2 different directions simultaneously
-    // if (this.props.touchTween.tweenType !== "pulse") {
-    //   this._Tweener["bounce"]({
-    //     startScale: 0.95,
-    //     endScale: 1.0,
-    //     friction: 2.5,
-    //   }, {scale: this.state._scale});
-    //  }
-
     if(this.props.tweenStart === "touch"){
-      this.startAnimation();
+      this.startTween();
     }
-    else if(this.props.onPress){
-      // COMM: wonder if onPress is right name?
-      // also does renderTime need to be a prop? Would a createdAtTime in
-      // componentDidMount work?
-      this.props.onPress((Date.now() - this.props.renderTime) / 1000);
+
+    if(this.props.timeSinceMounted){
+      this.props.timeSinceMounted(
+        this.props.spriteKey,
+        (Date.now() - this.renderTime ) / 1000
+      );
     }
   }
 
   touchSprite() {
       // TOOD: rework this
+<<<<<<< HEAD
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
       this.numFrames = this._animation[this._animationKey].length-1;
@@ -209,10 +208,32 @@ class AnimatedSprite extends React.Component{
             this.setState({animate: true});
           }
       }, 100);
+=======
+      clearInterval(this.idelAnimationInterval);
+      this.startTouchAnimation();
+  }
+>>>>>>> origin/GameScenes
 
+  startTouchAnimation(){
+    this._animationKey = 'touch';
+    this.numFrames = this._animation[this._animationKey].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.touchAnimationInterval);
+
+    this.touchAnimationInterval = setInterval(()=>{
+        this.frameIndex++;
+        // run once and go back to idel
+        if(this.frameIndex > this.numFrames){
+          clearInterval(this.touchAnimationInterval);
+          this.startIdelAnimation();
+          return;
+        }else{
+          this.setState({animate: true});
+        }
+    }, 100);
   }
 
-  startAnimation() {
+  startTween() {
     if(!this.props.tween.repeatable && this._hasTweened){
       return;
     }
@@ -226,13 +247,12 @@ class AnimatedSprite extends React.Component{
       rotation: this.state._rotation,
       opacity: this.state._opacity,
     }
-    this._Tweener["Looper"](tweenOptions, tweenState, tweenType);
+    this._Tweener[tweenType](tweenOptions, tweenState);
   }
 
   render() {
 
     return(
-
         <Animated.View
           {...this._panResponder.panHandlers}
           style={this.getStyle()}
@@ -240,13 +260,19 @@ class AnimatedSprite extends React.Component{
             this.character = character;
           }}
         >
+<<<<<<< HEAD
           <TouchableOpacity
             activeOpacity={1.0}
             accessible={false}
             onPress={(evt) => this.handlePress(evt)}>
+=======
+
+          <TouchableWithoutFeedback
+            onPress={ (evt) => this.handlePress(evt) }>
+>>>>>>> origin/GameScenes
             <Animated.Image
-              ref={(soul) => {
-                this.soul = soul;
+              ref={(ref) => {
+                this.refAnimatedImage = ref;
               }}
               source={this._animation[this._animationKey][this.frameIndex]}
               style={{
@@ -254,15 +280,14 @@ class AnimatedSprite extends React.Component{
                 width: this.state._width,
                 height: this.state._height,
               }}/>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
+
         </Animated.View>
     );
   }
-
 }
 
-
-
+// TODO: add in any props that should be required.
 AnimatedSprite.propTypes = {
   coordinates: React.PropTypes.object.isRequired,
   size: React.PropTypes.object.isRequired,
@@ -276,15 +301,9 @@ AnimatedSprite.defaultProps = {
 };
 
 const styles = {
-  // character: {
-  //   borderWidth: 2,
-  //   borderColor: '#00ff00'
-  // },
-  // animator:{
-  //   borderWidth: 2,
-  //   borderColor: '#ff00ff',
-  // },
-};
-
+  character: {
+    opacity: 1,
+  }
+ };
 
 export default AnimatedSprite;

@@ -8,20 +8,22 @@ import {
     AsyncStorage,
     Navigator,
     Image,
+    InteractionManager,
+    TouchableOpacity,
 } from 'react-native';
 
 
 import BubblePopWinPage from './BubblePopWinPage';
-import AnimatedSprite from './animatedSprite';
-import NextGamePage from './NextGamePage';
-import bubbleCharacterLarge from '../sprites/bubble/bubbleCharacterLarge';
-import bubbleCharacterSmall from '../sprites/bubble/bubbleCharacterSmall';
+import AnimatedSprite from '../animatedSprite';
+import NextGamePage from '../NextGamePage';
+import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
+import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let NUM_BUBBLES = 15;
 let BUBBLE_SIZE = 60;
-let OFFSET = 40;
+let OFFSET = 60;
 
 class BubblePop extends React.Component {
     constructor(props){
@@ -29,15 +31,22 @@ class BubblePop extends React.Component {
         this.state = {
             score: 0,
             popTime: 0,
+            bubbleCharacters: [],
+            renderPlaceholderOnly: true,
         }
-        let bubbleCharacters = [];
-        this.createBubbles(NUM_BUBBLES);
+        //let bubbleCharacters = [];
+
+
+
     }
 
     componentDidMount () {
-        AsyncStorage.getItem('score').then((value) => {
-            this.setUpScene(JSON.parse(value));
-        }).done();
+
+      AsyncStorage.getItem('score').then((value) => {
+        this.setUpScene(JSON.parse(value));
+      }).done();
+
+      this.createBubbles(NUM_BUBBLES);
     }
 
     // set up old scene from storage
@@ -62,14 +71,13 @@ class BubblePop extends React.Component {
 
     // populate array of bubbles
     createBubbles(numBubbles) {
-        bubbleCharacters = [];
+        let bubbles = [];
         for(let i=0; i < numBubbles; i++){
             let size = {};
             let sequence = [];
-            let startLeft = i*((SCREEN_WIDTH-15-OFFSET-BUBBLE_SIZE)/NUM_BUBBLES);
-            let startTop = SCREEN_HEIGHT - 153;
-        
-            if(i%2 == 0){ 
+            let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES);
+
+            if(i%2 == 0){
                 size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE} // vary size of bubbles
                 sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
                 // vary bubble's x transition sequence
@@ -84,40 +92,52 @@ class BubblePop extends React.Component {
 
             const tweenSettings = {
                 tweenType: "sine-wave",
-                startXY: [startLeft, startTop],
+                startXY: [startLeft, SCREEN_HEIGHT],
                 xTo: sequence,
-                yTo: [0, startTop],
+                yTo: [0, SCREEN_HEIGHT],
                 duration: this.getDuration(),
                 loop: true,
             };
-            bubbleCharacters.push(
-                <AnimatedSprite key={i} coordinates={{top:500, left: startLeft}}
-                size={size}
-                draggable={false}
-                character={bubbleCharacterLarge} 
-                tween={tweenSettings} 
-                tweenStart="auto"
-                renderTime={Date.now()}                    
-                onPress={this.popBubble.bind(null, i)}/>
+            bubbles.push(
+                <AnimatedSprite
+                  key={i}
+                  spriteKey={i}
+                  coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
+                  size={size}
+                  draggable={false}
+                  character={bubbleCharacterLarge}
+                  tween={tweenSettings}
+                  tweenStart="auto"
+                  timeSinceMounted={
+                    (spriteKey, duration)=>this.popBubble(spriteKey, duration)
+                  }
+                />
             );
         }
-    }
-
-    // random value for y starting location
-    getStartTop () {
-        let startTop = Math.random() * ((SCREEN_HEIGHT+(NUM_BUBBLES*10)) - (SCREEN_HEIGHT - 70)) + (SCREEN_HEIGHT - 70);
-        return (startTop);
+        this.setState({bubbleCharacters: bubbles});
     }
 
     // random duration
     getDuration () {
-        return( Math.random() *  (11000 - 3000) + 3000 );
+        return( Math.random() *  (12000 - 4000) + 4000 );
     }
 
     // remove bubble and record time it took to pop it
     popBubble = (bubblePos, popTime) => {
-        this.setState({popTime: popTime});
-        delete bubbleCharacters[bubblePos];
+
+        // TODO: fix this, this is very wrong!!!!!!!
+        //delete bubbleCharacters[bubblePos];
+        //debugger;
+        let bubbles = [];
+
+        this.state.bubbleCharacters.forEach((item)=>{
+          if(bubblePos !== item.props.spriteKey){
+            bubbles.push(item)
+          }
+        });
+
+
+        this.setState({bubbleCharacters: bubbles, popTime: popTime});
         this.updateScore();
     }
 
@@ -127,7 +147,7 @@ class BubblePop extends React.Component {
         this.saveScore(newScore);
 
         if(newScore > NUM_BUBBLES - 1){ // navigate to win page if all bubbles are popped
-            clearTimeout(timeout); // reset the game timer            
+            clearTimeout(timeout); // reset the game timer
             this.props.navigator.push({
                 id: 4,
                 callback: this.resetGame,
@@ -150,20 +170,34 @@ class BubblePop extends React.Component {
         this.youLost();
     };
 
+    buttonPress = () => {
+        //this.props.navigator.pop();
+    }
+
     render(){
-        return (
-            <View style={styles.topLevel}>
-                <View style={styles.sceneLevel}>
-                    <View style={styles.topBar}>
-                        <Text style={{fontSize: 20, marginTop: 10}}>Bubble Pop Game</Text>
-                        <Text style={{fontSize: 15}}>Pop all the bubbles and win the game!</Text>
-                        <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-                    </View>
-                    <View style={styles.gameWorld}>
-                        {bubbleCharacters}
-                    </View>
-                </View>
+      //if (this.state.renderPlaceholderOnly) {
+      //  return this._renderPlaceholderView();
+      //}
+
+      return (
+          <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
+            <View style={styles.topBar} >
+              <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
+              </TouchableOpacity>
             </View>
+            <View style={styles.gameWorld}>
+              {this.state.bubbleCharacters}
+            </View>
+          </Image>
+      );
+    }
+
+    _renderPlaceholderView() {
+      return (
+        <View>
+          <Text style={{color:"red"}}>Loading...</Text>
+          </View>
         );
     }
 }
@@ -172,17 +206,17 @@ const styles = StyleSheet.create({
     topLevel :{
         alignItems: 'center',
     },
-    sceneLevel : {
-        height: SCREEN_HEIGHT - 70,
-        width: SCREEN_WIDTH - 30,
-        borderStyle: 'solid',
-        borderWidth: 2,
-        alignItems: 'center',
-        flex: 1,
-    },
+    // sceneLevel : {
+    //     height: SCREEN_HEIGHT - 70,
+    //     width: SCREEN_WIDTH - 30,
+    //     borderStyle: 'solid',
+    //     borderWidth: 2,
+    //     alignItems: 'center',
+    //     flex: 1,
+    // },
     gameWorld: {
-        width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 153,
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT,
         borderStyle: 'solid',
         borderWidth: 2,
     },
@@ -190,12 +224,11 @@ const styles = StyleSheet.create({
         flex: 1,
         width: null,
         height: null,
-        opacity: .1,
     },
     topBar: {
         alignItems: 'center',
-        width: SCREEN_WIDTH - 30,
-        height: SCREEN_HEIGHT - 600,
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT - 700,
         borderStyle: 'solid',
         borderWidth: 2,
     },
