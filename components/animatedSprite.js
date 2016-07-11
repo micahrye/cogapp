@@ -18,6 +18,7 @@ class AnimatedSprite extends React.Component{
     super(props);
 
     this.state = {
+      counter: 0,
       movies: null,
       animate: false,
       _scale: new Animated.Value(0),
@@ -165,14 +166,15 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    // COMM: why would it be undefind?
+     if(this.props.draggable){
+      return;
+    }
+
+    //COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
     }
-
-    // if(this.props.draggable){
-    //   return;
-    // }
+   
 
 
     // put this in an if statement so scale is not being being told to go
@@ -194,6 +196,7 @@ class AnimatedSprite extends React.Component{
   }
 
   touchSprite() {
+    console.warn("in touch sprite");
       // TODO: rework this
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
