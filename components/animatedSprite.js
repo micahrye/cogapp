@@ -107,10 +107,7 @@ class AnimatedSprite extends React.Component{
         this.frameIndex = 0;
       }
       this.setState({animate: true});
-<<<<<<< HEAD
       //console.log("move please");
-=======
->>>>>>> origin/GameScenes
     }, 100);
   }
 
@@ -153,14 +150,11 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-<<<<<<< HEAD
         opacity: this.state._opacity,
         transform: [
           {scale: this.state._scale},
           {rotate: ro},
         ]
-=======
->>>>>>> origin/GameScenes
       }
     );
 
@@ -190,7 +184,6 @@ class AnimatedSprite extends React.Component{
 
   touchSprite() {
       // TOOD: rework this
-<<<<<<< HEAD
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
       this.numFrames = this._animation[this._animationKey].length-1;
@@ -208,11 +201,10 @@ class AnimatedSprite extends React.Component{
             this.setState({animate: true});
           }
       }, 100);
-=======
+
       clearInterval(this.idelAnimationInterval);
       this.startTouchAnimation();
   }
->>>>>>> origin/GameScenes
 
   startTouchAnimation(){
     this._animationKey = 'touch';
@@ -260,16 +252,9 @@ class AnimatedSprite extends React.Component{
             this.character = character;
           }}
         >
-<<<<<<< HEAD
-          <TouchableOpacity
-            activeOpacity={1.0}
-            accessible={false}
-            onPress={(evt) => this.handlePress(evt)}>
-=======
 
           <TouchableWithoutFeedback
             onPress={ (evt) => this.handlePress(evt) }>
->>>>>>> origin/GameScenes
             <Animated.Image
               ref={(ref) => {
                 this.refAnimatedImage = ref;
@@ -280,7 +265,7 @@ class AnimatedSprite extends React.Component{
                 width: this.state._width,
                 height: this.state._height,
               }}/>
-          </TouchableWithoutFeedback>
+         </TouchableWithoutFeedback>
 
         </Animated.View>
     );

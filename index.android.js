@@ -76,7 +76,6 @@ class CogApp extends React.Component {
       return <BubblePopWinPage navigator={navigator} route={route}/>
     } else if (route.id === 5){
       return <NextGamePage navigator={navigator} route={route}/>
-<<<<<<< HEAD
     } else if (route.id === 6){
       return <BugZap navigator={navigator} />
     } else if (route.id === 7){
@@ -105,8 +104,6 @@ class CogApp extends React.Component {
       return <GameThreeLevel4 navigator={navigator} />
     } else if (route.id === 19){
       return <GameFour navigator={navigator} />
-=======
->>>>>>> master
     }
   }
 }
