@@ -66,7 +66,7 @@ class GameTwo1 extends Component {
       duration: 600,
       repeatable: false,
       loop: false,
-      destroy: true,
+      disappearAfterAnimation: true,
     };
 
     const tweenOpts02 = {
@@ -76,7 +76,7 @@ class GameTwo1 extends Component {
       duration: 600,
       repeatable: false,
       loop: false,
-      destroy: true,
+      disappearAfterAnimation: true,
     };
 
     const tweenOpts03 = {
@@ -86,7 +86,7 @@ class GameTwo1 extends Component {
       duration: 600,
       repeatable: false,
       loop: false,
-      destroy: true,
+      disappearAfterAnimation: true,
     };
 
     ro = this.state.rotation.interpolate({

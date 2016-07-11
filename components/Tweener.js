@@ -58,6 +58,9 @@ const Tweener = function () {
       if (options.loop === false) {
         looping = false;
       }
+      if (options.disappearAfterAnimation) {
+        state.opacity.setValue(0);
+      }
       bounce(options, state);
     });
 
@@ -85,6 +88,9 @@ const Tweener = function () {
         if (options.loop === false) {
           looping = false;
         }
+        if (options.disappearAfterAnimation) {
+          state.opacity.setValue(0);
+        }
         move(options, state);
       });
   };
@@ -103,6 +109,9 @@ const Tweener = function () {
     ).start(() => {
       if (options.loop === false) {
         looping = false;
+      }
+      if (options.disappearAfterAnimation) {
+        state.opacity.setValue(0);
       }
       sineWave(options, state);
     });
@@ -160,6 +169,9 @@ const Tweener = function () {
        if (options.loop === false) {
          looping = false;
        }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
+       }
        pulse(options, state);
      });
    }
@@ -196,6 +208,9 @@ const Tweener = function () {
      if (options.loop === false) {
        looping = false;
      }
+     if (options.disappearAfterAnimation) {
+       state.opacity.setValue(0);
+     }
      wiggle(options, state);
    });
    }
@@ -225,8 +240,9 @@ const Tweener = function () {
        if (options.loop === false) {
          looping = false;
        }
-       if (options.destroy) {
-         state.opacity.setValue(0);
+       if (options.disappearAfterAnimation) {
+         //state.opacity.setValue(0);
+         state.top.setValue(-500); // moves it out of the way of other views
        }
        bounceDrop(options, state);
      });
@@ -257,6 +273,9 @@ const Tweener = function () {
        if (options.loop === false) {
          looping = false;
        }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
+       }
        zoom(options, state);
      });
    }
@@ -286,6 +305,9 @@ const Tweener = function () {
      ]).start(() => {
        if (options.loop === false) {
          looping = false;
+       }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
        }
        hop(options, state);
      });
@@ -327,6 +349,9 @@ const Tweener = function () {
        if (options.loop === false) {
          looping = false;
        }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
+       }
        tumbleOff(options, state);
      });
 
@@ -347,6 +372,9 @@ const Tweener = function () {
      ).start(() => {
        if (options.loop === false) {
          looping = false;
+       }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
        }
        spin(options, state);
      });
@@ -416,6 +444,9 @@ const Tweener = function () {
      ]).start(() => {
        if (options.loop === false) {
          looping = false;
+       }
+       if (options.disappearAfterAnimation) {
+         state.opacity.setValue(0);
        }
        hopForward(options, state);
      });

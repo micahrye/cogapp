@@ -26,6 +26,7 @@ class AnimatedSprite extends React.Component{
       _rotation: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
+      _opacity: new Animated.Value(1),
     };
 
     this.character = undefined;
@@ -99,7 +100,7 @@ class AnimatedSprite extends React.Component{
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
       }
-      this.setState({animate: true});   
+      this.setState({animate: true});
       //console.log("move please");
     }, 100);
   }
@@ -147,6 +148,7 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
+        opacity: this.state._opacity,
         transform: [
           {scale: this.state._scale},
           {rotate: ro},
@@ -189,7 +191,7 @@ class AnimatedSprite extends React.Component{
   }
 
   touchSprite() {
-      // TOOD: rework this 
+      // TOOD: rework this
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
       this.numFrames = this._animation[this._animationKey].length-1;
@@ -222,6 +224,7 @@ class AnimatedSprite extends React.Component{
       left: this.state._left,
       scale: this.state._scale,
       rotation: this.state._rotation,
+      opacity: this.state._opacity,
     }
     this._Tweener["Looper"](tweenOptions, tweenState, tweenType);
   }
@@ -239,6 +242,7 @@ class AnimatedSprite extends React.Component{
         >
           <TouchableOpacity
             activeOpacity={1.0}
+            accessible={false}
             onPress={(evt) => this.handlePress(evt)}>
             <Animated.Image
               ref={(soul) => {
