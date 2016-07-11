@@ -2,6 +2,44 @@
 
 import { Animated, Easing } from 'react-native';
 
+// ******* TWEENER *********
+// Template/instructions for adding new animations:
+//
+// const ANIMATION_NAME = function(options, state) {
+//    if (looping === false) {
+//       return;
+//    }
+//    Animated.timing/sequence/parallel/etc... (
+//      ***custom animation code goes here***
+//        animate state values like state.opacity
+//        or state.top/left using the Animated class
+//        in conjuction with information recieved from
+//        options like options.endXY or options.startXY
+//    ).start(() => {
+//       if (options.loop === false) {
+//          looping = false;
+//       }
+//       if (options.disappearAfterAnimation) {
+//          state.opacity.setValue(0);
+//          OR
+//          state.top.setValue(-500);
+//          (or anything that removes the component from view)
+//       }
+//      ANIMATION_NAME(options, state);
+//      });
+//  }
+//
+// Once a new animation is created in the manner of the one
+// above, go to the bottom of file to the return statement.
+// associate the name of your new animation with a reference
+// string ('reference':ANIMATION_NAME).  Then go to the Looper
+// function and a case to the switch statement like this:
+//   case 'reference':
+//       ANIMATION_NAME(options, state);
+//       break;
+//
+// *************************
+
 const Tweener = function () {
 
   let looping = false;  // looping bool
@@ -12,33 +50,45 @@ const Tweener = function () {
 
     if (options.loop === true) {
       looping = !looping;
-        } else {
-         looping = true;
-        }
+    } else {
+        looping = true;
+    }
 
-       if (anim === 'pulse') {
-         pulse(options, state);
-       } else if (anim === 'wiggle') {
-         wiggle(options, state);
-       } else if (anim === 'move') {
-         move(options, state);
-       } else if (anim === 'bounce') {
-         bounce(options, state);
-       } else if (anim === 'sine-wave') {
-         sineWave(options, state);
-       } else if (anim === 'bounce-drop') {
-         bounceDrop(options, state);
-       } else if (anim === 'zoom') {
-         zoom(options, state);
-       } else if (anim === 'hop') {
-         hop(options, state);
-       } else if (anim === 'tumble-off') {
-         tumbleOff(options, state);
-       } else if (anim === 'spin') {
-         spin(options, state);
-       } else if (anim === 'hop-forward') {
-          hopForward(options, state)
-       }
+    switch(anim) {
+      case 'move':
+          move(options, state);
+          break;
+      case 'pulse':
+          pulse(options, state);
+          break;
+      case 'wiggle':
+          wiggle(options, state);
+          break;
+      case 'bounce':
+          bounce(options, state);
+          break;
+      case 'sine-wave':
+          sineWave(options, state);
+          break;
+      case 'bounce-drop':
+          bounceDrop(options, state);
+          break;
+      case 'zoom':
+          zoom(options, state);
+          break;
+      case 'hop':
+          hop(options, state);
+          break;
+      case 'tumble-off':
+          tumbleOff(options, state);
+          break;
+      case 'spin':
+          spin(options, state);
+          break;
+      case 'hop-forward':
+          hopForward(options, state);
+          break;
+    }
 
      }
 
@@ -117,6 +167,9 @@ const Tweener = function () {
     });
 
   }
+
+  // _getSequenceX and _getSequenceY are helper functions, used
+  // by sine-wave.
 
   const _getSequenceX = function (options, state) {
     const duration = options.duration;
