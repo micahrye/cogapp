@@ -34,10 +34,6 @@ class BubblePop extends React.Component {
             bubbleCharacters: [],
             renderPlaceholderOnly: true,
         }
-        //let bubbleCharacters = [];
-
-
-
     }
 
     componentDidMount () {
@@ -108,10 +104,8 @@ class BubblePop extends React.Component {
                   character={bubbleCharacterLarge}
                   tween={tweenSettings}
                   tweenStart="auto"
-                  timeSinceMounted={
-                    (spriteKey, duration)=>this.popBubble(spriteKey, duration)
-                  }
-                />
+                  timeSinceMounted={this.popBubble.bind(null, i)} // it wasn't working with the anon function so I changed it back to this but maybe there's a better way to do it
+                  />
             );
         }
         this.setState({bubbleCharacters: bubbles});
@@ -124,10 +118,6 @@ class BubblePop extends React.Component {
 
     // remove bubble and record time it took to pop it
     popBubble = (bubblePos, popTime) => {
-
-        // TODO: fix this, this is very wrong!!!!!!!
-        //delete bubbleCharacters[bubblePos];
-        //debugger;
         let bubbles = [];
 
         this.state.bubbleCharacters.forEach((item)=>{
@@ -135,7 +125,6 @@ class BubblePop extends React.Component {
             bubbles.push(item)
           }
         });
-
 
         this.setState({bubbleCharacters: bubbles, popTime: popTime});
         this.updateScore();
@@ -206,14 +195,6 @@ const styles = StyleSheet.create({
     topLevel :{
         alignItems: 'center',
     },
-    // sceneLevel : {
-    //     height: SCREEN_HEIGHT - 70,
-    //     width: SCREEN_WIDTH - 30,
-    //     borderStyle: 'solid',
-    //     borderWidth: 2,
-    //     alignItems: 'center',
-    //     flex: 1,
-    // },
     gameWorld: {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,

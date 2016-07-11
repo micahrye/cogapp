@@ -82,6 +82,8 @@ class AnimatedSprite extends React.Component{
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
+    this.createdAtTime = Date.now();
+
     if(this.props.tweenStart == "auto"){
       this.startAnimation();
     }
@@ -182,11 +184,11 @@ class AnimatedSprite extends React.Component{
     if(this.props.tweenStart === "touch"){
       this.startAnimation();
     }
-    else if(this.props.onPress){
+    else if(this.props.timeSinceMounted){
       // COMM: wonder if onPress is right name?
       // also does renderTime need to be a prop? Would a createdAtTime in
       // componentDidMount work?
-      this.props.onPress((Date.now() - this.props.renderTime) / 1000);
+      this.props.timeSinceMounted((Date.now() - this.createdAtTime) / 1000);
     }
   }
 
