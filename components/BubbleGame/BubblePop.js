@@ -21,7 +21,7 @@ import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 5;
+let NUM_BUBBLES = 15;
 let BUBBLE_SIZE = 60;
 let OFFSET = 60;
 
