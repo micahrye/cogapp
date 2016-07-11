@@ -13,38 +13,47 @@ import {
   Dimensions,
 } from 'react-native';
 
-import reactMixin from 'react-mixin';
-import TimerMixin from 'react-timer-mixin';
+// imports
 
 import AnimatedSprite from "./animatedSprite";
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import Tweener from "./Tweener";
+
+// import different characters to feed to animated sprite
+import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import frogCharacter from "../sprites/frog/frogCharacter";
 import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
 
 const Window = Dimensions.get('window');
-const endCoordinates = [480,250];
-const sprite1Start = [150,20];
-const sprite2Start = [250,20];
-const sprite3Start = [350,20];
+// destination for falling food items (should be close to where creature sits)
+const endCoordinates = [550,330];
+// these constants specify the initial locations and spacing of the food items
+const startLeft = 150;
+const startTop = 20;
+const spacing = 150;
+const sprite1Start = [startLeft,startTop];
+const sprite2Start = [startLeft+spacing,startTop];
+const sprite3Start = [startLeft+spacing*2,startTop];
 
 class GameTwo1 extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       rotation : new Animated.Value(16),
     }
   }
 
+  // move on to next page when navigation button is pressed
+  // push id 12 to navigator, which will take the game to
+  // GameTwo2.js
   buttonPress = () => {
       this.props.navigator.push({
           id: 12,
       });
   }
 
+  // animate lever to move to a downward angle on press
   leverPress = () => {
     Animated.timing(
       this.state.rotation,
@@ -54,11 +63,14 @@ class GameTwo1 extends Component {
         duration: 500,
       }
     ).start();
-
   }
+
+
 
   render() {
 
+    // options for left-most food item - drops and
+    // bounces towards creature on touch
     const tweenOpts01 = {
       tweenType: "bounce-drop",
       startXY: sprite1Start ,
@@ -69,6 +81,7 @@ class GameTwo1 extends Component {
       disappearAfterAnimation: true,
     };
 
+    // options for middle food item
     const tweenOpts02 = {
       tweenType: "bounce-drop",
       startXY: sprite2Start,
@@ -79,6 +92,7 @@ class GameTwo1 extends Component {
       disappearAfterAnimation: true,
     };
 
+    // options for right-most food item
     const tweenOpts03 = {
       tweenType: "bounce-drop",
       startXY: sprite3Start,
@@ -89,11 +103,14 @@ class GameTwo1 extends Component {
       disappearAfterAnimation: true,
     };
 
+    // translates integers into degrees to allow rotation to
+    // be animated.  Used in leverStyle transform
     ro = this.state.rotation.interpolate({
       inputRange: [0,100],
       outputRange: ['0deg','180deg']
     })
 
+    // style for lever
     const leverStyle = {
       height: 150,
       width: 20,
@@ -121,19 +138,19 @@ class GameTwo1 extends Component {
                     style={{...leverStyle}}>
                   </TouchableOpacity>
                 </Animated.View>
-                <AnimatedSprite coordinates={{top: 20, left: 150}}
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={appleCharacter}
                     tweenStart="touch"
                     tween={tweenOpts01}/>
-                <AnimatedSprite coordinates={{top: 20, left: 250}}
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts02}/>
-                <AnimatedSprite coordinates={{top: 20, left: 350}}
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
@@ -146,6 +163,8 @@ class GameTwo1 extends Component {
 }
 
 const styles = StyleSheet.create({
+  // styles for background png image/basic black backgroundColor
+  // to go behind it
   container: {
       flex: 1,
       backgroundColor: 'black',
@@ -155,11 +174,13 @@ const styles = StyleSheet.create({
       width: null,
       height: null,
   },
+  // style for navigation button
   button: {
       backgroundColor: '#4d94ff',
       borderRadius: 10,
       width: 90,
       height: 30,
+
   },
 })
 
