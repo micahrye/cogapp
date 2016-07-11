@@ -2,6 +2,7 @@ When debugging or runing on device that is
 plugged into usb you need to run the following 
 from the command line. 
 
+<<<<<<< HEAD
 $ react-native start 
 $ adb reverse tcp:8081 tcp:8081
 $ react-native run-android 
@@ -18,3 +19,10 @@ more performant.
 
 
 https://facebook.github.io/react-native/docs/signed-apk-android.html
+=======
+$ react-native start
+$ adb reverse tcp:8081 tcp:8081
+$ react-native run-android 
+
+
+>>>>>>> master
