@@ -44,13 +44,31 @@ class GameFour extends React.Component {
         let boxes = [];
         for(let i=0; i < 3; i++){
             boxes.push(
-                    <AnimatedSprite style={this.testStyle} key={i} coordinates={{top: 300, left: (i*90) + 10}}
+                    <AnimatedSprite 
+                    style={this.testStyle} 
+                    key={i}
+                    spriteKey={i} 
+                    coordinates={{top: 300, left: (i*90) + 10}}
                     size={{width: 60, height: 60}}
                     draggable={true} 
+                    draggedTo={this.checkLocation.bind(null, i)}
                     character={squareCharacter}/>
                 );
         }
         this.setState({moveableBoxes: boxes});
+    }
+
+    // check if a moveable box has been dragged to dashed box and if true remove it
+    checkLocation = (numBox, newX, newY) => {
+        if((newX > 185 && newX < 205) && (newY > 190 && newY < 210)){
+            let boxes = [];
+            this.state.moveableBoxes.forEach((item)=>{
+                if(numBox !== item.props.spriteKey){
+                    boxes.push(item)
+                }
+            });
+            this.setState({moveableBoxes: boxes});
+        }
     }
 
     getBoxStyles(boxNum) {
@@ -101,13 +119,13 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         left: SCREEN_WIDTH/2 - 140,
     },
-    box: {
-        borderWidth: 2,
-        width: 60,
-        height: 60,
-        margin: 15,
-        alignItems: 'center',
-    },
+    // box: {
+    //     borderWidth: 2,
+    //     width: 60,
+    //     height: 60,
+    //     margin: 15,
+    //     alignItems: 'center',
+    // },
     text: {
         fontSize: 45,
     },

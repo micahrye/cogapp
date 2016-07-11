@@ -31,7 +31,7 @@ class AnimatedSprite extends React.Component{
 
     this.character = undefined;
     this.soul = undefined;
-    this._charactertyles =  {};
+    this._characterStyles =  {};
     this._initialX = this.state._left._value;
     this._initialY = this.state._top._value;
     this._panResponder = {};
@@ -136,6 +136,10 @@ class AnimatedSprite extends React.Component{
     this._previousTop += gestureState.dy;
     this.state._top = this._characterStyles.style.top;
     this.state._left = this._characterStyles.style.left;
+
+    if(this.props.draggedTo){
+      this.props.draggedTo(this._characterStyles.style.left, this._characterStyles.style.top);
+    }
   }
 
   getStyle(){
@@ -166,9 +170,9 @@ class AnimatedSprite extends React.Component{
       this.touchSprite();
     }
 
-    if(this.props.draggable){
-      return;
-    }
+    // if(this.props.draggable){
+    //   return;
+    // }
 
 
     // put this in an if statement so scale is not being being told to go
@@ -185,15 +189,12 @@ class AnimatedSprite extends React.Component{
       this.startAnimation();
     }
     else if(this.props.timeSinceMounted){
-      // COMM: wonder if onPress is right name?
-      // also does renderTime need to be a prop? Would a createdAtTime in
-      // componentDidMount work?
       this.props.timeSinceMounted((Date.now() - this.createdAtTime) / 1000);
     }
   }
 
   touchSprite() {
-      // TOOD: rework this
+      // TODO: rework this
       clearInterval(this.animationInterval);
       this._animationKey = 'touch';
       this.numFrames = this._animation[this._animationKey].length-1;
