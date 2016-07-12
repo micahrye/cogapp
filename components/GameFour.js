@@ -10,12 +10,11 @@ import {
 import AnimatedSprite from "./animatedSprite";
 import bubbleCharacter from "../sprites/bubble/bubbleCharacterLarge";
 import frogCharacterIdle from "../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../sprites/frog/frogCharacterCelebrate"
+import frogCharacterCelebrate from "../sprites/frog/frogCharacterCelebrate";
 import squareCharacter from "../sprites/square/squareCharacter";
 
-
-let SCREEN_WIDTH = require('Dimensions').get('window').width;
-let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let fixedBoxes = [];
 
 class GameFour extends React.Component {
@@ -48,7 +47,6 @@ class GameFour extends React.Component {
         for(let i=0; i < 3; i++){
             boxes.push(
                     <AnimatedSprite 
-                    style={this.testStyle} 
                     key={i}
                     spriteKey={i} 
                     coordinates={{top: 300, left: (i*90) + 10}}
@@ -103,18 +101,20 @@ class GameFour extends React.Component {
 
     render(){
         return(
-            <View style={styles.container}>
-                <View style={styles.boxContainer}>
-                    {fixedBoxes}
-                    {this.state.moveableBoxes}    
+            <Image source={require('../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
+                <View style={styles.container}>
+                    <View style={styles.boxContainer}>
+                        {fixedBoxes}
+                        {this.state.moveableBoxes}    
+                    </View>
+                    <AnimatedSprite
+                            key={this.state.key} 
+                            coordinates={{top: 100, left: SCREEN_WIDTH-200}}
+                            size={{width: 256, height: 256}}
+                            draggable={false}
+                            character={this.state.currFrogCharacter}/>
                 </View>
-                <AnimatedSprite
-                        key={this.state.key} 
-                        coordinates={{top: 100, left: SCREEN_WIDTH-200}}
-                        size={{width: 256, height: 256}}
-                        draggable={false}
-                        character={this.state.currFrogCharacter}/>
-            </View>
+            </Image>
         );
        
     }
@@ -124,6 +124,11 @@ class GameFour extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
     },
     boxContainer: {
         flex: 1,
@@ -144,11 +149,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 45,
     },
-    testStyle: {
-        borderWidth: 2,
-        width: 10,
-        height: 10,
-    }
 });
 
 export default GameFour;

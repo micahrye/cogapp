@@ -20,11 +20,11 @@ import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
 import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
 
-let SCREEN_WIDTH = require('Dimensions').get('window').width;
-let SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let NUM_BUBBLES = 15;
-let BUBBLE_SIZE = 60;
-let OFFSET = 60;
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const NUM_BUBBLES = 15;
+const BUBBLE_SIZE = 60;
+const OFFSET = 60;
 
 class BubblePop extends React.Component {
     constructor(props){
