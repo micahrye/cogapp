@@ -18,6 +18,7 @@ import AnimatedSprite from '../animatedSprite';
 import NextGamePage from '../NextGamePage';
 import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
 import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
+import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -121,6 +122,11 @@ class BubblePop extends React.Component {
           if(bubblePos !== item.props.spriteKey){
             bubbles.push(item)
           }
+          // else{
+          //   console.warn(item.props.character);
+          //   item.props.character = {poppedBubble}
+          //   bubbles.push(item);
+          // }
         });
 
         this.setState({bubbleCharacters: bubbles, popTime: popTime});

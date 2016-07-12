@@ -61,6 +61,10 @@ class Main extends React.Component {
     this.props.navigator.push({id:20})
   }
 
+  goToGameSix = () => {
+    this.props.navigator.push({id:21})
+  }
+
   render() {
     return (
 
@@ -84,14 +88,14 @@ class Main extends React.Component {
                 <Text style={styles.text}>Go To BugZap</Text>
               </View>
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.column}>
             <TouchableOpacity onPress={this.goToGameTwo}>
               <View style={styles.button}>
                 <Text style={styles.text}>Go To Game Two</Text>
               </View>
             </TouchableOpacity>
+          </View>
+
+          <View style={styles.column}>
             <TouchableOpacity onPress={this.goToGameThree}>
               <View style={styles.button}>
                 <Text style={styles.text}>Go To Game Three</Text>
@@ -105,6 +109,11 @@ class Main extends React.Component {
             <TouchableOpacity onPress={this.goToGameFive}>
               <View style={styles.button}>
                 <Text style={styles.text}>Go To Game Five</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameSix}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Six</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -145,7 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4d94ff',
     borderRadius: 10,
     margin: 10,
-    height: 100,
+    height: 75,
     width: 200,
     justifyContent: 'center',
   },
