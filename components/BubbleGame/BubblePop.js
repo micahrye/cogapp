@@ -19,6 +19,7 @@ import NextGamePage from '../NextGamePage';
 import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
 import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
+import frogCharacter from "../../sprites/frog/frogCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -122,11 +123,40 @@ class BubblePop extends React.Component {
           if(bubblePos !== item.props.spriteKey){
             bubbles.push(item)
           }
-          // else{
-          //   console.warn(item.props.character);
-          //   item.props.character = {poppedBubble}
-          //   bubbles.push(item);
-          // }
+         //  else{
+         //    bubbles.push(item);
+         //    console.log(bubbles[bubblePos].props.spriteKey);
+         //    bubbles[bubblePos].props.spriteKey = 8;
+         //    console.log(bubbles[bubblePos].props.spriteKey);
+
+         //    // console.warn(item.props.spriteKey);
+         //    // console.warn(item.props.character);
+         //    // console.log(item);
+         //    // item.props.character = {frogCharacter}
+         //    //             console.log(item);
+         //    // this.state.bubbleCharacters[bubblePos].props.character = frogCharacter;
+         //    // //this.setState({bubbleCharacters[bubblePos].props.character: frogCharacter});
+
+         //    // console.log(this.state.bubbleCharacters[bubblePos].props.character);
+
+         //   // bubbles.push(item);
+         //         // <AnimatedSprite
+         //         //    key={Math.random()}
+         //         //      coordinates={{top: SCREEN_HEIGHT - 100, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
+         //         //      size={{width: 256, height: 256}}
+         //         //      draggable={false}
+         //         //      character={item.props.character} />
+         //        // <AnimatedSprite
+         //        //   key={item.props.spriteKey}
+         //        //   spriteKey={item.props.spriteKey}
+         //        //   coordinates={{top: SCREEN_HEIGHT, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
+         //        //   size={{width: 200, height: 20}}
+         //        //   draggable={true}
+         //        //   character={bubbleCharacterLarge}
+         //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/> 
+                  
+         //   // );
+         // }
         });
 
         this.setState({bubbleCharacters: bubbles, popTime: popTime});
@@ -162,14 +192,7 @@ class BubblePop extends React.Component {
         this.youLost();
     };
 
-    // buttonPress = () => {
-    //     //this.props.navigator.pop();
-    // }
-
     render(){
-      //if (this.state.renderPlaceholderOnly) {
-      //  return this._renderPlaceholderView();
-      //}
       return (
           <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
             <View style={styles.topBar} >

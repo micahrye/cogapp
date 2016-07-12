@@ -16,8 +16,8 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
-let SCREEN_WIDTH = require('Dimensions').get('window').width;
-let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap extends React.Component {
     componentDidMount() { }
