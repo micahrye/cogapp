@@ -47,6 +47,26 @@ class GameFive extends Component {
 
   render() {
 
+    const tweenOpts01 = {
+      tweenType: "bounce-drop",
+      startXY: [270, 10],
+      endXY: [170, 300],
+      duration: 600,
+      repeatable: false,
+      loop: false,
+      disappearAfterAnimation: true,
+    };
+
+    const tweenOpts02 = {
+      tweenType: "bounce-drop",
+      startXY: [270, 90],
+      endXY: [170, 300],
+      duration: 600,
+      repeatable: false,
+      loop: false,
+      disappearAfterAnimation: true,
+    };
+
 
 
     return (
@@ -68,12 +88,16 @@ class GameFive extends Component {
             coordinates={{top: 10, left: 270}}
             size={{width: 60, height: 60}}
             draggable={false}
-            character={appleCharacter}/>
+            character={appleCharacter}
+            tweenStart="touch"
+            tween={tweenOpts01}/>
         <AnimatedSprite
             coordinates={{top: 90, left: 270}}
             size={{width: 60, height: 60}}
             draggable={false}
-            character={canCharacter}/>
+            character={canCharacter}
+            tweenStart="touch"
+            tween={tweenOpts02}/>
         </Image>
       </View>
     );
