@@ -19,6 +19,7 @@ import Background from '../../backgrounds/Game_1_Background_1280.png';
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+
 class BugZap1 extends React.Component {
     componentDidMount() { }
 

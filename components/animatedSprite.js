@@ -173,7 +173,7 @@ class AnimatedSprite extends React.Component{
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
     }
-   
+
 
 
     // put this in an if statement so scale is not being being told to go
