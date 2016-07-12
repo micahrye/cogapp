@@ -9,7 +9,7 @@ import {
 
 import AnimatedSprite from "./animatedSprite";
 import bubbleCharacter from "../sprites/bubble/bubbleCharacterLarge";
-import frogCharacter from "../sprites/frog/frogCharacter";
+import frogCharacterIdle from "../sprites/frog/frogCharacter";
 import frogCharacterCelebrate from "../sprites/frog/frogCharacterCelebrate"
 import squareCharacter from "../sprites/square/squareCharacter";
 
@@ -23,7 +23,8 @@ class GameFour extends React.Component {
         super(props);
         this.state = {
             moveableBoxes: [],
-            currFrogCharacter: frogCharacter,
+            currFrogCharacter: frogCharacterIdle,
+            key: 0,
         }
     }
 
@@ -69,12 +70,17 @@ class GameFour extends React.Component {
                     boxes.push(item)
                 }
             });
-            this.setState({moveableBoxes: boxes, currFrogCharacter: frogCharacterCelebrate});
-            console.warn(this.state.currFrogCharacter);
-            // setTimeout( () => {
-            //     this.setState({frogCharacter: frogCharacter});
-            // }, 1400);
+            this.setState({moveableBoxes: boxes});
+            this.frogCelebrate();  
         }
+    }
+
+    frogCelebrate() {
+        this.setState({key: Math.random(), currFrogCharacter: frogCharacterCelebrate});
+
+        setTimeout( () => {
+            this.setState({key: Math.random(), currFrogCharacter: frogCharacterIdle});
+        }, 1400);
     }
 
     getBoxStyles(boxNum) {
@@ -101,7 +107,9 @@ class GameFour extends React.Component {
                     {fixedBoxes}
                     {this.state.moveableBoxes}    
                 </View>
-                <AnimatedSprite coordinates={{top: 100, left: SCREEN_WIDTH-200}}
+                <AnimatedSprite
+                        key={this.state.key} 
+                        coordinates={{top: 100, left: SCREEN_WIDTH-200}}
                         size={{width: 256, height: 256}}
                         draggable={false}
                         character={this.state.currFrogCharacter}/>
