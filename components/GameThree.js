@@ -9,6 +9,8 @@ import {
 
 import AnimatedSprite from "./animatedSprite";
 import frogCharacterFlipped from "../sprites/frog/frogCharacterFlipped";
+import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
+import platformCharacter from "../sprites/platform/platformCharacter";
 
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -21,23 +23,27 @@ class GameThree extends React.Component {
     render(){
         const tweenSettings = {
             tweenType: "hop-forward",
-                startXY: [-20, 0],
+                startXY: [10, 150],
                 endXY:[450],
                 yTo: [-100],
                 duration: 3000,
                 loop: false,
         }
         return(
-            <View style={styles.container}>
-                <AnimatedSprite coordinates={{top: 0, left: -20}}
-                size={{width: 256, height: 256}}
-                draggable={false}
-                character={frogCharacterFlipped}
-                tween={tweenSettings}
-                tweenStart="auto"/>
-
-                <View style={styles.tile}></View>
-            </View>
+          <View style={styles.container}>
+            <Image source={require('../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
+              <AnimatedSprite coordinates={{top: 150, left: 10}}
+                  size={{width: 100, height: 120}}
+                  draggable={false}
+                  character={monkeyCharacter}
+                  tween={tweenSettings}
+                  tweenStart="auto"/>
+              <AnimatedSprite coordinates={{top: 200, left: 250}}
+                      size={{width: 220, height: 50}}
+                      draggable={false}
+                      character={platformCharacter}/>
+            </Image>
+          </View>
         );
 
     }
@@ -47,7 +53,12 @@ class GameThree extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        backgroundColor: 'black',
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
     },
     tile: {
         height: 100,
