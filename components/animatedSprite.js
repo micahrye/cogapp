@@ -14,9 +14,9 @@ import Tweener from "./Tweener";
 
 const TILE = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
 if (error) {
-  console.warn('failed to load the sound', error);
+  //console.warn('failed to load the sound', error);
 } else { // loaded successfully
-  console.warn('sound did load');
+  //console.warn('sound did load');
   }
 });
 

@@ -12,6 +12,7 @@ import Sound from 'react-native-sound';
 import AnimatedSprite from "./animatedSprite";
 import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
 import platformCharacter from "../sprites/platform/platformCharacter";
+import Tile from "./Tile";
 
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -19,26 +20,26 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 // create a class for individual tiles so GameThree2's render will
 // be neater and easier to read
-class Tile extends Component {
-  render() {
-
-    const tweenOpts01 = {
-      tweenType: "bounce",
-      repeatable: true,
-      loop: false,
-    };
-
-    return (
-      <AnimatedSprite coordinates={{top: this.props.top, left: this.props.left}}
-              size={{width: 88, height: 20}}
-              draggable={false}
-              character={platformCharacter}
-              soundOnTouch={true}
-              tweenStart="touch"
-              tween={tweenOpts01}/>
-    );
-  }
-}
+// class Tile extends Component {
+//   render() {
+//
+//     const tweenOpts01 = {
+//       tweenType: "bounce",
+//       repeatable: true,
+//       loop: false,
+//     };
+//
+//     return (
+//       <AnimatedSprite coordinates={{top: this.props.top, left: this.props.left}}
+//               size={{width: 88, height: 20}}
+//               draggable={false}
+//               character={platformCharacter}
+//               soundOnTouch={true}
+//               tweenStart="touch"
+//               tween={tweenOpts01}/>
+//     );
+//   }
+// }
 
 class GameThree2 extends React.Component {
 
@@ -72,15 +73,15 @@ class GameThree2 extends React.Component {
                   character={monkeyCharacter}
                   tween={tweenSettings}
                   tweenStart="auto"/>
-              <Tile top={70} left={190} />
-              <Tile top={87} left={293} />
-              <Tile top={79} left={390} />
-              <Tile top={178} left={193} />
-              <Tile top={180} left={294} />
-              <Tile top={190} left={395} />
-              <Tile top={280} left={200} />
-              <Tile top={283} left={310} />
-              <Tile top={268} left={415} />
+              <Tile top={70} left={190} width={88} height={20} />
+              <Tile top={87} left={293} width={88} height={20}/>
+              <Tile top={79} left={390} width={88} height={20}/>
+              <Tile top={178} left={193} width={88} height={20}/>
+              <Tile top={180} left={294} width={88} height={20}/>
+              <Tile top={190} left={395} width={88} height={20}/>
+              <Tile top={280} left={200} width={88} height={20}/>
+              <Tile top={283} left={310} width={88} height={20}/>
+              <Tile top={268} left={415} width={88} height={20}/>
             </Image>
           </View>
         );

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
+import Tile from "./Tile";
 import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
 import platformCharacter from "../sprites/platform/platformCharacter";
 
@@ -47,10 +48,7 @@ class GameThree extends React.Component {
                   character={monkeyCharacter}
                   tween={tweenSettings}
                   tweenStart="auto"/>
-              <AnimatedSprite coordinates={{top: 200, left: 250}}
-                      size={{width: 220, height: 50}}
-                      draggable={false}
-                      character={platformCharacter}/>
+              <Tile top={200} left={250} width={220} height={50} />
             </Image>
           </View>
         );
