@@ -5,6 +5,7 @@ import {
     Text,
     View,
     Image,
+    TouchableOpacity,
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
@@ -17,6 +18,12 @@ let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class GameThree extends React.Component {
+
+  buttonPress = () => {
+      this.props.navigator.push({
+          id: 15,
+      });
+  }
 
 
 
@@ -32,6 +39,9 @@ class GameThree extends React.Component {
         return(
           <View style={styles.container}>
             <Image source={require('../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
+              <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                  <Text>Go to Level 2</Text>
+              </TouchableOpacity>
               <AnimatedSprite coordinates={{top: 150, left: 10}}
                   size={{width: 100, height: 120}}
                   draggable={false}
@@ -66,7 +76,13 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         top: (SCREEN_HEIGHT/2) - 50,
         transform: [{rotateX: '10deg'}],
-    }
+    },
+    button: {
+        backgroundColor: '#4d94ff',
+        borderRadius: 10,
+        width: 90,
+        height: 30,
+    },
 });
 
 export default GameThree;

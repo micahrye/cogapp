@@ -33,7 +33,7 @@ import GameTwoLevel1 from './components/GameTwo1';
 import GameTwoLevel2 from './components/GameTwo2';
 import GameTwoLevel3 from './components/GameTwo3';
 import GameThree from './components/GameThree';
-import GameThreeLevel1 from './components/GameThree1';
+import GameThree1 from './components/GameThree1';
 import GameThreeLevel2 from './components/GameThree2';
 import GameThreeLevel3 from './components/GameThree3';
 import GameThreeLevel4 from './components/GameThree4';
@@ -97,7 +97,7 @@ class CogApp extends React.Component {
     } else if (route.id === 14){
       return <GameThree navigator={navigator} />
     } else if (route.id === 15){
-      return <GameThreeLevel1 navigator={navigator} />
+      return <GameThree1 navigator={navigator} />
     } else if (route.id === 16){
       return <GameThreeLevel2 navigator={navigator} />
     } else if (route.id === 17){
@@ -110,7 +110,7 @@ class CogApp extends React.Component {
       return <GameFive navigator={navigator} />
     } else if (route.id === 21){
       return <GameSix navigator={navigator} />
-    } 
+    }
   }
 }
 
