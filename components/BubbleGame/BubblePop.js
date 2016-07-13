@@ -32,8 +32,7 @@ class BubblePop extends React.Component {
     this.state = {
       score: 0,
       popTime: 0,
-      bubbleCharacters: [],
-      renderPlaceholderOnly: true
+      bubbleCharacters: []
     }
   }
 
@@ -42,6 +41,7 @@ class BubblePop extends React.Component {
     AsyncStorage.getItem('score').then((value) => {
       this.setUpScene(JSON.parse(value));
     }).done();
+
   }
 
   // set up scene based on score from storage
@@ -107,17 +107,10 @@ class BubblePop extends React.Component {
         duration: this.getDuration(),
         loop: true
       };
-      bubbles.push(<AnimatedSprite key={i} spriteKey={i}
-        coordinates={{
-          top: SCREEN_HEIGHT,
-          left: startLeft
-        }}
-        size={size} draggable={false} character={bubbleCharacterLarge}
-        tween={tweenSettings} tweenStart="auto"
-        timeSinceMounted={this.popBubble.bind(null, i)}
-        // it wasn't working with the anon function so I changed it back to
-        // this but maybe there's a better way to do it
-      />);
+      bubbles.push(<AnimatedSprite key={i} spriteKey={i} coordinates={{
+        top: SCREEN_HEIGHT,
+        left: startLeft
+      }} size={size} draggable={false} character={bubbleCharacterLarge} tween={tweenSettings} tweenStart="auto" timeSinceMounted={(spriteKey, duration) => this.popBubble(spriteKey, duration)}/>);
     }
     this.setState({bubbleCharacters: bubbles});
   }
@@ -214,16 +207,6 @@ class BubblePop extends React.Component {
           {this.state.bubbleCharacters}
         </View>
       </Image>
-    );
-  }
-
-  _renderPlaceholderView() {
-    return (
-      <View>
-        <Text style={{
-          color: "red"
-        }}>Loading...</Text>
-      </View>
     );
   }
 }

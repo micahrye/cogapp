@@ -38,7 +38,8 @@ class GameSix extends React.Component {
                         <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                             size={{width: 50, height: 50}}
                             draggable={true}
-                            character={appleCharacter}/>
+                            character={appleCharacter}
+                            />
                     </View>
 
                     <View style={styles.itemContainer}>
@@ -48,7 +49,8 @@ class GameSix extends React.Component {
                             size={{width: 50, height: 50}}
                             draggable={true}
                             character={canCharacter}
-                            tweenStart="touch"/>
+                            tweenStart="touch"
+                            />
                     </View>
 
                     <View style={styles.itemContainer}>
@@ -58,7 +60,8 @@ class GameSix extends React.Component {
                             size={{width: 50, height: 50}}
                             draggable={true}
                             character={bugCharacter}
-                            tweenStart="touch"/>
+                            tweenStart="touch"
+                            />
                     </View>
 
                     <View style={styles.itemContainer}>
@@ -68,24 +71,25 @@ class GameSix extends React.Component {
                             size={{width: 50, height: 50}}
                             draggable={true}
                             character={canCharacter}
-                            tweenStart="touch"/>
+                            tweenStart="touch"
+                            />
                     </View>
 
                     <AnimatedSprite coordinates={{top: 250, left: 30}}
                             size={{width: 170, height: 120}}
                             draggable={false}
-                            character={omnivoreCharacter}/>
+                            character={omnivoreCharacter}
+                            />
 
                     <View style={styles.thoughtBubbles}>
                         <View style={styles.bubble1}><Text style={styles.thoughtText}>1</Text></View>
-                        <View style={styles.bubble2}></View>
-                        <View style={styles.bubble3}></View>
+                        <View style={styles.bubble2} />
+                        <View style={styles.bubble3} />
                     </View>
-
                 </View>
             </Image>
         );
-       
+
     }
 }
 

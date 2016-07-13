@@ -7,6 +7,7 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
+import Sound from 'react-native-sound';
 
 import AnimatedSprite from "./animatedSprite";
 import frogCharacterFlipped from "../sprites/frog/frogCharacterFlipped";
@@ -16,6 +17,29 @@ import platformCharacter from "../sprites/platform/platformCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+
+// create a class for individual tiles so GameThree2's render will
+// be neater and easier to read
+class Tile extends Component {
+  render() {
+
+    const tweenOpts01 = {
+      tweenType: "bounce",
+      repeatable: true,
+      loop: false,
+    };
+
+    return (
+      <AnimatedSprite coordinates={{top: this.props.top, left: this.props.left}}
+              size={{width: 88, height: 20}}
+              draggable={false}
+              character={platformCharacter}
+              soundOnTouch={true}
+              tweenStart="touch"
+              tween={tweenOpts01}/>
+    );
+  }
+}
 
 class GameThree2 extends React.Component {
 
@@ -27,14 +51,15 @@ class GameThree2 extends React.Component {
 
 
 
-    render(){
+    render() {
+
         const tweenSettings = {
             tweenType: "hop-forward",
-                startXY: [10, 150],
-                endXY:[450],
-                yTo: [-100],
-                duration: 3000,
-                loop: false,
+            startXY: [10, 150],
+            endXY:[450],
+            yTo: [-100],
+            duration: 3000,
+            loop: false,
         }
         return(
           <View style={styles.container}>
@@ -48,10 +73,15 @@ class GameThree2 extends React.Component {
                   character={monkeyCharacter}
                   tween={tweenSettings}
                   tweenStart="auto"/>
-              <AnimatedSprite coordinates={{top: 200, left: 250}}
-                      size={{width: 220, height: 50}}
-                      draggable={false}
-                      character={platformCharacter}/>
+              <Tile top={70} left={190} />
+              <Tile top={87} left={293} />
+              <Tile top={79} left={390} />
+              <Tile top={178} left={193} />
+              <Tile top={180} left={294} />
+              <Tile top={190} left={395} />
+              <Tile top={280} left={200} />
+              <Tile top={283} left={310} />
+              <Tile top={268} left={415} />
             </Image>
           </View>
         );

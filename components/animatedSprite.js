@@ -7,10 +7,12 @@ import {
   PanResponder,
   StyleSheet,
   View,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
-
+import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
+
+
 
 
 class AnimatedSprite extends React.Component{
@@ -18,32 +20,32 @@ class AnimatedSprite extends React.Component{
     super(props);
 
     this.state = {
-      movies: null,
       animate: false,
-      _scale: new Animated.Value(0),
+      _scale: new Animated.Value(1),
       _top: new Animated.Value(props.coordinates.top),
       _left: new Animated.Value(props.coordinates.left),
       _rotation: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
-      _opacity: new Animated.Value(1),
     };
 
     this.character = undefined;
-    this.soul = undefined;
-    this._characterStyles =  {};
-    this._initialX = this.state._left._value;
-    this._initialY = this.state._top._value;
+    this.refAnimatedImage = undefined;
+    this._charactertyles =  {};
+    this._initialLeft = this.state._left._value;
+    this._initialLefTop = this.state._top._value;
     this._panResponder = {};
 
     this._animation = this.props.character;
     this._animationKey = 'idel';
     this.numFrames = this._animation[this._animationKey].length-1;
-    this.frameIndex = 0;
-    this.animationInterval = undefined;
+    this.frameIndex = -1;
+    this.idelAnimationInterval = undefined;
+    this.touchAnimationInterval = undefined;
 
     this._Tweener = Tweener();
     this._hasTweened = 0;
+    this.renderTime = 0;
   }
 
   componentWillMount() {
@@ -65,8 +67,8 @@ class AnimatedSprite extends React.Component{
         });
     }
 
-    this._previousLeft =  this._initialX;
-    this._previousTop = this._initialY;
+    this._previousLeft =  this._initialLeft;
+    this._previousTop = this._initialLefTop;
     this._characterStyles = {
       style: {
         left: this._previousLeft,
@@ -78,32 +80,34 @@ class AnimatedSprite extends React.Component{
   }
 
   componentDidMount() {
-    this.setAnimationInterval();
+    this.startIdelAnimation();
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    this.createdAtTime = Date.now();
-
     if(this.props.tweenStart == "auto"){
-      this.startAnimation();
+      this.startTween();
     }
+    this.renderTime = Date.now();
   }
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
-    clearInterval(this.animationInterval);
+    clearInterval(this.idelAnimationInterval);
   }
 
-  setAnimationInterval(){
+  startIdelAnimation(){
     // NOTE: making assumption there is an idel animation. Maybe change if only
     // one frame fro idel don't run interval.
-    this.animationInterval = setInterval(()=>{
+    this._animationKey = ['idel'];
+    this.numFrames = this._animation[this._animationKey].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.idelAnimationInterval);
+    this.idelAnimationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
       }
       this.setState({animate: true});
-      //console.log("move please");
     }, 100);
   }
 
@@ -143,10 +147,12 @@ class AnimatedSprite extends React.Component{
   }
 
   getStyle(){
+
     let ro = this.state._rotation.interpolate({
       inputRange: [0,100],
-      outputRange: ['0deg','360deg']
+      outputRange: ['0deg','180deg'],
     });
+
     return (
       {
         top: this.state._top,
@@ -154,70 +160,74 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-        opacity: this.state._opacity,
-        transform: [
-          {scale: this.state._scale},
-          {rotate: ro},
-        ]
+        transform: [{rotate: ro},
+                    {scale: this.state._scale}],
       }
     );
 
   }
 
   handlePress(evt){
-     if(this.props.draggable){
-      return;
-    }
-
-    //COMM: why would it be undefind?
+    // COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
     }
 
+    if(this.props.draggable){
+      return;
+    }
 
+    if(this.props.soundOnTouch){
 
-    // put this in an if statement so scale is not being being told to go
-    // in 2 different directions simultaneously
-    // if (this.props.touchTween.tweenType !== "pulse") {
-    //   this._Tweener["bounce"]({
-    //     startScale: 0.95,
-    //     endScale: 1.0,
-    //     friction: 2.5,
-    //   }, {scale: this.state._scale});
-    //  }
+      let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+      } else { // loaded successfully
+        console.log('sound did load');
+        tile.play();
+        }
+     });
+
+    }
 
     if(this.props.tweenStart === "touch"){
-      this.startAnimation();
+      this.startTween();
     }
-    else if(this.props.timeSinceMounted){
-      this.props.timeSinceMounted((Date.now() - this.createdAtTime) / 1000);
+
+    if(this.props.timeSinceMounted){
+      this.props.timeSinceMounted(
+        this.props.spriteKey,
+        (Date.now() - this.renderTime ) / 1000
+      );
     }
   }
 
   touchSprite() {
-    console.warn("in touch sprite");
-      // TODO: rework this
-      clearInterval(this.animationInterval);
-      this._animationKey = 'touch';
-      this.numFrames = this._animation[this._animationKey].length-1;
-      this.frameIndex = 0;
-      this.animationInterval = setInterval(()=>{
-          this.frameIndex++;
-          if(this.frameIndex > this.numFrames){
-              clearInterval(this.animationInterval);
-              this._animationKey = ['idel'];
-              this.frameIndex = 0;
-              this.numFrames = this._animation[this._animationKey].length-1;
-              this.setAnimationInterval();
-              return;
-          }else{
-            this.setState({animate: true});
-          }
-      }, 100);
-
+      // TOOD: rework this
+      clearInterval(this.idelAnimationInterval);
+      this.startTouchAnimation();
   }
 
-  startAnimation() {
+  startTouchAnimation(){
+    this._animationKey = 'touch';
+    this.numFrames = this._animation[this._animationKey].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.touchAnimationInterval);
+
+    this.touchAnimationInterval = setInterval(()=>{
+        this.frameIndex++;
+        // run once and go back to idel
+        if(this.frameIndex > this.numFrames){
+          clearInterval(this.touchAnimationInterval);
+          this.startIdelAnimation();
+          return;
+        }else{
+          this.setState({animate: true});
+        }
+    }, 100);
+  }
+
+  startTween() {
     if(!this.props.tween.repeatable && this._hasTweened){
       return;
     }
@@ -229,15 +239,13 @@ class AnimatedSprite extends React.Component{
       left: this.state._left,
       scale: this.state._scale,
       rotation: this.state._rotation,
-      opacity: this.state._opacity,
     }
-    this._Tweener["Looper"](tweenOptions, tweenState, tweenType);
+    this._Tweener[tweenType](tweenOptions, tweenState);
   }
 
   render() {
 
     return(
-
         <Animated.View
           {...this._panResponder.panHandlers}
           style={this.getStyle()}
@@ -245,13 +253,12 @@ class AnimatedSprite extends React.Component{
             this.character = character;
           }}
         >
-          <TouchableOpacity
-            activeOpacity={1.0}
-            accessible={false}
-            onPress={(evt) => this.handlePress(evt)}>
+
+          <TouchableWithoutFeedback
+            onPress={ (evt) => this.handlePress(evt) }>
             <Animated.Image
-              ref={(soul) => {
-                this.soul = soul;
+              ref={(ref) => {
+                this.refAnimatedImage = ref;
               }}
               source={this._animation[this._animationKey][this.frameIndex]}
               style={{
@@ -259,21 +266,21 @@ class AnimatedSprite extends React.Component{
                 width: this.state._width,
                 height: this.state._height,
               }}/>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
+
         </Animated.View>
     );
   }
-
 }
 
-
-
+// TODO: add in any props that should be required.
 AnimatedSprite.propTypes = {
   coordinates: React.PropTypes.object.isRequired,
   size: React.PropTypes.object.isRequired,
   draggable: React.PropTypes.bool.isRequired,
   character: React.PropTypes.object.isRequired,
   tween: React.PropTypes.object,
+  soundOnTouch: React.PropTypes.bool,
 };
 
 AnimatedSprite.defaultProps = {
@@ -281,15 +288,9 @@ AnimatedSprite.defaultProps = {
 };
 
 const styles = {
-  // character: {
-  //   borderWidth: 2,
-  //   borderColor: '#00ff00'
-  // },
-  // animator:{
-  //   borderWidth: 2,
-  //   borderColor: '#ff00ff',
-  // },
-};
-
+  character: {
+    opacity: 1,
+  }
+ };
 
 export default AnimatedSprite;

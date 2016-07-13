@@ -48,10 +48,18 @@ class GameThree1 extends React.Component {
                   character={monkeyCharacter}
                   tween={tweenSettings}
                   tweenStart="auto"/>
-              <AnimatedSprite coordinates={{top: 200, left: 250}}
-                      size={{width: 220, height: 50}}
-                      draggable={false}
-                      character={platformCharacter}/>
+              <AnimatedSprite coordinates={{top: 80, left: 235}}
+                  size={{width: 220, height: 50}}
+                  draggable={false}
+                  character={platformCharacter}/>
+              <AnimatedSprite coordinates={{top: 180, left: 235}}
+                  size={{width: 220, height: 50}}
+                  draggable={false}
+                  character={platformCharacter}/>
+              <AnimatedSprite coordinates={{top: 280, left: 235}}
+                  size={{width: 220, height: 50}}
+                  draggable={false}
+                  character={platformCharacter}/>
             </Image>
           </View>
         );

@@ -46,7 +46,7 @@ class GameFour extends React.Component {
         let boxes = [];
         for(let i=0; i < 3; i++){
             boxes.push(
-                    <AnimatedSprite 
+                <AnimatedSprite 
                     key={i}
                     spriteKey={i} 
                     coordinates={{top: 300, left: (i*90) + 10}}
@@ -54,7 +54,7 @@ class GameFour extends React.Component {
                     draggable={true} 
                     draggedTo={this.checkLocation.bind(null, i)}
                     character={squareCharacter}/>
-                );
+            );
         }
         this.setState({moveableBoxes: boxes});
     }
@@ -108,11 +108,12 @@ class GameFour extends React.Component {
                         {this.state.moveableBoxes}    
                     </View>
                     <AnimatedSprite
-                            key={this.state.key} 
-                            coordinates={{top: 100, left: SCREEN_WIDTH-200}}
-                            size={{width: 256, height: 256}}
-                            draggable={false}
-                            character={this.state.currFrogCharacter}/>
+                        key={this.state.key} 
+                        coordinates={{top: 100, left: SCREEN_WIDTH-200}}
+                        size={{width: 256, height: 256}}
+                        draggable={false}
+                        character={this.state.currFrogCharacter}
+                        />
                 </View>
             </Image>
         );
@@ -139,13 +140,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         left: SCREEN_WIDTH/2 - 140,
     },
-    // box: {
-    //     borderWidth: 2,
-    //     width: 60,
-    //     height: 60,
-    //     margin: 15,
-    //     alignItems: 'center',
-    // },
     text: {
         fontSize: 45,
     },
