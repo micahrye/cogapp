@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
-import frogCharacterFlipped from "../sprites/frog/frogCharacterFlipped";
 import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
 import platformCharacter from "../sprites/platform/platformCharacter";
 

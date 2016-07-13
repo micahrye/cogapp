@@ -10,7 +10,6 @@ import {
 import Sound from 'react-native-sound';
 
 import AnimatedSprite from "./animatedSprite";
-import frogCharacterFlipped from "../sprites/frog/frogCharacterFlipped";
 import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
 import platformCharacter from "../sprites/platform/platformCharacter";
 

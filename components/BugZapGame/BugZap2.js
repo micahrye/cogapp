@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import frogCharacter from "../../sprites/frog/frogCharacter";
-import frogCharacterFlipped from '../../sprites/frog/frogCharacterFlipped';
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 import AnimatedSprite from "../animatedSprite";
