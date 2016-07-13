@@ -1,11 +1,11 @@
 "use strict"
 
 const lightbulbCharacter = {
-    name:"lightbulb",
+  name:"lightbulb",
 
-    idel:[
-        require("./lightbulb.png"),
-    ],
+  idel:[
+    require("./lightbulb.png"),
+  ],
 
 };
 

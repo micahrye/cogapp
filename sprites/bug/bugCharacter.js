@@ -1,12 +1,12 @@
 "use strict"
 
 const bugCharacter = {
-    name:"bug",
+  name:"bug",
 
-    idel:[
-        require("./bug_fly01.png"),
-        require("./bug_fly02.png"),
-    ],
+  idel:[
+    require("./bug_fly01.png"),
+    require("./bug_fly02.png"),
+  ],
 
 };
 

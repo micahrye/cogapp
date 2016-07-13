@@ -1,11 +1,11 @@
 "use strict";
 
 const appleCharacter = {
-    name:"apple",
+  name:"apple",
 
-    idel:[
-        require("./apple.png"),
-    ],
+  idel:[
+    require("./apple.png"),
+  ],
 
 
 };

@@ -1,11 +1,11 @@
 "use strict";
 
 const canCharacter = {
-    name:"can",
+  name:"can",
 
-    idel:[
-        require("./can.png"),
-    ],
+  idel:[
+    require("./can.png"),
+  ],
 
 
 };
