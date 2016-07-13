@@ -9,8 +9,10 @@ import {
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
-
+import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
+
+
 
 
 class AnimatedSprite extends React.Component{
@@ -165,6 +167,26 @@ class AnimatedSprite extends React.Component{
 
     if(this.props.draggable){
       return;
+    }
+
+
+    if(this.props.soundOnTouch){
+
+      let tile = new Sound('../sounds/tile.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+      } else { // loaded successfully
+        console.log('sound did not load');
+        }
+     });
+
+      tile.play((success) => {
+       if (success) {
+        console.log('successfully finished playing');
+       } else {
+          console.log('playback failed due to audio decoding errors');
+       }
+     });
     }
 
     if(this.props.tweenStart === "touch"){

@@ -22,11 +22,22 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 // be neater and easier to read
 class Tile extends Component {
   render() {
+
+    const tweenOpts01 = {
+      tweenType: "hop",
+      startXY: [this.props.left,this.props.top],
+      repeatable: true,
+      loop: false,
+    };
+
     return (
       <AnimatedSprite coordinates={{top: this.props.top, left: this.props.left}}
               size={{width: 88, height: 20}}
               draggable={false}
-              character={platformCharacter}/>
+              character={platformCharacter}
+              soundOnTouch={true}
+              tweenStart="touch"
+              tween={tweenOpts01}/>
     );
   }
 }
@@ -41,14 +52,15 @@ class GameThree2 extends React.Component {
 
 
 
-    render(){
+    render() {
+
         const tweenSettings = {
             tweenType: "hop-forward",
-                startXY: [10, 150],
-                endXY:[450],
-                yTo: [-100],
-                duration: 3000,
-                loop: false,
+            startXY: [10, 150],
+            endXY:[450],
+            yTo: [-100],
+            duration: 3000,
+            loop: false,
         }
         return(
           <View style={styles.container}>

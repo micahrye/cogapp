@@ -5,19 +5,17 @@ import { Animated, Easing } from 'react-native';
 const Tweener = function () {
 
   const bounce = function(options, state) {
-    if (looping === false) {
-      return;
-    }
     state.scale.setValue(0.9);
     Animated.spring(
     state.scale,
       {
         toValue: 1.0,
         friction: 2.5,
+        duration: options.duration,
       }
     ).start(() => {
       if (options.loop === false) {
-        looping = false;
+        return;
       }
       bounce(options, state);
     });
