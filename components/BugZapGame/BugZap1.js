@@ -84,16 +84,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 90,
         height: 30,
-
+        position: 'absolute',
     },
     flip: {
-        top: SCREEN_HEIGHT - 308,
+        top: SCREEN_HEIGHT - 275,
         left: -50,
         width: 256,
         height: 256,
         transform: [{rotateY: '180deg'}],
-                borderWidth: 2,
-
+        position: 'absolute',
     },
 });
 
