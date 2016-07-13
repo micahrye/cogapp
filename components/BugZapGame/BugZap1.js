@@ -56,11 +56,13 @@ class BugZap1 extends React.Component {
                             draggable={false}
                             character={frogCharacter} 
                             />
-                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: -50}}
-                            size={{width: 256, height: 256}}
-                            draggable={false}
-                            character={frogCharacterFlipped} 
-                            />
+                        <View style={styles.flip}>
+                            <AnimatedSprite coordinates={{top: 0, left: 0}}
+                                size={{width: 256, height: 256}}
+                                draggable={false}
+                                character={frogCharacter} 
+                                />
+                        </View>
                 </Image>
             </View>
         );
@@ -82,6 +84,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 90,
         height: 30,
+
+    },
+    flip: {
+        top: SCREEN_HEIGHT - 308,
+        left: -50,
+        width: 256,
+        height: 256,
+        transform: [{rotateY: '180deg'}],
+                borderWidth: 2,
 
     },
 });
