@@ -1,6 +1,6 @@
 "use strict"
 
-const bugCharacter = {
+const bugCharacterFly = {
   name:"bug",
 
   idel:[
@@ -10,4 +10,4 @@ const bugCharacter = {
 
 };
 
-export default bugCharacter;
+export default bugCharacterFly;

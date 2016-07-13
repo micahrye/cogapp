@@ -10,7 +10,7 @@ Navigator,
 } from 'react-native';
 
 import frogCharacter from "../../sprites/frog/frogCharacter";
-import bugCharacter from '../../sprites/bug/bugCharacter';
+import bugCharacterFly from '../../sprites/bug/bugCharacterFly';
 import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
@@ -35,7 +35,7 @@ componentDidMount() { }
           <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
             size={{width: 128, height: 128}}
             draggable={false}
-            character={bugCharacter}
+            character={bugCharacterFly}
             tween={tweenSettings}
             tweenStart="auto"
             />

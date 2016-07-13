@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 
 import frogCharacter from "../../sprites/frog/frogCharacter";
-import bugCharacter from '../../sprites/bug/bugCharacter';
+import bugCharacterFly from '../../sprites/bug/bugCharacterFly';
+import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
 import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
@@ -63,7 +64,7 @@ class BugZap2 extends React.Component {
         <AnimatedSprite key={0} coordinates={{top: SCREEN_HEIGHT - 300, left: SCREEN_WIDTH - 200}}
         size={{width: 128, height: 128}}
         draggable={false}
-        character={bugCharacter}/>
+        character={bugCharacterIdle}/>
       );
       this.setState({blackout: false});
     }, 200);

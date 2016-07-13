@@ -10,7 +10,7 @@ import {
 import AnimatedSprite from "./animatedSprite";
 import frogCharacter from "../sprites/frog/frogCharacter";
 import canCharacter from "../sprites/can/canCharacter";
-import bugCharacter from "../sprites/bug/bugCharacter";
+import bugCharacterIdle from "../sprites/bug/bugCharacterIdle";
 import appleCharacter from "../sprites/apple/appleCharacter";
 import omnivoreCharacter from "../sprites/omnivore/omnivoreCharacter";
 
@@ -57,7 +57,7 @@ class GameSix extends React.Component {
             <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
               size={{width: 50, height: 50}}
               draggable={true}
-              character={bugCharacter}
+              character={bugCharacterIdle}
               tweenStart="touch"
               />
           </View>
