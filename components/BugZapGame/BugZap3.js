@@ -38,15 +38,18 @@ class BugZap3 extends React.Component {
                             draggable={false}
                             character={bugCharacter}
                             tween={tweenSettings}
-                            tweenStart="auto"/>
+                            tweenStart="auto"
+                            />
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                             size={{width: 256, height: 256}}
                             draggable={false}
-                            character={frogCharacter} />
+                            character={frogCharacter} 
+                            />
                         <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
                             size={{width: 256, height: 256}}
                             draggable={false}
-                            character={frogCharacterFlipped} />
+                            character={frogCharacterFlipped} 
+                            />
                 </Image>
             </View>
         );

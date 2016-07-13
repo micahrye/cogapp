@@ -197,7 +197,7 @@ class BubblePop extends React.Component {
     render(){
       return (
           <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
-              <View style={styles.topBar} >
+              <View style={styles.topBar}>
                   <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
                   </TouchableOpacity>
