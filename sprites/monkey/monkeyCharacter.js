@@ -1,11 +1,11 @@
 "use strict"
 
 const monkeyCharacter = {
-  name:"monkey",
+    name:"monkey",
 
-  idel:[
-    require("./monkey.png"),
-  ],
+    idel:[
+        require("./monkey.png"),
+    ],
 
 };
 

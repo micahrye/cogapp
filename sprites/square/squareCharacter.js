@@ -1,11 +1,11 @@
 "use strict"
 
 const squareCharacter = {
-  name:"square",
+    name:"square",
 
-  idel:[
-    require("./number35.png"),
-  ],
+    idel:[
+        require("./number35.png"),
+    ],
 
 };
 

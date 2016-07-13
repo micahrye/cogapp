@@ -34,7 +34,6 @@ class BubblePop extends React.Component {
             score: 0,
             popTime: 0,
             bubbleCharacters: [],
-            renderPlaceholderOnly: true,
         }
     }
 
@@ -95,16 +94,16 @@ class BubblePop extends React.Component {
             };
             bubbles.push(
                 <AnimatedSprite
-                  key={i}
-                  spriteKey={i}
-                  coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
-                  size={size}
-                  draggable={false}
-                  character={bubbleCharacterLarge}
-                  tween={tweenSettings}
-                  tweenStart="auto"
-                  timeSinceMounted={this.popBubble.bind(null, i)} // it wasn't working with the anon function so I changed it back to this but maybe there's a better way to do it
-                  />
+                    key={i}
+                    spriteKey={i}
+                    coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
+                    size={size}
+                    draggable={false}
+                    character={bubbleCharacterLarge}
+                    tween={tweenSettings}
+                    tweenStart="auto"
+                    timeSinceMounted={this.popBubble.bind(null, i)}/>
+                  
             );
         }
         this.setState({bubbleCharacters: bubbles});
@@ -120,43 +119,43 @@ class BubblePop extends React.Component {
         let bubbles = [];
 
         this.state.bubbleCharacters.forEach((item)=>{
-          if(bubblePos !== item.props.spriteKey){
-            bubbles.push(item)
-          }
-         //  else{
-         //    bubbles.push(item);
-         //    console.log(bubbles[bubblePos].props.spriteKey);
-         //    bubbles[bubblePos].props.spriteKey = 8;
-         //    console.log(bubbles[bubblePos].props.spriteKey);
+            if(bubblePos !== item.props.spriteKey){
+              bubbles.push(item)
+            }
+           //  else{
+           //    bubbles.push(item);
+           //    console.log(bubbles[bubblePos].props.spriteKey);
+           //    bubbles[bubblePos].props.spriteKey = 8;
+           //    console.log(bubbles[bubblePos].props.spriteKey);
 
-         //    // console.warn(item.props.spriteKey);
-         //    // console.warn(item.props.character);
-         //    // console.log(item);
-         //    // item.props.character = {frogCharacter}
-         //    //             console.log(item);
-         //    // this.state.bubbleCharacters[bubblePos].props.character = frogCharacter;
-         //    // //this.setState({bubbleCharacters[bubblePos].props.character: frogCharacter});
+           //    // console.warn(item.props.spriteKey);
+           //    // console.warn(item.props.character);
+           //    // console.log(item);
+           //    // item.props.character = {frogCharacter}
+           //    //             console.log(item);
+           //    // this.state.bubbleCharacters[bubblePos].props.character = frogCharacter;
+           //    // //this.setState({bubbleCharacters[bubblePos].props.character: frogCharacter});
 
-         //    // console.log(this.state.bubbleCharacters[bubblePos].props.character);
+           //    // console.log(this.state.bubbleCharacters[bubblePos].props.character);
 
-         //   // bubbles.push(item);
-         //         // <AnimatedSprite
-         //         //    key={Math.random()}
-         //         //      coordinates={{top: SCREEN_HEIGHT - 100, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
-         //         //      size={{width: 256, height: 256}}
-         //         //      draggable={false}
-         //         //      character={item.props.character} />
-         //        // <AnimatedSprite
-         //        //   key={item.props.spriteKey}
-         //        //   spriteKey={item.props.spriteKey}
-         //        //   coordinates={{top: SCREEN_HEIGHT, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
-         //        //   size={{width: 200, height: 20}}
-         //        //   draggable={true}
-         //        //   character={bubbleCharacterLarge}
-         //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/> 
-                  
-         //   // );
-         // }
+           //   // bubbles.push(item);
+           //         // <AnimatedSprite
+           //         //    key={Math.random()}
+           //         //      coordinates={{top: SCREEN_HEIGHT - 100, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
+           //         //      size={{width: 256, height: 256}}
+           //         //      draggable={false}
+           //         //      character={item.props.character} />
+           //        // <AnimatedSprite
+           //        //   key={item.props.spriteKey}
+           //        //   spriteKey={item.props.spriteKey}
+           //        //   coordinates={{top: SCREEN_HEIGHT, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
+           //        //   size={{width: 200, height: 20}}
+           //        //   draggable={true}
+           //        //   character={bubbleCharacterLarge}
+           //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/> 
+                    
+           //   // );
+           // }
         });
 
         this.setState({bubbleCharacters: bubbles, popTime: popTime});
@@ -195,24 +194,16 @@ class BubblePop extends React.Component {
     render(){
       return (
           <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
-            <View style={styles.topBar} >
-              <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.gameWorld}>
-              {this.state.bubbleCharacters}
-            </View>
+              <View style={styles.topBar} >
+                  <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                    <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
+                  </TouchableOpacity>
+              </View>
+              <View style={styles.gameWorld}>
+                  {this.state.bubbleCharacters}
+              </View>
           </Image>
       );
-    }
-
-    _renderPlaceholderView() {
-      return (
-        <View>
-          <Text style={{color:"red"}}>Loading...</Text>
-          </View>
-        );
     }
 }
 
