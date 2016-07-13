@@ -138,6 +138,10 @@ class AnimatedSprite extends React.Component{
     this._previousTop += gestureState.dy;
     this.state._top = this._characterStyles.style.top;
     this.state._left = this._characterStyles.style.left;
+
+    if(this.props.draggedTo){
+      this.props.draggedTo(this._characterStyles.style.left, this._characterStyles.style.top);
+    }
   }
 
   getStyle(){

@@ -102,7 +102,10 @@ class BubblePop extends React.Component {
                     character={bubbleCharacterLarge}
                     tween={tweenSettings}
                     tweenStart="auto"
-                    timeSinceMounted={this.popBubble.bind(null, i)}/>
+                    timeSinceMounted={
+                      (spriteKey, duration)=>this.popBubble(spriteKey, duration)
+                    }
+                    />
                   
             );
         }
