@@ -12,7 +12,13 @@ import {
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
 
-
+const TILE = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
+if (error) {
+  console.warn('failed to load the sound', error);
+} else { // loaded successfully
+  console.warn('sound did load');
+  }
+});
 
 
 class AnimatedSprite extends React.Component{
@@ -177,17 +183,9 @@ class AnimatedSprite extends React.Component{
       return;
     }
 
+    TILE.stop();  // stop sound if currently playing
     if(this.props.soundOnTouch){
-
-      let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-      } else { // loaded successfully
-        console.log('sound did load');
-        tile.play();
-        }
-     });
-
+      TILE.play();
     }
 
     if(this.props.tweenStart === "touch"){
