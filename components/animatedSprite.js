@@ -21,7 +21,7 @@ class AnimatedSprite extends React.Component{
 
     this.state = {
       animate: false,
-      _scale: new Animated.Value(0),
+      _scale: new Animated.Value(1),
       _top: new Animated.Value(props.coordinates.top),
       _left: new Animated.Value(props.coordinates.left),
       _rotation: new Animated.Value(0),
@@ -147,6 +147,12 @@ class AnimatedSprite extends React.Component{
   }
 
   getStyle(){
+
+    let ro = this.state._rotation.interpolate({
+      inputRange: [0,100],
+      outputRange: ['0deg','180deg'],
+    });
+
     return (
       {
         top: this.state._top,
@@ -154,6 +160,8 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
+        transform: [{rotate: ro},
+                    {scale: this.state._scale}],
       }
     );
 
@@ -169,24 +177,17 @@ class AnimatedSprite extends React.Component{
       return;
     }
 
-
     if(this.props.soundOnTouch){
 
-      let tile = new Sound('../sounds/tile.mp3', Sound.MAIN_BUNDLE, (error) => {
+      let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
       if (error) {
         console.log('failed to load the sound', error);
       } else { // loaded successfully
-        console.log('sound did not load');
+        console.log('sound did load');
+        tile.play();
         }
      });
 
-      tile.play((success) => {
-       if (success) {
-        console.log('successfully finished playing');
-       } else {
-          console.log('playback failed due to audio decoding errors');
-       }
-     });
     }
 
     if(this.props.tweenStart === "touch"){
@@ -279,6 +280,7 @@ AnimatedSprite.propTypes = {
   draggable: React.PropTypes.bool.isRequired,
   character: React.PropTypes.object.isRequired,
   tween: React.PropTypes.object,
+  soundOnTouch: React.PropTypes.bool,
 };
 
 AnimatedSprite.defaultProps = {

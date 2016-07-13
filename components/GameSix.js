@@ -89,7 +89,7 @@ class GameSix extends React.Component {
                 </View>
             </Image>
         );
-       
+
     }
 }
 

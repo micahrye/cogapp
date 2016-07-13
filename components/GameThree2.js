@@ -24,8 +24,7 @@ class Tile extends Component {
   render() {
 
     const tweenOpts01 = {
-      tweenType: "hop",
-      startXY: [this.props.left,this.props.top],
+      tweenType: "bounce",
       repeatable: true,
       loop: false,
     };
