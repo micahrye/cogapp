@@ -79,7 +79,6 @@ class BugZap extends React.Component {
   // switch to idle bug character and pause tweening
   bugIdle() {
     this.setState({
-      key: Math.random(),
       currBugCharacter: bugCharacterIdle,
       currTweenSettings: TWEEN_IDLE,
     });
@@ -88,7 +87,7 @@ class BugZap extends React.Component {
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
       clearTimeout(timeout2);
-    }, 1000);
+    }, 2000);
   }
 
   // switch back to flying bug character and start next tween

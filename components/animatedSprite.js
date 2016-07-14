@@ -170,9 +170,9 @@ class AnimatedSprite extends React.Component{
   handlePress(evt){
 
     // COMM: why would it be undefind?
-    if(this._animation['touch'] !== undefined){
-      this.touchSprite();
-    }
+    // if(this._animation['touch'] !== undefined){
+    //   this.touchSprite();
+    // }
 
     if(this.props.draggable){
       return;
