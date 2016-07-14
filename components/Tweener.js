@@ -151,6 +151,7 @@ const Tweener = function () {
    }
  });
  }
+
  const bounceDrop = function(options, state) {
    state.left.setValue(options.startXY[0]);
    Animated.timing(
@@ -363,6 +364,10 @@ const Tweener = function () {
       });
   }
 
+  const sendOffScreen = function(options, state) {
+    state.top.setValue(-500);
+  }
+
   return (
     {
       'bounce': bounce,
@@ -376,6 +381,7 @@ const Tweener = function () {
       'tumble-off': tumbleOff,
       'spin': spin,
       'hop-forward': hopForward,
+      'sendOffScreen': sendOffScreen,
     }
   );
 

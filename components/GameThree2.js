@@ -13,7 +13,7 @@ import AnimatedSprite from "./animatedSprite";
 import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
 import platformCharacter from "../sprites/platform/platformCharacter";
 import Tile from "./Tile";
-
+import birdCharacter from "../sprites/bird/birdCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -73,6 +73,10 @@ class GameThree2 extends React.Component {
                   character={monkeyCharacter}
                   tween={tweenSettings}
                   tweenStart="auto"/>
+              <AnimatedSprite coordinates={{top:180, left: 40}}
+                  size={{width: 120,height: 80}}
+                  draggable={false}
+                  character={birdCharacter}/>
               <Tile top={70} left={190} width={88} height={20} />
               <Tile top={87} left={293} width={88} height={20}/>
               <Tile top={79} left={390} width={88} height={20}/>

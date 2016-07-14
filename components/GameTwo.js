@@ -24,17 +24,18 @@ import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
 import frogCharacter from "../sprites/frog/frogCharacter";
 import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
+import signCharacter from "../sprites/sign/signCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
 const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
-const startLeft = 150;
-const startTop = 20;
-const spacing = 150;
-const sprite1Start = [startLeft,startTop];
-const sprite2Start = [startLeft+spacing,startTop];
-const sprite3Start = [startLeft+spacing*2,startTop];
+const startLeft = 250;
+const startTop = 90;
+
+
+const sprite2Start = [startLeft,startTop];
+
 
 class GameTwo extends Component {
 
@@ -70,19 +71,7 @@ class GameTwo extends Component {
 
   render() {
 
-    // options for left-most food item - drops and
-    // bounces towards creature on touch
-    const tweenOpts01 = {
-      tweenType: "bounce-drop",
-      startXY: sprite1Start ,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: false,
-      disappearAfterAnimation: true,
-    };
 
-    // options for middle food item
     const tweenOpts02 = {
       tweenType: "bounce-drop",
       startXY: sprite2Start,
@@ -93,16 +82,6 @@ class GameTwo extends Component {
       disappearAfterAnimation: true,
     };
 
-    // options for right-most food item
-    const tweenOpts03 = {
-      tweenType: "bounce-drop",
-      startXY: sprite3Start,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: false,
-      disappearAfterAnimation: true,
-    };
 
     // translates integers into degrees to allow rotation to
     // be animated.  Used in leverStyle transform
@@ -132,31 +111,24 @@ class GameTwo extends Component {
                 <AnimatedSprite coordinates={{top: Window.height - 275, left: Window.width - 200}}
                     size={{width: 256, height: 256}}
                     draggable={false}
-                    character={frogCharacter} />
+                    character={frogCharacter}
+                    hitSlop={{top:-150,left:-20,bottom:0,right:-10}} />
                 <Animated.View>
                   <TouchableOpacity
                     onPress={this.leverPress.bind(this)}
                     style={{...leverStyle}}>
                   </TouchableOpacity>
                 </Animated.View>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
-                    size={{width: 60, height: 60}}
+                <AnimatedSprite coordinates={{top: 0, left: startLeft}}
+                    size={{width: 110, height: 170}}
                     draggable={false}
-                    character={appleCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts01}/>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
+                    character={signCharacter}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft+30}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts02}/>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
-                    size={{width: 60, height: 60}}
-                    draggable={false}
-                    character={canCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts03}/>
         </Image>
       </View>
     );

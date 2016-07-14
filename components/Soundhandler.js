@@ -35,11 +35,11 @@ const Soundhandler = function () {
 
   const playSoundHelper = function(sound, backupSound) {
     if (flipflop) {
-      console.warn("anyone?");
+      console.warn("backup sound");
       backupSound.stop();
       backupSound.play();
     } else {
-      console.warn("hey");
+      console.warn("sound");
       sound.stop();
       sound.play();
     }

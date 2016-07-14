@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import Soundhandler from "./Soundhandler";
 import Tweener from "./Tweener";
@@ -158,8 +159,8 @@ class AnimatedSprite extends React.Component{
         top: this.state._top,
         left: this.state._left,
         position: 'absolute',
-        // borderWidth: 2,
-        // borderColor: '#ff00ff',
+        borderWidth: 2,
+        borderColor: '#ff00ff',
         transform: [{rotate: ro},
                     {scale: this.state._scale}],
       }
@@ -247,7 +248,9 @@ class AnimatedSprite extends React.Component{
           }}
         >
 
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            activeOpacity={1.0}
+            hitSlop={this.props.hitSlop}
             onPress={ (evt) => this.handlePress(evt) }>
             <Animated.Image
               ref={(ref) => {
@@ -259,7 +262,7 @@ class AnimatedSprite extends React.Component{
                 width: this.state._width,
                 height: this.state._height,
               }}/>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
 
         </Animated.View>
     );
@@ -275,6 +278,7 @@ AnimatedSprite.propTypes = {
   tween: React.PropTypes.object,
   soundOnTouch: React.PropTypes.bool,
   soundFile: React.PropTypes.string,
+  hitSlop: React.PropTypes.object,
 };
 
 AnimatedSprite.defaultProps = {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TouchableOpacity from 'react-native';
 import AnimatedSprite from "./animatedSprite";
 import platformCharacter from "../sprites/platform/platformCharacter";
 
