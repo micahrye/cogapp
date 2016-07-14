@@ -9,16 +9,8 @@ import {
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Sound from 'react-native-sound';
+import Soundhandler from "./Soundhandler";
 import Tweener from "./Tweener";
-
-const TILE = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
-if (error) {
-  //console.warn('failed to load the sound', error);
-} else { // loaded successfully
-  //console.warn('sound did load');
-  }
-});
 
 
 class AnimatedSprite extends React.Component{
@@ -52,6 +44,8 @@ class AnimatedSprite extends React.Component{
     this._Tweener = Tweener();
     this._hasTweened = 0;
     this.renderTime = 0;
+
+    this.Soundhandler = Soundhandler();
   }
 
   componentWillMount() {
@@ -174,6 +168,7 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
+
     // COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
@@ -183,9 +178,9 @@ class AnimatedSprite extends React.Component{
       return;
     }
 
-    TILE.stop();  // stop sound if currently playing
+
     if(this.props.soundOnTouch){
-      TILE.play();
+      this.Soundhandler["playSound"](this.props.soundFile);
     }
 
     if(this.props.tweenStart === "touch"){
@@ -279,6 +274,7 @@ AnimatedSprite.propTypes = {
   character: React.PropTypes.object.isRequired,
   tween: React.PropTypes.object,
   soundOnTouch: React.PropTypes.bool,
+  soundFile: React.PropTypes.string,
 };
 
 AnimatedSprite.defaultProps = {

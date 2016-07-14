@@ -19,6 +19,7 @@ class Tile extends Component {
               draggable={false}
               character={platformCharacter}
               soundOnTouch={true}
+              soundFile="tile"
               tweenStart="touch"
               tween={tweenOpts01}/>
     );

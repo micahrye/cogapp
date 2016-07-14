@@ -78,8 +78,7 @@ class GameTwo1 extends Component {
       endXY: endCoordinates,
       duration: 600,
       repeatable: false,
-      loop: false,
-      disappearAfterAnimation: true,
+      loop: true,
     };
 
     // options for middle food item
@@ -90,7 +89,6 @@ class GameTwo1 extends Component {
       duration: 600,
       repeatable: false,
       loop: false,
-      disappearAfterAnimation: true,
     };
 
     // options for right-most food item
