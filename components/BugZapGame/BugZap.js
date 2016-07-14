@@ -21,33 +21,72 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap extends React.Component {
-  componentDidMount() { }
+
+  constructor(props){
+    super(props);
+    this.state = {
+      renderBug: false,
+      nextAnim: false,
+    }
+  }
+
+  componentWillMount() {
+    setTimeout( () => {
+      this.setState({renderBug: true})
+    }, 750);
+  }
+
+  componentDidMount() { 
+
+  }
 
   // go to next level
   buttonPress = () => {
-      this.props.navigator.push({
-        id: 7,
-      });
+    this.props.navigator.push({
+      id: 7,
+    });
   }
 
   frogTap() {
     console.warn("in frog tap");
   }
 
+  getTweenSettings() {
+    console.warn(this.state.nextAnim);
+    timeout = setTimeout(()=>{
+      this.setState({nextAnim: true});
+      clearTimeout(timeout);
+    }, 2000);
+
+    if(this.state.nextAnim){
+      console.warn("here");
+      return(
+        {
+          tweenType: "sine-wave",
+          startXY: [500, 120],
+          xTo: [0],
+          yTo: [0, 120],
+          duration: 3000,
+          loop: false,
+        }
+      );
+    }
+    else{
+      return(
+        {
+          tweenType: "sine-wave",
+          startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
+          xTo: [475, 500, 400],
+          yTo: [0, 120],
+          duration: 1500,
+          loop: false,
+        }
+      );
+    }
+  }
+
   render(){
-    // automatic sine wave from right to left across screen
-    const tweenSettings = {
-      tweenType: "sine-wave",
-      startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-      xTo: [-120],
-      yTo: [0, 120, 40, 100, 10],
-      duration: 5000,
-      loop: true,
-    };
-
-    
-    
-
+    console.warn("in render");
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
@@ -55,13 +94,15 @@ class BugZap extends React.Component {
               <Text>Go to Level 1</Text>
             </TouchableOpacity>
 
-            <AnimatedSprite
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-              size={{width: 128, height: 128}}
-              draggable={false}
-              character={bugCharacterFly}
-              tween={tweenSettings}
-              tweenStart="auto"/>
+            {this.state.renderBug ? 
+              <AnimatedSprite
+                coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                size={{width: 128, height: 128}}
+                draggable={false}
+                character={bugCharacterFly}
+                tween={this.getTweenSettings()}
+                tweenStart="auto"/> 
+            : null}
 
             
 
@@ -72,7 +113,7 @@ class BugZap extends React.Component {
               character={frogCharacter}
               timeSinceMounted={this.frogTap} 
               />
-        </Image>
+        </Image> 
       </View>
     );
   }
