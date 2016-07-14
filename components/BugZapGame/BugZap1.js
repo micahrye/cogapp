@@ -18,8 +18,8 @@ import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 
-let SCREEN_WIDTH = require('Dimensions').get('window').width;
-let SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const TWEEN_1 = {
   tweenType: "sine-wave",
@@ -79,10 +79,10 @@ class BugZap1 extends React.Component {
   // switch to idle bug character and pause tweening
   bugIdle() {
     this.setState({
+      bugKey: Math.random(),
       bugCharacter: bugCharacterIdle,
       tweenSettings: TWEEN_IDLE,
     });
-    this.setState({bugKey: this.state.key});
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
@@ -141,20 +141,25 @@ class BugZap1 extends React.Component {
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                   <Text>Go to Level 2</Text>
                 </TouchableOpacity>
+
+                {this.state.showBug ?
+                  <AnimatedSprite 
+                    key={this.state.bugKey}
+                    coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                    size={{width: 128, height: 128}}
+                    draggable={false}
+                    character={this.state.bugCharacter}
+                    tween={this.state.tweenSettings}
+                    tweenStart="auto"/>
+                : null}
+
                 <AnimatedSprite 
-                  key={this.state.bugKey}
+                  key={this.state.frogKey}
                   coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                  size={{width: 128, height: 128}}
-                  draggable={false}
-                  character={this.state.bugCharacter}
-                  tween={this.state.tweenSettings}
-                  tweenStart="auto"
-                  />
-                <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                   size={{width: 256, height: 256}}
                   draggable={false}
-                  character={this.state.frogCharacter} 
-                  />
+                  character={this.state.frogCharacter} />
+
                 <View style={styles.flip}>
                   <AnimatedSprite 
                     key={this.state.frogKey}
@@ -163,7 +168,7 @@ class BugZap1 extends React.Component {
                     draggable={false}
                     character={this.state.frogCharacter} 
                     />
-                </View>
+              </View>
           </Image>
         </View>
     );

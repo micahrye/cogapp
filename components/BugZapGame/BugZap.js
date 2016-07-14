@@ -21,6 +21,7 @@ import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+
 const TWEEN_1 = {
   tweenType: "sine-wave",
   startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
@@ -54,9 +55,9 @@ class BugZap extends React.Component {
       showBug: false,
       bugKey: 0,
       frogKey: 1,
-      currBugCharacter: bugCharacterFly,
-      currFrogCharacter: frogCharacterIdle,
-      currTweenSettings: TWEEN_1,
+      bugCharacter: bugCharacterFly,
+      frogCharacter: frogCharacterIdle,
+      tweenSettings: TWEEN_1,
     }
   }
 
@@ -79,10 +80,10 @@ class BugZap extends React.Component {
   // switch to idle bug character and pause tweening
   bugIdle() {
     this.setState({
-      currBugCharacter: bugCharacterIdle,
-      currTweenSettings: TWEEN_IDLE,
+      bugKey: Math.random(),
+      bugCharacter: bugCharacterIdle,
+      tweenSettings: TWEEN_IDLE,
     });
-    this.setState({bugKey: this.state.key});
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
@@ -94,13 +95,13 @@ class BugZap extends React.Component {
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
-      currBugCharacter: bugCharacterFly,
-      currTweenSettings: TWEEN_2,   
+      bugCharacter: bugCharacterFly,
+      tweenSettings: TWEEN_2,   
     });   
   }
 
   frogTap = () => {
-    if(this.state.currBugCharacter === bugCharacterIdle){
+    if(this.state.bugCharacter === bugCharacterIdle){
       this.frogCelebrate();
     }
     else{
@@ -110,10 +111,10 @@ class BugZap extends React.Component {
 
   // load frog celebrate character, then stop celebrating
   frogCelebrate() {
-    this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterCelebrate});
+    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterCelebrate});
    
     setTimeout( () => {
-      this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
+      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
     }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
 
     this.setState({showBug: false});
@@ -121,10 +122,10 @@ class BugZap extends React.Component {
 
   // load frog disgust character, then go back to idle
   frogDisgust() {
-    this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterDisgust});
+    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterDisgust});
 
     setTimeout( () => {
-      this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
+      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
     }, 500); // this should be 300, but that's too fast...why?
   }
 
@@ -149,8 +150,8 @@ class BugZap extends React.Component {
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                 size={{width: 128, height: 128}}
                 draggable={false}
-                character={this.state.currBugCharacter}
-                tween={this.state.currTweenSettings}
+                character={this.state.bugCharacter}
+                tween={this.state.tweenSettings}
                 tweenStart="auto"/> 
             : null}
 
@@ -161,7 +162,7 @@ class BugZap extends React.Component {
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
               draggable={false}
-              character={this.state.currFrogCharacter}
+              character={this.state.frogCharacter}
               timeSinceMounted={this.frogTap} 
               />
         </Image> 
@@ -187,22 +188,5 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
-
-// // array holding fly sprites
-        // let flies = [];
-        // // declare 5 fly variables, store them in flies
-        // for(let i = 0; i < 5; i++){
-        //   const tweens = {...tweenSettings};
-        //   tweens.yTo = [i*10, 20*i, 40+(i*5), 100+(4*i), 10];
-        //   flies.push(
-        //     <AnimatedSprite
-        //       key={i}
-        //       coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-        //       size={{width: 128, height: 128}}
-        //       draggable={false}
-        //       character={bugCharacterFly}
-        //       tween={tweens}
-        //       tweenStart="auto"/>
-        //   );
 
 export default BugZap;
