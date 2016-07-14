@@ -12,13 +12,40 @@ import {
 // imports
 import AnimatedSprite from "../animatedSprite";
 // import characters for animatedsprite to use
-import frogCharacter from "../../sprites/frog/frogCharacter";
+import frogCharacterIdle from "../../sprites/frog/frogCharacter";
+import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
 import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
 import bugCharacterFly from "../../sprites/bug/bugCharacterFly"
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const TWEEN_1 = {
+  tweenType: "sine-wave",
+  startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
+  xTo: [475, 500, 400],
+  yTo: [0, 120],
+  duration: 1500,
+  loop: false,
+}
+const TWEEN_IDLE = {
+  tweenType: "sine-wave",
+  startXY: [400, 120],
+  xTo: [400],
+  yTo: [120],
+  duration: 0,
+  loop: false,
+}
+const TWEEN_2 = {
+  tweenType: "sine-wave",
+  startXY: [400, 120],
+  xTo: [-150],
+  yTo: [0, 120],
+  duration: 2000,
+  loop: false,
+}
+
+let FROG_CHARACTER = frogCharacterIdle;
 
 class BugZap extends React.Component {
 
@@ -26,18 +53,67 @@ class BugZap extends React.Component {
     super(props);
     this.state = {
       renderBug: false,
-      nextAnim: false,
+      key: 0,
+      frogKey: 0,
+      currBugCharacter: bugCharacterFly,
+      currFrogCharacter: frogCharacterIdle,
+      currTweenSettings: TWEEN_1,
     }
   }
 
   componentWillMount() {
-    setTimeout( () => {
-      this.setState({renderBug: true})
-    }, 750);
+    // render bug after the rest of the scene
+    timeout0 = setTimeout( () => {
+      this.setState({renderBug: true});
+      clearTimeout(timeout0);
+    }, 500);
   }
 
-  componentDidMount() { 
+  componentDidMount() {
+    // after first tween is completed, bug idles
+    timeout1 = setTimeout(()=>{
+      this.bugIdle();
+      clearTimeout(timeout1);
+    }, 2000);
+  }
 
+  // switch to idle bug character and pause tweening
+  bugIdle() {
+    this.setState({
+      key: Math.random(),
+      currBugCharacter: bugCharacterIdle,
+      currTweenSettings: TWEEN_IDLE,
+    });
+
+    timeout2 = setTimeout(()=>{
+      this.bugFlyAway();
+      clearTimeout(timeout2);
+    }, 1000);
+  }
+
+  // switch back to flying bug character and start next tween
+  bugFlyAway() {
+    this.setState({
+      key: Math.random(),
+      currBugCharacter: bugCharacterFly,
+      currTweenSettings: TWEEN_2,   
+    });    
+  }
+
+  frogTap = () => {
+    if(this.state.currBugCharacter === bugCharacterIdle){
+      this.frogCelebrate();
+    }
+  }
+
+  // load frog celebrate character, then stop celebrating
+  frogCelebrate() {
+    console.warn("here1");
+    this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterCelebrate});
+
+    // setTimeout( () => {
+    //   this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
+    // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
   }
 
   // go to next level
@@ -47,46 +123,7 @@ class BugZap extends React.Component {
     });
   }
 
-  frogTap() {
-    console.warn("in frog tap");
-  }
-
-  getTweenSettings() {
-    console.warn(this.state.nextAnim);
-    timeout = setTimeout(()=>{
-      this.setState({nextAnim: true});
-      clearTimeout(timeout);
-    }, 2000);
-
-    if(this.state.nextAnim){
-      console.warn("here");
-      return(
-        {
-          tweenType: "sine-wave",
-          startXY: [500, 120],
-          xTo: [0],
-          yTo: [0, 120],
-          duration: 3000,
-          loop: false,
-        }
-      );
-    }
-    else{
-      return(
-        {
-          tweenType: "sine-wave",
-          startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-          xTo: [475, 500, 400],
-          yTo: [0, 120],
-          duration: 1500,
-          loop: false,
-        }
-      );
-    }
-  }
-
   render(){
-    console.warn("in render");
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
@@ -96,21 +133,23 @@ class BugZap extends React.Component {
 
             {this.state.renderBug ? 
               <AnimatedSprite
+                key={this.state.key}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                 size={{width: 128, height: 128}}
                 draggable={false}
-                character={bugCharacterFly}
-                tween={this.getTweenSettings()}
+                character={this.state.currBugCharacter}
+                tween={this.state.currTweenSettings}
                 tweenStart="auto"/> 
             : null}
 
             
 
             <AnimatedSprite
+              frogKey={this.state.frogKey}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
               draggable={false}
-              character={frogCharacter}
+              character={FROG_CHARACTER}
               timeSinceMounted={this.frogTap} 
               />
         </Image> 
