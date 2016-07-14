@@ -14,6 +14,7 @@ import AnimatedSprite from "../animatedSprite";
 // import characters for animatedsprite to use
 import frogCharacterIdle from "../../sprites/frog/frogCharacter";
 import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
+import frogCharacterDisgust from "../../sprites/frog/frogCharacterDisgust";
 import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
 import bugCharacterFly from "../../sprites/bug/bugCharacterFly"
 import Background from '../../backgrounds/Game_1_Background_1280.png';
@@ -45,16 +46,14 @@ const TWEEN_2 = {
   loop: false,
 }
 
-let FROG_CHARACTER = frogCharacterIdle;
-
 class BugZap extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-      renderBug: false,
-      key: 0,
-      frogKey: 0,
+      showBug: false,
+      bugKey: 0,
+      frogKey: 1,
       currBugCharacter: bugCharacterFly,
       currFrogCharacter: frogCharacterIdle,
       currTweenSettings: TWEEN_1,
@@ -64,7 +63,7 @@ class BugZap extends React.Component {
   componentWillMount() {
     // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
-      this.setState({renderBug: true});
+      this.setState({showBug: true});
       clearTimeout(timeout0);
     }, 500);
   }
@@ -84,6 +83,7 @@ class BugZap extends React.Component {
       currBugCharacter: bugCharacterIdle,
       currTweenSettings: TWEEN_IDLE,
     });
+    this.setState({bugKey: this.state.key});
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
@@ -94,26 +94,39 @@ class BugZap extends React.Component {
   // switch back to flying bug character and start next tween
   bugFlyAway() {
     this.setState({
-      key: Math.random(),
+      bugKey: Math.random(),
       currBugCharacter: bugCharacterFly,
       currTweenSettings: TWEEN_2,   
-    });    
+    });   
   }
 
   frogTap = () => {
     if(this.state.currBugCharacter === bugCharacterIdle){
       this.frogCelebrate();
     }
+    else{
+      this.frogDisgust();
+    }
   }
 
   // load frog celebrate character, then stop celebrating
   frogCelebrate() {
-    console.warn("here1");
     this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterCelebrate});
+   
+    setTimeout( () => {
+      this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
+    }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
 
-    // setTimeout( () => {
-    //   this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
-    // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+    this.setState({showBug: false});
+  }
+
+  // load frog disgust character, then go back to idle
+  frogDisgust() {
+    this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterDisgust});
+
+    setTimeout( () => {
+      this.setState({frogKey: Math.random(), currFrogCharacter: frogCharacterIdle});
+    }, 500); // this should be 300, but that's too fast...why?
   }
 
   // go to next level
@@ -131,9 +144,9 @@ class BugZap extends React.Component {
               <Text>Go to Level 1</Text>
             </TouchableOpacity>
 
-            {this.state.renderBug ? 
+            {this.state.showBug ? 
               <AnimatedSprite
-                key={this.state.key}
+                key={this.state.bugKey}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                 size={{width: 128, height: 128}}
                 draggable={false}
@@ -145,11 +158,11 @@ class BugZap extends React.Component {
             
 
             <AnimatedSprite
-              frogKey={this.state.frogKey}
+              key={this.state.frogKey}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
               draggable={false}
-              character={FROG_CHARACTER}
+              character={this.state.currFrogCharacter}
               timeSinceMounted={this.frogTap} 
               />
         </Image> 
