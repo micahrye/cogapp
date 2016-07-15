@@ -12,6 +12,7 @@ var {
 
 import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
+import frogCharacterTalented from "../sprites/frog/frogCharacterTalented";
 
 
 var CIRCLE_SIZE = 200;
@@ -60,9 +61,13 @@ var DragDragon = React.createClass({
     this._updateNativeStyles();
   },
 
-  changeTouchType: function(){
-    console.warn("what you say");
-    return "YOU REALLY LIKE ME?";
+  changeTouchType: function(currentAnimationType){
+    //console.warn(`currentAnimationType ${currentAnimationType}`);
+    debugger;
+    if(currentAnimationType === "default"){
+      return "flip";
+    }
+    return "default";
   },
 
   render: function() {
@@ -82,10 +87,10 @@ var DragDragon = React.createClass({
         <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 100, height: 95}}
           draggable={false}
-          character={greenDragonCharacter}
+          character={frogCharacterTalented}
           changeTouchType={this.changeTouchType}
         />
-
+      {/*
         <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 200, height: 195}}
           draggable={true}
@@ -95,7 +100,7 @@ var DragDragon = React.createClass({
             size={{width: 100, height: 95}}
             draggable={true}
             character={greenDragonCharacter} />
-
+      */}
       </View>
     );
   },

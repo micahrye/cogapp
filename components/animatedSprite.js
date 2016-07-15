@@ -38,7 +38,9 @@ class AnimatedSprite extends React.Component{
 
     this._animation = this.props.character;
     this._animationKey = 'idel';
-    this.numFrames = this._animation[this._animationKey].length-1;
+    this._curType = 'default';
+    this._lastType = 'default';
+    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
     this.frameIndex = -1;
     this.idelAnimationInterval = undefined;
     this.touchAnimationInterval = undefined;
@@ -98,8 +100,9 @@ class AnimatedSprite extends React.Component{
   startIdelAnimation(){
     // NOTE: making assumption there is an idel animation. Maybe change if only
     // one frame fro idel don't run interval.
-    this._animationKey = ['idel'];
-    this.numFrames = this._animation[this._animationKey].length-1;
+    this._animationKey = 'idel';
+    this._curType = 'default';
+    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
     this.frameIndex = -1;
     clearInterval(this.idelAnimationInterval);
     this.idelAnimationInterval = setInterval(()=>{
@@ -168,8 +171,10 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    const touchType = this.props.changeTouchType();
-    console.warn(`mememeem: ${touchType}`); 
+    debugger;
+    this._curType = this.props.changeTouchType(this._lastType);
+    this._lastType = this._curType;
+    //console.warn(`mememeem: ${this._curType}`);
     // COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();
@@ -212,7 +217,7 @@ class AnimatedSprite extends React.Component{
 
   startTouchAnimation(){
     this._animationKey = 'touch';
-    this.numFrames = this._animation[this._animationKey].length-1;
+    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
     this.frameIndex = -1;
     clearInterval(this.touchAnimationInterval);
 
@@ -262,7 +267,7 @@ class AnimatedSprite extends React.Component{
               ref={(ref) => {
                 this.refAnimatedImage = ref;
               }}
-              source={this._animation[this._animationKey][this.frameIndex]}
+              source={this._animation[this._animationKey][this._curType][this.frameIndex]}
               style={{
                 ...styles.character,
                 width: this.state._width,
