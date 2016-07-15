@@ -123,11 +123,12 @@ class BugZap extends React.Component {
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
       tweenSettings: this.state.tween2,   
-    });   
+    });
+    this.frogDisgust();   
   }
 
   frogTap = () => {
-    if(this.state.bugCharacter === bugCharacterIdle){
+    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){
       this.frogCelebrate();
     }
     else{
@@ -144,6 +145,7 @@ class BugZap extends React.Component {
     }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
 
     this.setState({showBug: false});
+    clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // load frog disgust character, then go back to idle
@@ -152,7 +154,7 @@ class BugZap extends React.Component {
 
     setTimeout( () => {
       this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 600); // this should be 300, but that makes it too fast...why?
+    }, 300); // this should be 200, but that makes it too fast...why?
   }
 
   // go to next level
@@ -181,7 +183,7 @@ class BugZap extends React.Component {
                 draggable={false}
                 character={this.state.bugCharacter}
                 tween={this.state.tweenSettings}
-                tweenStart="auto"/> 
+                tweenStart="auto"/>
             : null}
 
             <AnimatedSprite

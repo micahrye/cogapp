@@ -135,12 +135,14 @@ class BugZap1 extends React.Component {
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
       tweenSettings: this.state.tween2,   
-    });   
+    });
+    this.frogDisgust(0);
+    this.frogDisgust(1);   
   }
 
   frog1Tap = () => {
     bugColor = this.state.bugCharacter;
-    if(bugColor === bugCharacterIdle){
+    if(bugColor === bugCharacterIdle && this.state.showBug){ // celebrate if right "color" and bug isn't hidden
       this.frogCelebrate(0);
     }
     else{
@@ -150,7 +152,7 @@ class BugZap1 extends React.Component {
 
   frog2Tap = () => {
     bugColor = this.state.bugCharacter;
-    if(bugColor === bubbleCharacter){
+    if(bugColor === bubbleCharacter && this.state.showBug){
       this.frogCelebrate(1);
     }
     else{
@@ -176,6 +178,7 @@ class BugZap1 extends React.Component {
     }
 
     this.setState({showBug: false});
+    clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // load frog disgust character, then go back to idle
@@ -185,14 +188,14 @@ class BugZap1 extends React.Component {
 
       setTimeout( () => {
         this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 600); // this should be 300, but that makes it too fast...why?
+      }, 300); 
     }
     else{
       this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterDisgust});
 
       setTimeout( () => {
         this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 600); // this should be 300, but that makes it too fast...why?
+      }, 300); // this should be 300, but that makes it too fast...why?
     }
   }
 
