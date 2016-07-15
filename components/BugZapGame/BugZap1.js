@@ -150,11 +150,11 @@ class BugZap1 extends React.Component {
 
   frog2Tap = () => {
     bugColor = this.state.bugCharacter;
-    if(bugColor === bugCharacterIdle){
-      this.frogDisgust(1);
+    if(bugColor === bubbleCharacter){
+      this.frogCelebrate(1);
     }
     else{
-      this.frogCelebrate(1);
+      this.frogDisgust(1);
     }
   }
 
