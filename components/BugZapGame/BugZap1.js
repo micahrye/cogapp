@@ -9,42 +9,18 @@ import {
   Navigator,
 } from 'react-native';
 
+// imports
+import AnimatedSprite from "../animatedSprite";
+// import characters for animatedsprite to use
 import frogCharacterIdle from "../../sprites/frog/frogCharacter";
 import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
 import frogCharacterDisgust from "../../sprites/frog/frogCharacterDisgust";
-import bugCharacterFly from '../../sprites/bug/bugCharacterFly';
 import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
-import AnimatedSprite from "../animatedSprite";
+import bugCharacterFly from "../../sprites/bug/bugCharacterFly"
 import Background from '../../backgrounds/Game_1_Background_1280.png';
-
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-
-const TWEEN_1 = {
-  tweenType: "sine-wave",
-  startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-  xTo: [475, 500, 400],
-  yTo: [0, 120],
-  duration: 1500,
-  loop: false,
-}
-const TWEEN_IDLE = {
-  tweenType: "sine-wave",
-  startXY: [400, 120],
-  xTo: [400],
-  yTo: [120],
-  duration: 0,
-  loop: false,
-}
-const TWEEN_2 = {
-  tweenType: "sine-wave",
-  startXY: [400, 120],
-  xTo: [-150],
-  yTo: [0, 120],
-  duration: 2000,
-  loop: false,
-}
 
 class BugZap1 extends React.Component {
 
@@ -56,7 +32,9 @@ class BugZap1 extends React.Component {
       frogKey: 1,
       bugCharacter: bugCharacterFly,
       frogCharacter: frogCharacterIdle,
-      tweenSettings: TWEEN_1,
+      tweenSettings: {},
+      tweenIdle: {},
+      tween2: {},
     }
   }
 
@@ -73,7 +51,56 @@ class BugZap1 extends React.Component {
     timeout1 = setTimeout(()=>{
       this.bugIdle();
       clearTimeout(timeout1);
-    }, 2000);
+    }, 2500);
+    this.setUpTweens();
+  }
+
+  // 4 different spots for bug to land
+  setUpTweens() {
+    let sequenceChoice = Math.random();
+    let xEnd = [];
+    if(sequenceChoice < .25){
+      xEnd = 200;
+    }
+    else if(sequenceChoice > .25 && sequenceChoice <.5){
+      xEnd = 275;
+    }
+    else if (sequenceChoice > .5 && sequenceChoice <.75){
+      xEnd = 325;
+    }
+    else{
+      xEnd = 375;
+    }
+
+    this.setState({
+      tweenSettings: // initial tween onto screen
+      {
+        tweenType: "sine-wave",
+        startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
+        xTo: [450, 500, xEnd],
+        yTo: [0, 120, 0, 120],
+        duration: 2000,
+        loop: false,
+      },
+      tweenIdle: // when landed
+      {
+        tweenType: "sine-wave",
+        startXY: [xEnd, 120],
+        xTo: [xEnd],
+        yTo: [120],
+        duration: 0,
+        loop: false,
+      },
+      tween2: // tween offscreen
+      {
+        tweenType: "sine-wave",
+        startXY: [xEnd, 120],
+        xTo: [-150],
+        yTo: [0, 100, 0],
+        duration: 2000,
+        loop: false,
+      }
+     });
   }
 
   // switch to idle bug character and pause tweening
@@ -81,7 +108,7 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterIdle,
-      tweenSettings: TWEEN_IDLE,
+      tweenSettings: this.state.tweenIdle,
     });
 
     timeout2 = setTimeout(()=>{
@@ -95,7 +122,7 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
-      tweenSettings: TWEEN_2,   
+      tweenSettings: this.state.tween2,   
     });   
   }
 
@@ -125,52 +152,57 @@ class BugZap1 extends React.Component {
 
     setTimeout( () => {
       this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 500); // this should be 300, but that's too fast...why?
+    }, 600); // this should be 300, but that makes it too fast...why?
   }
 
+  // go to next level
   buttonPress = () => {
     this.props.navigator.push({
       id: 8,
     });
+    clearTimeout(timeout0);
+    clearTimeout(timeout1);
+    //clearTimeout(timeout2);
   }
 
   render(){
     return (
-        <View style={styles.container}>
-          <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
-                <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                  <Text>Go to Level 2</Text>
-                </TouchableOpacity>
+      <View style={styles.container}>
+        <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+          <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+              <Text>Go to Level 2</Text>
+            </TouchableOpacity>
 
-                {this.state.showBug ?
-                  <AnimatedSprite 
-                    key={this.state.bugKey}
-                    coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                    size={{width: 128, height: 128}}
-                    draggable={false}
-                    character={this.state.bugCharacter}
-                    tween={this.state.tweenSettings}
-                    tweenStart="auto"/>
-                : null}
+            {this.state.showBug ? 
+              <AnimatedSprite
+                key={this.state.bugKey}
+                coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                size={{width: 128, height: 128}}
+                draggable={false}
+                character={this.state.bugCharacter}
+                tween={this.state.tweenSettings}
+                tweenStart="auto"/> 
+            : null}
 
+            <AnimatedSprite
+              key={this.state.frogKey}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+              size={{width: 256, height: 256}}
+              draggable={false}
+              character={this.state.frogCharacter}
+              timeSinceMounted={this.frogTap} />
+
+            <View style={styles.flip}>
                 <AnimatedSprite 
                   key={this.state.frogKey}
-                  coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                  coordinates={{top: 0, left: 0}}
                   size={{width: 256, height: 256}}
                   draggable={false}
-                  character={this.state.frogCharacter} />
-
-                <View style={styles.flip}>
-                  <AnimatedSprite 
-                    key={this.state.frogKey}
-                    coordinates={{top: 0, left: 0}}
-                    size={{width: 256, height: 256}}
-                    draggable={false}
-                    character={this.state.frogCharacter} 
-                    />
-              </View>
-          </Image>
-        </View>
+                  character={this.state.frogCharacter} 
+                  />
+            </View>
+        </Image> 
+      </View>
     );
   }
 }
@@ -190,7 +222,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 90,
     height: 30,
-    position: 'absolute',
   },
   flip: {
     top: SCREEN_HEIGHT - 275,

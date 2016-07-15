@@ -44,6 +44,14 @@ class BugZap extends React.Component {
       this.setState({showBug: true});
       clearTimeout(timeout0);
     }, 500);
+  }
+
+  componentDidMount() {
+    // after first tween is completed, bug idles
+    timeout1 = setTimeout(()=>{
+      this.bugIdle();
+      clearTimeout(timeout1);
+    }, 2500);
     this.setUpTweens();
   }
 
@@ -52,19 +60,15 @@ class BugZap extends React.Component {
     let sequenceChoice = Math.random();
     let xEnd = [];
     if(sequenceChoice < .25){
-      console.warn("here1");
       xEnd = 200;
     }
     else if(sequenceChoice > .25 && sequenceChoice <.5){
-      console.warn("here2");
       xEnd = 275;
     }
     else if (sequenceChoice > .5 && sequenceChoice <.75){
-      console.warn("here3");
       xEnd = 325;
     }
     else{
-      console.warn("here4");
       xEnd = 375;
     }
 
@@ -96,15 +100,7 @@ class BugZap extends React.Component {
         duration: 2000,
         loop: false,
       }
-    });
-  }
-
-  componentDidMount() {
-    // after first tween is completed, bug idles
-    timeout1 = setTimeout(()=>{
-      this.bugIdle();
-      clearTimeout(timeout1);
-    }, 2500);
+     });
   }
 
   // switch to idle bug character and pause tweening
@@ -156,7 +152,7 @@ class BugZap extends React.Component {
 
     setTimeout( () => {
       this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 500); // this should be 300, but that's too fast...why?
+    }, 600); // this should be 300, but that makes it too fast...why?
   }
 
   // go to next level
@@ -164,6 +160,9 @@ class BugZap extends React.Component {
     this.props.navigator.push({
       id: 7,
     });
+    clearTimeout(timeout0);
+    clearTimeout(timeout1);
+    // clearTimeout(timeout2);
   }
 
   render(){
@@ -184,8 +183,6 @@ class BugZap extends React.Component {
                 tween={this.state.tweenSettings}
                 tweenStart="auto"/> 
             : null}
-
-            
 
             <AnimatedSprite
               key={this.state.frogKey}
