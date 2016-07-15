@@ -22,31 +22,6 @@ import Background from '../../backgrounds/Game_1_Background_1280.png';
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-const TWEEN_1 = {
-  tweenType: "sine-wave",
-  startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-  xTo: [475, 500, 400],
-  yTo: [0, 120],
-  duration: 1500,
-  loop: false,
-}
-const TWEEN_IDLE = {
-  tweenType: "sine-wave",
-  startXY: [400, 120],
-  xTo: [400],
-  yTo: [120],
-  duration: 0,
-  loop: false,
-}
-const TWEEN_2 = {
-  tweenType: "sine-wave",
-  startXY: [400, 120],
-  xTo: [-150],
-  yTo: [0, 120],
-  duration: 2000,
-  loop: false,
-}
-
 class BugZap extends React.Component {
 
   constructor(props){
@@ -57,7 +32,9 @@ class BugZap extends React.Component {
       frogKey: 1,
       bugCharacter: bugCharacterFly,
       frogCharacter: frogCharacterIdle,
-      tweenSettings: TWEEN_1,
+      tweenSettings: {},
+      tweenIdle: {},
+      tween2: {},
     }
   }
 
@@ -67,6 +44,59 @@ class BugZap extends React.Component {
       this.setState({showBug: true});
       clearTimeout(timeout0);
     }, 500);
+    this.setUpTweens();
+  }
+
+  // 4 different spots for bug to land
+  setUpTweens() {
+    let sequenceChoice = Math.random();
+    let xEnd = [];
+    if(sequenceChoice < .25){
+      console.warn("here1");
+      xEnd = 200;
+    }
+    else if(sequenceChoice > .25 && sequenceChoice <.5){
+      console.warn("here2");
+      xEnd = 275;
+    }
+    else if (sequenceChoice > .5 && sequenceChoice <.75){
+      console.warn("here3");
+      xEnd = 325;
+    }
+    else{
+      console.warn("here4");
+      xEnd = 375;
+    }
+
+    this.setState({
+      tweenSettings: // initial tween onto screen
+      {
+        tweenType: "sine-wave",
+        startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
+        xTo: [450, 500, xEnd],
+        yTo: [0, 120, 0, 120],
+        duration: 2000,
+        loop: false,
+      },
+      tweenIdle: // when landed
+      {
+        tweenType: "sine-wave",
+        startXY: [xEnd, 120],
+        xTo: [xEnd],
+        yTo: [120],
+        duration: 0,
+        loop: false,
+      },
+      tween2: // tween offscreen
+      {
+        tweenType: "sine-wave",
+        startXY: [xEnd, 120],
+        xTo: [-150],
+        yTo: [0, 100, 0],
+        duration: 2000,
+        loop: false,
+      }
+    });
   }
 
   componentDidMount() {
@@ -74,7 +104,7 @@ class BugZap extends React.Component {
     timeout1 = setTimeout(()=>{
       this.bugIdle();
       clearTimeout(timeout1);
-    }, 2000);
+    }, 2500);
   }
 
   // switch to idle bug character and pause tweening
@@ -82,7 +112,7 @@ class BugZap extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterIdle,
-      tweenSettings: TWEEN_IDLE,
+      tweenSettings: this.state.tweenIdle,
     });
 
     timeout2 = setTimeout(()=>{
@@ -96,7 +126,7 @@ class BugZap extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
-      tweenSettings: TWEEN_2,   
+      tweenSettings: this.state.tween2,   
     });   
   }
 
