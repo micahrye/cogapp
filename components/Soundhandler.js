@@ -19,6 +19,22 @@ if (error) {
   }
 });
 
+// const BUBBLE_POP = new Sound('bubblePop.mp3', Sound.MAIN_BUNDLE, (error) => {
+// if (error) {
+//   console.warn('failed to load the sound bubble', error);
+// } else { // loaded successfully
+//   console.warn('sound did load');
+//   }
+// });
+
+// const BUBBLE_POP_OTHER = new Sound('bubblePopWav.wav', Sound.MAIN_BUNDLE, (error) => {
+// if (error) {
+//   console.warn('failed to load the sound wav', error);
+// } else { // loaded successfully
+//   console.warn('sound did load');
+//   }
+// });
+
 const Soundhandler = function () {
 
   let flipflop = false;
@@ -29,8 +45,10 @@ const Soundhandler = function () {
       case "tile":
         playSoundHelper(TILE_0,TILE_1);
         break;
+      case "bubblePop":
+        playSoundHelper(BUBBLE_POP, BUBBLE_POP);
+        break;
     }
-
   };
 
   const playSoundHelper = function(sound, backupSound) {

@@ -104,6 +104,8 @@ class BubblePop extends React.Component {
           timeSinceMounted={
             (spriteKey, duration)=>this.popBubble(spriteKey, duration)
           }
+          soundOnTouch={true}
+          soundFile="bubblePop"
         />
             
       );
