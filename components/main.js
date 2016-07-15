@@ -16,6 +16,8 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   TouchableNativeFeedback,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
@@ -28,20 +30,10 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    /*
-    this.setTimeout(()=>{
-      Alert.alert("Alert Title", "msg");
-    }, 1000);
-    */
+
   }
 
-  _handelPress(evt){
-    console.log("push it!");
-    this.props.navigator.push({id: 1});
-    //Alert.alert("Alert Title", "msg");
-  }
-
-  goToGame = () => {
+  goToBubblePop = () => {
     this.props.navigator.push({id: 3});
   }
 
@@ -49,25 +41,85 @@ class Main extends React.Component {
     this.props.navigator.push({id: 2});
   }
 
+  goToBugZap = () => {
+    this.props.navigator.push({id: 6});
+  }
+
+  goToGameTwo = () => {
+    this.props.navigator.push({id: 10});
+  }
+
+  goToGameThree = () => {
+    this.props.navigator.push({id: 14})
+  }
+
+  goToGameFour = () => {
+    this.props.navigator.push({id: 19})
+  }
+
+  goToGameFive = () => {
+    this.props.navigator.push({id:20})
+  }
+
+  goToGameSix = () => {
+    this.props.navigator.push({id:21})
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={(evt)=>{this._handelPress(evt);}}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Hello You :)</Text>
+
+        <ScrollView style={{height:Dimensions.get('window').height,
+                            width:Dimensions.get('window').width}}
+        >
+        <View style={styles.container}>
+          <View style={styles.column}>
+            <TouchableOpacity onPress={this.goToBubblePop}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To BubblePop</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToDragon}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Dragon</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToBugZap}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To BugZap</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameTwo}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Two</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToGame}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Game</Text>
+
+          <View style={styles.column}>
+            <TouchableOpacity onPress={this.goToGameThree}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Three</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameFour}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Four</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameFive}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Five</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.goToGameSix}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Go To Game Six</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.goToDragon}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Go To Dragon</Text>
           </View>
-        </TouchableOpacity>
-      </View>
+        </ScrollView>
+
     );
   }
 }
@@ -87,16 +139,22 @@ let style = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#cce6ff',
+  },
+  column: {
+    flex: 2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button : {
     backgroundColor: '#4d94ff',
     borderRadius: 10,
     margin: 10,
-    height: 200,
+    height: 75,
     width: 200,
     justifyContent: 'center',
   },
@@ -110,24 +168,4 @@ const styles = StyleSheet.create({
   }
 });
 
-
 export default Main;
-
-
-/*
-<Motion defaultStyle={{x: 0}} style={{x: spring(100)}}>
-  {val => {
-    let style = {
-      position: 'absolute',
-      top: val.x * 2.5,
-      left: val.x * 3,
-      backgroundColor: '#0000ff',
-      color: '#fff'
-    };
-    return (
-      <Animatable.View ref="view">
-    <Text style={style}>{val.x}</Text>
-  </Animatable.View>
-      )}}
-</Motion>
-*/

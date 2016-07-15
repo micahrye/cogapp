@@ -11,7 +11,8 @@ var {
 } = ReactNative;
 
 import AnimatedSprite from "./animatedSprite";
-import greenDragonCharacter from "./frames/greenDragonCharacter";
+import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
+import frogCharacterTalented from "../sprites/frog/frogCharacterTalented";
 
 
 var CIRCLE_SIZE = 200;
@@ -60,6 +61,15 @@ var DragDragon = React.createClass({
     this._updateNativeStyles();
   },
 
+  changeTouchType: function(currentAnimationType){
+    //console.warn(`currentAnimationType ${currentAnimationType}`);
+    debugger;
+    if(currentAnimationType === "default"){
+      return "flip";
+    }
+    return "default";
+  },
+
   render: function() {
     return (
       <View
@@ -74,21 +84,23 @@ var DragDragon = React.createClass({
         >
         </View>
 
-        <AnimatedSprite coordinates={{x:50, y:100}}
+        <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 100, height: 95}}
           draggable={false}
-          character={greenDragonCharacter} />
-
-        <AnimatedSprite coordinates={{x:50, y:100}}
+          character={frogCharacterTalented}
+          changeTouchType={this.changeTouchType}
+        />
+      {/*
+        <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 200, height: 195}}
           draggable={true}
           character={greenDragonCharacter} />
 
-        <AnimatedSprite coordinates={{x:160, y:400}}
+        <AnimatedSprite coordinates={{top:400, left:160}}
             size={{width: 100, height: 95}}
             draggable={true}
             character={greenDragonCharacter} />
-
+      */}
       </View>
     );
   },

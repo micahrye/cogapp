@@ -255,22 +255,3 @@ const styles = StyleSheet.create({
 
 
 export default Flyer;
-
-
-/*
-<Motion defaultStyle={{x: 0}} style={{x: spring(100)}}>
-  {val => {
-    let style = {
-      position: 'absolute',
-      top: val.x * 2.5,
-      left: val.x * 3,
-      backgroundColor: '#0000ff',
-      color: '#fff'
-    };
-    return (
-      <Animatable.View ref="view">
-    <Text style={style}>{val.x}</Text>
-  </Animatable.View>
-      )}}
-</Motion>
-*/

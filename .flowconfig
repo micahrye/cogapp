@@ -1,10 +1,8 @@
 [ignore]
 
-
 # We fork some components by platform.
 .*/*.web.js
 .*/*.android.js
-
 
 # Some modules have their own node_modules with overlap
 .*/node_modules/node-haste/.*
@@ -96,4 +94,4 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(>=0\\.\\(2[0-5]\\|1[0-9]\\|[0-9
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 
 [version]
-^0.27.0
+^0.25.0
