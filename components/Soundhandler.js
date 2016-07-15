@@ -19,17 +19,9 @@ if (error) {
   }
 });
 
-// const BUBBLE_POP = new Sound('bubblePop.mp3', Sound.MAIN_BUNDLE, (error) => {
+// const BUBBLE_POP = new Sound('bubblepop.mp3', Sound.MAIN_BUNDLE, (error) => {
 // if (error) {
 //   console.warn('failed to load the sound bubble', error);
-// } else { // loaded successfully
-//   console.warn('sound did load');
-//   }
-// });
-
-// const BUBBLE_POP_OTHER = new Sound('bubblePopWav.wav', Sound.MAIN_BUNDLE, (error) => {
-// if (error) {
-//   console.warn('failed to load the sound wav', error);
 // } else { // loaded successfully
 //   console.warn('sound did load');
 //   }

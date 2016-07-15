@@ -17,6 +17,7 @@ import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
 import frogCharacterDisgust from "../../sprites/frog/frogCharacterDisgust";
 import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
 import bugCharacterFly from "../../sprites/bug/bugCharacterFly"
+import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -29,7 +30,8 @@ class BugZap1 extends React.Component {
     this.state = {
       showBug: false,
       bugKey: 0,
-      frogKey: 1,
+      frogKey0: 1,
+      frogKey1: 0,
       bugCharacter: bugCharacterFly,
       frogCharacter: frogCharacterIdle,
       tweenSettings: {},
@@ -105,11 +107,21 @@ class BugZap1 extends React.Component {
 
   // switch to idle bug character and pause tweening
   bugIdle() {
-    this.setState({
-      bugKey: Math.random(),
-      bugCharacter: bugCharacterIdle,
-      tweenSettings: this.state.tweenIdle,
-    });
+    let bugColorChoice = Math.random();
+    if(bugColorChoice < .5){
+      this.setState({
+        bugKey: Math.random(),
+        bugCharacter: bugCharacterIdle,
+        tweenSettings: this.state.tweenIdle,
+      });
+    }
+    else{
+      this.setState({
+        bugKey: Math.random(),
+        bugCharacter: bubbleCharacter,
+        tweenSettings: this.state.tweenIdle,
+      });
+    }
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
@@ -126,33 +138,62 @@ class BugZap1 extends React.Component {
     });   
   }
 
-  frogTap = () => {
-    if(this.state.bugCharacter === bugCharacterIdle){
-      this.frogCelebrate();
+  frog1Tap = () => {
+    bugColor = this.state.bugCharacter;
+    if(bugColor === bugCharacterIdle){
+      this.frogCelebrate(0);
     }
     else{
-      this.frogDisgust();
+      this.frogDisgust(0);
+    }
+  }
+
+  frog2Tap = () => {
+    bugColor = this.state.bugCharacter;
+    if(bugColor === bugCharacterIdle){
+      this.frogDisgust(1);
+    }
+    else{
+      this.frogCelebrate(1);
     }
   }
 
   // load frog celebrate character, then stop celebrating
-  frogCelebrate() {
-    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterCelebrate});
-   
-    setTimeout( () => {
-      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+  frogCelebrate(frog) {
+    if(frog === 0){
+      this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterCelebrate});
+     
+      setTimeout( () => {
+        this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
+      }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+    }
+    else{
+      this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterCelebrate});
+     
+      setTimeout( () => {
+        this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
+      }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+    }
 
     this.setState({showBug: false});
   }
 
   // load frog disgust character, then go back to idle
-  frogDisgust() {
-    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterDisgust});
+  frogDisgust(frog) {
+    if(frog === 0){
+      this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterDisgust});
 
-    setTimeout( () => {
-      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 600); // this should be 300, but that makes it too fast...why?
+      setTimeout( () => {
+        this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
+      }, 600); // this should be 300, but that makes it too fast...why?
+    }
+    else{
+      this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterDisgust});
+
+      setTimeout( () => {
+        this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
+      }, 600); // this should be 300, but that makes it too fast...why?
+    }
   }
 
   // go to next level
@@ -185,20 +226,21 @@ class BugZap1 extends React.Component {
             : null}
 
             <AnimatedSprite
-              key={this.state.frogKey}
+              key={this.state.frogKey0}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
               draggable={false}
               character={this.state.frogCharacter}
-              timeSinceMounted={this.frogTap} />
+              timeSinceMounted={this.frog1Tap} />
 
             <View style={styles.flip}>
                 <AnimatedSprite 
-                  key={this.state.frogKey}
+                  key={this.state.frogKey1}
                   coordinates={{top: 0, left: 0}}
                   size={{width: 256, height: 256}}
                   draggable={false}
-                  character={this.state.frogCharacter} 
+                  character={this.state.frogCharacter}
+                  timeSinceMounted={this.frog2Tap} 
                   />
             </View>
         </Image> 
