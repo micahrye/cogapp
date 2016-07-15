@@ -128,40 +128,6 @@ class BubblePop extends React.Component {
       if (bubblePos !== item.props.spriteKey) {
         bubbles.push(item)
       }
-      //  else{
-      //    bubbles.push(item);
-      //    console.log(bubbles[bubblePos].props.spriteKey);
-      //    bubbles[bubblePos].props.spriteKey = 8;
-      //    console.log(bubbles[bubblePos].props.spriteKey);
-
-      //    // console.warn(item.props.spriteKey);
-      //    // console.warn(item.props.character);
-      //    // console.log(item);
-      //    // item.props.character = {frogCharacter}
-      //    //             console.log(item);
-      //    // this.state.bubbleCharacters[bubblePos].props.character = frogCharacter;
-      //    // //this.setState({bubbleCharacters[bubblePos].props.character: frogCharacter});
-
-      //    // console.log(this.state.bubbleCharacters[bubblePos].props.character);
-
-      //   // bubbles.push(item);
-      //         // <AnimatedSprite
-      //         //    key={Math.random()}
-      //         //      coordinates={{top: SCREEN_HEIGHT - 100, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
-      //         //      size={{width: 256, height: 256}}
-      //         //      draggable={false}
-      //         //      character={item.props.character} />
-      //        // <AnimatedSprite
-      //        //   key={item.props.spriteKey}
-      //        //   spriteKey={item.props.spriteKey}
-      //        //   coordinates={{top: SCREEN_HEIGHT, left: item.props.spriteKey*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES)}}
-      //        //   size={{width: 200, height: 20}}
-      //        //   draggable={true}
-      //        //   character={bubbleCharacterLarge}
-      //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/>
-
-      //   // );
-      // }
     });
 
     this.setState({bubbleCharacters: bubbles, popTime: popTime});

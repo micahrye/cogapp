@@ -168,6 +168,8 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
+    const touchType = this.props.changeTouchType();
+    console.warn(`mememeem: ${touchType}`); 
     // COMM: why would it be undefind?
     if(this._animation['touch'] !== undefined){
       this.touchSprite();

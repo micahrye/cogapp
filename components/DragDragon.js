@@ -60,6 +60,11 @@ var DragDragon = React.createClass({
     this._updateNativeStyles();
   },
 
+  changeTouchType: function(){
+    console.warn("what you say");
+    return "YOU REALLY LIKE ME?";
+  },
+
   render: function() {
     return (
       <View
@@ -77,7 +82,9 @@ var DragDragon = React.createClass({
         <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 100, height: 95}}
           draggable={false}
-          character={greenDragonCharacter} />
+          character={greenDragonCharacter}
+          changeTouchType={this.changeTouchType}
+        />
 
         <AnimatedSprite coordinates={{top:100, left:50}}
           size={{width: 200, height: 195}}
