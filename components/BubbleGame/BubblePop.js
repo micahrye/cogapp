@@ -177,7 +177,7 @@ class BubblePop extends React.Component {
         id: 4,
         callback: this.resetGame,
       });
-      clearTimeout(timeout); // reset the game timer
+     // clearTimeout(timeout); // reset the game timer
     }
   }
 

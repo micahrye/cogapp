@@ -35,6 +35,7 @@ class BugZap extends React.Component {
       tweenSettings: {},
       tweenIdle: {},
       tween2: {},
+      zappedTooEarly: false,
     }
   }
 
@@ -100,7 +101,7 @@ class BugZap extends React.Component {
         duration: 2000,
         loop: false,
       }
-     });
+    });
   }
 
   // switch to idle bug character and pause tweening
@@ -111,10 +112,15 @@ class BugZap extends React.Component {
       tweenSettings: this.state.tweenIdle,
     });
 
-    timeout2 = setTimeout(()=>{
+    if(!this.state.zappedTooEarly){
+      timeout2 = setTimeout(()=>{
+        this.bugFlyAway();
+        clearTimeout(timeout2);
+      }, 2000);
+    }
+    else{
       this.bugFlyAway();
-      clearTimeout(timeout2);
-    }, 2000);
+    }
   }
 
   // switch back to flying bug character and start next tween
@@ -123,15 +129,18 @@ class BugZap extends React.Component {
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
       tweenSettings: this.state.tween2,   
-    });
-    this.frogDisgust();   
+    }); 
   }
 
   frogTap = () => {
-    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){
+    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){ // bug has landed
       this.frogCelebrate();
     }
-    else{
+    else if(this.state.tweenSettings != this.state.tween2){ // bug has not landed yet
+      this.frogDisgust();
+      this.setState({zappedTooEarly: true}); // bug doesn't land, just keeps flying offscreen
+    }
+    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
       this.frogDisgust();
     }
   }
