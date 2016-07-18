@@ -63,7 +63,7 @@ class BugZap extends React.Component {
   // 4 different spots for bug to land
   setUpTweens() {
     let sequenceChoice = Math.random();
-    let xEnd = [];
+    let xEnd = 0;
     if(sequenceChoice < .25){
       xEnd = 200;
     }
@@ -117,8 +117,8 @@ class BugZap extends React.Component {
     });
 
     timeout2 = setTimeout(()=>{
-      this.bugFlyAway(); 
-      this.frogDisgust(); // did not zap in time 
+      this.bugFlyAway();
+      this.frogDisgust();
       clearTimeout(timeout2);
     }, 2000);
   }
@@ -133,16 +133,15 @@ class BugZap extends React.Component {
   }
 
   frogTap = () => {
-    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){ // bug has landed
-      this.frogCelebrate();
+    if(this.state.showBug){
+      if(this.state.bugCharacter === bugCharacterIdle){ // bug has landed
+        this.frogCelebrate();
+      }
+      else if(this.state.tweenSettings != this.state.tween2){ // bug has not landed yet
+        this.frogDisgust();
+        this.setState({zappedTooEarly: true}); // bug doesn't land, just keeps flying offscreen
+      }
     }
-    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){ // bug has not landed yet
-      this.frogDisgust();
-      this.setState({zappedTooEarly: true}); // bug doesn't land, just keeps flying offscreen
-    }
-    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
-      this.frogDisgust();
-    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
   // load frog celebrate character, then go back to idle

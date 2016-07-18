@@ -31,14 +31,13 @@ class BugZap1 extends React.Component {
       showBug: false,
       bugKey: 0,
       frogKey0: 1,
-      frogKey1: 0,
+      frogKey1: 2,
       bugCharacter: bugCharacterFly,
       frogCharacter: frogCharacterIdle,
       tweenSettings: {},
       tweenIdle: {},
       tween2: {},
       zappedTooEarly: false,
-      wrongTap: false,
     }
   }
 
@@ -131,15 +130,13 @@ class BugZap1 extends React.Component {
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
-      if(!this.state.wrongTap){ // both are disgusted if no taps attempted during idle
-        this.frogDisgust(0);  
-        this.frogDisgust(1);
-      }
+      this.frogDisgust(0);
+      this.frogDisgust(1);
       clearTimeout(timeout2);
     }, 2000);
   }
 
-  // switch to flying bug character and start next tween
+  // switch to flying bug character and start next tween, frogs are disgusted
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
@@ -149,42 +146,42 @@ class BugZap1 extends React.Component {
   }
 
   frog1Tap = () => {
-    bugColor = this.state.bugCharacter;
-    if(bugColor === bugCharacterIdle && this.state.showBug){ // celebrate if right "color" and bug isn't hidden
-      this.frogCelebrate(0);
+    let bugColor = this.state.bugCharacter;
+    if(this.state.showBug){
+      if(bugColor === bugCharacterIdle){ // celebrate if right "color" and bug isn't already eaten
+        this.frogCelebrate(0);
+      }
+      else if(bugColor === bubbleCharacter){ // wrong choice
+        this.bugFlyAway();
+        this.frogDisgust(0);
+        clearTimeout(timeout2); // so bugFlyAway isn't called again
+      }
+      else if(this.state.tweenSettings != this.state.tween2){ // zapped too early
+        this.frogDisgust(0);
+        this.setState({zappedTooEarly: true});
+      }
     }
-    else if(bugColor === bubbleCharacter && this.state.showBug){
-      this.frogDisgust(0);
-      this.setState({wrongTap: true});
-    }
-    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){
-      this.frogDisgust(0);
-      this.setState({zappedTooEarly: true});
-    }
-    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
-      this.frogDisgust(0);
-    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
   frog2Tap = () => {
-    bugColor = this.state.bugCharacter;
-    if(bugColor === bubbleCharacter && this.state.showBug){ // celebrate if right "color" and bug isn't hidden
-      this.frogCelebrate(1);
+    let bugColor = this.state.bugCharacter;
+    if(this.state.showBug){
+      if(bugColor === bubbleCharacter){
+        this.frogCelebrate(1);
+      }
+      else if(bugColor === bugCharacterIdle){
+        this.bugFlyAway();
+        this.frogDisgust(1);
+        clearTimeout(timeout2);
+      }
+      else if(this.state.tweenSettings != this.state.tween2){
+        this.frogDisgust(1);
+        this.setState({zappedTooEarly: true});
+      }
     }
-    else if(bugColor === bugCharacterIdle && this.state.showBug){
-      this.frogDisgust(1);
-      this.setState({wrongTap: true});
-    }
-    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){
-      this.frogDisgust(1);
-      this.setState({zappedTooEarly: true});
-    }
-    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
-      this.frogDisgust(1);
-    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
-  // load frog celebrate character, then stop celebrating
+  // load frog celebrate character, then go back to idle
   frogCelebrate(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterCelebrate});
@@ -219,7 +216,7 @@ class BugZap1 extends React.Component {
 
       setTimeout( () => {
         this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 300); // TODO this should be 300, but that makes it too fast...why?
+      }, 300); // TODO this should be 200, but that makes it too fast...why?
     }
   }
 
