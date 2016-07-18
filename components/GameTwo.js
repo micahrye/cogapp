@@ -25,6 +25,7 @@ import frogCharacter from "../sprites/frog/frogCharacter";
 import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
 import signCharacter from "../sprites/sign/signCharacter";
+import leverCharacter from "../sprites/lever/leverCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
@@ -35,6 +36,7 @@ const startTop = 90;
 
 
 const sprite2Start = [startLeft,startTop];
+
 
 
 class GameTwo extends Component {
@@ -55,17 +57,25 @@ class GameTwo extends Component {
       });
   }
 
-  // animate lever to move to a downward angle on press
-  leverPress = () => {
-    Animated.timing(
-      this.state.rotation,
-      {
-        toValue: 75,
-        easing: Easing.linear,
-        duration: 500,
-      }
-    ).start();
+  displayMessage = function(){
+    console.warn('timeout');
   }
+
+  onLeverTouch = () => {
+    setTimeout(this.displayMessage,10000); // timeout ten seconds after lever is pulled
+  }
+
+  // animate lever to move to a downward angle on press
+  // leverPress = () => {
+  //   Animated.timing(
+  //     this.state.rotation,
+  //     {
+  //       toValue: 75,
+  //       easing: Easing.linear,
+  //       duration: 500,
+  //     }
+  //   ).start();
+  // }
 
 
 
@@ -79,7 +89,12 @@ class GameTwo extends Component {
       duration: 600,
       repeatable: false,
       loop: false,
-      disappearAfterAnimation: true,
+    };
+
+    const tweenOptsLever = {
+      tweenType: "bounce",
+      repeatable: true,
+      loop: false,
     };
 
 
@@ -91,16 +106,16 @@ class GameTwo extends Component {
     })
 
     // style for lever
-    const leverStyle = {
-      height: 150,
-      width: 20,
-      borderColor: 'red',
-      borderWidth: 3,
-      backgroundColor: 'blue',
-      top: 40,
-      left: 0,
-      transform: [{rotate:ro}]
-    };
+    // const leverStyle = {
+    //   height: 150,
+    //   width: 20,
+    //   borderColor: 'red',
+    //   borderWidth: 3,
+    //   backgroundColor: 'blue',
+    //   top: 40,
+    //   left: 0,
+    //   transform: [{rotate:ro}]
+    // };
 
     return (
       <View style={styles.container}>
@@ -112,13 +127,14 @@ class GameTwo extends Component {
                     size={{width: 256, height: 256}}
                     draggable={false}
                     character={frogCharacter}
-                    hitSlop={{top:-150,left:-20,bottom:0,right:-10}} />
-                <Animated.View>
-                  <TouchableOpacity
-                    onPress={this.leverPress.bind(this)}
-                    style={{...leverStyle}}>
-                  </TouchableOpacity>
-                </Animated.View>
+                    hitSlop={{top:-150,left:-20,bottom:0,right:-10}}/>
+                <AnimatedSprite coordinates={{top:80,left:0}}
+                    size={{width:140,height:120}}
+                    draggable={false}
+                    character={leverCharacter}
+                    tweenStart="touch"
+                    tween={tweenOptsLever}
+                    setTouchActivity={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: 0, left: startLeft}}
                     size={{width: 110, height: 170}}
                     draggable={false}

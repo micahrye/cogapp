@@ -183,6 +183,9 @@ class AnimatedSprite extends React.Component{
     if(this.props.soundOnTouch){
       this.Soundhandler["playSound"](this.props.soundFile);
     }
+    if (this.props.setTouchActivity !== undefined) {
+      this.props.setTouchActivity();
+    }
 
     if(this.props.tweenStart === "touch"){
       this.startTween();
@@ -279,6 +282,7 @@ AnimatedSprite.propTypes = {
   soundOnTouch: React.PropTypes.bool,
   soundFile: React.PropTypes.string,
   hitSlop: React.PropTypes.object,
+  setTouchActivity: React.PropTypes.func,
 };
 
 AnimatedSprite.defaultProps = {
