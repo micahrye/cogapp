@@ -48,9 +48,13 @@ class BugZap extends React.Component {
   }
 
   componentDidMount() {
-    // after first tween is completed, bug idles
     timeout1 = setTimeout(()=>{
-      this.bugIdle();
+      if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
+        this.bugIdle();
+      }
+      else{
+        this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
+      }
       clearTimeout(timeout1);
     }, 2500);
     this.setUpTweens();
@@ -112,37 +116,34 @@ class BugZap extends React.Component {
       tweenSettings: this.state.tweenIdle,
     });
 
-    if(!this.state.zappedTooEarly){
-      timeout2 = setTimeout(()=>{
-        this.bugFlyAway();
-        clearTimeout(timeout2);
-      }, 2000);
-    }
-    else{
-      this.bugFlyAway();
-    }
+    timeout2 = setTimeout(()=>{
+      this.bugFlyAway(); 
+      this.frogDisgust(); // did not zap in time 
+      clearTimeout(timeout2);
+    }, 2000);
   }
 
-  // switch back to flying bug character and start next tween
+  // switch to flying bug character and start next tween
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
       tweenSettings: this.state.tween2,   
-    }); 
+    });
   }
 
   frogTap = () => {
+    console.log(this.state.tweenSettings);
     if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){ // bug has landed
       this.frogCelebrate();
     }
-    else if(this.state.tweenSettings != this.state.tween2){ // bug has not landed yet
+    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){ // bug has not landed yet
       this.frogDisgust();
       this.setState({zappedTooEarly: true}); // bug doesn't land, just keeps flying offscreen
     }
     else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
       this.frogDisgust();
-    }
+    } // can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
   // load frog celebrate character, then stop celebrating
