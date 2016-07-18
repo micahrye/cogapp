@@ -37,6 +37,8 @@ class BugZap1 extends React.Component {
       tweenSettings: {},
       tweenIdle: {},
       tween2: {},
+      zappedTooEarly: false,
+      wrongTap: false,
     }
   }
 
@@ -49,9 +51,13 @@ class BugZap1 extends React.Component {
   }
 
   componentDidMount() {
-    // after first tween is completed, bug idles
     timeout1 = setTimeout(()=>{
-      this.bugIdle();
+      if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
+        this.bugIdle();
+      }
+      else{
+        this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
+      }
       clearTimeout(timeout1);
     }, 2500);
     this.setUpTweens();
@@ -125,19 +131,21 @@ class BugZap1 extends React.Component {
 
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
+      if(!this.state.wrongTap){ // both are disgusted if no taps attempted during idle
+        this.frogDisgust(0);  
+        this.frogDisgust(1);
+      }
       clearTimeout(timeout2);
     }, 2000);
   }
 
-  // switch back to flying bug character and start next tween
+  // switch to flying bug character and start next tween
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
       tweenSettings: this.state.tween2,   
-    });
-    this.frogDisgust(0);
-    this.frogDisgust(1);   
+    }); 
   }
 
   frog1Tap = () => {
@@ -145,19 +153,35 @@ class BugZap1 extends React.Component {
     if(bugColor === bugCharacterIdle && this.state.showBug){ // celebrate if right "color" and bug isn't hidden
       this.frogCelebrate(0);
     }
-    else{
+    else if(bugColor === bubbleCharacter && this.state.showBug){
       this.frogDisgust(0);
+      this.setState({wrongTap: true});
     }
+    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){
+      this.frogDisgust(0);
+      this.setState({zappedTooEarly: true});
+    }
+    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
+      this.frogDisgust(0);
+    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
   frog2Tap = () => {
     bugColor = this.state.bugCharacter;
-    if(bugColor === bubbleCharacter && this.state.showBug){
+    if(bugColor === bubbleCharacter && this.state.showBug){ // celebrate if right "color" and bug isn't hidden
       this.frogCelebrate(1);
     }
-    else{
+    else if(bugColor === bugCharacterIdle && this.state.showBug){
       this.frogDisgust(1);
+      this.setState({wrongTap: true});
     }
+    else if(this.state.tweenSettings != this.state.tween2 && this.state.showBug){
+      this.frogDisgust(1);
+      this.setState({zappedTooEarly: true});
+    }
+    else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
+      this.frogDisgust(1);
+    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
   // load frog celebrate character, then stop celebrating
@@ -195,7 +219,7 @@ class BugZap1 extends React.Component {
 
       setTimeout( () => {
         this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 300); // this should be 300, but that makes it too fast...why?
+      }, 300); // TODO this should be 300, but that makes it too fast...why?
     }
   }
 

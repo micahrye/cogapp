@@ -133,7 +133,6 @@ class BugZap extends React.Component {
   }
 
   frogTap = () => {
-    console.log(this.state.tweenSettings);
     if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){ // bug has landed
       this.frogCelebrate();
     }
@@ -143,10 +142,10 @@ class BugZap extends React.Component {
     }
     else if(this.state.tweenSettings === this.state.tween2){ // did not zap in time
       this.frogDisgust();
-    } // can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
+    } // TODO can take this out or leave it, docs were not specific about whether frog should be disgusted when clicked as bug is flying away
   }
 
-  // load frog celebrate character, then stop celebrating
+  // load frog celebrate character, then go back to idle
   frogCelebrate() {
     this.setState({frogKey: Math.random(), frogCharacter: frogCharacterCelebrate});
    
@@ -164,7 +163,7 @@ class BugZap extends React.Component {
 
     setTimeout( () => {
       this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 300); // this should be 200, but that makes it too fast...why?
+    }, 300); // TODO this should be 200, but that makes it too fast...why?
   }
 
   // go to next level
