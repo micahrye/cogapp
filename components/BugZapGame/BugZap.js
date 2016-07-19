@@ -26,6 +26,8 @@ class BugZap extends React.Component {
     super(props);
     this.state = {
       flies: [Math.random().toString(36).substring(20),],
+      frogs: [Math.random().toString(36).substring(20),
+      Math.random().toString(36).substring(20),],
     }
     this.allowFlyRemoval = false;
   }
