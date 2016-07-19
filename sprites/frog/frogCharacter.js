@@ -23,6 +23,13 @@ const frogCharacter = {
     require("./frog_celebrate13.png"),
     require("./frog_celebrate14.png"),
   ],
+
+
+  disgust:[
+    require("./frog_disgust01.png"),
+    require("./frog_disgust02.png"),
+    require("./frog_disgust03.png"),
+  ],
 };
 
 export default frogCharacter;

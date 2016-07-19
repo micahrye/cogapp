@@ -16,11 +16,11 @@ import Tweener from "./Tweener";
 /*
 If your character does not need to change its animation state 
   (ie: will always be idling):
-      set animatedSpriteKey prop to idle or do not include it as a prop
+      set spriteAnimationKey prop to idle or do not include it as a prop
 /*
 If you want to change the character's animation state (ex: have it celebrate):
   add a new object to the character file and assign it the array of sprite images
-  include animatedSpriteKey as a prop and assign it the name of the key of 
+  include spriteAnimationKey as a prop and assign it the name of the key of 
     the new object in the character file
     /*If you want the new animation to continue looping instead of returning to idle:
         add loopAnimation as a prop and set it to true
@@ -29,6 +29,10 @@ If you want to change the character's animation state (ex: have it celebrate):
 /*
   Include tween as a prop and pass it settings for the tween
   Include tweenStart as a prop and assign it either "touch" or "auto"
+
+/*TO DO SOMETHING ON PRESS*/
+/*
+  Include onPress as a prop and assign it a function to do whatever you need
 
 /*TO GET COORDINATES AFTER DRAG*/
 /*
@@ -226,9 +230,9 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    // if(this.props.onPres){
-    //   this.props.onPress("frog");
-    // }
+    if(this.props.onPress){
+      this.props.onPress();
+    }
 
     if(this.props.draggable){
       return;
@@ -304,6 +308,7 @@ AnimatedSprite.propTypes = {
   spriteAnimationKey: React.PropTypes.string,
   loopAnimation: React.PropTypes.bool,
   spriteKey: React.PropTypes.number,
+  //onPress
   //timeSinceMounted
   //draggedTo
 };
