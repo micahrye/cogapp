@@ -21,7 +21,7 @@ import Tweener from "./Tweener";
 
 // import different characters to feed to animated sprite
 import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
-import frogCharacter from "../sprites/frog/frogCharacter";
+import mammalCharacter from "../sprites/mammal/mammalCharacter";
 import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
 
@@ -128,10 +128,10 @@ class GameTwo1 extends Component {
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>Go to Level 3</Text>
                 </TouchableOpacity>
-                <AnimatedSprite coordinates={{top: Window.height - 275, left: Window.width - 200}}
-                    size={{width: 256, height: 256}}
+                <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
+                    size={{width: 115, height: 160}}
                     draggable={false}
-                    character={frogCharacter} />
+                    character={mammalCharacter} />
                 <Animated.View>
                   <TouchableOpacity
                     onPress={this.leverPress.bind(this)}

@@ -20,8 +20,7 @@ import Tweener from "./Tweener";
 
 
 // import different characters to feed to animated sprite
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
-import frogCharacter from "../sprites/frog/frogCharacter";
+import mammalCharacter from "../sprites/mammal/mammalCharacter";
 import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
 import signCharacter from "../sprites/sign/signCharacter";
@@ -100,10 +99,10 @@ class GameTwo extends Component {
 
     // translates integers into degrees to allow rotation to
     // be animated.  Used in leverStyle transform
-    ro = this.state.rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','180deg']
-    })
+    // ro = this.state.rotation.interpolate({
+    //   inputRange: [0,100],
+    //   outputRange: ['0deg','180deg']
+    // })
 
     // style for lever
     // const leverStyle = {
@@ -117,17 +116,18 @@ class GameTwo extends Component {
     //   transform: [{rotate:ro}]
     // };
 
+    // make sign a basic animated view, work with tweener directly
+
     return (
       <View style={styles.container}>
         <Image source={require('../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>Go to Level 2</Text>
                 </TouchableOpacity>
-                <AnimatedSprite coordinates={{top: Window.height - 275, left: Window.width - 200}}
-                    size={{width: 256, height: 256}}
+                <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
+                    size={{width: 115, height: 160}}
                     draggable={false}
-                    character={frogCharacter}
-                    hitSlop={{top:-150,left:-20,bottom:0,right:-10}}/>
+                    character={mammalCharacter}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:140,height:120}}
                     draggable={false}
