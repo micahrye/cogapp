@@ -12,37 +12,28 @@ import {
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
 
-/*TO ANIMATE SPRITES*/
-/*
-If your character does not need to change its animation state 
-  (ie: will always be idling):
-      set spriteAnimationKey prop to idle or do not include it as a prop
-/*
-If you want to change the character's animation state (ex: have it celebrate):
-  add a new object to the character file and assign it the array of sprite images
-  include spriteAnimationKey as a prop and assign it the name of the key of 
-    the new object in the character file
-    /*If you want the new animation to continue looping instead of returning to idle:
-        add loopAnimation as a prop and set it to true
+/*****PROPS LIST*****/
+/*Required:
+  character: object, at least one array of images with key 'idle'
+  coordinates: object, top and left coordinates
+  size: object, width and height measurments
 
-/*TO MAKE CHARACTER TWEEN*/
-/*
-  Include tween as a prop and pass it settings for the tween
-  Include tweenStart as a prop and assign it either "touch" or "auto"
+/*Optional:
+draggable: bool, whether object is draggable
+spriteAnimationKey: string, takes name of the key you want to use in character file
+    if not included: defaults to 'idle', startIdleAnimation automatically runs
+    (change to a different value to switch animation)
+loopAnimation: bool, whether to loop animation given in spriteAnimationKey
+    ('idle' animation always looped as default)
+tween: object, takes in tween settings
+tweenStart: string, takes either "touch" or "auto"
+spriteKey: unique key for the character
+soundOnTouch: play sound?
 
-/*TO DO SOMETHING ON PRESS*/
-/*
-  Include onPress as a prop and assign it a function to do whatever you need
-
-/*TO GET COORDINATES AFTER DRAG*/
-/*
-  Include draggedTo as a prop and assign it a function to handle 
-    the coordinates passed up
-
-/*TO RECORD TIME SINCE CHARACTER MOUNTED*/
-/*
-  Include timeSinceMounted as a prop and assign it a function to handle 
-    number of seconds passed up
+/*Functions:
+onPress: passes up spriteKey
+draggedTo: passes up character's coordinates after drag
+timeSinceMounted: passes up spriteKey and time since character mounted in seconds
 */
 
 class AnimatedSprite extends React.Component{
@@ -231,7 +222,7 @@ class AnimatedSprite extends React.Component{
 
   handlePress(evt){
     if(this.props.onPress){
-      this.props.onPress();
+      this.props.onPress(this.props.spriteKey);
     }
 
     if(this.props.draggable){
@@ -300,8 +291,8 @@ class AnimatedSprite extends React.Component{
 AnimatedSprite.propTypes = {
   coordinates: React.PropTypes.object.isRequired,
   size: React.PropTypes.object.isRequired,
-  draggable: React.PropTypes.bool.isRequired,
   character: React.PropTypes.object.isRequired,
+  draggable: React.PropTypes.bool,
   tween: React.PropTypes.object,
   tweenStart: React.PropTypes.string,
   soundOnTouch: React.PropTypes.bool,

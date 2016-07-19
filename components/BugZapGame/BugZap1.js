@@ -129,7 +129,7 @@ class BugZap1 extends React.Component {
     });
   }
 
-  frogTap = () => {
+  frogTap = (frog) => {
     if(this.state.showBug){
       if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
         this.frogCelebrate();
@@ -173,6 +173,7 @@ class BugZap1 extends React.Component {
             {this.state.showBug ? 
               <AnimatedSprite
                 key={this.state.bugKey}
+                spriteKey={0}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                 size={{width: 128, height: 128}}
                 draggable={false}
@@ -185,11 +186,11 @@ class BugZap1 extends React.Component {
 
             <AnimatedSprite
               key={this.state.frogKey}
+              spriteKey={1}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
-              draggable={false}
               character={frogCharacter}
-              onPress={() => {this.frogTap()}}
+              onPress={(frog) => {this.frogTap(frog)}}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               />
         </Image> 
