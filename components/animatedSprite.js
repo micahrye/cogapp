@@ -12,8 +12,34 @@ import {
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
 
+/*TO ANIMATE SPRITES*/
+/*
+If your character does not need to change its animation state 
+  (ie: will always be idling):
+      set animatedSpriteKey prop to idle or do not include it as a prop
+/*
+If you want to change the character's animation state (ex: have it celebrate):
+  add a new object to the character file and assign it the array of sprite images
+  include animatedSpriteKey as a prop and assign it the name of the key of 
+    the new object in the character file
+    /*If you want the new animation to continue looping instead of returning to idle:
+        add loopAnimation as a prop and set it to true
 
+/*TO MAKE CHARACTER TWEEN*/
+/*
+  Include tween as a prop and pass it settings for the tween
+  Include tweenStart as a prop and assign it either "touch" or "auto"
 
+/*TO GET COORDINATES AFTER DRAG*/
+/*
+  Include draggedTo as a prop and assign it a function to handle 
+    the coordinates passed up
+
+/*TO RECORD TIME SINCE CHARACTER MOUNTED*/
+/*
+  Include timeSinceMounted as a prop and assign it a function to handle 
+    number of seconds passed up
+*/
 
 class AnimatedSprite extends React.Component{
   constructor(props){
@@ -30,23 +56,19 @@ class AnimatedSprite extends React.Component{
     };
 
     this.character = undefined;
-    this.refAnimatedImage = undefined;
     this._charactertyles =  {};
     this._initialLeft = this.state._left._value;
     this._initialLefTop = this.state._top._value;
     this._panResponder = {};
 
     this._animation = this.props.character;
-    this._animationKey = 'idel';
-    this._curType = 'default';
-    this._lastType = 'default';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
+    this._animationKey = 'idle';
+    this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
-    this.idelAnimationInterval = undefined;
-    this.touchAnimationInterval = undefined;
+    this.idleAnimationInterval = undefined;
+    this.otherAnimationInterval = undefined;
 
     this._Tweener = Tweener();
-    this._hasTweened = 0;
     this.renderTime = 0;
   }
 
@@ -82,36 +104,68 @@ class AnimatedSprite extends React.Component{
   }
 
   componentDidMount() {
-    this.startIdelAnimation();
+    // default to idle animation if no spriteAnimationKey prop provided
+    if(this.props.spriteAnimationKey === 'idle' || this.props.spriteAnimationKey === undefined){
+      this.startIdleAnimation();
+    }
+    else{
+      this.startOtherAnimation(this.props.spriteAnimationKey);
+    }
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
     if(this.props.tweenStart == "auto"){
       this.startTween();
     }
+
     this.renderTime = Date.now();
   }
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
-    clearInterval(this.idelAnimationInterval);
-    clearInterval(this.touchAnimationInterval);
+    clearInterval(this.idleAnimationInterval);
+    clearInterval(this.otherAnimationInterval);
   }
 
-  startIdelAnimation(){
-    // NOTE: making assumption there is an idel animation. Maybe change if only
-    // one frame fro idel don't run interval.
-    this._animationKey = 'idel';
-    this._curType = 'default';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
+  startIdleAnimation(){
+    // NOTE: maybe make separate case for when idle animation is only one frame
+    this._animationKey = 'idle';
+    this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
-    clearInterval(this.idelAnimationInterval);
-    this.idelAnimationInterval = setInterval(()=>{
+    clearInterval(this.idleAnimationInterval);
+    this.idleAnimationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
       }
       this.setState({animate: true});
+    }, 100);
+  }
+
+  startOtherAnimation(animationKey){
+    this._animationKey = animationKey;
+    this.numFrames = this._animation[this._animationKey].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.otherAnimationInterval);
+
+    this.otherAnimationInterval = setInterval(()=>{
+        this.frameIndex++;
+        if(this.props.loopAnimation){ // continue looping animation
+          if(this.frameIndex > this.numFrames){
+            this.frameIndex = 0;
+          }
+          this.setState({animate: true});
+        }
+        else{ // run once and go back to idle
+          if(this.frameIndex > this.numFrames){
+            clearInterval(this.otherAnimationInterval);
+            this.startIdleAnimation();
+            return;
+          }
+          else{
+            this.setState({animate: true});
+          }
+        }
     }, 100);
   }
 
@@ -172,34 +226,23 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    // COMM: why would it be undefind?
-    //this.props.key
-    if(this.props.onPres){
-      this.props.onPress("frog");
-    }
-
-
-    if(this._animation['touch']['default']){
-      this.touchSprite();
-    }
-    this._curType = this.props.changeTouchType(this._lastType);
-    this._lastType = this._curType;
+    // if(this.props.onPres){
+    //   this.props.onPress("frog");
+    // }
 
     if(this.props.draggable){
       return;
     }
 
     if(this.props.soundOnTouch){
-
       let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-      } else { // loaded successfully
-        console.log('sound did load');
-        tile.play();
+        if (error) {
+          console.log('failed to load the sound', error);
+        } else { // loaded successfully
+          console.log('sound did load');
+          tile.play();
         }
-     });
-
+      });
     }
 
     if(this.props.tweenStart === "touch"){
@@ -214,36 +257,7 @@ class AnimatedSprite extends React.Component{
     }
   }
 
-  touchSprite() {
-      // TOOD: rework this
-      clearInterval(this.idelAnimationInterval);
-      this.startTouchAnimation();
-  }
-
-  startTouchAnimation(){
-    this._animationKey = 'touch';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
-    this.frameIndex = -1;
-    clearInterval(this.touchAnimationInterval);
-
-    this.touchAnimationInterval = setInterval(()=>{
-        this.frameIndex++;
-        // run once and go back to idel
-        if(this.frameIndex > this.numFrames){
-          clearInterval(this.touchAnimationInterval);
-          this.startIdelAnimation();
-          return;
-        }else{
-          this.setState({animate: true});
-        }
-    }, 100);
-  }
-
   startTween() {
-    if(!this.props.tween.repeatable && this._hasTweened){
-      return;
-    }
-    this._hasTweened++;
     const tweenType = this.props.tween.tweenType;
     const tweenOptions = this.props.tween;
     const tweenState = {
@@ -261,20 +275,13 @@ class AnimatedSprite extends React.Component{
         <Animated.View
           {...this._panResponder.panHandlers}
           style={this.getStyle()}
-          ref={(character) => {
-            this.character = character;
-          }}
         >
 
           <TouchableWithoutFeedback
             onPress={ (evt) => this.handlePress(evt) }>
             <Animated.Image
-              ref={(ref) => {
-                this.refAnimatedImage = ref;
-              }}
-              source={this._animation[this._animationKey][this._curType][this.frameIndex]}
+              source={this._animation[this._animationKey][this.frameIndex]}
               style={{
-                ...styles.character,
                 width: this.state._width,
                 height: this.state._height,
               }}/>
@@ -292,17 +299,18 @@ AnimatedSprite.propTypes = {
   draggable: React.PropTypes.bool.isRequired,
   character: React.PropTypes.object.isRequired,
   tween: React.PropTypes.object,
+  tweenStart: React.PropTypes.string,
   soundOnTouch: React.PropTypes.bool,
+  spriteAnimationKey: React.PropTypes.string,
+  loopAnimation: React.PropTypes.bool,
+  spriteKey: React.PropTypes.number,
+  //timeSinceMounted
+  //draggedTo
 };
 
 AnimatedSprite.defaultProps = {
   initialCount: 0,
 };
 
-const styles = {
-  character: {
-    opacity: 1,
-  }
- };
 
 export default AnimatedSprite;

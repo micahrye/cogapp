@@ -117,7 +117,7 @@ class BubblePop extends React.Component {
       }} size={size} draggable={false}
       character={bubbleCharacterLarge} tween={tweenSettings}
       tweenStart="auto"
-      changeTouchType={this.changeTouchType}
+      //changeTouchType={this.changeTouchType}
       timeSinceMounted={(spriteKey, duration) => {
         this.popBubble(spriteKey, duration)}}/>);
     }

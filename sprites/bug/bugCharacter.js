@@ -3,15 +3,14 @@
 const bugCharacter = {
     name:"bug",
 
-    idel: {
-      default: [
-          require("./bug_fly01.png"),
-          require("./bug_fly02.png"),
-      ],
-    },
-    touch: {
-      default: [],
-    },
+    idle:[
+      require("./bug_idle01.png"),
+    ],
+
+    fly:[
+      require("./bug_fly01.png"),
+      require("./bug_fly02.png"),
+    ],
 };
 
 export default bugCharacter;

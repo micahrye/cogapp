@@ -11,7 +11,7 @@ function tweenSettings (screenWidth, screenHeight) {
       0, 120, 40, 100, 10
     ],
     duration: 5000,
-    loop: true
+    loop: false
   };
 }
 

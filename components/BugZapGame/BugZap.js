@@ -28,11 +28,24 @@ class BugZap extends React.Component {
       flies: [Math.random().toString(36).substring(20),],
       frogs: [Math.random().toString(36).substring(20),
       Math.random().toString(36).substring(20),],
+
+      frogSpriteAnimationKey: 'idle',
+      bugSpriteAnimationKey: 'idle',
+
+      frogKey: 0,
+      bugKey: 0,
     }
     this.allowFlyRemoval = false;
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'})
+    }, 1000)
+    setTimeout(() => {
+      this.setState({bugKey: Math.random(), bugSpriteAnimationKey: 'fly'})
+    }, 3000)
+  }
 
   // go to next level
   buttonPress = () => {
@@ -80,14 +93,15 @@ class BugZap extends React.Component {
     this.state.flies.forEach((uid, i) => {
       const tweens = { ...tweenSettings };
       tweens.yTo = [i * 10, 20 * i, 40 + (i * 5), 100 + (4 * i), 10 ];
-      bugs.push(<AnimatedSprite key={uid} coordinates={coordinates} size={{
+      bugs.push(<AnimatedSprite key={this.state.bugKey} coordinates={coordinates} size={{
           width: 128,
           height: 128
         }} draggable={false}
         character={bugCharacter}
         tween={tweens} tweenStart="auto"
-        changeTouchType={this.changeTouchType}
-      />);
+        //changeTouchType={this.changeTouchType}
+        spriteAnimationKey={this.state.bugSpriteAnimationKey}
+        loopAnimation={true}/>);
      });
     this.clockIt();
 
@@ -99,13 +113,14 @@ class BugZap extends React.Component {
             <Text>Go to Level 1</Text>
           </TouchableOpacity>
           {bugs}
-          <AnimatedSprite coordinates={coordinates} size={{
+          <AnimatedSprite key={this.state.frogKey} coordinates={coordinates} size={{
               width: 256,
               height: 256
             }} draggable={false} character={frogCharacter}
-            changeTouchType={this.changeTouchType}
+            //changeTouchType={this.changeTouchType}
             ref={(ref) => {this.getRef(ref)}}
             onPress={() => {this.handlePress()} }
+            spriteAnimationKey={this.state.frogSpriteAnimationKey}
           />
         </Image>
       </View>

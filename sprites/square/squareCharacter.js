@@ -3,8 +3,8 @@
 const squareCharacter = {
     name:"square",
 
-    idel:[
-        require("./number35.png"),
+    idle:[
+      require("./number35.png"),
     ],
 
 };

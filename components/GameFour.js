@@ -69,7 +69,7 @@ class GameFour extends React.Component {
                 }
             });
             this.setState({moveableBoxes: boxes});
-            this.frogCelebrate();  
+            //this.frogCelebrate();  
         }
     }
 
