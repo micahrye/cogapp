@@ -8,7 +8,8 @@ import {
   Image,
   Navigator
 } from 'react-native';
-
+import reactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
 // imports
 import AnimatedSprite from "../animatedSprite";
 // import characters for animatedsprite to use
@@ -24,12 +25,9 @@ class BugZap extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      flies: [ Math.random().toString(36).substring(20),
-        Math.random().toString(36).substring(20),
-        Math.random().toString(36).substring(20),
-        Math.random().toString(36).substring(20),
-      ]
+      flies: [Math.random().toString(36).substring(20),],
     }
+    this.allowFlyRemoval = false;
   }
 
   componentDidMount() {}
@@ -49,16 +47,25 @@ class BugZap extends React.Component {
       return;
     }
   }
+
   handlePress (name) {
     if (true) {
-      //debugger;
-      //console.warn("what");
       this.removeBugs();
     }
   }
-  removeBugs () {
-    this.setState({flies: []})
+
+  clockIt () {
+    this.setTimeout ( () => {
+      this.allowFlyRemoval = !this.allowFlyRemoval;
+    }, 2500);
   }
+
+  removeBugs () {
+    if(this.allowFlyRemoval){
+      this.setState({flies: []})
+    }
+  }
+
   render() {
     // automatic sine wave from right to left across screen
     const tweenSettings = bugUtil.tweenSettings(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -71,7 +78,7 @@ class BugZap extends React.Component {
     this.state.flies.forEach((uid, i) => {
       const tweens = { ...tweenSettings };
       tweens.yTo = [i * 10, 20 * i, 40 + (i * 5), 100 + (4 * i), 10 ];
-      bugs.push(<AnimatedSprite key={i} coordinates={coordinates} size={{
+      bugs.push(<AnimatedSprite key={uid} coordinates={coordinates} size={{
           width: 128,
           height: 128
         }} draggable={false}
@@ -79,7 +86,8 @@ class BugZap extends React.Component {
         tween={tweens} tweenStart="auto"
         changeTouchType={this.changeTouchType}
       />);
-    });
+     });
+    this.clockIt();
 
     return (
       <View style={styles.container}>
@@ -102,6 +110,8 @@ class BugZap extends React.Component {
     );
   }
 }
+
+reactMixin.onClass(BugZap, TimerMixin);
 
 const styles = StyleSheet.create({
   container: {
