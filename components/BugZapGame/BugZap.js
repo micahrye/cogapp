@@ -21,6 +21,17 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      flies: [ Math.random().toString(36).substring(20),
+        Math.random().toString(36).substring(20),
+        Math.random().toString(36).substring(20),
+        Math.random().toString(36).substring(20),
+      ]
+    }
+  }
+
   componentDidMount() {}
 
   // go to next level
@@ -32,6 +43,22 @@ class BugZap extends React.Component {
     return currentAnimationType;
   }
 
+  getRef(ref){
+    //debugger;
+    if (!ref) {
+      return;
+    }
+  }
+  handlePress (name) {
+    if (true) {
+      //debugger;
+      //console.warn("what");
+      this.removeBugs();
+    }
+  }
+  removeBugs () {
+    this.setState({flies: []})
+  }
   render() {
     // automatic sine wave from right to left across screen
     const tweenSettings = bugUtil.tweenSettings(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -39,12 +66,12 @@ class BugZap extends React.Component {
     // array holding fly sprites
     let flies = [];
     // declare 5 fly variables, store them in flies
-    for (let i = 0; i < 5; i++) {
-      const tweens = {
-        ...tweenSettings
-      };
+    let bugs = [];
+    //debugger;
+    this.state.flies.forEach((uid, i) => {
+      const tweens = { ...tweenSettings };
       tweens.yTo = [i * 10, 20 * i, 40 + (i * 5), 100 + (4 * i), 10 ];
-      flies.push(<AnimatedSprite key={i} coordinates={coordinates} size={{
+      bugs.push(<AnimatedSprite key={i} coordinates={coordinates} size={{
           width: 128,
           height: 128
         }} draggable={false}
@@ -52,27 +79,23 @@ class BugZap extends React.Component {
         tween={tweens} tweenStart="auto"
         changeTouchType={this.changeTouchType}
       />);
-    }
+    });
 
     return (
       <View style={styles.container}>
-        <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+        <Image source={require('../../backgrounds/Game_1_Background_1280.png')}
+          style={styles.backgroundImage}>
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
             <Text>Go to Level 1</Text>
           </TouchableOpacity>
-          <AnimatedSprite coordinates={coordinates}
-            size={{width: 128, height: 128}}
-            draggable={false}
-            character={bugCharacter}
-            tween={tweenSettings} tweenStart="auto"
-            changeTouchType={this.changeTouchType}
-          />
-          {flies}
+          {bugs}
           <AnimatedSprite coordinates={coordinates} size={{
               width: 256,
               height: 256
             }} draggable={false} character={frogCharacter}
             changeTouchType={this.changeTouchType}
+            ref={(ref) => {this.getRef(ref)}}
+            onPress={() => {this.handlePress()} }
           />
         </Image>
       </View>

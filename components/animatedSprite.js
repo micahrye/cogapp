@@ -173,6 +173,8 @@ class AnimatedSprite extends React.Component{
 
   handlePress(evt){
     // COMM: why would it be undefind?
+    this.props.onPress("frog");
+
     if(this._animation['touch']['default']){
       this.touchSprite();
     }
