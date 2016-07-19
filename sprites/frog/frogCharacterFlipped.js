@@ -3,11 +3,14 @@
 const frogCharacterFlipped = {
   name:"frogFlipped",
 
-  idel:[
-      require("./frog_celebrate01_flip.png"),
-  ],
-  
-  touch:[
+  idel:{
+    default: [
+        require("./frog_celebrate01_flip.png"),
+    ],
+  },
+
+  touch:{
+    default: [
       require("./frog_celebrate01_flip.png"),
       require("./frog_celebrate02_flip.png"),
       require("./frog_celebrate03_flip.png"),
@@ -22,7 +25,8 @@ const frogCharacterFlipped = {
       require("./frog_celebrate12_flip.png"),
       require("./frog_celebrate13_flip.png"),
       require("./frog_celebrate14_flip.png"),
-  ],
+    ],
+  },
 
 };
 

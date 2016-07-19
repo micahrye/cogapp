@@ -95,6 +95,7 @@ class AnimatedSprite extends React.Component{
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
     clearInterval(this.idelAnimationInterval);
+    clearInterval(this.touchAnimationInterval);
   }
 
   startIdelAnimation(){
@@ -171,14 +172,12 @@ class AnimatedSprite extends React.Component{
   }
 
   handlePress(evt){
-    debugger;
-    this._curType = this.props.changeTouchType(this._lastType);
-    this._lastType = this._curType;
-    //console.warn(`mememeem: ${this._curType}`);
     // COMM: why would it be undefind?
-    if(this._animation['touch'] !== undefined){
+    if(this._animation['touch']['default']){
       this.touchSprite();
     }
+    this._curType = this.props.changeTouchType(this._lastType);
+    this._lastType = this._curType;
 
     if(this.props.draggable){
       return;

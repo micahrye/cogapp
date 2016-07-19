@@ -62,6 +62,10 @@ class BubblePop extends React.Component {
     }, 30000);
   }
 
+  changeTouchType(currentAnimationType){
+    return currentAnimationType;
+  }
+
   // populate array of bubbles
   createBubbles(numBubbles) {
     let bubbles = [];
@@ -110,7 +114,12 @@ class BubblePop extends React.Component {
       bubbles.push(<AnimatedSprite key={i} spriteKey={i} coordinates={{
         top: SCREEN_HEIGHT,
         left: startLeft
-      }} size={size} draggable={false} character={bubbleCharacterLarge} tween={tweenSettings} tweenStart="auto" timeSinceMounted={(spriteKey, duration) => this.popBubble(spriteKey, duration)}/>);
+      }} size={size} draggable={false}
+      character={bubbleCharacterLarge} tween={tweenSettings}
+      tweenStart="auto"
+      changeTouchType={this.changeTouchType}
+      timeSinceMounted={(spriteKey, duration) => {
+        this.popBubble(spriteKey, duration)}}/>);
     }
     this.setState({bubbleCharacters: bubbles});
   }

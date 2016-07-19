@@ -8,20 +8,20 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import AnimatedSprite from "./animatedSprite";
-import frogCharacterFlipped from "../sprites/frog/frogCharacterFlipped";
-import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
-import platformCharacter from "../sprites/platform/platformCharacter";
+import AnimatedSprite from "../animatedSprite";
+import frogCharacterFlipped from "../../sprites/frog/frogCharacterFlipped";
+import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
+import platformCharacter from "../../sprites/platform/platformCharacter";
 
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-class GameThree3 extends React.Component {
+class GameThree extends React.Component {
 
   buttonPress = () => {
       this.props.navigator.push({
-          id: 18,
+          id: 15,
       });
   }
 
@@ -38,9 +38,9 @@ class GameThree3 extends React.Component {
         }
         return(
           <View style={styles.container}>
-            <Image source={require('../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
+            <Image source={require('../../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
               <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                  <Text>Go to Level 5</Text>
+                  <Text>Go to Level 2</Text>
               </TouchableOpacity>
               <AnimatedSprite coordinates={{top: 150, left: 10}}
                   size={{width: 100, height: 120}}
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GameThree3
+export default GameThree;

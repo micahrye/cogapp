@@ -8,14 +8,16 @@ import {
     Image,
     Navigator,
 } from 'react-native';
+import reactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
 
-import frogCharacter from "../../sprites/frog/frogCharacter";
+import frogCharacter        from "../../sprites/frog/frogCharacter";
 import frogCharacterFlipped from '../../sprites/frog/frogCharacterFlipped';
-import bugCharacter from '../../sprites/bug/bugCharacter';
-import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
-import AnimatedSprite from "../animatedSprite";
-import Background from '../../backgrounds/Game_1_Background_1280.png';
-
+import bugCharacter         from '../../sprites/bug/bugCharacter';
+import lightbulbCharacter   from '../../sprites/lightbulb/lightbulbCharacter';
+import AnimatedSprite       from "../animatedSprite";
+import Background           from '../../backgrounds/Game_1_Background_1280.png';
+import bugUtil              from './bugUtil';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -36,7 +38,7 @@ class BugZap2 extends React.Component {
 
     // screen goes black after tiemout
     setBlackout() {
-        timeout = setTimeout ( () => {
+        timeout = this.setTimeout ( () => {
             blackout.push(<View key={0} style={styles.blackout}></View>);
             this.setState({blackout: true});
             this.flashSpotLight();
@@ -45,10 +47,10 @@ class BugZap2 extends React.Component {
 
     // spotlight is flashed briefly after blackout
     flashSpotLight() {
-        timeout2 = setTimeout ( () => {
+        timeout2 = this.setTimeout ( () => {
             spotLight.push(<View key={0} style={styles.spotLight}></View>);
             this.setState({blackout: true});
-            timeout3 = setTimeout ( () => {
+            timeout3 = this.setTimeout ( () => {
                 delete spotLight[0];
                 this.setState({blackout: true});
                 this.removeBlackout();
@@ -56,15 +58,16 @@ class BugZap2 extends React.Component {
         }, 1000);
     }
 
-    // screen goes back to normal and bug appears 
+    // screen goes back to normal and bug appears
     removeBlackout() {
-        timeout4 = setTimeout ( () => {
+        timeout4 = this.setTimeout ( () => {
             delete blackout[0];
             bug.push(
                 <AnimatedSprite key={0} coordinates={{top: SCREEN_HEIGHT - 300, left: SCREEN_WIDTH - 200}}
-                size={{width: 128, height: 128}}
-                draggable={false}
-                character={bugCharacter}/>
+                  size={{width: 128, height: 128}}
+                  draggable={false} character={bugCharacter}
+                  changeTouchType={this.changeTouchType}
+                />
             );
             this.setState({blackout: false});
         }, 200);
@@ -76,6 +79,10 @@ class BugZap2 extends React.Component {
         });
     }
 
+    changeTouchType(currentAnimationType){
+      return currentAnimationType;
+    }
+
     render(){
         const tweenSettings = {
                 tweenType: "bounce-drop",
@@ -85,43 +92,47 @@ class BugZap2 extends React.Component {
                 loop: false,
         };
         return (
-                <View style={styles.container}>
-                    <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
-                            <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                                <Text>Go to Level 3</Text>
-                            </TouchableOpacity>
-                            <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
-                                size={{width: 128, height: 128}}
-                                draggable={false}
-                                character={lightbulbCharacter}
-                                tween={tweenSettings}
-                                tweenStart="auto"
-                                />
-                            <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                                size={{width: 256, height: 256}}
-                                draggable={false}
-                                character={frogCharacter}
-                                />
-                            <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
-                                size={{width: 256, height: 256}}
-                                draggable={false}
-                                character={frogCharacterFlipped}
-                                />
-                            <View>
-                                {blackout}
-                            </View>
-                            <View>
-                                {spotLight}
-                            </View>
-                            <View>
-                                {bug}
-                            </View>
-                    </Image>
-                </View>
+          <View style={styles.container}>
+            <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+              <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+                  <Text>Go to Level 3</Text>
+              </TouchableOpacity>
+              <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
+                  size={{width: 128, height: 128}}
+                  draggable={false}
+                  character={lightbulbCharacter}
+                  tween={tweenSettings}
+                  tweenStart="auto"
+                  changeTouchType={this.changeTouchType}
+                  />
+              <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                  size={{width: 256, height: 256}}
+                  draggable={false}
+                  character={frogCharacter}
+                  changeTouchType={this.changeTouchType}
+                  />
+              <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
+                  size={{width: 256, height: 256}}
+                  draggable={false}
+                  character={frogCharacterFlipped}
+                  changeTouchType={this.changeTouchType}
+                  />
+              <View>
+                  {blackout}
+              </View>
+              <View>
+                  {spotLight}
+              </View>
+              <View>
+                  {bug}
+              </View>
+            </Image>
+          </View>
         );
     }
 }
 
+reactMixin.onClass(BugZap2, TimerMixin);
 
 const styles = StyleSheet.create({
     container: {

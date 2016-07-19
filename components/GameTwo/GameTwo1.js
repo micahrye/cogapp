@@ -15,14 +15,14 @@ import {
 
 // imports
 
-import AnimatedSprite from "./animatedSprite";
-import Tweener from "./Tweener";
+import AnimatedSprite from "../animatedSprite";
+import Tweener from "../Tweener";
 
 // import different characters to feed to animated sprite
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
-import frogCharacter from "../sprites/frog/frogCharacter";
-import canCharacter from "../sprites/can/canCharacter";
-import appleCharacter from "../sprites/apple/appleCharacter";
+import greenDragonCharacter from "../../sprites/dragon/greenDragonCharacter";
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import appleCharacter from "../../sprites/apple/appleCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
@@ -35,7 +35,7 @@ const sprite1Start = [startLeft,startTop];
 const sprite2Start = [startLeft+spacing,startTop];
 const sprite3Start = [startLeft+spacing*2,startTop];
 
-class GameTwo extends Component {
+class GameTwo1 extends Component {
 
   constructor(props) {
     super(props);
@@ -45,11 +45,11 @@ class GameTwo extends Component {
   }
 
   // move on to next page when navigation button is pressed
-  // push id 11 to navigator, which will take the game to
-  // GameTwo1.js
+  // push id 12 to navigator, which will take the game to
+  // GameTwo2.js
   buttonPress = () => {
       this.props.navigator.push({
-          id: 11,
+          id: 12,
       });
   }
 
@@ -124,9 +124,9 @@ class GameTwo extends Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+        <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                    <Text>Go to Level 2</Text>
+                    <Text>Go to Level 3</Text>
                 </TouchableOpacity>
                 <AnimatedSprite coordinates={{top: Window.height - 275, left: Window.width - 200}}
                     size={{width: 256, height: 256}}
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default GameTwo
+export default GameTwo1

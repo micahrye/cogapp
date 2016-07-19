@@ -21,6 +21,9 @@ const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap3 extends React.Component {
     componentDidMount() { }
+    changeTouchType(currentAnimationType){
+      return currentAnimationType;
+    }
     render(){
         const tweenSettings = {
                 tweenType: "sine-wave",
@@ -31,27 +34,30 @@ class BugZap3 extends React.Component {
                 loop: true,
         };
         return (
-            <View style={styles.container}>
-                <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
-                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                            size={{width: 128, height: 128}}
-                            draggable={false}
-                            character={bugCharacter}
-                            tween={tweenSettings}
-                            tweenStart="auto"
-                            />
-                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                            size={{width: 256, height: 256}}
-                            draggable={false}
-                            character={frogCharacter} 
-                            />
-                        <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
-                            size={{width: 256, height: 256}}
-                            draggable={false}
-                            character={frogCharacterFlipped} 
-                            />
-                </Image>
-            </View>
+          <View style={styles.container}>
+            <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+              <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                  size={{width: 128, height: 128}}
+                  draggable={false}
+                  character={bugCharacter}
+                  tween={tweenSettings}
+                  tweenStart="auto"
+                  changeTouchType={this.changeTouchType}
+                  />
+              <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                  size={{width: 256, height: 256}}
+                  draggable={false}
+                  character={frogCharacter}
+                  changeTouchType={this.changeTouchType}
+                  />
+              <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 730}}
+                  size={{width: 256, height: 256}}
+                  draggable={false}
+                  character={frogCharacterFlipped} 
+                  changeTouchType={this.changeTouchType}
+              />
+            </Image>
+          </View>
         );
     }
 }

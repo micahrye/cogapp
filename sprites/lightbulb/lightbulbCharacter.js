@@ -3,10 +3,14 @@
 const lightbulbCharacter = {
     name:"lightbulb",
 
-    idel:[
-        require("./lightbulb.png"),
-    ],
-
+    idel: {
+      default: [
+          require("./lightbulb.png"),
+      ],
+    },
+    touch: {
+      default: [],
+    },
 };
 
 export default lightbulbCharacter;
