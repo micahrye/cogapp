@@ -25,6 +25,7 @@ import canCharacter from "../sprites/can/canCharacter";
 import appleCharacter from "../sprites/apple/appleCharacter";
 import signCharacter from "../sprites/sign/signCharacter";
 import leverCharacter from "../sprites/lever/leverCharacter";
+import frogCharacter from "../sprites/frog/frogCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
@@ -128,6 +129,11 @@ class GameTwo extends Component {
                     size={{width: 115, height: 160}}
                     draggable={false}
                     character={mammalCharacter}/>
+                <AnimatedSprite coordinates={{top:150,left:150}}
+                    size={{width:256,height:256}}
+                    draggable={false}
+                    character={frogCharacter}
+                />
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:140,height:120}}
                     draggable={false}
