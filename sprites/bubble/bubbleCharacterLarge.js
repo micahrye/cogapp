@@ -14,6 +14,13 @@ const bubbleCharacterLarge = {
     require("./bubble_clockwise_large08.png"),
   ],
 
+  pop: [
+    require("./bubble_pop_large01.png"),
+    require("./bubble_pop_large02.png"),
+    require("./bubble_pop_large03.png"),
+    require("./bubble_pop_large04.png"),
+  ]
+
 
 };
 

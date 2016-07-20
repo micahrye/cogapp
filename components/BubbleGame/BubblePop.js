@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-
 import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from '../animatedSprite';
 import NextGamePage from './NextGamePage';
@@ -34,9 +33,10 @@ class BubblePop extends React.Component {
         score: 0,
         popTime: 0,
         bubbleCharacters: [],
+        spriteAnimationKey: 'idle',
+        bubbleKey: 0,
     }
   }
-
 
   componentDidMount () {
     // get old score from storage if there is one and set up the scene
@@ -93,7 +93,7 @@ class BubblePop extends React.Component {
       };
       bubbles.push(
         <AnimatedSprite
-          key={i}
+          key={this.state.bubbleKey + i}
           spriteKey={i}
           coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
           size={size}
@@ -106,7 +106,7 @@ class BubblePop extends React.Component {
           }
           soundOnTouch={true}
           soundFile="bubblePop"
-        />
+          spriteAnimationKey={this.state.spriteAnimationKey}/>
 
       );
     }
@@ -120,7 +120,10 @@ class BubblePop extends React.Component {
 
   // remove bubble and record time it took to pop it
   popBubble = (bubblePos, popTime) => {
+    this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});
     let bubbles = [];
+
+    //this.createBubbles(this.state.bubbleCharacters.length - 1);
 
     this.state.bubbleCharacters.forEach((item)=>{
       if(bubblePos !== item.props.spriteKey){
@@ -162,7 +165,8 @@ class BubblePop extends React.Component {
      // }
       });
 
-      this.setState({bubbleCharacters: bubbles, popTime: popTime});
+      this.setState({bubbleCharacters: bubbles});
+      this.setState({popTime: popTime});
       this.updateScore();
   }
 

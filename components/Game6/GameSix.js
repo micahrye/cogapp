@@ -10,7 +10,7 @@ import {
 import AnimatedSprite from "../animatedSprite";
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
-import bugCharacterIdle from "../../sprites/bug/bugCharacterIdle";
+import bugCharacterIdle from "../../sprites/bug/bugCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
 

@@ -10,7 +10,7 @@ Navigator,
 } from 'react-native';
 
 import frogCharacter from "../../sprites/frog/frogCharacter";
-import bugCharacterFly from '../../sprites/bug/bugCharacterFly';
+import bugCharacterFly from '../../sprites/bug/bugCharacter';
 import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 

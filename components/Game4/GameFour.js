@@ -10,7 +10,7 @@ import {
 import AnimatedSprite from "../animatedSprite";
 import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
 import frogCharacterIdle from "../../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
+import frogCharacterCelebrate from "../../sprites/frog/frogCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
