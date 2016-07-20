@@ -15,15 +15,15 @@ import {
 
 // imports
 
-import AnimatedSprite from "./animatedSprite";
-import Tweener from "./Tweener";
+import AnimatedSprite from "../animatedSprite";
+import Tweener from "../Tweener";
 
 // import different characters to feed to animated sprite
-import chuteCharacter from "../sprites/chute/chuteCharacter";
-import omnivoreCharacter from "../sprites/omnivore/omnivoreCharacter";
-import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
-import canCharacter from "../sprites/can/canCharacter";
-import appleCharacter from "../sprites/apple/appleCharacter";
+import chuteCharacter from "../../sprites/chute/chuteCharacter";
+import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
+import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import appleCharacter from "../../sprites/apple/appleCharacter";
 
 const Window = Dimensions.get('window');
 
@@ -71,7 +71,7 @@ class GameFive extends Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../backgrounds/Game_5_Background_1280.png')} style={styles.backgroundImage}>
+        <Image source={require('../../backgrounds/Game_5_Background_1280.png')} style={styles.backgroundImage}>
         <AnimatedSprite coordinates={{top: 77, left: 460}}
             size={{width: 150, height: 165}}
             draggable={false}

@@ -7,11 +7,11 @@ import {
   Image,
 } from 'react-native';
 
-import AnimatedSprite from "./animatedSprite";
-import bubbleCharacter from "../sprites/bubble/bubbleCharacterLarge";
-import frogCharacterIdle from "../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../sprites/frog/frogCharacterCelebrate";
-import squareCharacter from "../sprites/square/squareCharacter";
+import AnimatedSprite from "../animatedSprite";
+import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
+import frogCharacterIdle from "../../sprites/frog/frogCharacter";
+import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
+import squareCharacter from "../../sprites/square/squareCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -27,7 +27,7 @@ class GameFour extends React.Component {
     }
   }
 
-  componentDidMount() { 
+  componentDidMount() {
     this.createBoxes();
   }
 
@@ -46,12 +46,12 @@ class GameFour extends React.Component {
     let boxes = [];
     for(let i=0; i < 3; i++){
       boxes.push(
-        <AnimatedSprite 
+        <AnimatedSprite
           key={i}
-          spriteKey={i} 
+          spriteKey={i}
           coordinates={{top: 300, left: (i*90) + 10}}
           size={{width: 60, height: 60}}
-          draggable={true} 
+          draggable={true}
           draggedTo={this.checkLocation.bind(null, i)}
           character={squareCharacter}/>
       );
@@ -69,7 +69,7 @@ class GameFour extends React.Component {
         }
       });
       this.setState({moveableBoxes: boxes});
-      this.frogCelebrate();  
+      this.frogCelebrate();
     }
   }
 
@@ -101,14 +101,14 @@ class GameFour extends React.Component {
 
   render(){
     return(
-      <Image source={require('../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
+      <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
         <View style={styles.container}>
           <View style={styles.boxContainer}>
             {fixedBoxes}
-            {this.state.moveableBoxes}    
+            {this.state.moveableBoxes}
           </View>
           <AnimatedSprite
-            key={this.state.key} 
+            key={this.state.key}
             coordinates={{top: 100, left: SCREEN_WIDTH-200}}
             size={{width: 256, height: 256}}
             draggable={false}

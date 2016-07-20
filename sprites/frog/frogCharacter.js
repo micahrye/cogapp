@@ -7,7 +7,7 @@ const frogCharacter = {
     require("./frog_celebrate01.png"),
   ],
 
-  touch:[
+  celebrate:[
     require("./frog_celebrate01.png"),
     require("./frog_celebrate02.png"),
     require("./frog_celebrate03.png"),
@@ -22,6 +22,12 @@ const frogCharacter = {
     require("./frog_celebrate12.png"),
     require("./frog_celebrate13.png"),
     require("./frog_celebrate14.png"),
+  ],
+
+  disgust:[
+    require("./frog_disgust01.png"),
+    require("./frog_disgust02.png"),
+    require("./frog_disgust03.png"),
   ],
 
 };

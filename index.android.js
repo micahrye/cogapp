@@ -20,26 +20,26 @@ import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 import Main from "./components/main";
-import DragDragon from "./components/DragDragon";
+import DragDragon from "./components/DragDragon/DragDragon";
 import BubblePop from './components/BubbleGame/BubblePop';
 import BubblePopWinPage from './components/BubbleGame/BubblePopWinPage';
-import NextGamePage from './components/NextGamePage';
+import NextGamePage from './components/BubbleGame/NextGamePage';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
 import BugZapLevel2 from './components/BugZapGame/BugZap2';
 import BugZapLevel3 from './components/BugZapGame/BugZap3';
-import GameTwo from './components/GameTwo';
-import GameTwoLevel1 from './components/GameTwo1';
-import GameTwoLevel2 from './components/GameTwo2';
-import GameTwoLevel3 from './components/GameTwo3';
-import GameThree from './components/GameThree';
-import GameThree1 from './components/GameThree1';
-import GameThreeLevel2 from './components/GameThree2';
-import GameThreeLevel3 from './components/GameThree3';
-import GameThreeLevel4 from './components/GameThree4';
-import GameFour from './components/GameFour';
-import GameFive from './components/GameFive';
-import GameSix from './components/GameSix';
+import GameTwo from './components/Game2/GameTwo';
+import GameTwoLevel1 from './components/Game2/GameTwo1';
+import GameTwoLevel2 from './components/Game2/GameTwo2';
+import GameTwoLevel3 from './components/Game2/GameTwo3';
+import GameThree from './components/Game3/GameThree';
+import GameThree1 from './components/Game3/GameThree1';
+import GameThreeLevel2 from './components/Game3/GameThree2';
+import GameThreeLevel3 from './components/Game3/GameThree3';
+import GameThreeLevel4 from './components/Game3/GameThree4';
+import GameFour from './components/Game4/GameFour';
+import GameFive from './components/Game5/GameFive';
+import GameSix from './components/Game6/GameSix';
 
 
 

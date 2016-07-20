@@ -8,20 +8,20 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import AnimatedSprite from "./animatedSprite";
+import AnimatedSprite from "../animatedSprite";
 import Tile from "./Tile";
-import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
-import platformCharacter from "../sprites/platform/platformCharacter";
-import birdCharacter from "../sprites/bird/birdCharacter";
+import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
+import platformCharacter from "../../sprites/platform/platformCharacter";
+import birdCharacter from "../../sprites/bird/birdCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-class GameThree1 extends React.Component {
+class GameThree4 extends React.Component {
 
   buttonPress = () => {
-      this.props.navigator.push({
-          id: 16,
+      this.props.navigator.replace({
+          id: 19,
       });
   }
 
@@ -38,9 +38,9 @@ class GameThree1 extends React.Component {
         }
         return(
           <View style={styles.container}>
-            <Image source={require('../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
+            <Image source={require('../../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
               <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                  <Text>Go to Level 3</Text>
+                  <Text>Go to end</Text>
               </TouchableOpacity>
               <AnimatedSprite coordinates={{top: 150, left: 10}}
                   size={{width: 100, height: 120}}
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GameThree1
+export default GameThree4

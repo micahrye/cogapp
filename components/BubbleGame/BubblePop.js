@@ -15,7 +15,7 @@ import {
 
 import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from '../animatedSprite';
-import NextGamePage from '../NextGamePage';
+import NextGamePage from './NextGamePage';
 import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
 import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
 import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
@@ -107,7 +107,7 @@ class BubblePop extends React.Component {
           soundOnTouch={true}
           soundFile="bubblePop"
         />
-            
+
       );
     }
     this.setState({bubbleCharacters: bubbles});
@@ -156,8 +156,8 @@ class BubblePop extends React.Component {
      //        //   size={{width: 200, height: 20}}
      //        //   draggable={true}
      //        //   character={bubbleCharacterLarge}
-     //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/> 
-              
+     //        //   timeSinceMounted={this.popBubble.bind(null, item.props.spriteKey)}/>
+
      //   // );
      // }
       });

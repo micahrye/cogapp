@@ -15,17 +15,17 @@ import {
 
 // imports
 
-import AnimatedSprite from "./animatedSprite";
-import Tweener from "./Tweener";
+import AnimatedSprite from "../animatedSprite";
+import Tweener from "../Tweener";
 
 
 // import different characters to feed to animated sprite
-import mammalCharacter from "../sprites/mammal/mammalCharacter";
-import canCharacter from "../sprites/can/canCharacter";
-import appleCharacter from "../sprites/apple/appleCharacter";
-import signCharacter from "../sprites/sign/signCharacter";
-import leverCharacter from "../sprites/lever/leverCharacter";
-import frogCharacter from "../sprites/frog/frogCharacter";
+import mammalCharacter from "../../sprites/mammal/mammalCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import appleCharacter from "../../sprites/apple/appleCharacter";
+import signCharacter from "../../sprites/sign/signCharacter";
+import leverCharacter from "../../sprites/lever/leverCharacter";
+import frogCharacter from "../../sprites/frog/frogCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
@@ -52,7 +52,7 @@ class GameTwo extends Component {
   // push id 11 to navigator, which will take the game to
   // GameTwo1.js
   buttonPress = () => {
-      this.props.navigator.push({
+      this.props.navigator.replace({
           id: 11,
       });
   }
@@ -121,7 +121,7 @@ class GameTwo extends Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+        <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>Go to Level 2</Text>
                 </TouchableOpacity>

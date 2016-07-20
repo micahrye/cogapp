@@ -7,12 +7,12 @@ import {
   Image,
 } from 'react-native';
 
-import AnimatedSprite from "./animatedSprite";
-import frogCharacter from "../sprites/frog/frogCharacter";
-import canCharacter from "../sprites/can/canCharacter";
-import bugCharacterIdle from "../sprites/bug/bugCharacterIdle";
-import appleCharacter from "../sprites/apple/appleCharacter";
-import omnivoreCharacter from "../sprites/omnivore/omnivoreCharacter";
+import AnimatedSprite from "../animatedSprite";
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import bugCharacterIdle from "../../sprites/bug/bugCharacterIdle";
+import appleCharacter from "../../sprites/apple/appleCharacter";
+import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
 
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -28,7 +28,7 @@ const sprite3Start = [startLeft+spacing*2,startTop];
 class GameSix extends React.Component {
   render(){
     return(
-      <Image source={require('../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
+      <Image source={require('../../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
         <View style={styles.container}>
           <View style={styles.itemContainer}>
             <View style={styles.number}><Text style={styles.text}>1</Text></View>

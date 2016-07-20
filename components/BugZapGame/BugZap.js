@@ -8,37 +8,29 @@ import {
   Image,
   Navigator,
 } from 'react-native';
-
 // imports
 import AnimatedSprite from "../animatedSprite";
 // import characters for animatedsprite to use
-import frogCharacterIdle from "../../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
-import frogCharacterDisgust from "../../sprites/frog/frogCharacterDisgust";
-import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
-import bugCharacterFly from "../../sprites/bug/bugCharacterFly"
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import bugCharacter from '../../sprites/bug/bugCharacter';
 import Background from '../../backgrounds/Game_1_Background_1280.png';
-
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-
 class BugZap extends React.Component {
-
   constructor(props){
     super(props);
     this.state = {
       showBug: false,
       bugKey: 0,
       frogKey: 1,
-      bugCharacter: bugCharacterFly,
-      frogCharacter: frogCharacterIdle,
       tweenSettings: {},
       tweenIdle: {},
       tween2: {},
       zappedTooEarly: false,
+      bugSpriteAnimationKey: 'fly',
+      frogSpriteAnimationKey: 'idle',
     }
   }
-
   componentWillMount() {
     // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
@@ -46,7 +38,6 @@ class BugZap extends React.Component {
       clearTimeout(timeout0);
     }, 500);
   }
-
   componentDidMount() {
     timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
@@ -59,7 +50,6 @@ class BugZap extends React.Component {
     }, 2500);
     this.setUpTweens();
   }
-
   // 4 different spots for bug to land
   setUpTweens() {
     let sequenceChoice = Math.random();
@@ -76,7 +66,6 @@ class BugZap extends React.Component {
     else{
       xEnd = 375;
     }
-
     this.setState({
       tweenSettings: // initial tween onto screen
       {
@@ -107,64 +96,46 @@ class BugZap extends React.Component {
       }
     });
   }
-
   // switch to idle bug character and pause tweening
   bugIdle() {
     this.setState({
       bugKey: Math.random(),
-      bugCharacter: bugCharacterIdle,
       tweenSettings: this.state.tweenIdle,
+      bugSpriteAnimationKey: 'idle',
     });
-
     timeout2 = setTimeout(()=>{
       this.bugFlyAway();
       this.frogDisgust();
       clearTimeout(timeout2);
     }, 2000);
   }
-
   // switch to flying bug character and start next tween
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
-      bugCharacter: bugCharacterFly,
-      tweenSettings: this.state.tween2,   
+      tweenSettings: this.state.tween2,
+      bugSpriteAnimationKey: 'fly',
     });
   }
-
-  frogTap = () => {
+  frogTap = (frog) => {
     if(this.state.showBug){
-      if(this.state.bugCharacter === bugCharacterIdle){ // bug has landed
+      if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
         this.frogCelebrate();
       }
       else if(this.state.tweenSettings != this.state.tween2){ // bug has not landed yet
         this.frogDisgust();
-        this.setState({zappedTooEarly: true}); // bug doesn't land, just keeps flying offscreen
+        this.setState({zappedTooEarly: true}); // now bug doesn't land, just keeps flying offscreen
       }
     }
   }
-
-  // load frog celebrate character, then go back to idle
   frogCelebrate() {
-    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterCelebrate});
-   
-    setTimeout( () => {
-      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
-
+    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     this.setState({showBug: false});
     clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
-
-  // load frog disgust character, then go back to idle
   frogDisgust() {
-    this.setState({frogKey: Math.random(), frogCharacter: frogCharacterDisgust});
-
-    setTimeout( () => {
-      this.setState({frogKey: Math.random(), frogCharacter: frogCharacterIdle});
-    }, 300); // TODO this should be 200, but that makes it too fast...why?
+    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
   }
-
   // go to next level
   buttonPress = () => {
     this.props.navigator.push({
@@ -174,7 +145,6 @@ class BugZap extends React.Component {
     clearTimeout(timeout1);
     // clearTimeout(timeout2);
   }
-
   render(){
     return (
       <View style={styles.container}>
@@ -182,33 +152,33 @@ class BugZap extends React.Component {
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
               <Text>Go to Level 1</Text>
             </TouchableOpacity>
-
-            {this.state.showBug ? 
+            {this.state.showBug ?
               <AnimatedSprite
                 key={this.state.bugKey}
+                spriteKey={0}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
                 size={{width: 128, height: 128}}
                 draggable={false}
-                character={this.state.bugCharacter}
+                character={bugCharacter}
                 tween={this.state.tweenSettings}
-                tweenStart="auto"/>
+                tweenStart="auto"
+                spriteAnimationKey={this.state.bugSpriteAnimationKey}
+                loopAnimation={true}/>
             : null}
-
             <AnimatedSprite
               key={this.state.frogKey}
+              spriteKey={1}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
-              draggable={false}
-              character={this.state.frogCharacter}
-              timeSinceMounted={this.frogTap} 
+              character={frogCharacter}
+              onPress={(frog) => {this.frogTap(frog)}}
+              spriteAnimationKey={this.state.frogSpriteAnimationKey}
               />
-        </Image> 
+        </Image>
       </View>
     );
   }
 }
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -225,5 +195,4 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
-
 export default BugZap;

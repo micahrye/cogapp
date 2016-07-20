@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import Sound from 'react-native-sound';
 
-import AnimatedSprite from "./animatedSprite";
-import monkeyCharacter from "../sprites/monkey/monkeyCharacter";
-import platformCharacter from "../sprites/platform/platformCharacter";
+import AnimatedSprite from "../animatedSprite";
+import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
+import platformCharacter from "../../sprites/platform/platformCharacter";
 import Tile from "./Tile";
-import birdCharacter from "../sprites/bird/birdCharacter";
+import birdCharacter from "../../sprites/bird/birdCharacter";
 
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -44,7 +44,7 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 class GameThree2 extends React.Component {
 
   buttonPress = () => {
-      this.props.navigator.push({
+      this.props.navigator.replace({
           id: 17,
       });
   }
@@ -63,7 +63,7 @@ class GameThree2 extends React.Component {
         }
         return(
           <View style={styles.container}>
-            <Image source={require('../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
+            <Image source={require('../../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
               <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                   <Text>Go to Level 4</Text>
               </TouchableOpacity>

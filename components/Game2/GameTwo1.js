@@ -15,15 +15,15 @@ import {
 
 // imports
 
-import AnimatedSprite from "./animatedSprite";
-import Tweener from "./Tweener";
+import AnimatedSprite from "../animatedSprite";
+import Tweener from "../Tweener";
 
 
 // import different characters to feed to animated sprite
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
-import mammalCharacter from "../sprites/mammal/mammalCharacter";
-import canCharacter from "../sprites/can/canCharacter";
-import appleCharacter from "../sprites/apple/appleCharacter";
+import greenDragonCharacter from "../../sprites/dragon/greenDragonCharacter";
+import mammalCharacter from "../../sprites/mammal/mammalCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import appleCharacter from "../../sprites/apple/appleCharacter";
 
 
 const Window = Dimensions.get('window');
@@ -50,7 +50,7 @@ class GameTwo1 extends Component {
   // push id 12 to navigator, which will take the game to
   // GameTwo2.js
   buttonPress = () => {
-      this.props.navigator.push({
+      this.props.navigator.replace({
           id: 12,
       });
   }
@@ -124,7 +124,7 @@ class GameTwo1 extends Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+        <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
                     <Text>Go to Level 3</Text>
                 </TouchableOpacity>

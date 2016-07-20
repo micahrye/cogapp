@@ -10,8 +10,8 @@ var {
   processColor,
 } = ReactNative;
 
-import AnimatedSprite from "./animatedSprite";
-import greenDragonCharacter from "../sprites/dragon/greenDragonCharacter";
+import AnimatedSprite from "../animatedSprite";
+import greenDragonCharacter from "../../sprites/dragon/greenDragonCharacter";
 
 
 var CIRCLE_SIZE = 200;

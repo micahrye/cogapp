@@ -42,13 +42,13 @@ componentDidMount() { }
           <AnimatedSprite coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
             size={{width: 256, height: 256}}
             draggable={false}
-            character={frogCharacter} 
+            character={frogCharacter}
             />
           <View style={styles.flip}>
             <AnimatedSprite coordinates={{top: 0, left: 0}}
               size={{width: 256, height: 256}}
               draggable={false}
-              character={frogCharacter} 
+              character={frogCharacter}
               />
           </View>
         </Image>

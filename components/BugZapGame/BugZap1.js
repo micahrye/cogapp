@@ -141,8 +141,8 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugCharacter: bugCharacterFly,
-      tweenSettings: this.state.tween2,   
-    }); 
+      tweenSettings: this.state.tween2,
+    });
   }
 
   frog1Tap = () => {
@@ -185,14 +185,14 @@ class BugZap1 extends React.Component {
   frogCelebrate(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterCelebrate});
-     
+
       setTimeout( () => {
         this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
       }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
     }
     else{
       this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterCelebrate});
-     
+
       setTimeout( () => {
         this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
       }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
@@ -209,7 +209,7 @@ class BugZap1 extends React.Component {
 
       setTimeout( () => {
         this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 300); 
+      }, 300);
     }
     else{
       this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterDisgust});
@@ -222,7 +222,7 @@ class BugZap1 extends React.Component {
 
   // go to next level
   buttonPress = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       id: 8,
     });
     clearTimeout(timeout0);
@@ -238,7 +238,7 @@ class BugZap1 extends React.Component {
               <Text>Go to Level 2</Text>
             </TouchableOpacity>
 
-            {this.state.showBug ? 
+            {this.state.showBug ?
               <AnimatedSprite
                 key={this.state.bugKey}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
@@ -246,7 +246,7 @@ class BugZap1 extends React.Component {
                 draggable={false}
                 character={this.state.bugCharacter}
                 tween={this.state.tweenSettings}
-                tweenStart="auto"/> 
+                tweenStart="auto"/>
             : null}
 
             <AnimatedSprite
@@ -258,16 +258,16 @@ class BugZap1 extends React.Component {
               timeSinceMounted={this.frog1Tap} />
 
             <View style={styles.flip}>
-                <AnimatedSprite 
+                <AnimatedSprite
                   key={this.state.frogKey1}
                   coordinates={{top: 0, left: 0}}
                   size={{width: 256, height: 256}}
                   draggable={false}
                   character={this.state.frogCharacter}
-                  timeSinceMounted={this.frog2Tap} 
+                  timeSinceMounted={this.frog2Tap}
                   />
             </View>
-        </Image> 
+        </Image>
       </View>
     );
   }
