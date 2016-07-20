@@ -1,286 +1,282 @@
-"use strict";
-
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Alert,
   Animated,
   PanResponder,
-  StyleSheet,
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
 import Sound from 'react-native-sound';
-import Tweener from "./Tweener";
+import Tweener from './Tweener';
 
+const styles = {
+  character: {
+    opacity: 1,
+  },
+};
 
-
-
-class AnimatedSprite extends React.Component{
-  constructor(props){
+class AnimatedSprite extends React.Component {
+  constructor (props) {
     super(props);
 
     this.state = {
       animate: false,
-      _scale: new Animated.Value(1),
-      _top: new Animated.Value(props.coordinates.top),
-      _left: new Animated.Value(props.coordinates.left),
-      _rotation: new Animated.Value(0),
-      _width: props.size.width,
-      _height: props.size.height,
+      scale: new Animated.Value(1),
+      top: new Animated.Value(props.coordinates.top),
+      left: new Animated.Value(props.coordinates.left),
+      rotation: new Animated.Value(0),
+      width: props.size.width,
+      height: props.size.height,
     };
 
     this.character = undefined;
     this.refAnimatedImage = undefined;
-    this._charactertyles =  {};
-    this._initialLeft = this.state._left._value;
-    this._initialLefTop = this.state._top._value;
-    this._panResponder = {};
+    this.charactertyles = {};
+    this.initialLeft = this.state.left.value;
+    this.initialLeftop = this.state.top.value;
+    this.panResponder = {};
 
-    this._animation = this.props.character;
-    this._animationKey = 'idel';
-    this._curType = 'default';
-    this._lastType = 'default';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
+    this.animation = this.props.character;
+    this.animationKey = 'idel';
+    this.curType = 'default';
+    this.lastType = 'default';
+    this.numFrames = this.animation[this.animationKey][this.curType].length-1;
     this.frameIndex = -1;
     this.idelAnimationInterval = undefined;
     this.touchAnimationInterval = undefined;
 
-    this._Tweener = Tweener();
-    this._hasTweened = 0;
+    this.Tweener = Tweener();
+    this.hasTweened = 0;
     this.renderTime = 0;
   }
 
-  componentWillMount() {
-    if(this.props.draggable){
+  componentWillMount () {
+    if (this.props.draggable) {
       // note that with PanResponder we setNativeProps for performance reasons,
       // as stated by FB.
-      this._panResponder = PanResponder.create({
+      this.panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant:(e, gestureState) => {
-          this._handlePanResponderGrant(e, gestureState)},
+        onPanResponderGrant: (e, gestureState) => {
+          this.handlePanResponderGrant(e, gestureState);
+        },
         onPanResponderMove: (e, gestureState) => {
-          this._handlePanResponderMove(e, gestureState)},
+          this.handlePanResponderMove(e, gestureState);
+        },
         onPanResponderRelease: (e, gestureState) => {
-          this._handlePanResponderEnd(e, gestureState)},
-        onPanResponderTerminate:
-          (e, gestureState) => {
-          this._handlePanResponderEnd(e, gestureState)},
-        });
+          this.handlePanResponderEnd(e, gestureState);
+        },
+        onPanResponderTerminate: (e, gestureState) => {
+          this.handlePanResponderEnd(e, gestureState);
+        },
+      });
     }
 
-    this._previousLeft =  this._initialLeft;
-    this._previousTop = this._initialLefTop;
-    this._characterStyles = {
+    this.previousLeft = this.initialLeft;
+    this.previousTop = this.initialLeftop;
+    this.characterStyles = {
       style: {
-        left: this._previousLeft,
-        top: this._previousTop,
-        width: this.state._width,
-        height: this.state._height,
+        left: this.previousLeft,
+        top: this.previousTop,
+        width: this.state.width,
+        height: this.state.height,
       },
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.startIdelAnimation();
     // if this character setNativeProps
-    this.character && this.character.setNativeProps(this._characterStyles)
+    this.character && this.character.setNativeProps(this.characterStyles)
 
-    if(this.props.tweenStart == "auto"){
+    if (this.props.tweenStart == "auto") {
       this.startTween();
     }
     this.renderTime = Date.now();
   }
 
-  componentWillUnmount(){
+  componentWillUnmount () {
     // Make sure to clear any intervals that have been set.
     clearInterval(this.idelAnimationInterval);
     clearInterval(this.touchAnimationInterval);
   }
 
-  startIdelAnimation(){
-    // NOTE: making assumption there is an idel animation. Maybe change if only
-    // one frame fro idel don't run interval.
-    this._animationKey = 'idel';
-    this._curType = 'default';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
-    this.frameIndex = -1;
-    clearInterval(this.idelAnimationInterval);
-    this.idelAnimationInterval = setInterval(()=>{
-      this.frameIndex++;
-      if(this.frameIndex > this.numFrames){
-        this.frameIndex = 0;
-      }
-      this.setState({animate: true});
-    }, 100);
+  updateNativeStyles () {
+    this.character && this.character.setNativeProps(this.characterStyles);
   }
 
-  _updateNativeStyles() {
-    this.character && this.character.setNativeProps(this._characterStyles);
-  }
-
-  _handleStartShouldSetPanResponder(e, gestureState) {
+  handleStartShouldSetPanResponder () {
     // Should we become active when the user presses down on the circle?
     return true;
   }
 
-  _handleMoveShouldSetPanResponder(e, gestureState) {
+  handleMoveShouldSetPanResponder () {
     return true;
   }
 
-  _handlePanResponderGrant(e, gestureState) {
+  // handlePanResponderGrant (e, gestureState) {
     // do something on grant
+  // }
+
+  handlePanResponderMove (e, gestureState) {
+    this.characterStyles.style.left = this.previousLeft + gestureState.dx;
+    this.characterStyles.style.top = this.previousTop + gestureState.dy;
+    this.updateNativeStyles();
   }
 
-  _handlePanResponderMove(e, gestureState) {
-    this._characterStyles.style.left = this._previousLeft + gestureState.dx;
-    this._characterStyles.style.top = this._previousTop + gestureState.dy;
-    this._updateNativeStyles();
-  }
-
-  _handlePanResponderEnd(e, gestureState) {
+  handlePanResponderEnd (e, gestureState) {
     // do anything you want onPanResponderRelease
-    this._previousLeft += gestureState.dx;
-    this._previousTop += gestureState.dy;
-    this.state._top = this._characterStyles.style.top;
-    this.state._left = this._characterStyles.style.left;
+    this.previousLeft += gestureState.dx;
+    this.previousTop += gestureState.dy;
+    this.state.top = this.characterStyles.style.top;
+    this.state.left = this.characterStyles.style.left;
 
-    if(this.props.draggedTo){
-      this.props.draggedTo(this._characterStyles.style.left, this._characterStyles.style.top);
+    if (this.props.draggedTo) {
+      this.props.draggedTo(this.characterStyles.style.left, this.characterStyles.style.top);
     }
   }
 
-  getStyle(){
-
-    let ro = this.state._rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','180deg'],
+  getStyle () {
+    const ro = this.state.rotation.interpolate({
+      inputRange: [0, 100],
+      outputRange: ['0deg', '180deg'],
     });
-
     return (
       {
-        top: this.state._top,
-        left: this.state._left,
+        top: this.state.top,
+        left: this.state.left,
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-        transform: [{rotate: ro},
-                    {scale: this.state._scale}],
+        transform: [{ rotate: ro },
+                    { scale: this.state.scale }],
       }
     );
-
   }
 
-  handlePress(evt){
-    // COMM: why would it be undefind?
-    //this.props.key
-    if(this.props.onPres){
-      this.props.onPress("frog");
-    }
-
-
-    if(this._animation['touch']['default']){
-      this.touchSprite();
-    }
-    this._curType = this.props.changeTouchType(this._lastType);
-    this._lastType = this._curType;
-
-    if(this.props.draggable){
-      return;
-    }
-
-    if(this.props.soundOnTouch){
-
-      let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-      } else { // loaded successfully
-        console.log('sound did load');
-        tile.play();
-        }
-     });
-
-    }
-
-    if(this.props.tweenStart === "touch"){
-      this.startTween();
-    }
-
-    if(this.props.timeSinceMounted){
-      this.props.timeSinceMounted(
-        this.props.spriteKey,
-        (Date.now() - this.renderTime ) / 1000
-      );
-    }
-  }
-
-  touchSprite() {
-      // TOOD: rework this
-      clearInterval(this.idelAnimationInterval);
-      this.startTouchAnimation();
-  }
-
-  startTouchAnimation(){
-    this._animationKey = 'touch';
-    this.numFrames = this._animation[this._animationKey][this._curType].length-1;
+  startIdelAnimation () {
+    // NOTE: making assumption there is an idel animation. Maybe change if only
+    // one frame fro idel don't run interval.
+    this.animationKey = 'idel';
+    this.curType = 'default';
+    this.numFrames = this.animation[this.animationKey][this.curType].length-1;
     this.frameIndex = -1;
-    clearInterval(this.touchAnimationInterval);
-
-    this.touchAnimationInterval = setInterval(()=>{
-        this.frameIndex++;
-        // run once and go back to idel
-        if(this.frameIndex > this.numFrames){
-          clearInterval(this.touchAnimationInterval);
-          this.startIdelAnimation();
-          return;
-        }else{
-          this.setState({animate: true});
-        }
+    clearInterval(this.idelAnimationInterval);
+    this.idelAnimationInterval = setInterval(() => {
+      this.frameIndex++;
+      if (this.frameIndex > this.numFrames) {
+        this.frameIndex = 0;
+      }
+      this.setState({ animate: true });
     }, 100);
   }
 
-  startTween() {
-    if(!this.props.tween.repeatable && this._hasTweened){
+  handlePress () {
+    // COMM: why would it be undefind?
+    // this.props.key
+    if (this.props.onPres) {
+      this.props.onPress("frog");
+    }
+
+    if (this.animation.touch.default) {
+      this.touchSprite();
+    }
+    this.curType = this.props.changeTouchType(this.lastType);
+    this.lastType = this.curType;
+
+    if (this.props.draggable) {
       return;
     }
-    this._hasTweened++;
+
+    if (this.props.soundOnTouch) {
+      const tile = new Sound('tile.mp3', Sound.MAINBUNDLE, (error) => {
+        if (error) {
+          console.log('failed to load the sound', error);
+        } else { // loaded successfully
+          console.log('sound did load');
+          tile.play();
+        }
+      });
+    }
+
+    if (this.props.tweenStart === "touch") {
+      this.startTween();
+    }
+
+    if (this.props.timeSinceMounted) {
+      this.props.timeSinceMounted(this.props.spriteKey,
+        (Date.now() - this.renderTime) / 1000);
+    }
+  }
+
+  touchSprite () {
+      // TOOD: rework this
+    clearInterval(this.idelAnimationInterval);
+    this.startTouchAnimation();
+  }
+
+  startTouchAnimation () {
+    this.animationKey = 'touch';
+    this.numFrames = this.animation[this.animationKey][this.curType].length-1;
+    this.frameIndex = -1;
+    clearInterval(this.touchAnimationInterval);
+
+    this.touchAnimationInterval = setInterval(() => {
+      this.frameIndex++;
+      // run once and go back to idel
+      if (this.frameIndex > this.numFrames) {
+        clearInterval(this.touchAnimationInterval);
+        this.startIdelAnimation();
+        return;
+      } else {
+        this.setState({ animate: true });
+      }
+    }, 100);
+  }
+
+  startTween () {
+    if (!this.props.tween.repeatable && this.hasTweened) {
+      return;
+    }
+    this.hasTweened++;
     const tweenType = this.props.tween.tweenType;
     const tweenOptions = this.props.tween;
     const tweenState = {
-      top: this.state._top,
-      left: this.state._left,
-      scale: this.state._scale,
-      rotation: this.state._rotation,
+      top: this.state.top,
+      left: this.state.left,
+      scale: this.state.scale,
+      rotation: this.state.rotation,
     }
-    this._Tweener[tweenType](tweenOptions, tweenState);
+    this.Tweener[tweenType](tweenOptions, tweenState);
   }
 
   render() {
 
-    return(
-        <Animated.View
-          {...this._panResponder.panHandlers}
-          style={this.getStyle()}
-          ref={(character) => {
-            this.character = character;
-          }}
+    return (
+      <Animated.View
+        {...this.panResponder.panHandlers}
+        style={this.getStyle()}
+        ref={(character) => {
+          this.character = character;
+        }}
+      >
+
+        <TouchableWithoutFeedback
+          onPress={(evt) => this.handlePress(evt)}
         >
+          <Animated.Image
+            ref={(ref) => {
+              this.refAnimatedImage = ref;
+            }}
+            source={this.animation[this.animationKey][this.curType][this.frameIndex]}
+            style={{
+              ...styles.character,
+              width: this.state.width,
+              height: this.state.height,
+            }}
+          />
+        </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback
-            onPress={ (evt) => this.handlePress(evt) }>
-            <Animated.Image
-              ref={(ref) => {
-                this.refAnimatedImage = ref;
-              }}
-              source={this._animation[this._animationKey][this._curType][this.frameIndex]}
-              style={{
-                ...styles.character,
-                width: this.state._width,
-                height: this.state._height,
-              }}/>
-          </TouchableWithoutFeedback>
-
-        </Animated.View>
+      </Animated.View>
     );
   }
 }
@@ -298,11 +294,5 @@ AnimatedSprite.propTypes = {
 AnimatedSprite.defaultProps = {
   initialCount: 0,
 };
-
-const styles = {
-  character: {
-    opacity: 1,
-  }
- };
 
 export default AnimatedSprite;
