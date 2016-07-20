@@ -12,6 +12,10 @@ const bugCharacter = {
     require("./bug_fly02.png"),
   ],
 
+  bubble: [
+  	require("../bubble/bubble_clockwise_large01.png"),
+  ]
+
 };
 
 export default bugCharacter;
