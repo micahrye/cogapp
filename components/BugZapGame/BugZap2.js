@@ -9,11 +9,8 @@ import {
   Navigator,
 } from 'react-native';
 
-import frogCharacterIdle from "../../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../../sprites/frog/frogCharacterCelebrate";
-import frogCharacterDisgust from "../../sprites/frog/frogCharacterDisgust";
-import bugCharacterFly from '../../sprites/bug/bugCharacterFly';
-import bugCharacterIdle from '../../sprites/bug/bugCharacterIdle';
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import bugCharacter from '../../sprites/bug/bugCharacter';
 import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
@@ -28,8 +25,8 @@ class BugZap2 extends React.Component {
     this.state = {
       blackoutScreen: [],
       spotLightFlash: [],
-      bugCharacter: bugCharacterIdle,
-      frogCharacter: frogCharacterIdle,
+      bugSpriteAnimationKey: 'idle',
+      frogSpriteAnimationKey: 'idle',
       tweenSettings: {},
       bugKey: 0,
       frogKey0: 1,
@@ -47,6 +44,7 @@ class BugZap2 extends React.Component {
     this.setUpTween();
   }
 
+  // bug either appears on the left or the right
   setUpTween() {
     let sideChoice = Math.random();
     let xStart = 0;
@@ -59,7 +57,7 @@ class BugZap2 extends React.Component {
     }
 
     this.setState({
-      tweenSettings:
+      tweenSettings: // idle tween
       {
         tweenType: "sine-wave",
         startXY: [xStart, 120],
@@ -68,7 +66,7 @@ class BugZap2 extends React.Component {
         duration: 2000,
         loop: false,
       },
-      tweenAway:
+      tweenAway: // tween offscreen
       {
         tweenType: "sine-wave",
         startXY: [xStart, 120],
@@ -80,7 +78,7 @@ class BugZap2 extends React.Component {
     });
   }
 
-  // screen goes black after timeout
+  // screen goes black
   setBlackout() {
     let blackout = [];
     blackout.push(<View key={0} style={styles.blackout}></View>);
@@ -122,78 +120,62 @@ class BugZap2 extends React.Component {
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
-      bugCharacter: bugCharacterFly,
+      bugSpriteAnimationKey: 'fly',
       tweenSettings: this.state.tweenAway,
     });
   }
 
-  frog1Tap = () => {
+  frogTap = (frog) => {
     let bugSide = this.state.side;
-    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){
+    if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
       if(bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
-        this.frogCelebrate(0);
+        if(frog === 0){
+          this.frogCelebrate(frog);
+        }
+        else{
+          this.wrongFrogTapped(frog);
+        }
       }
-      else{ // wrong choice
-        this.bugFlyAway();
-        this.frogDisgust(0);
-        clearTimeout(timeout4); // so bugFlyAway isn't called again
-      }
-    }
-  }
-
-  frog2Tap = () => {
-    let bugSide = this.state.side;
-    if(this.state.bugCharacter === bugCharacterIdle && this.state.showBug){
-      if(bugSide === 'left'){
-        this.frogCelebrate(1);
-      }
-      else{
-        this.bugFlyAway();
-        this.frogDisgust(1);
-        clearTimeout(timeout4);
+      else { // bug landed on left side
+        if(frog === 0){
+          this.wrongFrogTapped(frog);
+        }
+        else{
+          this.frogCelebrate(frog)
+        }
       }
     }
   }
 
-  // load frog celebrate character, then go back to idle
+  // frog is disgusted, bug flies away without idling
+  wrongFrogTapped(frog){
+    this.bugFlyAway();
+    this.frogDisgust(frog);
+    clearTimeout(timeout4); // so bugFlyAway isn't called again
+  }
+
+  // frog celebrates and bug is hidden
   frogCelebrate(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterCelebrate});
-
-      setTimeout( () => {
-        this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
     else{
-      this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterCelebrate});
-
-      setTimeout( () => {
-        this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
-
     this.setState({showBug: false});
     clearTimeout(timeout4); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
-  // load frog disgust character, then go back to idle
   frogDisgust(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterDisgust});
-
-      setTimeout( () => {
-        this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 300);
+      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
     else{
-      this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterDisgust});
-
-      setTimeout( () => {
-        this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      }, 300); // TODO this should be 200, but that makes it too fast...why?
+      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
   }
 
+  // go to next level
   buttonPress = () => {
     this.props.navigator.replace({
       id: 9,
@@ -215,40 +197,48 @@ class BugZap2 extends React.Component {
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
             <Text>Go to Level 3</Text>
           </TouchableOpacity>
+
           <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
             size={{width: 128, height: 128}}
             draggable={false}
             character={lightbulbCharacter}
             tween={bulbTweenSettings}
             tweenStart="auto"/>
+      
+          {this.state.showBug ? 
+            <AnimatedSprite
+              key={this.state.bugKey}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+              size={{width: 128, height: 128}}
+              draggable={false}
+              character={bugCharacter}
+              tween={this.state.tweenSettings}
+              tweenStart="auto"
+              spriteAnimationKey={this.state.bugSpriteAnimationKey}
+              loopAnimation={true}/> 
+          : null}
 
           <AnimatedSprite
             key={this.state.frogKey0}
+            spriteKey={0}
             coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
             size={{width: 256, height: 256}}
             draggable={false}
-            character={this.state.frogCharacter}
-            timeSinceMounted={this.frog1Tap}/>
+            character={frogCharacter}
+            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+            onPress={(frog) => {this.frogTap(frog)}}/>
 
           <View style={styles.flip}>
-            <AnimatedSprite
-              key={this.state.frogKey1}
-              coordinates={{top: 0, left: 0}}
-              size={{width: 256, height: 256}}
-              draggable={false}
-              character={this.state.frogCharacter}
-              timeSinceMounted={this.frog2Tap}
-              />
+              <AnimatedSprite 
+                key={this.state.frogKey1}
+                spriteKey={1}
+                coordinates={{top: 0, left: 0}}
+                size={{width: 256, height: 256}}
+                draggable={false}
+                character={frogCharacter}
+                spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+                onPress={(frog) => {this.frogTap(frog)}} />
           </View>
-
-          {this.state.showBug ?
-            <AnimatedSprite key={this.state.bugKey} coordinates={{top: 0, left: 0}}
-              size={{width: 128, height: 128}}
-              draggable={false}
-              character={this.state.bugCharacter}
-              tween={this.state.tweenSettings}
-              tweenStart="auto"/>
-          : null}
 
           <View>
             {this.state.blackoutScreen}
