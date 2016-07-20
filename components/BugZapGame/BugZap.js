@@ -31,6 +31,7 @@ class BugZap extends React.Component {
       frogSpriteAnimationKey: 'idle',
     }
   }
+  //comment
   componentWillMount() {
     // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
