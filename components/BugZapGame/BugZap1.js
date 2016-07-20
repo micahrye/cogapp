@@ -142,6 +142,7 @@ class BugZap1 extends React.Component {
     }); 
   }
 
+<<<<<<< Updated upstream
   frogTap = (frog) => {
     let bugColor = this.state.bugSpriteAnimationKey;
     if(this.state.showBug){ // if bug isn't already eaten
@@ -160,6 +161,18 @@ class BugZap1 extends React.Component {
         else{
           this.frogCelebrate(frog);
         }
+=======
+  frog1Tap = () => {
+    let bugColor = this.state.bugSpriteAnimationKey;
+    if(this.state.showBug){
+      if(bugColor === 'idle'){ // celebrate if right "color" and bug isn't already eaten
+        this.frogCelebrate(0);
+      }
+      else if(bugColor === 'bubble'){ // wrong choice
+        this.bugFlyAway();
+        this.frogDisgust(0);
+        clearTimeout(timeout2); // so bugFlyAway isn't called again
+>>>>>>> Stashed changes
       }
       else if(this.state.tweenSettings != this.state.tween2){ // zapped too early  
         this.frogDisgust(frog);
@@ -168,11 +181,30 @@ class BugZap1 extends React.Component {
     }
   }
 
+<<<<<<< Updated upstream
   // frog is disgusted, bug flies away without idling
   wrongFrogTapped(frog){
     this.bugFlyAway();
     this.frogDisgust(frog);
     clearTimeout(timeout2); // so bugFlyAway isn't called again
+=======
+  frog2Tap = () => {
+    let bugColor = this.state.bugSpriteAnimationKey;
+    if(this.state.showBug){
+      if(bugColor === 'bubble'){
+        this.frogCelebrate(1);
+      }
+      else if(bugColor === 'idle'){
+        this.bugFlyAway();
+        this.frogDisgust(1);
+        clearTimeout(timeout2);
+      }
+      else if(this.state.tweenSettings != this.state.tween2){
+        this.frogDisgust(1);
+        this.setState({zappedTooEarly: true});
+      }
+    }
+>>>>>>> Stashed changes
   }
 
   // frog celebrates and bug is hidden
@@ -234,8 +266,13 @@ class BugZap1 extends React.Component {
               size={{width: 256, height: 256}}
               draggable={false}
               character={frogCharacter}
+<<<<<<< Updated upstream
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}}/>
+=======
+              timeSinceMounted={this.frog1Tap}
+              spriteAnimationKey={this.state.frogSpriteAnimationKey} />
+>>>>>>> Stashed changes
 
             <View style={styles.flip}>
                 <AnimatedSprite 
@@ -245,8 +282,14 @@ class BugZap1 extends React.Component {
                   size={{width: 256, height: 256}}
                   draggable={false}
                   character={frogCharacter}
+<<<<<<< Updated upstream
                   spriteAnimationKey={this.state.frogSpriteAnimationKey} 
                   onPress={(frog) => {this.frogTap(frog)}} />
+=======
+                  timeSinceMounted={this.frog2Tap}
+                  spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+                  />
+>>>>>>> Stashed changes
             </View>
         </Image> 
       </View>

@@ -34,6 +34,8 @@ const endCoordinates = [550,330];
 const startLeft = 250;
 const startTop = 90;
 
+const LoadingTime = 3000;
+
 
 const sprite2Start = [startLeft,startTop];
 
@@ -44,9 +46,19 @@ class GameTwo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rotation : new Animated.Value(16),
+      loadingScreen: <View key={0} style={styles.loadingScreen}></View>,
     }
   }
+
+  componentDidMount() {
+    setTimeout(() => {this.endLoadingScreen();},LoadingTime);
+  }
+
+  endLoadingScreen() {
+    loading = [];
+    this.setState({loadingScreen: loading});
+  }
+
 
   // move on to next page when navigation button is pressed
   // push id 11 to navigator, which will take the game to
@@ -64,19 +76,6 @@ class GameTwo extends Component {
   onLeverTouch = () => {
     setTimeout(this.displayMessage,10000); // timeout ten seconds after lever is pulled
   }
-
-  // animate lever to move to a downward angle on press
-  // leverPress = () => {
-  //   Animated.timing(
-  //     this.state.rotation,
-  //     {
-  //       toValue: 75,
-  //       easing: Easing.linear,
-  //       duration: 500,
-  //     }
-  //   ).start();
-  // }
-
 
 
   render() {
@@ -151,6 +150,9 @@ class GameTwo extends Component {
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts02}/>
+                <View>
+                    {this.state.loadingScreen}
+                </View>
         </Image>
       </View>
     );
@@ -175,7 +177,16 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       width: 90,
       height: 30,
-
+      top:0,
+      left:0,
+      position: 'absolute',
+  },
+  loadingScreen: {
+    flex: 1,
+    backgroundColor: 'black',
+    height: Window.height,
+    width: Window.width,
+    position: 'absolute',
   },
 })
 
