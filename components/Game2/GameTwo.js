@@ -43,20 +43,48 @@ const sprite2Start = [startLeft,startTop];
 
 class GameTwo extends Component {
 
+
   constructor(props) {
     super(props);
+
     this.state = {
-      loadingScreen: <View key={0} style={styles.loadingScreen}></View>,
+      textOpacity: new Animated.Value(1.0),
+      loadingScreen: <View key={0} style={styles.loadingScreen}>
+                     </View>,
+      frogSpriteAnimationKey: 'idle',
+      frogKey: 1,
     }
   }
 
   componentDidMount() {
-    setTimeout(() => {this.endLoadingScreen();},LoadingTime);
-  }
-
-  endLoadingScreen() {
-    loading = [];
-    this.setState({loadingScreen: loading});
+    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
+    this.frogTap();
+    Animated.sequence([
+      Animated.timing(
+        this.state.textOpacity,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        this.state.textOpacity,
+        {
+          toValue: 1.0,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        this.state.textOpacity,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: LoadingTime/3
+        }
+      )
+    ]).start();
   }
 
 
@@ -74,8 +102,14 @@ class GameTwo extends Component {
   }
 
   onLeverTouch = () => {
-    setTimeout(this.displayMessage(),10000); // timeout ten seconds after lever is pulled
+    setTimeout(this.displayMessage,10000); // timeout ten seconds after lever is pulled
   }
+
+  frogTap = () => {
+    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
+  }
+
+
 
 
   render() {
@@ -132,6 +166,10 @@ class GameTwo extends Component {
                     size={{width:256,height:256}}
                     draggable={false}
                     character={frogCharacter}
+                    key={this.state.frogKey}
+                    spriteKey={1}
+                    onPress={this.frogTap}
+                    spriteAnimationKey={this.state.frogSpriteAnimationKey}
                 />
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:140,height:120}}
@@ -152,6 +190,10 @@ class GameTwo extends Component {
                     tween={tweenOpts02}/>
                 <View>
                     {this.state.loadingScreen}
+                    <Animated.View style={{left: 200,top: 100,opacity:this.state.textOpacity}}>
+                      <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
+                      LOADING</Text>
+                    </Animated.View>
                 </View>
         </Image>
       </View>
@@ -182,8 +224,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
   },
   loadingScreen: {
-    flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'lightblue',
     height: Window.height,
     width: Window.width,
     position: 'absolute',

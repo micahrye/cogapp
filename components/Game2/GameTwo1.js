@@ -46,6 +46,22 @@ class GameTwo1 extends Component {
     }
   }
 
+  loadingPage =   <View>
+                      <View style={{backgroundColor: 'lightblue',
+                                    height: Window.height,
+                                    width: Window.width,
+                                    position: 'absolute'}}>
+                      </View>
+                      <Animated.View style={{left: 200,top: 100}}>
+                        <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
+                        LOADING</Text>
+                      </Animated.View>
+                  </View>;
+
+  componentDidMount() {
+    setTimeout(() => {this.loadingPage=null},1000);
+  }
+
   // move on to next page when navigation button is pressed
   // push id 12 to navigator, which will take the game to
   // GameTwo2.js
@@ -156,6 +172,7 @@ class GameTwo1 extends Component {
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts03}/>
+                {this.loadingPage}
         </Image>
       </View>
     );
