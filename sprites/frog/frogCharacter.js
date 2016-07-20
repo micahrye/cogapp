@@ -3,7 +3,7 @@
 const frogCharacter = {
   name:"frog",
 
-  idel:[
+  idle:[
     require("./frog_celebrate01.png"),
   ],
 

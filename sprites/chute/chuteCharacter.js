@@ -3,7 +3,7 @@
 const chuteCharacter = {
   name:"chute",
 
-  idel:[
+  idle:[
     require("./chute.png"),
   ],
 

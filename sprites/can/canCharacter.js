@@ -3,7 +3,7 @@
 const canCharacter = {
   name:"can",
 
-  idel:[
+  idle:[
     require("./can.png"),
   ],
 

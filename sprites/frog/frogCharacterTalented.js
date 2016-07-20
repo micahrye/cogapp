@@ -3,7 +3,7 @@
 const frogCharacterTalented = {
   name:"frogFlipped",
 
-  idel:[
+  idle:[
     require("./frog_celebrate01_flip.png"),
   ],
 

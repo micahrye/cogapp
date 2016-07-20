@@ -3,7 +3,7 @@
 const lightbulbCharacter = {
   name:"lightbulb",
 
-  idel:[
+  idle:[
     require("./lightbulb.png"),
   ],
 

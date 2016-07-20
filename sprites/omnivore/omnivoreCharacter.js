@@ -3,7 +3,7 @@
 const omnivoreCharacter = {
   name:"omnivore",
 
-  idel:[
+  idle:[
     require("./omnivore.png"),
   ],
 

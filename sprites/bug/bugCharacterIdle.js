@@ -3,7 +3,7 @@
 const bugCharacterIdle = {
   name:"bug",
 
-  idel:[
+  idle:[
     require("./bug_idle01.png"),
   ],
 

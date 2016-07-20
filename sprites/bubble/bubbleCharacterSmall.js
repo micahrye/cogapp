@@ -3,7 +3,7 @@
 const bubbleCharacterSmall = {
   name:"bubbleSmall",
 
-  idel:[
+  idle:[
     require("./bubble_clockwise_small01.png"),
     require("./bubble_clockwise_small02.png"),
     require("./bubble_clockwise_small03.png"),

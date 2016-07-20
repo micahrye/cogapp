@@ -3,7 +3,7 @@
 const signCharacter = {
   name:"sign",
 
-  idel:[
+  idle:[
     require("./sign.png"),
   ],
 
