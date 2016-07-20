@@ -36,24 +36,27 @@ const startTop = 90;
 
 const LoadingTime = 3000;
 
-
 const sprite2Start = [startLeft,startTop];
-
-
 
 class GameTwo extends Component {
 
 
   constructor(props) {
     super(props);
-
+    textOpacity = new Animated.Value(1.0);
     this.state = {
-      textOpacity: new Animated.Value(1.0),
-      loadingScreen: <View key={0} style={styles.loadingScreen}>
+      loadingScreen: <View>
+                     <View key={0} style={styles.loadingScreen}>
+                     <Animated.View style={{opacity:textOpacity}}>
+                       <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
+                       LOADING</Text>
+                     </Animated.View>
+                     </View>
                      </View>,
       frogSpriteAnimationKey: 'idle',
       frogKey: 1,
     }
+
   }
 
   componentDidMount() {
@@ -61,7 +64,7 @@ class GameTwo extends Component {
     this.frogTap();
     Animated.sequence([
       Animated.timing(
-        this.state.textOpacity,
+        textOpacity,
         {
           toValue: 0,
           easing: Easing.linear,
@@ -69,7 +72,7 @@ class GameTwo extends Component {
         }
       ),
       Animated.timing(
-        this.state.textOpacity,
+        textOpacity,
         {
           toValue: 1.0,
           easing: Easing.linear,
@@ -77,7 +80,7 @@ class GameTwo extends Component {
         }
       ),
       Animated.timing(
-        this.state.textOpacity,
+        textOpacity,
         {
           toValue: 0,
           easing: Easing.linear,
@@ -190,10 +193,7 @@ class GameTwo extends Component {
                     tween={tweenOpts02}/>
                 <View>
                     {this.state.loadingScreen}
-                    <Animated.View style={{left: 200,top: 100,opacity:this.state.textOpacity}}>
-                      <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
-                      LOADING</Text>
-                    </Animated.View>
+
                 </View>
         </Image>
       </View>
@@ -228,6 +228,8 @@ const styles = StyleSheet.create({
     height: Window.height,
     width: Window.width,
     position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
