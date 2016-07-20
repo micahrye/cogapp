@@ -38,31 +38,31 @@ class Main extends React.Component {
   }
 
   goToDragon = () => {
-    this.props.navigator.push({id: 2});
+    this.props.navigator.replace({id: 2});
   }
 
   goToBugZap = () => {
-    this.props.navigator.push({id: 6});
+    this.props.navigator.replace({id: 6});
   }
 
   goToGameTwo = () => {
-    this.props.navigator.push({id: 10});
+    this.props.navigator.replace({id: 10});
   }
 
   goToGameThree = () => {
-    this.props.navigator.push({id: 14})
+    this.props.navigator.replace({id: 14})
   }
 
   goToGameFour = () => {
-    this.props.navigator.push({id: 19})
+    this.props.navigator.replace({id: 19})
   }
 
   goToGameFive = () => {
-    this.props.navigator.push({id:20})
+    this.props.navigator.replace({id:20})
   }
 
   goToGameSix = () => {
-    this.props.navigator.push({id:21})
+    this.props.navigator.replace({id:21})
   }
 
   render() {

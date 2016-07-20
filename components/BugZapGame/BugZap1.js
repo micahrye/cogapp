@@ -142,40 +142,37 @@ class BugZap1 extends React.Component {
     }); 
   }
 
-  frog1Tap = () => {
+  frogTap = (frog) => {
     let bugColor = this.state.bugSpriteAnimationKey;
-    if(this.state.showBug){
-      if(bugColor === 'idle'){ // celebrate if right "color" and bug isn't already eaten
-        this.frogCelebrate(0);
+    if(this.state.showBug){ // if bug isn't already eaten
+      if(bugColor === 'idle'){ 
+        if(frog === 0){ // celebrate if right "color"
+          this.frogCelebrate(frog);
+        }
+        else{ // wrong frog tapped for that "color"
+          wrongFrogTapped(frog);
+        }
       }
-      else if(bugColor === 'bubble'){ // wrong choice
-        this.bugFlyAway();
-        this.frogDisgust(0);
-        clearTimeout(timeout2); // so bugFlyAway isn't called again
+      else if(bugColor === 'bubble'){ 
+        if(frog === 0){
+          wrongFrogTapped(frog);
+        }
+        else{
+          this.frogCelebrate(frog);
+        }
       }
-      else if(this.state.tweenSettings != this.state.tween2){ // zapped too early
-        this.frogDisgust(0);
+      else if(this.state.tweenSettings != this.state.tween2){ // zapped too early  
+        this.frogDisgust(frog);
         this.setState({zappedTooEarly: true});
       }
     }
   }
 
-  frog2Tap = () => {
-    let bugColor = this.state.bugSpriteAnimationKey;
-    if(this.state.showBug){
-      if(bugColor === 'bubble'){
-        this.frogCelebrate(1);
-      }
-      else if(bugColor === 'idle'){
-        this.bugFlyAway();
-        this.frogDisgust(1);
-        clearTimeout(timeout2);
-      }
-      else if(this.state.tweenSettings != this.state.tween2){
-        this.frogDisgust(1);
-        this.setState({zappedTooEarly: true});
-      }
-    }
+  // frog is disgusted, bug flies away without idling
+  wrongFrogTapped(frog){
+    this.bugFlyAway();
+    this.frogDisgust(frog);
+    clearTimeout(timeout2); // so bugFlyAway isn't called again
   }
 
   // frog celebrates and bug is hidden
@@ -232,23 +229,24 @@ class BugZap1 extends React.Component {
 
             <AnimatedSprite
               key={this.state.frogKey0}
+              spriteKey={0}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
               size={{width: 256, height: 256}}
               draggable={false}
               character={frogCharacter}
-              timeSinceMounted={this.frog1Tap}
-              spriteAnimationKey={this.state.frogSpriteAnimationKey} />
+              spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+              onPress={(frog) => {this.frogTap(frog)}}/>
 
             <View style={styles.flip}>
                 <AnimatedSprite 
                   key={this.state.frogKey1}
+                  spriteKey={1}
                   coordinates={{top: 0, left: 0}}
                   size={{width: 256, height: 256}}
                   draggable={false}
                   character={frogCharacter}
-                  timeSinceMounted={this.frog2Tap}
                   spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-                  />
+                  onPress={(frog) => {this.frogTap(frog)}} />
             </View>
         </Image> 
       </View>
