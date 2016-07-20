@@ -133,7 +133,7 @@ class BugZap1 extends React.Component {
     }, 2000);
   }
 
-  // switch to flying bug character and start next tween, frogs are disgusted
+  // switch to flying bug character and start next tween
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
@@ -178,48 +178,30 @@ class BugZap1 extends React.Component {
     }
   }
 
-  // load frog celebrate character, then go back to idle
+  // frog celebrates and bug is hidden
   frogCelebrate(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-     
-      // setTimeout( () => {
-      //   this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
     }
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-     
-      // setTimeout( () => {
-      //   this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
     }
-
     this.setState({showBug: false});
     clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
-  // load frog disgust character, then go back to idle
   frogDisgust(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'disgust'});
-
-      // setTimeout( () => {
-      //   this.setState({frogKey0: Math.random(), frogCharacter: frogCharacterIdle});
-      // }, 300); 
     }
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
-
-      // setTimeout( () => {
-      //   this.setState({frogKey1: Math.random(), frogCharacter: frogCharacterIdle});
-      // }, 300); // TODO this should be 200, but that makes it too fast...why?
     }
   }
 
   // go to next level
   buttonPress = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       id: 8,
     });
     clearTimeout(timeout0);

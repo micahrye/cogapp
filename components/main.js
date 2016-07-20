@@ -34,7 +34,7 @@ class Main extends React.Component {
   }
 
   goToBubblePop = () => {
-    this.props.navigator.push({id: 3});
+    this.props.navigator.replace({id: 3});
   }
 
   goToDragon = () => {
