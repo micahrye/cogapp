@@ -32,8 +32,9 @@ class BugZap2 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       showBug: false,
-      side: "right",
     }
+    let bugSide = 'left';
+    let tweenAway = {};
   }
 
   componentDidMount() {
@@ -49,12 +50,23 @@ class BugZap2 extends React.Component {
     let sideChoice = Math.random();
     let xStart = 0;
     if(sideChoice < .5){
-      this.setState({side: "left"});
+      bugSide = 'right'
       xStart = 150;
     }
     else{
-      xStart = 375;
+      xStart = 450;
     }
+
+    // tween offscreen
+    tweenAway =
+    {
+      tweenType: "sine-wave",
+      startXY: [xStart, 120],
+      xTo: [-150],
+      yTo: [0, 100, 0],
+      duration: 2000,
+      loop: false,
+    };
 
     this.setState({
       tweenSettings: // idle tween
@@ -66,15 +78,6 @@ class BugZap2 extends React.Component {
         duration: 2000,
         loop: false,
       },
-      tweenAway: // tween offscreen
-      {
-        tweenType: "sine-wave",
-        startXY: [xStart, 120],
-        xTo: [-150],
-        yTo: [0, 100, 0],
-        duration: 2000,
-        loop: false,
-      }
     });
   }
 
@@ -92,7 +95,7 @@ class BugZap2 extends React.Component {
   // spotlight is flashed briefly after blackout
   flashSpotLight() {
     let spotLight = [];
-    spotLight.push(<View key={0} style={styles.spotLight}></View>);
+    spotLight.push(<View key={0} style={this.getSpotLightStyle()}></View>);
     this.setState({spotLightFlash: spotLight});
     timeout2 = setTimeout ( () => {
       this.setState({spotLightFlash: []});
@@ -121,12 +124,11 @@ class BugZap2 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: 'fly',
-      tweenSettings: this.state.tweenAway,
+      tweenSettings: tweenAway,
     });
   }
 
   frogTap = (frog) => {
-    let bugSide = this.state.side;
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
       if(bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
@@ -180,6 +182,29 @@ class BugZap2 extends React.Component {
     this.props.navigator.replace({
       id: 9,
     });
+  }
+
+  getSpotLightStyle() {
+    let side = Math.random();
+    let posX = 0;
+    if(side < .5){
+      posX = 150;
+    }
+    else{
+      posX = 450
+    }
+    return(
+      {
+        flex: 1,
+        backgroundColor: 'white',
+        height: 150,
+        width: 150,
+        left: posX,
+        top: 100,
+        position: 'absolute',
+        borderRadius: 100,
+      }
+    )
   }
 
   render(){
@@ -281,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 150,
     width: 150,
-    left: 400,
+    left: 450,
     top: 100,
     position: 'absolute',
     borderRadius: 100,

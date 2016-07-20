@@ -30,12 +30,14 @@ class BugZap1 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       tweenSettings: {},
-      tweenIdle: {},
-      tween2: {},
+      // tweenIdle: {},
+      // tween2: {},
       zappedTooEarly: false,
       frogSpriteAnimationKey: 'idle',
       bugSpriteAnimationKey: 'fly'
     }
+    let tweenIdle: {}
+    let tweenAway: {}
   }
 
   componentWillMount() {
@@ -76,6 +78,26 @@ class BugZap1 extends React.Component {
       xEnd = 375;
     }
 
+    // when landed
+    tweenIdle = {
+      tweenType: "sine-wave",
+      startXY: [xEnd, 120],
+      xTo: [xEnd],
+      yTo: [120],
+      duration: 0,
+      loop: false,
+    };
+
+    // tween offscreen  
+    tweenAway = { 
+      tweenType: "sine-wave",
+      startXY: [xEnd, 120],
+      xTo: [-150],
+      yTo: [0, 100, 0],
+      duration: 2000,
+      loop: false,
+    };
+
     this.setState({
       tweenSettings: // initial tween onto screen
       {
@@ -86,24 +108,6 @@ class BugZap1 extends React.Component {
         duration: 2000,
         loop: false,
       },
-      tweenIdle: // when landed
-      {
-        tweenType: "sine-wave",
-        startXY: [xEnd, 120],
-        xTo: [xEnd],
-        yTo: [120],
-        duration: 0,
-        loop: false,
-      },
-      tween2: // tween offscreen
-      {
-        tweenType: "sine-wave",
-        startXY: [xEnd, 120],
-        xTo: [-150],
-        yTo: [0, 100, 0],
-        duration: 2000,
-        loop: false,
-      }
      });
   }
 
@@ -114,14 +118,14 @@ class BugZap1 extends React.Component {
       this.setState({
         bugKey: Math.random(),
         bugSpriteAnimationKey: 'idle',
-        tweenSettings: this.state.tweenIdle,
+        tweenSettings: tweenIdle,
       });
     }
     else{
       this.setState({
         bugKey: Math.random(),
         bugSpriteAnimationKey: 'bubble',
-        tweenSettings: this.state.tweenIdle,
+        tweenSettings: tweenIdle,
       });
     }
 
@@ -137,8 +141,8 @@ class BugZap1 extends React.Component {
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
-        bugSpriteAnimationKey: 'fly',
-      tweenSettings: this.state.tween2,   
+      bugSpriteAnimationKey: 'fly',
+      tweenSettings: tweenAway,   
     }); 
   }
 
@@ -161,7 +165,7 @@ class BugZap1 extends React.Component {
           this.frogCelebrate(frog);
         }
       }
-      else if(this.state.tweenSettings != this.state.tween2){ // zapped too early  
+      else if(this.state.tweenSettings != tweenAway){ // zapped too early  
         this.frogDisgust(frog);
         this.setState({zappedTooEarly: true});
       }
