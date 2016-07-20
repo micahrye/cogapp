@@ -74,7 +74,7 @@ class GameTwo extends Component {
   }
 
   onLeverTouch = () => {
-    setTimeout(this.displayMessage,10000); // timeout ten seconds after lever is pulled
+    setTimeout(this.displayMessage(),10000); // timeout ten seconds after lever is pulled
   }
 
 
