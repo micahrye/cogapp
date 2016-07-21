@@ -30,6 +30,8 @@ tweenStart: string, takes either "touch" or "auto"
 spriteKey: object, unique key for the character
 soundOnTouch: bool, play sound?
 rotate: array, takes a style transform value
+fps: object, how many frames per second to run the animations at
+  if not included: defaults to 100
 
 /*Functions:
 onPress: passes up spriteKey
@@ -67,6 +69,7 @@ class AnimatedSprite extends React.Component{
 
     this._Tweener = Tweener();
     this.renderTime = 0;
+    this.fps = 100;
   }
 
   componentWillMount() {
@@ -102,6 +105,10 @@ class AnimatedSprite extends React.Component{
   }
 
   componentDidMount() {
+    if(this.props.fps){
+      this.fps = this.props.fps;
+    }
+
     // default to idle animation if no spriteAnimationKey prop provided
     if(this.props.spriteAnimationKey === 'idle' || this.props.spriteAnimationKey === undefined){
       this.startIdleAnimation();
@@ -137,7 +144,7 @@ class AnimatedSprite extends React.Component{
         this.frameIndex = 0;
       }
       this.setState({animate: true});
-    }, 100);
+    }, this.fps);
   }
 
   startOtherAnimation(animationKey){
@@ -164,7 +171,7 @@ class AnimatedSprite extends React.Component{
             this.setState({animate: true});
           }
         }
-    }, 100);
+    }, this.fps);
   }
 
   _updateNativeStyles() {

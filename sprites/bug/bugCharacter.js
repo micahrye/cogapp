@@ -11,11 +11,17 @@ const bugCharacter = {
   ],
 
   fly:[
-    // require("./bug_fly01.png"),
-    // require("./bug_fly02.png"),
+    require("./bug_fly01.png"),
+    require("./bug_fly02.png"),
     require("./bug_fly03.png"),
     require("./bug_fly04.png"),
-    //require("./bug_fly05.png"),
+    require("./bug_fly05.png"),
+  ],
+
+  splat:[
+    require("./bug_splat01.png"),
+    require("./bug_splat02.png"),
+    require("./bug_splat03.png"),
   ],
 
   bubble: [

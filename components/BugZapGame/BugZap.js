@@ -59,7 +59,6 @@ class BugZap extends React.Component {
     let sequenceChoice = Math.random();
     let xEnd = 0;
     if(sequenceChoice < .25){
-      console.warn("here");
       xEnd = 200;
     }
     else if(sequenceChoice > .25 && sequenceChoice <.5){
@@ -131,6 +130,10 @@ class BugZap extends React.Component {
   frogTap = () => {
     if(this.state.showBug){
       if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
+        this.setState({
+          bugKey: Math.random(), 
+          bugSpriteAnimationKey: 'splat',
+        });
         this.frogCelebrate();
       }
       else if(this.state.tweenSettings != tweenAway){ // bug has not landed yet
@@ -142,7 +145,7 @@ class BugZap extends React.Component {
 
   frogCelebrate() {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-    this.setState({showBug: false});
+    //this.setState({showBug: false});
     clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 

@@ -31,10 +31,9 @@ class BugZap2 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       showBug: false,
-      bugSide: "right"
     }
-   // let bugSide = 'right';
-    let tweenAway = {};
+    this.bugSide = 'right';
+    this.tweenAway = {};
   }
 
   componentDidMount() {
@@ -50,7 +49,7 @@ class BugZap2 extends React.Component {
     let sideChoice = Math.random();
     let xStart = 0;
     if(sideChoice < .5){
-      this.setState({bugSide: 'left'});
+      this.bugSide = 'left';
       xStart = 150;
     }
     else{
@@ -130,7 +129,7 @@ class BugZap2 extends React.Component {
 
   frogTap = (frog) => {
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
-      if(this.state.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
+      if(this.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
           this.frogCelebrate(frog);
         }
