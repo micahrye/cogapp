@@ -32,10 +32,11 @@ class BugZap1 extends React.Component {
       tweenSettings: {},
       zappedTooEarly: false,
       frogSpriteAnimationKey: 'idle',
-      bugSpriteAnimationKey: 'fly'
+      bugSpriteAnimationKey: 'fly',
+      loop: true,
     }
-    let tweenIdle: {}
-    let tweenAway: {}
+    this.tweenIdle = {}
+    this.tweenAway = {}
   }
 
   componentDidMount() {
@@ -75,7 +76,7 @@ class BugZap1 extends React.Component {
     }
 
     // when landed
-    tweenIdle = {
+    this.tweenIdle = {
       tweenType: "sine-wave",
       startXY: [xEnd, 120],
       xTo: [xEnd],
@@ -85,7 +86,7 @@ class BugZap1 extends React.Component {
     };
 
     // tween offscreen  
-    tweenAway = { 
+    this.tweenAway = { 
       tweenType: "sine-wave",
       startXY: [xEnd, 120],
       xTo: [-150],
@@ -114,14 +115,14 @@ class BugZap1 extends React.Component {
       this.setState({
         bugKey: Math.random(),
         bugSpriteAnimationKey: 'idle',
-        tweenSettings: tweenIdle,
+        tweenSettings: this.tweenIdle,
       });
     }
     else{
       this.setState({
         bugKey: Math.random(),
         bugSpriteAnimationKey: 'bubble',
-        tweenSettings: tweenIdle,
+        tweenSettings: this.tweenIdle,
       });
     }
 
@@ -138,7 +139,7 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: 'fly',
-      tweenSettings: tweenAway,   
+      tweenSettings: this.tweenAway,   
     }); 
   }
 
@@ -147,7 +148,7 @@ class BugZap1 extends React.Component {
     if(this.state.showBug){ // if bug isn't already eaten
       if(bugColor === 'idle'){ 
         if(frog === 0){ // celebrate if right "color"
-          this.frogCelebrate(frog);
+          this.correctFrogTapped(frog);
         }
         else{ // wrong frog tapped for that "color"
           this.wrongFrogTapped(frog);
@@ -158,14 +159,25 @@ class BugZap1 extends React.Component {
           this.wrongFrogTapped(frog);
         }
         else{
-          this.frogCelebrate(frog);
+          this.correctFrogTapped(frog);
         }
       }
-      else if(this.state.tweenSettings != tweenAway){ // zapped too early  
+      else if(this.state.tweenSettings != this.tweenAway){ // zapped too early  
         this.frogDisgust(frog);
         this.setState({zappedTooEarly: true});
       }
     }
+  }
+
+  // bug splats and is hidden, frog celebrates
+  correctFrogTapped(frog){
+    this.setState({
+      bugKey: Math.random(), 
+      bugSpriteAnimationKey: 'splat',
+      loop: false,
+    });
+    this.frogCelebrate(frog);
+    clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // frog is disgusted, bug flies away without idling
@@ -175,7 +187,6 @@ class BugZap1 extends React.Component {
     clearTimeout(timeout2); // so bugFlyAway isn't called again
   }
 
-  // frog celebrates and bug is hidden
   frogCelebrate(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
@@ -183,8 +194,6 @@ class BugZap1 extends React.Component {
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
-    this.setState({showBug: false});
-    clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   frogDisgust(frog) {
@@ -194,6 +203,11 @@ class BugZap1 extends React.Component {
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
+  }
+
+  // once bug has splatted
+  onAnimationFinish() {
+    this.setState({showBug: false});
   }
 
   // go to next level
@@ -224,7 +238,8 @@ class BugZap1 extends React.Component {
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
-                loopAnimation={true}/> 
+                loopAnimation={this.state.loop}
+                onAnimationFinish={() => {this.onAnimationFinish()}}/> 
             : null}
 
             <AnimatedSprite

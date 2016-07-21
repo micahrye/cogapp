@@ -41,6 +41,7 @@ import GameFour from './components/Game4/GameFour';
 import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
 import LoadingPage from './components/LoadingPage';
+import NextTrial from './components/NextTrial'
 
 
 
@@ -113,6 +114,8 @@ class CogApp extends React.Component {
       return <GameSix navigator={navigator} />
     } else if (route.id === 22){
       return <LoadingPage navigator={navigator} />
+    } else if(route.id === 23){
+      return<NextTrial navigator={navigator} />
     }
   }
 }
