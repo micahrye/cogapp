@@ -35,15 +35,18 @@ class BugZap1 extends React.Component {
       bugSpriteAnimationKey: 'fly',
       loop: true,
     }
-    this.tweenIdle = {}
-    this.tweenAway = {}
+    this.tweenIdle = {};
+    this.tweenAway = {};
+    this.timeout0 = undefined;
+    this.timeout1 = undefined;
+    this.timeout2 = undefined;
+    this.timeout3 = undefined;
   }
 
   componentDidMount() {
      // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
       this.setState({showBug: true});
-      clearTimeout(timeout0);
     }, 500);
 
     timeout1 = setTimeout(()=>{
@@ -53,9 +56,19 @@ class BugZap1 extends React.Component {
       else{
         this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
       }
-      clearTimeout(timeout1);
     }, 2500);
     this.setUpTweens();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout0);
+    clearTimeout(this.timeout1);
+    if(this.timeout2 !== undefined){
+      clearTimeout(this.timeout2);
+    }
+    if(this.timeout3 !== undefined){
+      clearTimeout(this.timeout3);
+    }
   }
 
   // 4 different spots for bug to land
@@ -130,7 +143,6 @@ class BugZap1 extends React.Component {
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
-      clearTimeout(timeout2);
     }, 2000);
   }
 
@@ -215,9 +227,6 @@ class BugZap1 extends React.Component {
     this.props.navigator.replace({
       id: 8,
     });
-    clearTimeout(timeout0);
-    clearTimeout(timeout1);
-    //clearTimeout(timeout2);
   }
 
   render(){

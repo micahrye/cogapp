@@ -34,14 +34,31 @@ class BugZap2 extends React.Component {
     }
     this.bugSide = 'right';
     this.tweenAway = {};
+    this.timeout0 = undefined;
+    this.timeout1 = undefined;
+    this.timeout2 = undefined;
+    this.timeout3 = undefined;
   }
 
   componentDidMount() {
     timeout0 = setTimeout ( () => {
       this.setBlackout();
-      clearTimeout(timeout0);
     }, 3500);
     this.setUpTween();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout0);
+    clearTimeout(this.timeout1);
+    if(this.timeout2 !== undefined){
+      clearTimeout(this.timeout2);
+    }
+    if(this.timeout3 !== undefined){
+      clearTimeout(this.timeout3);
+    }
+    if(this.timeout4 !== undefined){
+      clearTimeout(this.timeout4);
+    }
   }
 
   // bug either appears on the left or the right
@@ -87,7 +104,6 @@ class BugZap2 extends React.Component {
     this.setState({blackoutScreen: blackout});
     timeout1 = setTimeout ( () => {
       this.flashSpotLight();
-      clearTimeout(timeout1);
     }, 1000);
   }
 
@@ -100,9 +116,7 @@ class BugZap2 extends React.Component {
       this.setState({spotLightFlash: []});
       timeout3 = setTimeout ( () => { // spotlight dissapears just before blackout does
         this.removeBlackout();
-        clearTimeout(timeout3);
       }, 200);
-      clearTimeout(timeout2);
     }, 500);
   }
 
@@ -115,7 +129,6 @@ class BugZap2 extends React.Component {
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
-      clearTimeout(timeout4);
     }, 2000);
   }
 

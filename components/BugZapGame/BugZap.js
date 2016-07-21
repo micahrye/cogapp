@@ -34,25 +34,38 @@ class BugZap extends React.Component {
     }
     this.tweenIdle = {};
     this.tweenAway = {};
+    this.timeout0 = undefined;
+    this.timeout1 = undefined;
+    this.timeout2 = undefined;
+    this.timeout3 = undefined;
   }
 
   componentDidMount() {
     // render bug after the rest of the scene
-    timeout0 = setTimeout( () => {
+    this.timeout0 = setTimeout( () => {
       this.setState({showBug: true});
-      clearTimeout(timeout0);
     }, 500);
 
-    timeout1 = setTimeout(()=>{
+    this.timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
       }
       else{
         this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
       }
-      clearTimeout(timeout1);
     }, 3500);
     this.setUpTweens();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout0);
+    clearTimeout(this.timeout1);
+    if(this.timeout2 !== undefined){
+      clearTimeout(this.timeout2);
+    }
+    if(this.timeout3 !== undefined){
+      clearTimeout(this.timeout3);
+    }
   }
 
   // 4 different spots for bug to land
@@ -62,7 +75,7 @@ class BugZap extends React.Component {
     if(sequenceChoice < .25){
       xEnd = 200;
     }
-    else if(sequenceChoice > .25 && sequenceChoice <.5){
+    else if (sequenceChoice > .25 && sequenceChoice <.5){
       xEnd = 275;
     }
     else if (sequenceChoice > .5 && sequenceChoice <.75){
@@ -112,11 +125,10 @@ class BugZap extends React.Component {
       tweenSettings: this.tweenIdle,
       bugSpriteAnimationKey: 'idle',
     });
-    timeout2 = setTimeout(()=>{
+    this.timeout2 = setTimeout(()=>{
       this.bugFlyAway();
       this.frogDisgust();
-      clearTimeout(timeout2);
-    }, 2000);
+    }, 3000);
   }
 
   // switch to flying bug character and start next tween
@@ -128,8 +140,7 @@ class BugZap extends React.Component {
     });
     timeout3 = setTimeout(() => {
       this.goToNextTrial();
-      clearTimeout(timeout3);
-    }, 3000)
+    }, 2000);
   }
 
   frogTap = () => {
@@ -151,7 +162,7 @@ class BugZap extends React.Component {
       loop: false,
     });
     this.frogCelebrate();
-    clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
+    clearTimeout(this.timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   frogCelebrate() {
@@ -162,13 +173,13 @@ class BugZap extends React.Component {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
   }
 
-  // once bug has splatted
+  
   onAnimationFinish(animationKey) {
     if(animationKey === 'splat'){
-      this.setState({showBug: false});
+      this.setState({showBug: false}); // once bug has splatted
     }
     if(animationKey === 'celebrate'){
-      this.goToNextTrial();
+      this.goToNextTrial(); // once bug is done celebrating
     }
   }
 
@@ -177,9 +188,6 @@ class BugZap extends React.Component {
     this.props.navigator.replace({
       id: 7,
     });
-    clearTimeout(timeout0);
-    clearTimeout(timeout1);
-    // clearTimeout(timeout2);
   }
 
   goToNextTrial() {
@@ -187,10 +195,6 @@ class BugZap extends React.Component {
       id: 23,
       getId: this.getCurrId,
     });
-    // clearTimeout(timeout0);
-    // clearTimeout(timeout1);
-    // clearTimeout(timeout2);
-    //clearTimeout(timeout3);
   }
 
   getCurrId() {
@@ -217,7 +221,7 @@ class BugZap extends React.Component {
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loop}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 'bug')}}/>
             : null}
 
             <AnimatedSprite
@@ -228,7 +232,7 @@ class BugZap extends React.Component {
               character={frogCharacter}
               onPress={this.frogTap}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 'frog')}}
               />
         </Image>
       </View>
