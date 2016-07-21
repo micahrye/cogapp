@@ -45,13 +45,12 @@ class GameTwo extends Component {
     super(props);
     textOpacity = new Animated.Value(1.0);
     this.state = {
-      loadingScreen: <View>
-                     <View key={0} style={styles.loadingScreen}>
-                     <Animated.View style={{opacity:textOpacity}}>
-                       <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
-                       LOADING</Text>
-                     </Animated.View>
-                     </View>
+      loadingScreen: <View key={0} style={styles.loadingScreen}>
+                       <Animated.View style={{opacity:textOpacity}}>
+                         <Text style={{fontSize:60,fontWeight:'bold',
+                                        color: 'lightcoral'}}>
+                         LOADING</Text>
+                       </Animated.View>
                      </View>,
       frogSpriteAnimationKey: 'idle',
       frogKey: 1,
@@ -66,7 +65,7 @@ class GameTwo extends Component {
       Animated.timing(
         textOpacity,
         {
-          toValue: 0,
+          toValue: 0.2,
           easing: Easing.linear,
           duration: LoadingTime/3,
         }
@@ -134,27 +133,6 @@ class GameTwo extends Component {
     };
 
 
-    // translates integers into degrees to allow rotation to
-    // be animated.  Used in leverStyle transform
-    // ro = this.state.rotation.interpolate({
-    //   inputRange: [0,100],
-    //   outputRange: ['0deg','180deg']
-    // })
-
-    // style for lever
-    // const leverStyle = {
-    //   height: 150,
-    //   width: 20,
-    //   borderColor: 'red',
-    //   borderWidth: 3,
-    //   backgroundColor: 'blue',
-    //   top: 40,
-    //   left: 0,
-    //   transform: [{rotate:ro}]
-    // };
-
-    // make sign a basic animated view, work with tweener directly
-
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
@@ -175,7 +153,7 @@ class GameTwo extends Component {
                     spriteAnimationKey={this.state.frogSpriteAnimationKey}
                 />
                 <AnimatedSprite coordinates={{top:80,left:0}}
-                    size={{width:140,height:120}}
+                    size={{width:143,height:125}}
                     draggable={false}
                     character={leverCharacter}
                     tweenStart="touch"
@@ -193,7 +171,6 @@ class GameTwo extends Component {
                     tween={tweenOpts02}/>
                 <View>
                     {this.state.loadingScreen}
-
                 </View>
         </Image>
       </View>

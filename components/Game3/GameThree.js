@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
+    Animated,
     AppRegistry,
+    Easing,
     StyleSheet,
     Text,
     View,
@@ -18,7 +20,53 @@ import birdCharacter from "../../sprites/bird/birdCharacter";
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+const LoadingTime = 3000;
+
 class GameThree extends React.Component {
+
+  constructor(props) {
+    super(props);
+    textOpacity = new Animated.Value(1.0);
+    this.state = {
+      loadingScreen: <View key={0} style={styles.loadingScreen}>
+                       <Animated.View style={{opacity:textOpacity}}>
+                         <Text style={{fontSize:60,fontWeight:'bold',
+                                       color: 'lightcoral'}}>
+                         LOADING</Text>
+                       </Animated.View>
+                     </View>,
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
+    Animated.sequence([
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0.2,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 1.0,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: LoadingTime/3
+        }
+      )
+    ]).start();
+  }
 
   buttonPress = () => {
       this.props.navigator.replace({
@@ -54,6 +102,9 @@ class GameThree extends React.Component {
                   draggable={false}
                   character={birdCharacter}/>
               <Tile top={200} left={250} width={220} height={50} />
+              <View>
+                  {this.state.loadingScreen}
+              </View>
             </Image>
           </View>
         );
@@ -84,6 +135,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 90,
         height: 30,
+        top:0,
+        left:0,
+        position: 'absolute',
+    },
+    loadingScreen: {
+      backgroundColor: 'lightblue',
+      height: SCREEN_HEIGHT,
+      width: SCREEN_WIDTH,
+      position: 'absolute',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 });
 

@@ -24,6 +24,7 @@ import greenDragonCharacter from "../../sprites/dragon/greenDragonCharacter";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
+import leverCharacter from "../../sprites/lever/leverCharacter";
 
 
 const Window = Dimensions.get('window');
@@ -37,29 +38,52 @@ const sprite1Start = [startLeft,startTop];
 const sprite2Start = [startLeft+spacing,startTop];
 const sprite3Start = [startLeft+spacing*2,startTop];
 
+const LoadingTime = 3000;
+
 class GameTwo1 extends Component {
 
   constructor(props) {
     super(props);
+    textOpacity = new Animated.Value(1.0);
     this.state = {
-      rotation : new Animated.Value(16),
+      loadingScreen: <View key={0} style={styles.loadingScreen}>
+                       <Animated.View style={{opacity:textOpacity}}>
+                         <Text style={{fontSize:60,fontWeight:'bold',
+                                       color: 'lightcoral'}}>
+                         LOADING</Text>
+                       </Animated.View>
+                     </View>,
     }
   }
 
-  loadingPage =   <View>
-                      <View style={{backgroundColor: 'lightblue',
-                                    height: Window.height,
-                                    width: Window.width,
-                                    position: 'absolute'}}>
-                      </View>
-                      <Animated.View style={{left: 200,top: 100}}>
-                        <Text style={{fontSize:60,fontWeight:'bold',color: 'lightcoral'}}>
-                        LOADING</Text>
-                      </Animated.View>
-                  </View>;
-
   componentDidMount() {
-    setTimeout(() => {this.loadingPage=null},1000);
+    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
+    Animated.sequence([
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0.2,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 1.0,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: LoadingTime/3
+        }
+      )
+    ]).start();
   }
 
   // move on to next page when navigation button is pressed
@@ -71,17 +95,6 @@ class GameTwo1 extends Component {
       });
   }
 
-  // animate lever to move to a downward angle on press
-  leverPress = () => {
-    Animated.timing(
-      this.state.rotation,
-      {
-        toValue: 75,
-        easing: Easing.linear,
-        duration: 500,
-      }
-    ).start();
-  }
 
 
 
@@ -96,6 +109,12 @@ class GameTwo1 extends Component {
       duration: 600,
       repeatable: false,
       loop: true,
+    };
+
+    const tweenOptsLever = {
+      tweenType: "bounce",
+      repeatable: true,
+      loop: false,
     };
 
     // options for middle food item
@@ -119,24 +138,7 @@ class GameTwo1 extends Component {
       disappearAfterAnimation: true,
     };
 
-    // translates integers into degrees to allow rotation to
-    // be animated.  Used in leverStyle transform
-    ro = this.state.rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','180deg']
-    })
 
-    // style for lever
-    const leverStyle = {
-      height: 150,
-      width: 20,
-      borderColor: 'red',
-      borderWidth: 3,
-      backgroundColor: 'blue',
-      top: 40,
-      left: 0,
-      transform: [{rotate:ro}]
-    };
 
     return (
       <View style={styles.container}>
@@ -148,12 +150,11 @@ class GameTwo1 extends Component {
                     size={{width: 115, height: 160}}
                     draggable={false}
                     character={mammalCharacter} />
-                <Animated.View>
-                  <TouchableOpacity
-                    onPress={this.leverPress.bind(this)}
-                    style={{...leverStyle}}>
-                  </TouchableOpacity>
-                </Animated.View>
+                <AnimatedSprite coordinates={{top:80,left:0}}
+                    size={{width:143,height:125}}
+                    draggable={false}
+                    character={leverCharacter}                      tweenStart="touch"
+                    tween={tweenOptsLever}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 60, height: 60}}
                     draggable={false}
@@ -172,7 +173,9 @@ class GameTwo1 extends Component {
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts03}/>
-                {this.loadingPage}
+                <View>
+                    {this.state.loadingScreen}
+                </View>
         </Image>
       </View>
     );
@@ -197,7 +200,17 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       width: 90,
       height: 30,
-
+      top:0,
+      left:0,
+      position: 'absolute',
+  },
+  loadingScreen: {
+    backgroundColor: 'lightblue',
+    height: Window.height,
+    width: Window.width,
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
