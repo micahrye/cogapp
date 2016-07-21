@@ -15,7 +15,6 @@ import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
-
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 

@@ -35,15 +35,13 @@ class BugZap extends React.Component {
     let tweenAway: {};
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
       this.setState({showBug: true});
       clearTimeout(timeout0);
     }, 500);
-  }
 
-  componentDidMount() {
     timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
@@ -52,7 +50,7 @@ class BugZap extends React.Component {
         this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
       }
       clearTimeout(timeout1);
-    }, 2500);
+    }, 3500);
     this.setUpTweens();
   }
 
@@ -61,16 +59,17 @@ class BugZap extends React.Component {
     let sequenceChoice = Math.random();
     let xEnd = 0;
     if(sequenceChoice < .25){
+      console.warn("here");
       xEnd = 200;
     }
     else if(sequenceChoice > .25 && sequenceChoice <.5){
       xEnd = 275;
     }
     else if (sequenceChoice > .5 && sequenceChoice <.75){
-      xEnd = 325;
+      xEnd = SCREEN_WIDTH - 400;
     }
     else{
-      xEnd = 375;
+      xEnd = SCREEN_WIDTH - 300;
     }
 
     // when landed
@@ -98,9 +97,9 @@ class BugZap extends React.Component {
       {
         tweenType: "sine-wave",
         startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-        xTo: [450, 500, xEnd],
+        xTo: [xEnd],
         yTo: [0, 120, 0, 120],
-        duration: 2000,
+        duration: 3000,
         loop: false,
       },
     });
