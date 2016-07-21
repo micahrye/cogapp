@@ -36,21 +36,13 @@ const sprite1Start = [startLeft,startTop];
 const sprite2Start = [startLeft+spacing,startTop];
 const sprite3Start = [startLeft+spacing*2,startTop];
 
-const LoadingTime = 3000;
 
 class GameTwo3 extends Component {
 
   constructor(props) {
     super(props);
-    textOpacity = new Animated.Value(1.0);
     this.state = {
-      loadingScreen: <View key={0} style={styles.loadingScreen}>
-                       <Animated.View style={{opacity:textOpacity}}>
-                         <Text style={{fontSize:60,fontWeight:'bold',
-                                       color: 'lightcoral'}}>
-                         LOADING</Text>
-                       </Animated.View>
-                     </View>,
+
     }
   }
 
@@ -64,33 +56,7 @@ class GameTwo3 extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
-    Animated.sequence([
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0.2,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 1.0,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0,
-          easing: Easing.linear,
-          duration: LoadingTime/3
-        }
-      )
-    ]).start();
+
   }
 
 
@@ -171,9 +137,6 @@ class GameTwo3 extends Component {
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts03}/>
-                <View>
-                    {this.state.loadingScreen}
-                </View>
         </Image>
       </View>
     );
@@ -201,14 +164,6 @@ const styles = StyleSheet.create({
       left: 0,
       top: 0,
       position: 'absolute',
-  },
-  loadingScreen: {
-    backgroundColor: 'lightblue',
-    height: Window.height,
-    width: Window.width,
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })
 

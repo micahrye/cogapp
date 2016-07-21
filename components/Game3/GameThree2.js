@@ -20,52 +20,16 @@ import birdCharacter from "../../sprites/bird/birdCharacter";
 let SCREEN_WIDTH = require('Dimensions').get('window').width;
 let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-const LoadingTime = 3000;
 
 class GameThree2 extends React.Component {
 
   constructor(props) {
     super(props);
-    textOpacity = new Animated.Value(1.0);
     this.state = {
-      loadingScreen: <View key={0} style={styles.loadingScreen}>
-                       <Animated.View style={{opacity:textOpacity}}>
-                         <Text style={{fontSize:60,fontWeight:'bold',
-                                       color: 'lightcoral'}}>
-                         LOADING</Text>
-                       </Animated.View>
-                     </View>,
     }
   }
 
   componentDidMount() {
-    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
-    Animated.sequence([
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0.2,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 1.0,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0,
-          easing: Easing.linear,
-          duration: LoadingTime/3
-        }
-      )
-    ]).start();
   }
 
   buttonPress = () => {
@@ -110,9 +74,6 @@ class GameThree2 extends React.Component {
               <Tile top={280} left={200} width={88} height={20}/>
               <Tile top={283} left={310} width={88} height={20}/>
               <Tile top={268} left={415} width={88} height={20}/>
-              <View>
-                  {this.state.loadingScreen}
-              </View>
             </Image>
           </View>
         );
@@ -147,14 +108,6 @@ const styles = StyleSheet.create({
         left:0,
         position: 'absolute',
     },
-    loadingScreen: {
-        backgroundColor: 'lightblue',
-        height: SCREEN_HEIGHT,
-        width: SCREEN_WIDTH,
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
   });
 
 export default GameThree2

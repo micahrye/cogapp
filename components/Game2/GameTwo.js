@@ -43,15 +43,7 @@ class GameTwo extends Component {
 
   constructor(props) {
     super(props);
-    textOpacity = new Animated.Value(1.0);
     this.state = {
-      loadingScreen: <View key={0} style={styles.loadingScreen}>
-                       <Animated.View style={{opacity:textOpacity}}>
-                         <Text style={{fontSize:60,fontWeight:'bold',
-                                        color: 'lightcoral'}}>
-                         LOADING</Text>
-                       </Animated.View>
-                     </View>,
       frogSpriteAnimationKey: 'idle',
       frogKey: 1,
     }
@@ -59,34 +51,7 @@ class GameTwo extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
-    this.frogTap();
-    Animated.sequence([
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0.2,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 1.0,
-          easing: Easing.linear,
-          duration: LoadingTime/3,
-        }
-      ),
-      Animated.timing(
-        textOpacity,
-        {
-          toValue: 0,
-          easing: Easing.linear,
-          duration: LoadingTime/3
-        }
-      )
-    ]).start();
+
   }
 
 
@@ -169,9 +134,6 @@ class GameTwo extends Component {
                     character={canCharacter}
                     tweenStart="touch"
                     tween={tweenOpts02}/>
-                <View>
-                    {this.state.loadingScreen}
-                </View>
         </Image>
       </View>
     );
@@ -199,14 +161,6 @@ const styles = StyleSheet.create({
       top:0,
       left:0,
       position: 'absolute',
-  },
-  loadingScreen: {
-    backgroundColor: 'lightblue',
-    height: Window.height,
-    width: Window.width,
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })
 

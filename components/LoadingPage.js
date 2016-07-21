@@ -12,11 +12,17 @@ import {
   Dimensions,
 } from 'react-native';
 
+import AnimatedSprite from "./animatedSprite";
+
 // sprites
 import frogCharacter from "../sprites/frog/frogCharacter";
 import bugCharacter from "../sprites/bug/bugCharacter";
+import bubbleCharacterLarge from "../sprites/bubble/bubbleCharacterLarge";
+import bubbleCharacterSmall from "../sprites/bubble/bubbleCharacterSmall";
 
-const LoadingTime = 4000;
+const Window = Dimensions.get('window');
+
+const LoadingTime = 2000;
 
 class LoadingPage extends Component {
 
@@ -75,6 +81,7 @@ class LoadingPage extends Component {
     ]).start();
   }
 
+
   render() {
 
     const loadingbar = {
@@ -90,6 +97,7 @@ class LoadingPage extends Component {
     };
 
     return (
+      <View>
       <View style={styles.background}>
         <Animated.View style={{opacity:this.state.textOpacity}}>
           <Text style={{...text}}>LOADING</Text>
@@ -97,6 +105,37 @@ class LoadingPage extends Component {
         <Animated.View style ={{...loadingbar}}>
         </Animated.View>
       </View>
+        <View>
+        <AnimatedSprite coordinates={{top:150,left:150}}
+            size={{width:100,height:100}}
+            character={frogCharacter}
+            spriteAnimationKey={'celebrate'}/>
+        <AnimatedSprite coordinates={{top:150,left:50}}
+            size={{width:100,height:100}}
+            character={frogCharacter}
+            spriteAnimationKey={'disgust'}/>
+        <AnimatedSprite coordinates={{top:50,left:50}}
+            size={{width:100,height:100}}
+            character={bugCharacter}
+            spriteAnimationKey={'idle'}/>
+        <AnimatedSprite coordinates={{top:100,left:50}}
+            size={{width:100,height:100}}
+            character={bugCharacter}
+            spriteAnimationKey={'fly'}/>
+        <AnimatedSprite coordinates={{top:250,left:250}}
+            size={{width:100,height:100}}
+            character={bubbleCharacterLarge}
+            spriteAnimationKey={'pop'}/>
+        <AnimatedSprite coordinates={{top:200,left:200}}
+            size={{width:100,height:100}}
+            character={bubbleCharacterLarge}
+            spriteAnimationKey={'idle'}/>
+        <AnimatedSprite coordinates={{top:200,left:200}}
+            size={{width:100,height:100}}
+            character={bubbleCharacterSmall}
+            spriteAnimationKey={'idle'}/>
+        </View>
+        </View>
     );
   }
 
@@ -105,6 +144,8 @@ class LoadingPage extends Component {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: 'peachpuff',
+    width: Window.width,
+    height: Window.height,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
