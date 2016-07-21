@@ -126,6 +126,10 @@ class BugZap extends React.Component {
       tweenSettings: this.tweenAway,
       bugSpriteAnimationKey: 'fly',
     });
+    timeout3 = setTimeout(() => {
+      this.goToNextTrial();
+      clearTimeout(timeout3);
+    }, 3000)
   }
 
   frogTap = () => {
@@ -159,19 +163,38 @@ class BugZap extends React.Component {
   }
 
   // once bug has splatted
-  onAnimationFinish() {
-    this.setState({showBug: false});
+  onAnimationFinish(animationKey) {
+    if(animationKey === 'splat'){
+      this.setState({showBug: false});
+    }
+    if(animationKey === 'celebrate'){
+      this.goToNextTrial();
+    }
   }
 
   // go to next level
   buttonPress = () => {
     this.props.navigator.replace({
-      id: 23,
-      //callback: this.setId,
+      id: 7,
     });
     clearTimeout(timeout0);
     clearTimeout(timeout1);
     // clearTimeout(timeout2);
+  }
+
+  goToNextTrial() {
+    this.props.navigator.replace({
+      id: 23,
+      getId: this.getCurrId,
+    });
+    // clearTimeout(timeout0);
+    // clearTimeout(timeout1);
+    // clearTimeout(timeout2);
+    //clearTimeout(timeout3);
+  }
+
+  getCurrId() {
+    return 6;
   }
 
   render(){
@@ -194,7 +217,7 @@ class BugZap extends React.Component {
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loop}
-                onAnimationFinish={() => {this.onAnimationFinish()}}/>
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
             : null}
 
             <AnimatedSprite
@@ -205,6 +228,7 @@ class BugZap extends React.Component {
               character={frogCharacter}
               onPress={this.frogTap}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
               />
         </Image>
       </View>

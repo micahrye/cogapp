@@ -17,20 +17,18 @@ class NextTrial extends Component {
 
   constructor(props) {
     super(props);
-    this.id = 0;
   }
 
   componentDidMount() {
-    // this.getId();
-    // setTimeout(()=>{
-    //   this.props.navigator.replace({
-    //   id: this.id,
-    // });
+    setTimeout(()=>{
+      this.props.navigator.replace({
+        id: this.props.route.getId(),
+      });
+    }, 1000);
   }
 
-  // getId(){
-  //   switch
-  //     case
+  // setId = () => {
+  //   console.warn('here');
   // }
 
   render() {

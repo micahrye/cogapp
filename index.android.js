@@ -115,7 +115,7 @@ class CogApp extends React.Component {
     } else if (route.id === 22){
       return <LoadingPage navigator={navigator} />
     } else if(route.id === 23){
-      return<NextTrial navigator={navigator} />
+      return<NextTrial navigator={navigator} route={route}/>
     }
   }
 }
