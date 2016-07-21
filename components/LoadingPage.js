@@ -122,6 +122,10 @@ class LoadingPage extends Component {
             size={{width:100,height:100}}
             character={bugCharacter}
             spriteAnimationKey={'fly'}/>
+        <AnimatedSprite coordinates={{top:200,left:200}}
+            size={{width:100,height:100}}
+            character={bugCharacter}
+            spriteAnimationKey={'splat'}/>
         <AnimatedSprite coordinates={{top:250,left:250}}
             size={{width:100,height:100}}
             character={bubbleCharacterLarge}
@@ -135,7 +139,7 @@ class LoadingPage extends Component {
             character={bubbleCharacterSmall}
             spriteAnimationKey={'idle'}/>
         </View>
-        </View>
+      </View>
     );
   }
 
