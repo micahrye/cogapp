@@ -32,7 +32,8 @@ const Window = Dimensions.get('window');
 const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
-const startTop = 90;
+const startTop = -300;
+const endTop = 90
 
 const LoadingTime = 3000;
 
@@ -40,15 +41,32 @@ const sprite2Start = [startLeft,startTop];
 
 class GameTwo extends Component {
 
+  tweenDown = {
+    tweenType: "basic-back",
+    endXY: [startLeft,endTop],
+    duration: 300,
+    loop: false,
+  };
+
+  tweenTimeout = {
+    tweenType: "basic-back",
+    endXY: [startLeft,startTop],
+    duration: 300,
+    loop: false,
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       frogSpriteAnimationKey: 'idle',
       frogKey: 1,
+      canTween: this.tweenTimeout,
+      signTween: this.tweenTimeout,
     }
 
   }
+
+
 
   componentDidMount() {
 
@@ -69,13 +87,14 @@ class GameTwo extends Component {
   }
 
   onLeverTouch = () => {
-    setTimeout(this.displayMessage,10000); // timeout ten seconds after lever is pulled
+    setTimeout(this.displayMessage,10000);
+    this.setState({canTween:this.tweenDown,
+                   signTween: this.tweenDown});
   }
 
   frogTap = () => {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
   }
-
 
 
 
@@ -123,17 +142,19 @@ class GameTwo extends Component {
                     character={leverCharacter}
                     tweenStart="touch"
                     tween={tweenOptsLever}
-                    setTouchActivity={this.onLeverTouch}/>
-                <AnimatedSprite coordinates={{top: 0, left: startLeft}}
+                    onPress={this.onLeverTouch}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 110, height: 170}}
                     draggable={false}
-                    character={signCharacter}/>
+                    character={signCharacter}
+                    tweenStart="auto"
+                    tween={this.state.signTween}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+30}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts02}/>
+                    tweenStart="auto"
+                    tween={this.state.canTween}/>
         </Image>
       </View>
     );

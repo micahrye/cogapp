@@ -368,6 +368,23 @@ const Tweener = function () {
     state.top.setValue(-500);
   }
 
+  const basicBack = function(options, state) {
+    Animated.timing(
+      state.top,
+      {
+        toValue: options.endXY[1],
+        easing: Easing.back(2),
+        duration: options.duration,
+      }
+    ).start(() => {
+      if (options.loop === false) {
+        return
+      }else {
+        basicBack(options, state);
+      }
+    });
+  }
+
   return (
     {
       'bounce': bounce,
@@ -382,6 +399,7 @@ const Tweener = function () {
       'spin': spin,
       'hop-forward': hopForward,
       'sendOffScreen': sendOffScreen,
+      'basic-back': basicBack,
     }
   );
 
