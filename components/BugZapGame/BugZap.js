@@ -221,7 +221,7 @@ class BugZap extends React.Component {
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loop}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 'bug')}}/>
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
             : null}
 
             <AnimatedSprite
@@ -232,7 +232,7 @@ class BugZap extends React.Component {
               character={frogCharacter}
               onPress={this.frogTap}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 'frog')}}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
               />
         </Image>
       </View>
