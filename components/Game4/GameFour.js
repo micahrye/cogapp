@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
+  Animated,
   AppRegistry,
+  Easing,
   StyleSheet,
   Text,
   View,
@@ -17,18 +19,57 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let fixedBoxes = [];
 
+const LoadingTime = 3000;
+
 class GameFour extends React.Component {
+
   constructor(props){
     super(props);
+    textOpacity = new Animated.Value(1.0);
     this.state = {
       moveableBoxes: [],
       currFrogCharacter: frogCharacterIdle,
       key: 0,
+      loadingScreen: <View key={0} style={styles.loadingScreen}>
+                       <Animated.View style={{opacity:textOpacity}}>
+                         <Text style={{fontSize:60,fontWeight:'bold',
+                                       color: 'lightcoral'}}>
+                         LOADING</Text>
+                       </Animated.View>
+                     </View>,
     }
   }
 
   componentDidMount() {
     this.createBoxes();
+    setTimeout(() => {this.setState({loadingScreen: []});},LoadingTime);
+    //this.frogCelebrate();
+    Animated.sequence([
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0.2,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 1.0,
+          easing: Easing.linear,
+          duration: LoadingTime/3,
+        }
+      ),
+      Animated.timing(
+        textOpacity,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: LoadingTime/3
+        }
+      )
+    ]).start();
   }
 
   createBoxes() {
@@ -115,6 +156,9 @@ class GameFour extends React.Component {
             character={this.state.currFrogCharacter}
             />
         </View>
+        <View>
+            {this.state.loadingScreen}
+        </View>
       </Image>
     );
   }
@@ -142,6 +186,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 45,
   },
+  loadingScreen: {
+      backgroundColor: 'lightblue',
+      height: SCREEN_HEIGHT,
+      width: SCREEN_WIDTH,
+      position: 'absolute',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 });
 
 export default GameFour;

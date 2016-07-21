@@ -40,6 +40,7 @@ import GameThreeLevel4 from './components/Game3/GameThree4';
 import GameFour from './components/Game4/GameFour';
 import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
+import LoadingPage from './components/LoadingPage';
 
 
 
@@ -58,7 +59,7 @@ class CogApp extends React.Component {
   render() {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 0}}
+  initialRoute={{name: 'My First Scene', id: 22}}
   renderScene={(route, navigator) => {
       return this.renderScene(route, navigator);
     }
@@ -110,6 +111,8 @@ class CogApp extends React.Component {
       return <GameFive navigator={navigator} />
     } else if (route.id === 21){
       return <GameSix navigator={navigator} />
+    } else if (route.id === 22){
+      return <LoadingPage navigator={navigator} />
     }
   }
 }
