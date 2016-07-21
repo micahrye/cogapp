@@ -11,15 +11,12 @@ import {
 
 import AnimatedSprite from "../animatedSprite";
 import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
-import frogCharacterIdle from "../../sprites/frog/frogCharacter";
-import frogCharacterCelebrate from "../../sprites/frog/frogCharacter";
+import frogCharacter from "../../sprites/frog/frogCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 let fixedBoxes = [];
-
-
 
 class GameFour extends React.Component {
 
@@ -27,8 +24,8 @@ class GameFour extends React.Component {
     super(props);
     this.state = {
       moveableBoxes: [],
-      currFrogCharacter: frogCharacterIdle,
       key: 0,
+      spriteAnimationKey: 'idle',
     }
   }
 
@@ -80,11 +77,11 @@ class GameFour extends React.Component {
 
   // frog celebrates once when square dissapears
   frogCelebrate() {
-    this.setState({key: Math.random(), currFrogCharacter: frogCharacterCelebrate});
+    this.setState({key: Math.random(), spriteAnimationKey: 'celebrate'});
 
-    setTimeout( () => {
-      this.setState({key: Math.random(), currFrogCharacter: frogCharacterIdle});
-    }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
+    // setTimeout( () => {
+    //   this.setState({key: Math.random(), currFrogCharacter: frogCharacterIdle});
+    // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
   }
 
   getBoxStyles(boxNum) {
@@ -117,7 +114,8 @@ class GameFour extends React.Component {
             coordinates={{top: 100, left: SCREEN_WIDTH-200}}
             size={{width: 256, height: 256}}
             draggable={false}
-            character={this.state.currFrogCharacter}
+            character={frogCharacter}
+            spriteAnimationKey={this.state.spriteAnimationKey}
             />
         </View>
       </Image>

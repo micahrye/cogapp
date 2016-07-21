@@ -57,6 +57,7 @@ class AnimatedSprite extends React.Component{
     };
 
     this.character = undefined;
+    this.refAnimatedImage = undefined;
     this._charactertyles =  {};
     this._initialLeft = this.state._left._value;
     this._initialLefTop = this.state._top._value;
@@ -280,11 +281,17 @@ class AnimatedSprite extends React.Component{
         <Animated.View
           {...this._panResponder.panHandlers}
           style={this.getStyle()}
+          ref={(character) => {
+            this.character = character;
+          }}
         >
 
           <TouchableWithoutFeedback
             onPress={ (evt) => this.handlePress(evt) }>
             <Animated.Image
+              ref={(ref) => {
+                this.refAnimatedImage = ref;
+              }}
               source={this._animation[this._animationKey][this.frameIndex]}
               style={{
                 width: this.state._width,

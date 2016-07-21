@@ -10,6 +10,7 @@ import {
   Text,
   View,
   Dimensions,
+  Image,
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
@@ -19,6 +20,7 @@ import frogCharacter from "../sprites/frog/frogCharacter";
 import bugCharacter from "../sprites/bug/bugCharacter";
 import bubbleCharacterLarge from "../sprites/bubble/bubbleCharacterLarge";
 import bubbleCharacterSmall from "../sprites/bubble/bubbleCharacterSmall";
+import omnivoreCharacter from '../sprites/omnivore/omnivoreCharacter';
 
 const Window = Dimensions.get('window');
 
@@ -106,38 +108,39 @@ class LoadingPage extends Component {
         </Animated.View>
       </View>
         <View>
-        <AnimatedSprite coordinates={{top:150,left:150}}
-            size={{width:100,height:100}}
-            character={frogCharacter}
-            spriteAnimationKey={'celebrate'}/>
-        <AnimatedSprite coordinates={{top:150,left:50}}
-            size={{width:100,height:100}}
-            character={frogCharacter}
-            spriteAnimationKey={'disgust'}/>
-        <AnimatedSprite coordinates={{top:50,left:50}}
-            size={{width:100,height:100}}
-            character={bugCharacter}
-            spriteAnimationKey={'idle'}/>
-        <AnimatedSprite coordinates={{top:100,left:50}}
-            size={{width:100,height:100}}
-            character={bugCharacter}
-            spriteAnimationKey={'fly'}/>
-        <AnimatedSprite coordinates={{top:200,left:200}}
-            size={{width:100,height:100}}
-            character={bugCharacter}
-            spriteAnimationKey={'splat'}/>
-        <AnimatedSprite coordinates={{top:250,left:250}}
-            size={{width:100,height:100}}
-            character={bubbleCharacterLarge}
-            spriteAnimationKey={'pop'}/>
-        <AnimatedSprite coordinates={{top:200,left:200}}
-            size={{width:100,height:100}}
-            character={bubbleCharacterLarge}
-            spriteAnimationKey={'idle'}/>
-        <AnimatedSprite coordinates={{top:200,left:200}}
-            size={{width:100,height:100}}
-            character={bubbleCharacterSmall}
-            spriteAnimationKey={'idle'}/>
+          <AnimatedSprite coordinates={{top:150,left:150}}
+              size={{width:100,height:100}}
+              character={frogCharacter}
+              spriteAnimationKey={'celebrate'}/>
+          <AnimatedSprite coordinates={{top:150,left:50}}
+              size={{width:100,height:100}}
+              character={frogCharacter}
+              spriteAnimationKey={'disgust'}/>
+          <AnimatedSprite coordinates={{top:50,left:50}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'idle'}/>
+          <AnimatedSprite coordinates={{top:100,left:50}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'fly'}/>
+          <AnimatedSprite coordinates={{top:200,left:200}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'splat'}/>
+          <AnimatedSprite coordinates={{top:250,left:250}}
+              size={{width:100,height:100}}
+              character={bubbleCharacterLarge}
+              spriteAnimationKey={'pop'}/>
+          <AnimatedSprite coordinates={{top:200,left:200}}
+              size={{width:100,height:100}}
+              character={bubbleCharacterLarge}
+              spriteAnimationKey={'idle'}/>
+          <AnimatedSprite coordinates={{top:200,left:200}}
+              size={{width:100,height:100}}
+              character={bubbleCharacterSmall}
+              spriteAnimationKey={'idle'}/>
+          <Image source={require('../backgrounds/Game_1_Background_1280.png')}></Image>          
         </View>
       </View>
     );
