@@ -32,8 +32,9 @@ class BugZap2 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       showBug: false,
+      bugSide: "right"
     }
-    let bugSide = 'left';
+   // let bugSide = 'right';
     let tweenAway = {};
   }
 
@@ -50,11 +51,11 @@ class BugZap2 extends React.Component {
     let sideChoice = Math.random();
     let xStart = 0;
     if(sideChoice < .5){
-      bugSide = 'right'
+      this.setState({bugSide: 'left'});
       xStart = 150;
     }
     else{
-      xStart = 450;
+      xStart = SCREEN_WIDTH - 300;
     }
 
     // tween offscreen
@@ -130,7 +131,7 @@ class BugZap2 extends React.Component {
 
   frogTap = (frog) => {
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
-      if(bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
+      if(this.state.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
           this.frogCelebrate(frog);
         }
@@ -191,7 +192,7 @@ class BugZap2 extends React.Component {
       posX = 150;
     }
     else{
-      posX = 450
+      posX = SCREEN_WIDTH - 300
     }
     return(
       {
@@ -208,11 +209,10 @@ class BugZap2 extends React.Component {
   }
 
   render(){
-    console.log(this.state.tweenSettings);
     const bulbTweenSettings = {
       tweenType: "bounce-drop",
-      startXY: [SCREEN_WIDTH-400, -128],
-      endXY: [SCREEN_WIDTH-400, 0],
+      startXY: [SCREEN_WIDTH/2 - 50, -128],
+      endXY: [SCREEN_WIDTH/2 - 50, 0],
       duration: 3000,
       loop: false,
     };
@@ -223,7 +223,7 @@ class BugZap2 extends React.Component {
             <Text>Go to Level 3</Text>
           </TouchableOpacity>
 
-          <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH - 400}}
+          <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH/2 -50}}
             size={{width: 128, height: 128}}
             draggable={false}
             character={lightbulbCharacter}
@@ -253,17 +253,17 @@ class BugZap2 extends React.Component {
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
             onPress={(frog) => {this.frogTap(frog)}}/>
 
-          <View style={styles.flip}>
-              <AnimatedSprite 
-                key={this.state.frogKey1}
-                spriteKey={1}
-                coordinates={{top: 0, left: 0}}
-                size={{width: 256, height: 256}}
-                draggable={false}
-                character={frogCharacter}
-                spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-                onPress={(frog) => {this.frogTap(frog)}} />
-          </View>
+       
+          <AnimatedSprite 
+            key={this.state.frogKey1}
+            spriteKey={1}
+            coordinates={{top: SCREEN_HEIGHT - 275, left: -50}}
+            size={{width: 256, height: 256}}
+            rotate={[{rotateY: '180deg'}]}
+            draggable={false}
+            character={frogCharacter}
+            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+            onPress={(frog) => {this.frogTap(frog)}} />          
 
           <View>
             {this.state.blackoutScreen}
@@ -310,14 +310,6 @@ const styles = StyleSheet.create({
     top: 100,
     position: 'absolute',
     borderRadius: 100,
-  },
-  flip: {
-    top: SCREEN_HEIGHT - 275,
-    left: -50,
-    width: 256,
-    height: 256,
-    transform: [{rotateY: '180deg'}],
-    position: 'absolute',
   },
 });
 

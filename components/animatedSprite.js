@@ -27,8 +27,9 @@ loopAnimation: bool, whether to loop animation given in spriteAnimationKey
     ('idle' animation always looped as default)
 tween: object, takes in tween settings
 tweenStart: string, takes either "touch" or "auto"
-spriteKey: unique key for the character
-soundOnTouch: play sound?
+spriteKey: object, unique key for the character
+soundOnTouch: bool, play sound?
+rotate: array, takes a style transform value
 
 /*Functions:
 onPress: passes up spriteKey
@@ -48,6 +49,7 @@ class AnimatedSprite extends React.Component{
       _rotation: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
+      _transform: props.rotate,
     };
 
     this.character = undefined;
@@ -94,6 +96,7 @@ class AnimatedSprite extends React.Component{
         top: this._previousTop,
         width: this.state._width,
         height: this.state._height,
+        transform: this.state._transform,
       },
     };
   }
@@ -279,6 +282,7 @@ class AnimatedSprite extends React.Component{
               style={{
                 width: this.state._width,
                 height: this.state._height,
+                transform: this.state._transform,
               }}/>
           </TouchableWithoutFeedback>
 

@@ -30,8 +30,6 @@ class BugZap1 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       tweenSettings: {},
-      // tweenIdle: {},
-      // tween2: {},
       zappedTooEarly: false,
       frogSpriteAnimationKey: 'idle',
       bugSpriteAnimationKey: 'fly'
@@ -40,15 +38,13 @@ class BugZap1 extends React.Component {
     let tweenAway: {}
   }
 
-  componentWillMount() {
-    // render bug after the rest of the scene
+  componentDidMount() {
+     // render bug after the rest of the scene
     timeout0 = setTimeout( () => {
       this.setState({showBug: true});
       clearTimeout(timeout0);
     }, 500);
-  }
 
-  componentDidMount() {
     timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
@@ -241,17 +237,16 @@ class BugZap1 extends React.Component {
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}}/>
 
-            <View style={styles.flip}>
-                <AnimatedSprite 
-                  key={this.state.frogKey1}
-                  spriteKey={1}
-                  coordinates={{top: 0, left: 0}}
-                  size={{width: 256, height: 256}}
-                  draggable={false}
-                  character={frogCharacter}
-                  spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-                  onPress={(frog) => {this.frogTap(frog)}} />
-            </View>
+            <AnimatedSprite 
+              key={this.state.frogKey1}
+              spriteKey={1}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: - 50}}
+              size={{width: 256, height: 256}}
+              rotate={[{rotateY: '180deg'}]}
+              draggable={false}
+              character={frogCharacter}
+              spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+              onPress={(frog) => {this.frogTap(frog)}} />
         </Image> 
       </View>
     );
@@ -273,14 +268,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 90,
     height: 30,
-  },
-  flip: {
-    top: SCREEN_HEIGHT - 275,
-    left: -50,
-    width: 256,
-    height: 256,
-    transform: [{rotateY: '180deg'}],
-    position: 'absolute',
   },
 });
 
