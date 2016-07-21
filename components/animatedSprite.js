@@ -37,6 +37,8 @@ fps: object, how many frames per second to run the animations at
 onPress: passes up spriteKey
 draggedTo: passes up character's coordinates after drag
 timeSinceMounted: passes up spriteKey and time since character mounted in seconds
+onAnimationFinish: is triggered when 'other' animation has finished, passes up 
+  current spriteAnimationKey
 */
 
 class AnimatedSprite extends React.Component{
@@ -148,30 +150,27 @@ class AnimatedSprite extends React.Component{
   }
 
   startOtherAnimation(animationKey){
-    console.warn(this.fps);
     this._animationKey = animationKey;
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
     clearInterval(this.otherAnimationInterval);
 
     this.otherAnimationInterval = setInterval(()=>{
-        this.frameIndex++;
+      this.frameIndex++;
+      if(this.frameIndex > this.numFrames){
         if(this.props.loopAnimation){ // continue looping animation
-          if(this.frameIndex > this.numFrames){
-            this.frameIndex = 0;
-          }
-          this.setState({animate: true});
+            this.frameIndex = 0;          
         }
         else{ // run once and go back to idle
-          if(this.frameIndex > this.numFrames){
-            clearInterval(this.otherAnimationInterval);
-            this.startIdleAnimation();
-            return;
+          clearInterval(this.otherAnimationInterval);
+          this.startIdleAnimation();
+          if(this.props.onAnimationFinish){
+            this.props.onAnimationFinish(this.props.spriteAnimationKey)
           }
-          else{
-            this.setState({animate: true});
-          }
+          return;
         }
+      }
+      this.setState({animate: true});
     }, 1000 / this.fps);
   }
 

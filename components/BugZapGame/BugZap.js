@@ -30,6 +30,8 @@ class BugZap extends React.Component {
       zappedTooEarly: false,
       bugSpriteAnimationKey: 'fly',
       frogSpriteAnimationKey: 'idle',
+      currAnimType: 'fly',
+      loop: true,
     }
     let tweenIdle: {};
     let tweenAway: {};
@@ -133,6 +135,7 @@ class BugZap extends React.Component {
         this.setState({
           bugKey: Math.random(), 
           bugSpriteAnimationKey: 'splat',
+          loop: false,
         });
         this.frogCelebrate();
       }
@@ -145,12 +148,15 @@ class BugZap extends React.Component {
 
   frogCelebrate() {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-    //this.setState({showBug: false});
     clearTimeout(timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   frogDisgust() {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
+  }
+
+  onAnimationFinish() {
+    this.setState({showBug: false});
   }
 
   // go to next level
@@ -182,7 +188,8 @@ class BugZap extends React.Component {
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
-                loopAnimation={true}/>
+                loopAnimation={this.state.loop}
+                onAnimationFinish={() => {this.onAnimationFinish()}}/>
             : null}
 
             <AnimatedSprite
