@@ -31,7 +31,7 @@ spriteKey: object, unique key for the character
 soundOnTouch: bool, play sound?
 rotate: array, takes a style transform value
 fps: object, how many frames per second to run the animations at
-  if not included: defaults to 100
+  if not included: defaults to 10
 
 /*Functions:
 onPress: passes up spriteKey
@@ -69,7 +69,7 @@ class AnimatedSprite extends React.Component{
 
     this._Tweener = Tweener();
     this.renderTime = 0;
-    this.fps = 100;
+    this.fps = 10;
   }
 
   componentWillMount() {
@@ -144,10 +144,11 @@ class AnimatedSprite extends React.Component{
         this.frameIndex = 0;
       }
       this.setState({animate: true});
-    }, this.fps);
+    }, 1000 / this.fps);
   }
 
   startOtherAnimation(animationKey){
+    console.warn(this.fps);
     this._animationKey = animationKey;
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
@@ -171,7 +172,7 @@ class AnimatedSprite extends React.Component{
             this.setState({animate: true});
           }
         }
-    }, this.fps);
+    }, 1000 / this.fps);
   }
 
   _updateNativeStyles() {
