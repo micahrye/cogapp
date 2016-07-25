@@ -3,12 +3,11 @@
 const frogCharacter = {
   name:"frog",
 
-  idle:[
+  default:[
     require("./frog_celebrate01.png"),
   ],
 
   celebrate:[
-    require("./frog_celebrate01.png"),
     require("./frog_celebrate02.png"),
     require("./frog_celebrate03.png"),
     require("./frog_celebrate04.png"),
@@ -25,7 +24,6 @@ const frogCharacter = {
   ],
 
   disgust:[
-    require("./frog_disgust01.png"),
     require("./frog_disgust02.png"),
     require("./frog_disgust03.png"),
   ],

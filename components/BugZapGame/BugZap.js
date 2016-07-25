@@ -28,8 +28,8 @@ class BugZap extends React.Component {
       frogKey: 1,
       tweenSettings: {},
       zappedTooEarly: false,
-      bugSpriteAnimationKey: 'fly',
-      frogSpriteAnimationKey: 'idle',
+      bugSpriteAnimationKey: 'default',
+      frogSpriteAnimationKey: 'default',
       loop: true,
     }
     this.tweenIdle = {};
@@ -48,7 +48,8 @@ class BugZap extends React.Component {
 
     this.timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
-        this.bugIdle();
+        this.bugLand();
+        //this.bugIdle();
       }
       else{
         this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
@@ -85,12 +86,22 @@ class BugZap extends React.Component {
       xEnd = SCREEN_WIDTH - 300;
     }
 
+    // landing
+    this.tweenLanding = {
+      tweenType: "sine-wave",
+      startXY: [xEnd + 10, 120],
+      xTo: [xEnd],
+      yTo: [130],
+      duration: 125,
+      loop: false,
+    }
+
     // when landed
     this.tweenIdle = {
       tweenType: "sine-wave",
-      startXY: [xEnd, 120],
+      startXY: [xEnd, 130],
       xTo: [xEnd],
-      yTo: [120],
+      yTo: [130],
       duration: 0,
       loop: false,
     };
@@ -118,6 +129,17 @@ class BugZap extends React.Component {
     });
   }
 
+  bugLand() {
+    this.setState({
+      bugKey: Math.random(),
+      bugSpriteAnimationKey: 'landing',
+      tweenSettings: this.tweenLanding,
+    });
+    this.timeout25 = setTimeout(() => {
+      this.bugIdle();
+    }, 125);
+  }
+
   // switch to idle bug character and pause tweening
   bugIdle() {
     this.setState({
@@ -136,7 +158,8 @@ class BugZap extends React.Component {
     this.setState({
       bugKey: Math.random(),
       tweenSettings: this.tweenAway,
-      bugSpriteAnimationKey: 'fly',
+      bugSpriteAnimationKey: 'startFly',
+      loop: false,
     });
     timeout3 = setTimeout(() => {
       this.goToNextTrial();
@@ -145,7 +168,7 @@ class BugZap extends React.Component {
 
   frogTap = () => {
     if(this.state.showBug){
-      if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
+      if(this.state.bugSpriteAnimationKey === 'default'){ // bug has landed
         this.catchBug();
       }
       else if(this.state.tweenSettings != this.tweenAway){ // bug has not landed yet
@@ -181,6 +204,9 @@ class BugZap extends React.Component {
     if(animationKey === 'celebrate'){
       this.goToNextTrial(); // once bug is done celebrating
     }
+    // if(animationKey == 'landing'){
+    //   this.bugIdle();
+    // }
   }
 
   // go to next level

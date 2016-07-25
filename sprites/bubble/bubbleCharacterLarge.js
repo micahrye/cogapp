@@ -3,7 +3,7 @@
 const bubbleCharacterLarge = {
   name:"bubbleLarge",
 
-  idle:[
+  default:[
     require("./bubble_clockwise_large01.png"),
     require("./bubble_clockwise_large02.png"),
     require("./bubble_clockwise_large03.png"),

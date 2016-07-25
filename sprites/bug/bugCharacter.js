@@ -3,19 +3,30 @@
 const bugCharacter = {
   name:"bug",
 
-  idle:[
+  idle: [
+    // require("./bug_fly05.png"),
+    require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
     require("./bug_idle01.png"),
     require("./bug_idle02.png"),
     require("./bug_idle03.png"),
-    require("./bug_idle04.png"),
   ],
 
-  fly:[
+  startFly: [
     require("./bug_fly01.png"),
     require("./bug_fly02.png"),
+  ],
+
+  landing:[
+    require("./bug_fly05.png"),
+  ],
+
+  default:[
     require("./bug_fly03.png"),
     require("./bug_fly04.png"),
-    require("./bug_fly05.png"),
   ],
 
   splat:[

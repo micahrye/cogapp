@@ -47,10 +47,10 @@ class AnimatedSprite extends React.Component{
 
     this.state = {
       animate: false,
-      _scale: new Animated.Value(1),
+      //_scale: new Animated.Value(1),
       _top: new Animated.Value(props.coordinates.top),
       _left: new Animated.Value(props.coordinates.left),
-      _rotation: new Animated.Value(0),
+      //_rotation: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
       _transform: props.rotate,
@@ -64,10 +64,10 @@ class AnimatedSprite extends React.Component{
     this._panResponder = {};
 
     this._animation = this.props.character;
-    this._animationKey = 'idle';
+    this._animationKey = 'default';
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
-    this.idleAnimationInterval = undefined;
+    this.defaultAnimationInterval = undefined;
     this.otherAnimationInterval = undefined;
 
     this._Tweener = Tweener();
@@ -113,8 +113,8 @@ class AnimatedSprite extends React.Component{
     }
 
     // default to idle animation if no spriteAnimationKey prop provided
-    if(this.props.spriteAnimationKey === 'idle' || this.props.spriteAnimationKey === undefined){
-      this.startIdleAnimation();
+    if(this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
+      this.startDefaultAnimation();
     }
     else{
       this.startOtherAnimation(this.props.spriteAnimationKey);
@@ -131,17 +131,17 @@ class AnimatedSprite extends React.Component{
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
-    clearInterval(this.idleAnimationInterval);
+    clearInterval(this.defaultAnimationInterval);
     clearInterval(this.otherAnimationInterval);
   }
 
-  startIdleAnimation(){
+  startDefaultAnimation(){
     // NOTE: maybe make separate case for when idle animation is only one frame
-    this._animationKey = 'idle';
+    this._animationKey = 'default';
     this.numFrames = this._animation[this._animationKey].length-1;
     this.frameIndex = -1;
-    clearInterval(this.idleAnimationInterval);
-    this.idleAnimationInterval = setInterval(()=>{
+    clearInterval(this.defaultAnimationInterval);
+    this.defaultAnimationInterval = setInterval(()=>{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
@@ -164,7 +164,7 @@ class AnimatedSprite extends React.Component{
         }
         else{ // run once and go back to idle
           clearInterval(this.otherAnimationInterval);
-          this.startIdleAnimation();
+          this.startDefaultAnimation();
           if(this.props.onAnimationFinish){
             this.props.onAnimationFinish(this.props.spriteAnimationKey)
           }
@@ -212,10 +212,10 @@ class AnimatedSprite extends React.Component{
 
   getStyle(){
 
-    let ro = this.state._rotation.interpolate({
-      inputRange: [0,100],
-      outputRange: ['0deg','180deg'],
-    });
+    // let ro = this.state._rotation.interpolate({
+    //   inputRange: [0,100],
+    //   outputRange: ['0deg','180deg'],
+    // });
 
     return (
       {
@@ -224,8 +224,9 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-        transform: [{rotate: ro},
-                    {scale: this.state._scale}],
+        // transform: [{rotate: ro},
+        //             {scale: this.state._scale}],
+        transform: this.state._transform,
       }
     );
 
@@ -269,8 +270,8 @@ class AnimatedSprite extends React.Component{
     const tweenState = {
       top: this.state._top,
       left: this.state._left,
-      scale: this.state._scale,
-      rotation: this.state._rotation,
+      // scale: this.state._scale,
+      // rotation: this.state._rotation,
     }
     this._Tweener[tweenType](tweenOptions, tweenState);
   }
@@ -296,7 +297,6 @@ class AnimatedSprite extends React.Component{
               style={{
                 width: this.state._width,
                 height: this.state._height,
-                transform: this.state._transform,
               }}/>
           </TouchableWithoutFeedback>
 

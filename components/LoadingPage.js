@@ -123,11 +123,19 @@ class LoadingPage extends Component {
           <AnimatedSprite coordinates={{top:100,left:50}}
               size={{width:100,height:100}}
               character={bugCharacter}
-              spriteAnimationKey={'fly'}/>
+              spriteAnimationKey={'default'}/>
           <AnimatedSprite coordinates={{top:200,left:200}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'splat'}/>
+          <AnimatedSprite coordinates={{top:200,left:200}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'startFly'}/>
+          <AnimatedSprite coordinates={{top:200,left:200}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'landing'}/>
           <AnimatedSprite coordinates={{top:250,left:250}}
               size={{width:100,height:100}}
               character={bubbleCharacterLarge}
@@ -135,11 +143,11 @@ class LoadingPage extends Component {
           <AnimatedSprite coordinates={{top:200,left:200}}
               size={{width:100,height:100}}
               character={bubbleCharacterLarge}
-              spriteAnimationKey={'idle'}/>
+              spriteAnimationKey={'default'}/>
           <AnimatedSprite coordinates={{top:200,left:200}}
               size={{width:100,height:100}}
               character={bubbleCharacterSmall}
-              spriteAnimationKey={'idle'}/>
+              spriteAnimationKey={'default'}/>
           <Image source={require('../backgrounds/Game_1_Background_1280.png')}></Image>          
         </View>
       </View>
