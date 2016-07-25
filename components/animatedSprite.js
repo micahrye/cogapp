@@ -15,14 +15,14 @@ import Tweener from "./Tweener";
 
 /*****PROPS LIST*****/
 /*Required:
-  character: object, at least one array of images with key 'idle'
+  character: object, at least one array of images with key 'default'
   coordinates: object, top and left coordinates
   size: object, width and height measurments
 
 /*Optional:
 draggable: bool, whether object is draggable
 spriteAnimationKey: string, takes name of the key you want to use in character file
-    if not included: defaults to 'idle', startIdleAnimation automatically runs
+    if not included: defaults to 'default', startIdleAnimation automatically runs
     (change to a different value to switch animation)
 loopAnimation: bool, whether to loop animation given in spriteAnimationKey
     ('idle' animation always looped as default)

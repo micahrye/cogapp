@@ -24,7 +24,7 @@ import omnivoreCharacter from '../sprites/omnivore/omnivoreCharacter';
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 2000;
+const LoadingTime = 1500;
 
 class LoadingPage extends Component {
 
@@ -100,27 +100,27 @@ class LoadingPage extends Component {
 
     return (
       <View>
-      <View style={styles.background}>
-        <Animated.View style={{opacity:this.state.textOpacity}}>
-          <Text style={{...text}}>LOADING</Text>
-        </Animated.View>
-        <Animated.View style ={{...loadingbar}}>
-        </Animated.View>
-      </View>
+        <View style={styles.background}>
+          <Animated.View style={{opacity:this.state.textOpacity}}>
+            <Text style={{...text}}>LOADING</Text>
+          </Animated.View>
+          <Animated.View style ={{...loadingbar}}>
+          </Animated.View>
+        </View>
         <View>
-          <AnimatedSprite coordinates={{top:150,left:150}}
-              size={{width:100,height:100}}
-              character={frogCharacter}
-              spriteAnimationKey={'celebrate'}/>
           <AnimatedSprite coordinates={{top:150,left:50}}
               size={{width:100,height:100}}
               character={frogCharacter}
+              spriteAnimationKey={'celebrate'}/>
+          <AnimatedSprite coordinates={{top:150,left:100}}
+              size={{width:100,height:100}}
+              character={frogCharacter}
               spriteAnimationKey={'disgust'}/>
-          <AnimatedSprite coordinates={{top:50,left:50}}
+          <AnimatedSprite coordinates={{top:150,left:150}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'idle'}/>
-          <AnimatedSprite coordinates={{top:100,left:50}}
+          <AnimatedSprite coordinates={{top:150,left:200}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'default'}/>
@@ -128,27 +128,28 @@ class LoadingPage extends Component {
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'splat'}/>
-          <AnimatedSprite coordinates={{top:200,left:200}}
+          <AnimatedSprite coordinates={{top:200,left:250}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'startFly'}/>
-          <AnimatedSprite coordinates={{top:200,left:200}}
+          <AnimatedSprite coordinates={{top:200,left:300}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'landing'}/>
-          <AnimatedSprite coordinates={{top:250,left:250}}
+          <AnimatedSprite coordinates={{top:200,left:350}}
               size={{width:100,height:100}}
               character={bubbleCharacterLarge}
               spriteAnimationKey={'pop'}/>
-          <AnimatedSprite coordinates={{top:200,left:200}}
+          <AnimatedSprite coordinates={{top:200,left:400}}
               size={{width:100,height:100}}
               character={bubbleCharacterLarge}
               spriteAnimationKey={'default'}/>
-          <AnimatedSprite coordinates={{top:200,left:200}}
-              size={{width:100,height:100}}
-              character={bubbleCharacterSmall}
-              spriteAnimationKey={'default'}/>
-          <Image source={require('../backgrounds/Game_1_Background_1280.png')}></Image>          
+        </View>
+        <View>
+          <Image style={styles.image} source={require('../backgrounds/Game_1_Background_1280.png')}/>
+          <Image style={styles.image} source={require('../backgrounds/Game_2_Background_1280.png')}/>
+          <Image style={styles.image} source={require('../backgrounds/Game_3_Background_1280.png')}/>          
+
         </View>
       </View>
     );
@@ -166,6 +167,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  image: {
+    flex: 1,
+    height: 1,
+    width: 1,
+  },
 });
 
 export default LoadingPage
+
