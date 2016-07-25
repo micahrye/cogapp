@@ -44,6 +44,7 @@ class GameTwo1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
+
     }
   }
 
@@ -77,7 +78,8 @@ class GameTwo1 extends Component {
     };
 
     const tweenOptsLever = {
-      tweenType: "bounce",
+      tweenType: "hop",
+      startXY: [0,80],
       repeatable: true,
       loop: false,
     };

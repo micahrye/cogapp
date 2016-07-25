@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
@@ -37,7 +38,7 @@ fps: object, how many frames per second to run the animations at
 onPress: passes up spriteKey
 draggedTo: passes up character's coordinates after drag
 timeSinceMounted: passes up spriteKey and time since character mounted in seconds
-onAnimationFinish: is triggered when 'other' animation has finished, passes up 
+onAnimationFinish: is triggered when 'other' animation has finished, passes up
   current spriteAnimationKey
 */
 
@@ -160,7 +161,7 @@ class AnimatedSprite extends React.Component{
       this.frameIndex++;
       if(this.frameIndex > this.numFrames){
         if(this.props.loopAnimation){ // continue looping animation
-            this.frameIndex = 0;          
+            this.frameIndex = 0;
         }
         else{ // run once and go back to idle
           clearInterval(this.otherAnimationInterval);
@@ -287,7 +288,9 @@ class AnimatedSprite extends React.Component{
           }}
         >
 
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            activeOpacity={1.0}
+            hitSlop={this.props.hitSlop}
             onPress={ (evt) => this.handlePress(evt) }>
             <Animated.Image
               ref={(ref) => {
@@ -298,7 +301,7 @@ class AnimatedSprite extends React.Component{
                 width: this.state._width,
                 height: this.state._height,
               }}/>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
 
         </Animated.View>
     );
@@ -317,6 +320,7 @@ AnimatedSprite.propTypes = {
   spriteAnimationKey: React.PropTypes.string,
   loopAnimation: React.PropTypes.bool,
   spriteKey: React.PropTypes.number,
+  hitSlop: React.PropTypes.object,
   //onPress
   //timeSinceMounted
   //draggedTo

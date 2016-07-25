@@ -34,62 +34,48 @@ const startTop = -200;
 const endTopSign = -5;
 const endTopCan = 90;
 
-const LoadingTime = 3000;
 
 const sprite2Start = [startLeft,startTop];
 
 class GameTwo extends Component {
 
-
-
   constructor(props) {
 
-
-    tweenDownSign = {
+    tweenDown = function(startLeft,startTop,endLeft,endTop) {
+      return (
+        {
           tweenType: "bounce-drop",
           startXY: [startLeft,startTop],
-          endXY: [startLeft,endTopSign],
+          endXY: [endLeft,endTop],
           duration: 800,
           repeatable: false,
           loop: false,
-        };
+        }
+      );
+    }
 
-    tweenDownCan = {
-              tweenType: "bounce-drop",
-              startXY: [startLeft+32,startTop],
-              endXY: [startLeft+32,endTopCan],
-              duration: 800,
-              repeatable: false,
-              loop: false,
-            };
-
-    tweenTimeoutSign = {
+    tweenTimeout = function(startLeft,startTop,endLeft,endTop) {
+      return (
+        {
           tweenType: "basic-back",
-          startXY: [startLeft,endTopSign],
-          endXY: [startLeft,startTop],
+          startXY: [startLeft,startTop],
+          endXY: [endLeft,endTop],
           duration: 750,
+          repeatable: false,
           loop: false,
-        };
+        }
+      );
+    }
 
-    tweenTimeoutCan = {
-              tweenType: "basic-back",
-              startXY: [startLeft+32,endTopCan],
-              endXY: [startLeft+32,startTop],
-              duration: 750,
-              loop: false,
-            };
-
-      tweenHopSign = {
-                  tweenType: "hop",
-                  startXY: [startLeft,endTopSign],
-                  loop: false,
-                };
-
-      tweenHopCan = {
-                      tweenType: "hop",
-                      startXY: [startLeft+32,endTopCan],
-                      loop: false,
-                    };
+    tweenHop = function(startLeft,startTop) {
+      return (
+        {
+          tweenType: "hop",
+          startXY: [startLeft,startTop],
+          loop: false,
+        }
+      );
+    }
 
    tweenInitial = {
                   tweenType: "hop",
@@ -105,8 +91,6 @@ class GameTwo extends Component {
       repeatable: false,
       loop: false,
     };
-
-
 
     super(props);
     this.state = {
@@ -141,8 +125,8 @@ class GameTwo extends Component {
   onTimeoutOne = () => {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
-      this.setState({canTween: tweenTimeoutCan,
-                     signTween: tweenTimeoutSign,
+      this.setState({canTween: tweenTimeout(startLeft+32,endTopCan,startLeft+32,startTop),
+                     signTween: tweenTimeout(startLeft,endTopSign,startLeft,startTop),
                      canKey: Math.random(),
                      signKey: Math.random(),
                      timeoutHuh: false});
@@ -152,8 +136,8 @@ class GameTwo extends Component {
   onTimeoutTwo = () => {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
-      this.setState({canTween: tweenHopCan,
-                     signTween: tweenHopSign,
+      this.setState({canTween: tweenHop(startLeft+32,endTopCan),
+                     signTween: tweenHop(startLeft,endTopSign),
                      canKey: Math.random(),
                      signKey: Math.random(),});
     }
@@ -163,8 +147,8 @@ class GameTwo extends Component {
     if(!this.state.timeoutHuh && !this.state.foodPressed) {
       setTimeout(this.onTimeoutOne,10000);
       setTimeout(this.onTimeoutTwo,5000);
-      this.setState({canTween: tweenDownCan,
-                     signTween: tweenDownSign,
+      this.setState({canTween: tweenDown(startLeft+32,startTop,startLeft+32,endTopCan),
+                     signTween: tweenDown(startLeft,startTop,startLeft,endTopSign),
                      canKey: Math.random(),
                      signKey: Math.random(),
                      timeoutHuh: true,});
