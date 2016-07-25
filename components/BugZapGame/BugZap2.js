@@ -24,13 +24,14 @@ class BugZap2 extends React.Component {
     this.state = {
       blackoutScreen: [],
       spotLightFlash: [],
-      bugSpriteAnimationKey: 'idle',
-      frogSpriteAnimationKey: 'idle',
+      bugSpriteAnimationKey: 'default',
+      frogSpriteAnimationKey: 'default',
       tweenSettings: {},
       bugKey: 0,
       frogKey0: 1,
       frogKey1: 2,
       showBug: false,
+      loop: true,
     }
     this.bugSide = 'right';
     this.tweenAway = {};
@@ -38,10 +39,11 @@ class BugZap2 extends React.Component {
     this.timeout1 = undefined;
     this.timeout2 = undefined;
     this.timeout3 = undefined;
+    this.timeout4 = undefined;
   }
 
   componentDidMount() {
-    timeout0 = setTimeout ( () => {
+    this.timeout0 = setTimeout ( () => {
       this.setBlackout();
     }, 3500);
     this.setUpTween();
@@ -79,7 +81,7 @@ class BugZap2 extends React.Component {
       tweenType: "sine-wave",
       startXY: [xStart, 120],
       xTo: [-150],
-      yTo: [0, 100, 0],
+      yTo: [0, 120, 0],
       duration: 2000,
       loop: false,
     };
@@ -102,7 +104,7 @@ class BugZap2 extends React.Component {
     let blackout = [];
     blackout.push(<View key={0} style={styles.blackout}></View>);
     this.setState({blackoutScreen: blackout});
-    timeout1 = setTimeout ( () => {
+    this.timeout1 = setTimeout ( () => {
       this.flashSpotLight();
     }, 1000);
   }
@@ -112,9 +114,9 @@ class BugZap2 extends React.Component {
     let spotLight = [];
     spotLight.push(<View key={0} style={this.getSpotLightStyle()}></View>);
     this.setState({spotLightFlash: spotLight});
-    timeout2 = setTimeout ( () => {
+    this.timeout2 = setTimeout ( () => {
       this.setState({spotLightFlash: []});
-      timeout3 = setTimeout ( () => { // spotlight dissapears just before blackout does
+      this.timeout3 = setTimeout ( () => { // spotlight dissapears just before blackout does
         this.removeBlackout();
       }, 200);
     }, 500);
@@ -123,9 +125,12 @@ class BugZap2 extends React.Component {
   // screen goes back to normal and bug appears
   removeBlackout() {
     let bug = [];
-    this.setState({blackoutScreen: []});
-    this.setState({showBug: true});
-    timeout4 = setTimeout(()=>{
+    this.setState({
+      blackoutScreen: [],
+      showBug: true,
+      bugSpriteAnimationKey: 'idle',
+    });
+    this.timeout4 = setTimeout(()=>{
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
@@ -135,16 +140,24 @@ class BugZap2 extends React.Component {
   bugFlyAway() {
     this.setState({
       bugKey: Math.random(),
-      bugSpriteAnimationKey: 'fly',
+      bugSpriteAnimationKey: 'startFly',
+      loop: false,
       tweenSettings: tweenAway,
     });
+  }
+
+  // once bug has splatted
+  onAnimationFinish(animationKey) {
+    if(animationKey === "splat"){
+      this.setState({showBug: false});
+    }
   }
 
   frogTap = (frog) => {
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
       if(this.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
-          this.frogCelebrate(frog);
+          this.correctFrogTapped();
         }
         else{
           this.wrongFrogTapped(frog);
@@ -155,17 +168,28 @@ class BugZap2 extends React.Component {
           this.wrongFrogTapped(frog);
         }
         else{
-          this.frogCelebrate(frog)
+          this.correctFrogTapped();
         }
       }
     }
+  }
+
+  // bug splats and is hidden, frog celebrates
+  correctFrogTapped(frog) {
+    this.setState({
+      bugKey: Math.random(), 
+      bugSpriteAnimationKey: 'splat',
+      loop: false,
+    });
+    this.frogCelebrate(frog);
+    clearTimeout(this.timeout4); // so that frogs aren't disgusted after bug is "caught"
   }
 
   // frog is disgusted, bug flies away without idling
   wrongFrogTapped(frog){
     this.bugFlyAway();
     this.frogDisgust(frog);
-    clearTimeout(timeout4); // so bugFlyAway isn't called again
+    clearTimeout(this.timeout4); // so bugFlyAway isn't called again
   }
 
   // frog celebrates and bug is hidden
@@ -176,8 +200,6 @@ class BugZap2 extends React.Component {
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
-    this.setState({showBug: false});
-    clearTimeout(timeout4); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   frogDisgust(frog) {
@@ -251,7 +273,8 @@ class BugZap2 extends React.Component {
               tween={this.state.tweenSettings}
               tweenStart="auto"
               spriteAnimationKey={this.state.bugSpriteAnimationKey}
-              loopAnimation={true}/> 
+              loopAnimation={this.state.loop}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
           : null}
 
           <AnimatedSprite

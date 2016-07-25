@@ -38,6 +38,7 @@ class BugZap extends React.Component {
     this.timeout1 = undefined;
     this.timeout2 = undefined;
     this.timeout3 = undefined;
+    this.timeout4 = undefined;
   }
 
   componentDidMount() {
@@ -49,12 +50,11 @@ class BugZap extends React.Component {
     this.timeout1 = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugLand();
-        //this.bugIdle();
       }
       else{
-        this.bugFlyAway(); // if bug is zapped too early, it just flies away, no idling
+        this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
       }
-    }, 3500);
+    }, 2500);
     this.setUpTweens();
   }
 
@@ -67,6 +67,9 @@ class BugZap extends React.Component {
     if(this.timeout3 !== undefined){
       clearTimeout(this.timeout3);
     }
+    if(this.timeout4 !== undefined){
+      clearTimeout(this.timeout4);
+    }
   }
 
   // 4 different spots for bug to land
@@ -76,10 +79,10 @@ class BugZap extends React.Component {
     if(sequenceChoice < .25){
       xEnd = 200;
     }
-    else if (sequenceChoice > .25 && sequenceChoice <.5){
+    else if(sequenceChoice > .25 && sequenceChoice <.5){
       xEnd = 275;
     }
-    else if (sequenceChoice > .5 && sequenceChoice <.75){
+    else if(sequenceChoice > .5 && sequenceChoice <.75){
       xEnd = SCREEN_WIDTH - 400;
     }
     else{
@@ -89,9 +92,9 @@ class BugZap extends React.Component {
     // landing
     this.tweenLanding = {
       tweenType: "sine-wave",
-      startXY: [xEnd + 10, 120],
+      startXY: [xEnd + 10, 115],
       xTo: [xEnd],
-      yTo: [130],
+      yTo: [120],
       duration: 125,
       loop: false,
     }
@@ -99,9 +102,9 @@ class BugZap extends React.Component {
     // when landed
     this.tweenIdle = {
       tweenType: "sine-wave",
-      startXY: [xEnd, 130],
+      startXY: [xEnd, 120],
       xTo: [xEnd],
-      yTo: [130],
+      yTo: [120],
       duration: 0,
       loop: false,
     };
@@ -111,7 +114,7 @@ class BugZap extends React.Component {
       tweenType: "sine-wave",
       startXY: [xEnd, 120],
       xTo: [-150],
-      yTo: [0, 100, 0],
+      yTo: [0, 120, 0],
       duration: 2000,
       loop: false,
     };
@@ -123,19 +126,20 @@ class BugZap extends React.Component {
         startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
         xTo: [xEnd],
         yTo: [0, 120, 0, 120],
-        duration: 3000,
+        duration: 2000,
         loop: false,
       },
     });
   }
 
+  // right before bug lands, switch to landing bug character
   bugLand() {
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: 'landing',
       tweenSettings: this.tweenLanding,
     });
-    this.timeout25 = setTimeout(() => {
+    this.timeout2 = setTimeout(() => {
       this.bugIdle();
     }, 125);
   }
@@ -147,28 +151,37 @@ class BugZap extends React.Component {
       tweenSettings: this.tweenIdle,
       bugSpriteAnimationKey: 'idle',
     });
-    this.timeout2 = setTimeout(()=>{
-      this.bugFlyAway();
+    this.timeout3 = setTimeout(()=>{
+      this.bugFlyAway('startFly');
       this.frogDisgust();
-    }, 3000);
+    }, 2000);
   }
 
   // switch to flying bug character and start next tween
-  bugFlyAway() {
+  bugFlyAway(animation) {
     this.setState({
       bugKey: Math.random(),
       tweenSettings: this.tweenAway,
-      bugSpriteAnimationKey: 'startFly',
+      bugSpriteAnimationKey: animation, // "startFly" after landed, or "default" if zapped too early
       loop: false,
     });
-    timeout3 = setTimeout(() => {
+    timeout4 = setTimeout(() => {
       this.goToNextTrial();
     }, 2000);
   }
 
+  onAnimationFinish(animationKey) {
+    if(animationKey === 'splat'){
+      this.setState({showBug: false}); // once bug has splatted
+    }
+    if(animationKey === 'celebrate'){
+      this.goToNextTrial(); // once bug is done celebrating
+    }
+  }
+
   frogTap = () => {
     if(this.state.showBug){
-      if(this.state.bugSpriteAnimationKey === 'default'){ // bug has landed
+      if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
         this.catchBug();
       }
       else if(this.state.tweenSettings != this.tweenAway){ // bug has not landed yet
@@ -185,7 +198,7 @@ class BugZap extends React.Component {
       loop: false,
     });
     this.frogCelebrate();
-    clearTimeout(this.timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
+    clearTimeout(this.timeout3); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   frogCelebrate() {
@@ -194,19 +207,6 @@ class BugZap extends React.Component {
 
   frogDisgust() {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
-  }
-
-  
-  onAnimationFinish(animationKey) {
-    if(animationKey === 'splat'){
-      this.setState({showBug: false}); // once bug has splatted
-    }
-    if(animationKey === 'celebrate'){
-      this.goToNextTrial(); // once bug is done celebrating
-    }
-    // if(animationKey == 'landing'){
-    //   this.bugIdle();
-    // }
   }
 
   // go to next level
