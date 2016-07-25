@@ -3,7 +3,7 @@
 const squareCharacter = {
   name:"square",
 
-  idle:[
+  default:[
     require("./number35.png"),
   ],
 

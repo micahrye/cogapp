@@ -3,7 +3,7 @@
 const appleCharacter = {
   name:"apple",
 
-  idle:[
+  default:[
     require("./apple.png"),
   ],
 

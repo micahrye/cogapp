@@ -3,7 +3,7 @@
 const leverCharacter = {
   name:"lever",
 
-  idle:[
+  default:[
     require("./lever.png"),
   ],
 

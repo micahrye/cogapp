@@ -3,7 +3,7 @@
 const monkeyCharacter = {
   name:"monkey",
 
-  idle:[
+  default:[
     require("./monkey.png"),
   ],
 

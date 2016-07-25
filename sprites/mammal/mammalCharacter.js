@@ -3,7 +3,7 @@
 const mammalCharacter = {
   name:"mammal",
 
-  idle:[
+  default:[
     require("./mammal.png"),
   ],
 
