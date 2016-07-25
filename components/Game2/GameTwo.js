@@ -32,8 +32,9 @@ const Window = Dimensions.get('window');
 const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
-const startTop = -300;
-const endTop = 90
+const startTop = -200;
+const endTopSign = -5;
+const endTopCan = 90;
 
 const LoadingTime = 3000;
 
@@ -41,28 +42,72 @@ const sprite2Start = [startLeft,startTop];
 
 class GameTwo extends Component {
 
-  tweenDown = {
-    tweenType: "basic-back",
-    startXY: [startLeft,startTop],
-    endXY: [startLeft,endTop],
-    duration: 300,
-    loop: false,
-  };
 
-  tweenTimeout = {
-    tweenType: "basic-back",
-    endXY: [startLeft,startTop],
-    duration: 300,
-    loop: false,
-  };
 
   constructor(props) {
+
+
+    tweenDownSign = {
+          tweenType: "bounce-drop",
+          startXY: [startLeft,startTop],
+          endXY: [startLeft,endTopSign],
+          duration: 800,
+          repeatable: false,
+          loop: false,
+        };
+
+    tweenDownCan = {
+              tweenType: "bounce-drop",
+              startXY: [startLeft+32,startTop],
+              endXY: [startLeft+32,endTopCan],
+              duration: 800,
+              repeatable: false,
+              loop: false,
+            };
+
+    tweenTimeoutSign = {
+          tweenType: "basic-back",
+          startXY: [startLeft,endTopSign],
+          endXY: [startLeft,startTop],
+          duration: 750,
+          loop: false,
+        };
+
+    tweenTimeoutCan = {
+              tweenType: "basic-back",
+              startXY: [startLeft+32,endTopCan],
+              endXY: [startLeft+32,startTop],
+              duration: 750,
+              loop: false,
+            };
+
+      tweenHopSign = {
+                  tweenType: "hop",
+                  startXY: [startLeft,endTopSign],
+                  loop: false,
+                };
+
+      tweenHopCan = {
+                      tweenType: "hop",
+                      startXY: [startLeft+32,endTopCan],
+                      loop: false,
+                    };
+
+   tweenInitial = {
+                  tweenType: "hop",
+                  startXY: [startLeft+32,startTop],
+                  loop: false,
+                  };
+
+
+
     super(props);
     this.state = {
-      frogSpriteAnimationKey: 'idle',
-      frogKey: 1,
-      canTween: this.tweenDown,
-      signTween: this.tweenTimeout,
+      canKey: 0,
+      signKey: 0.5,
+      canTween: tweenInitial,
+      signTween: tweenInitial,
+      timeoutHuh: false,
     }
 
   }
@@ -83,19 +128,37 @@ class GameTwo extends Component {
       });
   }
 
-  displayMessage = function(){
-    console.warn('timeout');
+
+
+  onTimeoutOne = () => {
+    //console.warn("timeout");
+    this.setState({canTween: tweenTimeoutCan,
+                   signTween: tweenTimeoutSign,
+                   canKey: Math.random(),
+                   signKey: Math.random(),
+                   timeoutHuh: false});
+  }
+
+  onTimeoutTwo = () => {
+    //console.warn("timeout");
+    this.setState({canTween: tweenHopCan,
+                   signTween: tweenHopSign,
+                   canKey: Math.random(),
+                   signKey: Math.random(),});
   }
 
   onLeverTouch = () => {
-    setTimeout(this.displayMessage,10000);
-    this.setState({canTween:this.tweenDown,
-                   signTween: this.tweenDown});
+    if(!this.state.timeoutHuh) {
+      setTimeout(this.onTimeoutOne,10000);
+      setTimeout(this.onTimeoutTwo,5000);
+      this.setState({canTween: tweenDownCan,
+                     signTween: tweenDownSign,
+                     canKey: Math.random(),
+                     signKey: Math.random(),
+                     timeoutHuh: true,});
+    }
   }
 
-  frogTap = () => {
-    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-  }
 
 
 
@@ -128,15 +191,6 @@ class GameTwo extends Component {
                     size={{width: 115, height: 160}}
                     draggable={false}
                     character={mammalCharacter}/>
-                <AnimatedSprite coordinates={{top:150,left:150}}
-                    size={{width:256,height:256}}
-                    draggable={false}
-                    character={frogCharacter}
-                    key={this.state.frogKey}
-                    spriteKey={1}
-                    onPress={this.frogTap}
-                    spriteAnimationKey={this.state.frogSpriteAnimationKey}
-                />
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
@@ -145,12 +199,14 @@ class GameTwo extends Component {
                     tween={tweenOptsLever}
                     onPress={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
+                    key={this.state.signKey}
                     size={{width: 110, height: 170}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween}/>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft+30}}
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft+32}}
+                    key={this.state.canKey}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}

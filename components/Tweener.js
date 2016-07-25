@@ -171,10 +171,6 @@ const Tweener = function () {
        duration: options.duration,
      }
    ).start(() => {
-     // WHAT is this?????
-     if (options.destroy) {
-       state.opacity.setValue(0);
-     }
      if (options.loop === false) {
        return
      }else{
@@ -369,6 +365,8 @@ const Tweener = function () {
   }
 
   const basicBack = function(options, state) {
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
     Animated.timing(
       state.top,
       {
