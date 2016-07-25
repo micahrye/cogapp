@@ -102,6 +102,7 @@ class GameTwo extends Component {
       startXY: [startLeft+32,endTopCan],
       endXY: [540,250],
       duration: 750,
+      repeatable: false,
       loop: false,
     };
 
@@ -114,6 +115,7 @@ class GameTwo extends Component {
       canTween: tweenInitial,
       signTween: tweenInitial,
       timeoutHuh: false,
+      foodPressed: false,
     }
 
   }
@@ -138,23 +140,27 @@ class GameTwo extends Component {
 
   onTimeoutOne = () => {
     //console.warn("timeout");
-    this.setState({canTween: tweenTimeoutCan,
-                   signTween: tweenTimeoutSign,
-                   canKey: Math.random(),
-                   signKey: Math.random(),
-                   timeoutHuh: false});
+    if (!this.state.foodPressed) {
+      this.setState({canTween: tweenTimeoutCan,
+                     signTween: tweenTimeoutSign,
+                     canKey: Math.random(),
+                     signKey: Math.random(),
+                     timeoutHuh: false});
+    }
   }
 
   onTimeoutTwo = () => {
     //console.warn("timeout");
-    this.setState({canTween: tweenHopCan,
-                   signTween: tweenHopSign,
-                   canKey: Math.random(),
-                   signKey: Math.random(),});
+    if (!this.state.foodPressed) {
+      this.setState({canTween: tweenHopCan,
+                     signTween: tweenHopSign,
+                     canKey: Math.random(),
+                     signKey: Math.random(),});
+    }
   }
 
   onLeverTouch = () => {
-    if(!this.state.timeoutHuh) {
+    if(!this.state.timeoutHuh && !this.state.foodPressed) {
       setTimeout(this.onTimeoutOne,10000);
       setTimeout(this.onTimeoutTwo,5000);
       this.setState({canTween: tweenDownCan,
@@ -167,7 +173,8 @@ class GameTwo extends Component {
 
   onFoodPress = () => {
     this.setState({canTween: tweenFall,
-                   canKey: Math.random(),});
+                   canKey: Math.random(),
+                   foodPressed: true});
   }
 
 
@@ -184,7 +191,8 @@ class GameTwo extends Component {
     };
 
     const tweenOptsLever = {
-      tweenType: "bounce",
+      tweenType: "hop",
+      startXY: [0,80],
       repeatable: true,
       loop: false,
     };
