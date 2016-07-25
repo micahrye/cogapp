@@ -43,6 +43,7 @@ class GameTwo extends Component {
 
   tweenDown = {
     tweenType: "basic-back",
+    startXY: [startLeft,startTop],
     endXY: [startLeft,endTop],
     duration: 300,
     loop: false,
@@ -60,7 +61,7 @@ class GameTwo extends Component {
     this.state = {
       frogSpriteAnimationKey: 'idle',
       frogKey: 1,
-      canTween: this.tweenTimeout,
+      canTween: this.tweenDown,
       signTween: this.tweenTimeout,
     }
 
