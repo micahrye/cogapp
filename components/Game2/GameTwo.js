@@ -21,11 +21,9 @@ import Tweener from "../Tweener";
 
 // import different characters to feed to animated sprite
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
-import canCharacter from "../../sprites/can/canCharacter";
-import appleCharacter from "../../sprites/apple/appleCharacter";
+import grassCharacter from "../../sprites/grass/grassCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
-import frogCharacter from "../../sprites/frog/frogCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
@@ -99,6 +97,14 @@ class GameTwo extends Component {
                   loop: false,
                   };
 
+    tweenFall = {
+      tweenType: "curve-spin",
+      startXY: [startLeft+32,endTopCan],
+      endXY: [540,250],
+      duration: 750,
+      loop: false,
+    };
+
 
 
     super(props);
@@ -159,7 +165,10 @@ class GameTwo extends Component {
     }
   }
 
-
+  onFoodPress = () => {
+    this.setState({canTween: tweenFall,
+                   canKey: Math.random(),});
+  }
 
 
   render() {
@@ -209,9 +218,10 @@ class GameTwo extends Component {
                     key={this.state.canKey}
                     size={{width: 60, height: 60}}
                     draggable={false}
-                    character={canCharacter}
+                    character={grassCharacter}
                     tweenStart="auto"
-                    tween={this.state.canTween}/>
+                    tween={this.state.canTween}
+                    onPress={this.onFoodPress}/>
         </Image>
       </View>
     );
