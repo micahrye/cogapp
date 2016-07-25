@@ -20,10 +20,11 @@ import Tweener from "../Tweener";
 
 
 // import different characters to feed to animated sprite
-import greenDragonCharacter from "../../sprites/dragon/greenDragonCharacter";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
+import grassCharacter from "../../sprites/grass/grassCharacter";
+import bugCharacter from "../../sprites/bug/bugCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
 
 
@@ -32,19 +33,70 @@ const Window = Dimensions.get('window');
 const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 150;
-const startTop = 20;
+const startTop = -200;
 const spacing = 150;
-const sprite1Start = [startLeft,startTop];
-const sprite2Start = [startLeft+spacing,startTop];
-const sprite3Start = [startLeft+spacing*2,startTop];
+const foodEndTop = 90;
+
 
 
 class GameTwo1 extends Component {
 
   constructor(props) {
+
+    tweenDown = function(startLeft,startTop,endLeft,endTop) {
+      return (
+        {
+          tweenType: "bounce-drop",
+          startXY: [startLeft,startTop],
+          endXY: [endLeft,endTop],
+          duration: 800,
+          repeatable: false,
+          loop: false,
+        }
+      );
+    }
+
+    tweenTimeout = function(startLeft,startTop,endLeft,endTop) {
+      return (
+        {
+          tweenType: "basic-back",
+          startXY: [startLeft,startTop],
+          endXY: [endLeft,endTop],
+          duration: 750,
+          repeatable: false,
+          loop: false,
+        }
+      );
+    }
+
+    tweenHop = function(startLeft,startTop) {
+      return (
+        {
+          tweenType: "hop",
+          startXY: [startLeft,startTop],
+          loop: false,
+        }
+      );
+    }
+
+    tweenInitial = {
+       tweenType: "hop",
+       startXY: [startLeft,startTop],
+       loop: false,
+    };
+
+
+
     super(props);
     this.state = {
-
+      foodKey1: Math.random(),
+      foodKey2: Math.random(),
+      foodkey3: Math.random(),
+      foodTween1: tweenInitial,
+      foodTween2: tweenInitial,
+      foodTween3: tweenInitial,
+      timeoutHuh: false,
+      foodPressed: false,
     }
   }
 
@@ -61,21 +113,48 @@ class GameTwo1 extends Component {
       });
   }
 
+  onTimeoutOne = () => {
+    //console.warn("timeout");
+    //if (!this.state.foodPressed) {
+      this.setState({foodTween1: tweenTimeout(startLeft,foodEndTop,startLeft,startTop),
+                     foodTween2: tweenTimeout(startLeft+spacing,foodEndTop,startLeft+spacing,startTop),
+                     foodTween3: tweenTimeout(startLeft+spacing*2,foodEndTop,startLeft+spacing*2,startTop),
+                     foodKey1: Math.random(),
+                     foodKey2: Math.random(),
+                     foodKey3: Math.random(),
+                     timeoutHuh: false});
+    //}
+  }
+
+  onTimeoutTwo = () => {
+    //console.warn("timeout");
+    //if (!this.state.foodPressed) {
+      this.setState({foodTween1: tweenHop(startLeft,foodEndTop),
+                     foodTween2: tweenHop(startLeft+spacing,foodEndTop),
+                     foodTween3: tweenHop(startLeft+spacing*2,foodEndTop),
+                     foodKey1: Math.random(),
+                     foodKey2: Math.random(),
+                     foodKey3: Math.random()});
+    //}
+  }
+
+  onLeverTouch = () => {
+      setTimeout(this.onTimeoutOne,10000);
+      setTimeout(this.onTimeoutTwo,5000);
+      this.setState({foodTween1: tweenDown(startLeft,startTop,startLeft,foodEndTop),
+                     foodTween2: tweenDown(startLeft+spacing,startTop,startLeft+spacing,foodEndTop),
+                     foodTween3: tweenDown(startLeft+spacing*2,startTop,startLeft+spacing*2,foodEndTop),
+                     foodKey1: Math.random(),
+                     foodKey2: Math.random(),
+                     foodKey3: Math.random(),
+                     timeoutHuh: true,});
+
+  }
+
 
 
 
   render() {
-
-    // options for left-most food item - drops and
-    // bounces towards creature on touch
-    const tweenOpts01 = {
-      tweenType: "bounce-drop",
-      startXY: sprite1Start ,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: true,
-    };
 
     const tweenOptsLever = {
       tweenType: "hop",
@@ -83,28 +162,6 @@ class GameTwo1 extends Component {
       repeatable: true,
       loop: false,
     };
-
-    // options for middle food item
-    const tweenOpts02 = {
-      tweenType: "bounce-drop",
-      startXY: sprite2Start,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: false,
-    };
-
-    // options for right-most food item
-    const tweenOpts03 = {
-      tweenType: "bounce-drop",
-      startXY: sprite3Start,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: false,
-      disappearAfterAnimation: true,
-    };
-
 
 
     return (
@@ -120,26 +177,31 @@ class GameTwo1 extends Component {
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
-                    character={leverCharacter}                      tweenStart="touch"
-                    tween={tweenOptsLever}/>
+                    character={leverCharacter}
+                    tweenStart="touch"
+                    tween={tweenOptsLever}
+                    onPress={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={appleCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts01}/>
+                    key={this.state.foodKey1}
+                    tweenStart="auto"
+                    tween={this.state.foodTween1}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts02}/>
+                    key={this.state.foodKey2}
+                    tweenStart="auto"
+                    tween={this.state.foodTween2}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
-                    tweenStart="touch"
-                    tween={tweenOpts03}/>
+                    key={this.state.foodKey3}
+                    tweenStart="auto"
+                    tween={this.state.foodTween3}/>
         </Image>
       </View>
     );
