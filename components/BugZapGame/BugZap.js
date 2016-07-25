@@ -218,7 +218,7 @@ class BugZap extends React.Component {
 
   goToNextTrial() {
     this.props.navigator.replace({
-      id: 23,
+      id: 24,
       getId: this.getCurrId,
     });
   }

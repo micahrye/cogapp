@@ -10,7 +10,6 @@ import {
   Text,
   View,
   Dimensions,
-  Image,
 } from 'react-native';
 
 import AnimatedSprite from "./animatedSprite";
@@ -144,12 +143,6 @@ class LoadingPage extends Component {
               size={{width:100,height:100}}
               character={bubbleCharacterLarge}
               spriteAnimationKey={'default'}/>
-        </View>
-        <View>
-          <Image style={styles.image} source={require('../backgrounds/Game_1_Background_1280.png')}/>
-          <Image style={styles.image} source={require('../backgrounds/Game_2_Background_1280.png')}/>
-          <Image style={styles.image} source={require('../backgrounds/Game_3_Background_1280.png')}/>          
-
         </View>
       </View>
     );

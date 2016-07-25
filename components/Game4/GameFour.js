@@ -25,7 +25,7 @@ class GameFour extends React.Component {
     this.state = {
       moveableBoxes: [],
       key: 0,
-      spriteAnimationKey: 'idle',
+      spriteAnimationKey: 'default',
     }
   }
 
@@ -78,10 +78,6 @@ class GameFour extends React.Component {
   // frog celebrates once when square dissapears
   frogCelebrate() {
     this.setState({key: Math.random(), spriteAnimationKey: 'celebrate'});
-
-    // setTimeout( () => {
-    //   this.setState({key: Math.random(), currFrogCharacter: frogCharacterIdle});
-    // }, 1400); // wait until celebrate animation is over (14 frames of animation at 100fps)
   }
 
   getBoxStyles(boxNum) {
