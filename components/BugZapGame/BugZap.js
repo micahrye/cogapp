@@ -257,6 +257,7 @@ class BugZap extends React.Component {
               size={{width: 256, height: 256}}
               character={frogCharacter}
               onPress={this.frogTap}
+              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
               onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
               />

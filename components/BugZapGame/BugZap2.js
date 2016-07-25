@@ -285,7 +285,8 @@ class BugZap2 extends React.Component {
             draggable={false}
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-            onPress={(frog) => {this.frogTap(frog)}}/>
+            onPress={(frog) => {this.frogTap(frog)}}
+            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
 
        
           <AnimatedSprite 
@@ -297,7 +298,8 @@ class BugZap2 extends React.Component {
             draggable={false}
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-            onPress={(frog) => {this.frogTap(frog)}} />          
+            onPress={(frog) => {this.frogTap(frog)}} 
+            hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>          
 
           <View>
             {this.state.blackoutScreen}
