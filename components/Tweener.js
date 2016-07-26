@@ -153,20 +153,20 @@ const Tweener = function () {
  }
 
  const bounceDrop = function(options, state) {
-   state.left.setValue(options.startXY[0]);
-   Animated.timing(
-     state.left,
-     {
-       toValue: options.endXY[0],
-       easing: Easing.spring,
-       duration: options.duration,
-     }
-   ).start();
-   state.top.setValue(options.startXY[1]);
+  //  state.left.setValue(options.startXY[0]);
+  //  Animated.timing(
+  //    state.left,
+  //    {
+  //      toValue: options.endXY[0],
+  //      easing: Easing.spring,
+  //      duration: options.duration,
+  //    }
+  //  ).start();
+   state.top.setValue(options.startY);
    Animated.timing(
      state.top,
      {
-       toValue: options.endXY[1],
+       toValue: options.endY,
        easing: Easing.bounce,
        duration: options.duration,
      }
@@ -206,13 +206,12 @@ const Tweener = function () {
  }
 
   const hop = function(options, state) {
-
-    state.top.setValue(options.startXY[1]);
+    state.top.setValue(options.startY);
     Animated.sequence([
       Animated.timing(
         state.top,
         {
-          toValue: (options.startXY[1] - 75),
+          toValue: (options.startY - 75),
           easing: Easing.linear,
           duration: 100,
         }
@@ -220,7 +219,7 @@ const Tweener = function () {
       Animated.timing(
         state.top,
         {
-          toValue: options.startXY[1],
+          toValue: options.startY,
           easing: Easing.bounce,
           duration: 500,
         }
@@ -365,12 +364,11 @@ const Tweener = function () {
   }
 
   const basicBack = function(options, state) {
-    state.left.setValue(options.startXY[0]);
-    state.top.setValue(options.startXY[1]);
+    state.top.setValue(options.startY);
     Animated.timing(
       state.top,
       {
-        toValue: options.endXY[1],
+        toValue: options.endY,
         easing: Easing.back(2),
         duration: options.duration,
       }

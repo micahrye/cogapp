@@ -41,12 +41,12 @@ class GameTwo extends Component {
 
   constructor(props) {
 
-    tweenDown = function(startLeft,startTop,endLeft,endTop) {
+    tweenDown = function(startTop,endTop) {
       return (
         {
           tweenType: "bounce-drop",
-          startXY: [startLeft,startTop],
-          endXY: [endLeft,endTop],
+          startY: startTop,
+          endY: endTop,
           duration: 800,
           repeatable: false,
           loop: false,
@@ -54,12 +54,12 @@ class GameTwo extends Component {
       );
     }
 
-    tweenTimeout = function(startLeft,startTop,endLeft,endTop) {
+    tweenTimeout = function(startTop,endTop) {
       return (
         {
           tweenType: "basic-back",
-          startXY: [startLeft,startTop],
-          endXY: [endLeft,endTop],
+          startY: startTop,
+          endY: endTop,
           duration: 750,
           repeatable: false,
           loop: false,
@@ -67,11 +67,11 @@ class GameTwo extends Component {
       );
     }
 
-    tweenHop = function(startLeft,startTop) {
+    tweenHop = function(startTop) {
       return (
         {
           tweenType: "hop",
-          startXY: [startLeft,startTop],
+          startY: startTop,
           loop: false,
         }
       );
@@ -79,7 +79,7 @@ class GameTwo extends Component {
 
    tweenInitial = {
                   tweenType: "hop",
-                  startXY: [startLeft+32,startTop],
+                  startY: startTop,
                   loop: false,
                   };
 
@@ -125,8 +125,8 @@ class GameTwo extends Component {
   onTimeoutOne = () => {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
-      this.setState({canTween: tweenTimeout(startLeft+32,endTopCan,startLeft+32,startTop),
-                     signTween: tweenTimeout(startLeft,endTopSign,startLeft,startTop),
+      this.setState({canTween: tweenTimeout(endTopCan,startTop),
+                     signTween: tweenTimeout(endTopSign,startTop),
                      canKey: Math.random(),
                      signKey: Math.random(),
                      timeoutHuh: false});
@@ -136,8 +136,8 @@ class GameTwo extends Component {
   onTimeoutTwo = () => {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
-      this.setState({canTween: tweenHop(startLeft+32,endTopCan),
-                     signTween: tweenHop(startLeft,endTopSign),
+      this.setState({canTween: tweenHop(endTopCan),
+                     signTween: tweenHop(endTopSign),
                      canKey: Math.random(),
                      signKey: Math.random(),});
     }
@@ -147,8 +147,8 @@ class GameTwo extends Component {
     if(!this.state.timeoutHuh && !this.state.foodPressed) {
       setTimeout(this.onTimeoutOne,10000);
       setTimeout(this.onTimeoutTwo,5000);
-      this.setState({canTween: tweenDown(startLeft+32,startTop,startLeft+32,endTopCan),
-                     signTween: tweenDown(startLeft,startTop,startLeft,endTopSign),
+      this.setState({canTween: tweenDown(startTop,endTopCan),
+                     signTween: tweenDown(startTop,endTopSign),
                      canKey: Math.random(),
                      signKey: Math.random(),
                      timeoutHuh: true,});
@@ -165,18 +165,9 @@ class GameTwo extends Component {
   render() {
 
 
-    const tweenOpts02 = {
-      tweenType: "bounce-drop",
-      startXY: sprite2Start,
-      endXY: endCoordinates,
-      duration: 600,
-      repeatable: false,
-      loop: false,
-    };
-
     const tweenOptsLever = {
       tweenType: "hop",
-      startXY: [0,80],
+      startY: 80,
       repeatable: true,
       loop: false,
     };
