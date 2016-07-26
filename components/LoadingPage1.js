@@ -33,11 +33,22 @@ class LoadingPage extends Component {
     this.state = {
       bar: new Animated.Value(0),
       textOpacity: new Animated.Value(1.0),
+      showSecond: false,
+      showThird: false,
     }
   }
 
   componentDidMount() {
     setTimeout(() => {this.props.navigator.replace({id: 0});},LoadingTime);
+
+    // setTimeout(() => {
+    //   this.setState({showSecond: true});
+    // }, 2000);
+
+    // setTimeout(() => {
+    //   this.setState({showThird: true});
+    // }, 3500);
+
     this.barLoad();
     this.toggleOpacity();
   }
@@ -107,46 +118,80 @@ class LoadingPage extends Component {
           </Animated.View>
         </View>
         <View>
-          <AnimatedSprite coordinates={{top:150,left:50}}
-              size={{width:100,height:100}}
-              character={frogCharacter}
-              spriteAnimationKey={'celebrate'}/>
-          <AnimatedSprite coordinates={{top:150,left:100}}
-              size={{width:100,height:100}}
-              character={frogCharacter}
-              spriteAnimationKey={'disgust'}/>
-          <AnimatedSprite coordinates={{top:150,left:110}}
-              size={{width:100,height:100}}
-              character={frogCharacter}
-              spriteAnimationKey={'eat0'}/>
-          <AnimatedSprite coordinates={{top:150,left:150}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'idle'}/>
-          <AnimatedSprite coordinates={{top:150,left:200}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'default'}/>
-          <AnimatedSprite coordinates={{top:200,left:200}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'splat'}/>
-          <AnimatedSprite coordinates={{top:200,left:250}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'startFly'}/>
-          <AnimatedSprite coordinates={{top:200,left:300}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'landing'}/>
-          <AnimatedSprite coordinates={{top:200,left:350}}
-              size={{width:100,height:100}}
-              character={bubbleCharacterLarge}
-              spriteAnimationKey={'pop'}/>
-          <AnimatedSprite coordinates={{top:200,left:400}}
-              size={{width:100,height:100}}
-              character={bubbleCharacterLarge}
-              spriteAnimationKey={'default'}/>
+            <View>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={frogCharacter}
+                spriteAnimationKey={'celebrate'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={frogCharacter}
+                spriteAnimationKey={'disgust'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bugCharacter}
+                spriteAnimationKey={'splat'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bugCharacter}
+                spriteAnimationKey={'idle'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bubbleCharacterLarge}
+                spriteAnimationKey={'pop'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bugCharacter}
+                spriteAnimationKey={'startFly'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bugCharacter}
+                spriteAnimationKey={'landing'}
+                fps={10}/>
+              <AnimatedSprite 
+                coordinates={{top:250,left:550}}
+                size={{width:100,height:100}}
+                character={bugCharacter}
+                spriteAnimationKey={'idle'}
+                fps={10}/>
+            </View>
+        </View>
+        <View>
+          {this.state.showSecond ?
+            <View>
+              <AnimatedSprite 
+                coordinates={{top:150,left:200}}
+                size={{width:100,height:100}}
+                character={frogCharacter}
+                spriteAnimationKey={'eat0'}
+                fps={10}/>
+            </View>
+          : null}
+        </View>
+        <View>
+          {this.state.showThird ?
+            <View>
+              <AnimatedSprite 
+                coordinates={{top:150,left:500}}
+                size={{width:100,height:100}}
+                character={frogCharacter}
+                spriteAnimationKey={'eat2'}
+                fps={10}/>
+            </View>
+          : null}
         </View>
       </View>
     );
@@ -171,5 +216,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingPage
+export default LoadingPage;
+
+
+
+
 

@@ -15,7 +15,7 @@ import {
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 0;
+const LoadingTime = 1000;
 
 class LoadingPage0 extends Component {
 
