@@ -23,7 +23,7 @@ import omnivoreCharacter from '../sprites/omnivore/omnivoreCharacter';
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 1400;
+const LoadingTime = 1500;
 
 class LoadingPage extends Component {
 
@@ -37,7 +37,7 @@ class LoadingPage extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 25});},LoadingTime);
+    setTimeout(() => {this.props.navigator.replace({id: 0});},LoadingTime);
     this.barLoad();
     this.toggleOpacity();
   }
