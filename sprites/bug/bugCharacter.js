@@ -4,7 +4,6 @@ const bugCharacter = {
   name:"bug",
 
   idle: [
-    // require("./bug_fly05.png"),
     require("./bug_idle01.png"),
     require("./bug_idle01.png"),
     require("./bug_idle01.png"),

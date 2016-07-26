@@ -20,7 +20,7 @@ const LoadingTime = 0;
 class LoadingPage0 extends Component {
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 23});},LoadingTime);
+    setTimeout(() => {this.props.navigator.replace({id: 24});},LoadingTime);
   }
 
   render() {

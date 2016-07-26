@@ -159,6 +159,9 @@ class AnimatedSprite extends React.Component{
 
     this.otherAnimationInterval = setInterval(()=>{
       this.frameIndex++;
+      if(this.props.getFrameIndex){ // send up frameIndex to parent
+        this.props.getFrameIndex(this.props.spriteAnimationKey, this.frameIndex);
+      }
       if(this.frameIndex > this.numFrames){
         if(this.props.loopAnimation){ // continue looping animation
             this.frameIndex = 0;
@@ -167,7 +170,7 @@ class AnimatedSprite extends React.Component{
           clearInterval(this.otherAnimationInterval);
           this.startDefaultAnimation();
           if(this.props.onAnimationFinish){
-            this.props.onAnimationFinish(this.props.spriteAnimationKey)
+            this.props.onAnimationFinish(this.props.spriteAnimationKey) // notify parent animation has ended
           }
           return;
         }
@@ -223,8 +226,8 @@ class AnimatedSprite extends React.Component{
         top: this.state._top,
         left: this.state._left,
         position: 'absolute',
-        // borderWidth: 2,
-        // borderColor: '#ff00ff',
+        borderWidth: 2,
+        borderColor: '#ff00ff',
         // transform: [{rotate: ro},
         //             {scale: this.state._scale}],
         transform: this.state._transform,

@@ -23,7 +23,7 @@ import omnivoreCharacter from '../sprites/omnivore/omnivoreCharacter';
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 1500;
+const LoadingTime = 1400;
 
 class LoadingPage extends Component {
 
@@ -37,7 +37,7 @@ class LoadingPage extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 0});},LoadingTime);
+    setTimeout(() => {this.props.navigator.replace({id: 25});},LoadingTime);
     this.barLoad();
     this.toggleOpacity();
   }
@@ -115,10 +115,10 @@ class LoadingPage extends Component {
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'disgust'}/>
-          <AnimatedSprite coordinates={{top:150,left:125}}
+          <AnimatedSprite coordinates={{top:150,left:110}}
               size={{width:100,height:100}}
               character={frogCharacter}
-              spriteAnimationKey={'eat'}/>
+              spriteAnimationKey={'eat0'}/>
           <AnimatedSprite coordinates={{top:150,left:150}}
               size={{width:100,height:100}}
               character={bugCharacter}

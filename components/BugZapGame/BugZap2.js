@@ -244,8 +244,8 @@ class BugZap2 extends React.Component {
   render(){
     const bulbTweenSettings = {
       tweenType: "bounce-drop",
-      startXY: [SCREEN_WIDTH/2 - 50, -128],
-      endXY: [SCREEN_WIDTH/2 - 50, 0],
+      startY: -128,
+      endY: 0,
       duration: 3000,
       loop: false,
     };
