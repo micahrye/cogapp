@@ -369,7 +369,7 @@ const Tweener = function () {
       state.top,
       {
         toValue: options.endY,
-        easing: Easing.back(2),
+        easing: Easing.back(1.5),
         duration: options.duration,
       }
     ).start(() => {

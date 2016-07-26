@@ -31,8 +31,8 @@ const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
 const startTop = -200;
-const endTopSign = -5;
-const endTopCan = 90;
+const endTopSign = -15;
+const endTopCan = 80;
 
 
 const sprite2Start = [startLeft,startTop];

@@ -34,10 +34,11 @@ const Window = Dimensions.get('window');
 const endCoordinates = [550,330];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 200;
+const startLeft2 = 275;
 const startTop = -200;
 const spacing = 150;
-const foodEndTop = 90;
-const signEndTop = -5;
+const foodEndTop = 80;
+const signEndTop = -15;
 
 
 class GameTwo1 extends Component {
@@ -82,23 +83,57 @@ class GameTwo1 extends Component {
       );
     }
 
+    tweenFall = function (leftValue){
+      return(
+        {
+          tweenType: "curve-spin",
+          startXY: [leftValue,foodEndTop],
+          endXY: [540,250],
+          duration: 750,
+          repeatable: false,
+          loop: false,
+        }
+      );
+    }
+
     tweenInitial = {
        tweenType: "hop",
        startY: startTop,
        loop: false,
     };
 
+    randomFood = function() {
+      diceRoll = Math.random();
+      if (diceRoll < 0.33) {
+        return canCharacter;
+      } else if (diceRoll > 0.66) {
+        return bugCharacter;
+      } else {
+        return appleCharacter;
+      }
+    }
+
     this.state = {
       foodKey1: Math.random(),
       foodKey2: Math.random(),
-      foodkey3: Math.random(),
+      foodKey3: Math.random(),
+      foodKey4: Math.random(),
+      foodKey5: Math.random(),
       signKey1: Math.random(),
       signKey2: Math.random(),
       signKey3: Math.random(),
-      foodTween: tweenInitial,
-      signTween: tweenInitial,
+      signKey4: Math.random(),
+      signKey5: Math.random(),
+      phase0Left: grassCharacter,
+      phase0Right: grassCharacter,
+      phase0Correct: "left",
+      foodTween1: tweenInitial,
+      foodTween2: tweenInitial,
+      signTween1: tweenInitial,
+      signTween2: tweenInitial,
       timeoutHuh: false,
       foodPressed: false,
+      gamePhase: true,
     }
   }
 
@@ -120,40 +155,126 @@ class GameTwo1 extends Component {
       foodKey1: Math.random(),
       foodKey2: Math.random(),
       foodKey3: Math.random(),
+      foodKey4: Math.random(),
+      foodKey5: Math.random(),
       signKey1: Math.random(),
       signKey2: Math.random(),
       signKey3: Math.random(),
+      signKey4: Math.random(),
+      signKey5: Math.random(),
     });
   }
 
+
   onTimeoutOne = () => {
     //console.warn("timeout");
-    //if (!this.state.foodPressed) {
-      this.setState({foodTween: tweenTimeout(foodEndTop,startTop),
-                     signTween: tweenTimeout(signEndTop,startTop),
-                     timeoutHuh: false});
-      this.randomizeKeys();
-    //}
+    if (!this.state.foodPressed) {
+      if (this.state.gamePhase) {
+          this.setState({foodTween1: tweenTimeout(foodEndTop,startTop),
+                         signTween1: tweenTimeout(signEndTop,startTop)});
+        } else {
+          this.setState({foodTween2: tweenTimeout(foodEndTop,startTop),
+                         signTween2: tweenTimeout(signEndTop,startTop)});
+        }
+        this.setState({timeoutHuh: false});
+        this.randomizeKeys();
+    }
   }
 
   onTimeoutTwo = () => {
     //console.warn("timeout");
-    //if (!this.state.foodPressed) {
-      this.setState({foodTween: tweenHop(foodEndTop),
-                     signTween: tweenHop(signEndTop)});
+    if (!this.state.foodPressed) {
+      if (this.state.gamePhase) {
+        this.setState({foodTween1: tweenHop(foodEndTop),
+                       signTween1: tweenHop(signEndTop)});
+      } else {
+        this.setState({foodTween2: tweenHop(foodEndTop),
+                       signTween2: tweenHop(signEndTop)});
+      }
       this.randomizeKeys();
-    //}
+      }
+  }
+
+  randomFood() {
+    diceRoll = Math.random();
+    if (diceRoll < 0.33) {
+      return canCharacter;
+    } else if (diceRoll > 0.66) {
+      return bugCharacter;
+    } else {
+      return appleCharacter;
+    }
+  }
+
+  selectFood() {
+    diceRoll = Math.random();
+    if (diceRoll < 0.5) {
+      this.setState({phase0Left: grassCharacter,
+                     phase0Right: this.randomFood(),
+                     phase0Correct: "left"});
+    } else {
+      this.setState({phase0Right: grassCharacter,
+                     phase0Left: this.randomFood(),
+                     phase0Correct: "right"});
+    }
   }
 
   onLeverTouch = () => {
-    if (!this.state.timeoutHuh) {
+    if (!this.state.timeoutHuh && !this.state.foodPressed) {
         setTimeout(this.onTimeoutOne,10000);
         setTimeout(this.onTimeoutTwo,5000);
-        this.setState({foodTween: tweenDown(startTop,foodEndTop),
-                       signTween: tweenDown(startTop,signEndTop),
-                       timeoutHuh: true,});
+        if (this.state.gamePhase) {
+          this.setState({foodTween1: tweenDown(startTop,foodEndTop),
+                         signTween1: tweenDown(startTop,signEndTop)});
+        } else {
+          this.setState({foodTween2: tweenDown(startTop,foodEndTop),
+                         signTween2: tweenDown(startTop,signEndTop)});
+        }
+        this.setState({timeout: true});
         this.randomizeKeys();
+        this.selectFood();
     }
+  }
+
+  onFoodPress = (spriteKey) => {
+    xvalue = 0;
+    switch(spriteKey) {
+      case 1:
+         this.setState({foodKey1: Math.random()});
+         x = startLeft;
+         break;
+      case 3:
+         this.setState({foodKey2: Math.random()});
+         x = startLeft+spacing;
+         break;
+      case 5:
+         this.setState({foodKey3: Math.random()});
+         x = startLeft+spacing*2;
+         break;
+      case 7:
+         this.setState({foodKey4: Math.random()});
+         x = startLeft2;
+         if (this.state.phase0Correct === "left") {
+           this.setState({foodPressed: false});
+           this.onTimeoutOne();
+           this.setState({gamePhase: false});
+           this.onLeverTouch();
+         }
+         break;
+      case 9:
+         this.setState({foodKey5: Math.random()});
+         x= startLeft2+spacing;
+         if (this.state.phase0Correct === "right") {
+           this.setState({foodPressed: false});
+           this.onTimeoutOne();
+           this.setState({gamePhase: false});
+           this.onLeverTouch();
+         }
+         break;
+    }
+
+    this.setState({foodTween1: tweenFall(x),
+                   foodPressed: true});
   }
 
 
@@ -192,42 +313,85 @@ class GameTwo1 extends Component {
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
-                    tween={this.state.signTween}/>
+                    tween={this.state.signTween2}
+                    spriteKey={0}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={appleCharacter}
                     key={this.state.foodKey1}
                     tweenStart="auto"
-                    tween={this.state.foodTween}/>
+                    tween={this.state.foodTween2}
+                    onPress={this.onFoodPress}
+                    spriteKey={1}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing-30}}
                     key={this.state.signKey2}
                     size={{width: 110, height: 170}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
-                    tween={this.state.signTween}/>
+                    tween={this.state.signTween2}
+                    spriteKey={2}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
                     key={this.state.foodKey2}
                     tweenStart="auto"
-                    tween={this.state.foodTween}/>
+                    tween={this.state.foodTween2}
+                    onPress={this.onFoodPress}
+                    spriteKey={3}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
                     key={this.state.signKey3}
                     size={{width: 110, height: 170}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
-                    tween={this.state.signTween}/>
+                    tween={this.state.signTween2}
+                    spriteKey={4}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
                     size={{width: 60, height: 60}}
                     draggable={false}
                     character={canCharacter}
                     key={this.state.foodKey3}
                     tweenStart="auto"
-                    tween={this.state.foodTween}/>
+                    tween={this.state.foodTween2}
+                    onPress={this.onFoodPress}
+                    spriteKey={5}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft2-30}}
+                    key={this.state.signKey4}
+                    size={{width: 110, height: 170}}
+                    draggable={false}
+                    character={signCharacter}
+                    tweenStart="auto"
+                    tween={this.state.signTween1}
+                    spriteKey={6}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft2}}
+                    size={{width: 60, height: 60}}
+                    draggable={false}
+                    character={this.state.phase0Left}
+                    key={this.state.foodKey4}
+                    tweenStart="auto"
+                    tween={this.state.foodTween1}
+                    onPress={this.onFoodPress}
+                    spriteKey={7}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft2+spacing-30}}
+                    key={this.state.signKey5}
+                    size={{width: 110, height: 170}}
+                    draggable={false}
+                    character={signCharacter}
+                    tweenStart="auto"
+                    tween={this.state.signTween1}
+                    spriteKey={8}/>
+                <AnimatedSprite coordinates={{top: startTop, left: startLeft2+spacing}}
+                    size={{width: 60, height: 60}}
+                    draggable={false}
+                    character={this.state.phase0Right}
+                    key={this.state.foodKey5}
+                    tweenStart="auto"
+                    tween={this.state.foodTween1}
+                    onPress={this.onFoodPress}
+                    spriteKey={9}/>
         </Image>
       </View>
     );
