@@ -61,15 +61,9 @@ class BugZap extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timeout0);
     clearTimeout(this.timeout1);
-    if(this.timeout2 !== undefined){
-      clearTimeout(this.timeout2);
-    }
-    if(this.timeout3 !== undefined){
-      clearTimeout(this.timeout3);
-    }
-    if(this.timeout4 !== undefined){
-      clearTimeout(this.timeout4);
-    }
+    clearTimeout(this.timeout2);
+    clearTimeout(this.timeout3);
+    clearTimeout(this.timeout4);
   }
 
   // 4 different spots for bug to land
@@ -170,15 +164,6 @@ class BugZap extends React.Component {
     }, 2000);
   }
 
-  onAnimationFinish(animationKey) {
-    if(animationKey === 'splat'){
-      this.setState({showBug: false}); // once bug has splatted
-    }
-    if(animationKey === 'celebrate'){
-      this.goToNextTrial(); // once bug is done celebrating
-    }
-  }
-
   frogTap = () => {
     if(this.state.showBug){
       if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
@@ -195,10 +180,28 @@ class BugZap extends React.Component {
     this.setState({
       bugKey: Math.random(), 
       bugSpriteAnimationKey: 'splat',
-      loop: false,
+      loop: false, // does not loop splat animation
     });
-    this.frogCelebrate();
+    this.frogEat();
+    //this.frogCelebrate();
     clearTimeout(this.timeout3); // so that "bugFlyAway" function doesn't run after bug is "caught"
+  }
+
+  // triggered when certain animations finish
+  onAnimationFinish(animationKey) {
+    if(animationKey === 'splat'){
+      this.setState({showBug: false}); // once bug has splatted
+    }
+    if(animationKey === 'celebrate'){
+      this.goToNextTrial(); // once bug is done celebrating
+    }
+    if(animationKey === 'eat'){
+      console.warn("eat done");
+    }
+  }
+
+  frogEat(){
+    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'eat'});
   }
 
   frogCelebrate() {

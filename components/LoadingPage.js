@@ -115,6 +115,10 @@ class LoadingPage extends Component {
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'disgust'}/>
+          <AnimatedSprite coordinates={{top:150,left:125}}
+              size={{width:100,height:100}}
+              character={frogCharacter}
+              spriteAnimationKey={'eat'}/>
           <AnimatedSprite coordinates={{top:150,left:150}}
               size={{width:100,height:100}}
               character={bugCharacter}

@@ -33,7 +33,7 @@ class BubblePop extends React.Component {
         score: 0,
         popTime: 0,
         bubbleCharacters: [],
-        spriteAnimationKey: 'idle',
+        spriteAnimationKey: 'default',
         bubbleKey: 0,
     }
   }
@@ -91,6 +91,7 @@ class BubblePop extends React.Component {
         duration: this.getDuration(),
         loop: true,
       };
+
       bubbles.push(
         <AnimatedSprite
           key={this.state.bubbleKey + i}
@@ -120,7 +121,7 @@ class BubblePop extends React.Component {
 
   // remove bubble and record time it took to pop it
   popBubble = (bubblePos, popTime) => {
-    this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});
+    //this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});
     let bubbles = [];
 
     //this.createBubbles(this.state.bubbleCharacters.length - 1);

@@ -62,9 +62,7 @@ class BugZap1 extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timeout0);
     clearTimeout(this.timeout1);
-    if(this.timeout2 !== undefined){
-      clearTimeout(this.timeout2);
-    }
+    clearTimeout(this.timeout2);
   }
 
   // 4 different spots for bug to land
@@ -152,13 +150,6 @@ class BugZap1 extends React.Component {
     }); 
   }
 
-  // once bug has splatted
-  onAnimationFinish(animationKey) {
-    if(animationKey === "splat"){
-      this.setState({showBug: false});
-    }
-  }
-
   frogTap = (frog) => {
     let bugColor = this.state.bugSpriteAnimationKey;
     if(this.state.showBug){ // if bug isn't already eaten
@@ -190,7 +181,7 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(), 
       bugSpriteAnimationKey: 'splat',
-      loop: false,
+      loop: false, // so splat animation is not repeated
     });
     this.frogCelebrate(frog);
     clearTimeout(this.timeout2); // so frogs aren't disgusted after bug is "caught"
@@ -201,6 +192,13 @@ class BugZap1 extends React.Component {
     this.bugFlyAway();
     this.frogDisgust(frog);
     clearTimeout(this.timeout2); // so bugFlyAway isn't called again
+  }
+
+  // once bug has splatted
+  onAnimationFinish(animationKey) {
+    if(animationKey === "splat"){
+      this.setState({showBug: false});
+    }
   }
 
   frogCelebrate(frog) {
