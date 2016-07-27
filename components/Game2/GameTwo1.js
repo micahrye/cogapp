@@ -260,28 +260,31 @@ class GameTwo1 extends Component {
          x = startLeft2;
          this.setState({foodTween01: tweenFall(x),
                         foodPressed: true});
-        //  if (this.state.phase0Correct === "left") {
-        //    this.setState({foodPressed: false});
-        //    this.randomizeKeys();
-        //    this.setState({//foodTween1: tweenTimeout(foodEndTop,startTop),
-        //                   signTween01: tweenTimeout(signEndTop,startTop)});
-        //    this.setState({gamePhase: false});
-        //  }
+         if (this.state.phase0Correct === "left") {
+            this.randomizeKeys();
+            this.setState({signTween01: tweenTimeout(signEndTop,startTop),
+                           foodTween02: tweenTimeout(foodEndTop,startTop),
+                           gamePhase: false,
+                           foodPressed: false});
+          }
          break;
       case 9:
          this.setState({foodKey5: Math.random()});
          x= startLeft2+spacing;
          this.setState({foodTween02: tweenFall(x),
                         foodPressed: true});
-        //  if (this.state.phase0Correct === "right") {
-        //    this.setState({foodPressed: false});
-        //    this.randomizeKeys();
-        //    this.setState({//foodTween1: tweenTimeout(foodEndTop,startTop),
-        //                   signTween01: tweenTimeout(signEndTop,startTop)});
-        //    this.setState({gamePhase: false});
-        // }
+         if (this.state.phase0Correct === "right") {
+           this.randomizeKeys();
+             this.setState({signTween01: tweenTimeout(signEndTop,startTop),
+                            foodTween01: tweenTimeout(foodEndTop,startTop),
+                            gamePhase: false,
+                            foodPRessed: false});
+            }
          break;
     }
+
+
+
 
   }
 
