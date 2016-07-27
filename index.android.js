@@ -41,12 +41,7 @@ import GameFour from './components/Game4/GameFour';
 import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
 import NextTrial from './components/NextTrial'
-//import LoadingPage0 from './components/LoadingPage0';
-import LoadingPage1 from './components/LoadingPage1';
-
-
-
-
+import LoadingPageBugZap from './components/LoadingPageBugZap';
 
 
 class CogApp extends React.Component {
@@ -62,7 +57,7 @@ class CogApp extends React.Component {
   render() {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 24}}
+  initialRoute={{name: 'My First Scene', id: 0}}
   renderScene={(route, navigator) => {
       return this.renderScene(route, navigator);
     }
@@ -116,11 +111,9 @@ class CogApp extends React.Component {
       return <GameSix navigator={navigator} />
     } else if(route.id === 22){
       return<NextTrial navigator={navigator} route={route}/>
-    // } else if(route.id === 23){
-    //   return<LoadingPage0 navigator={navigator} route={route}/>
-    } else if (route.id === 24){
-      return <LoadingPage1 navigator={navigator} />
-    } 
+    } else if(route.id === 23){
+      return<LoadingPageBugZap navigator={navigator} route={route}/>
+    }
   }
 }
 

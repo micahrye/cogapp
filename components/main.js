@@ -42,7 +42,7 @@ class Main extends React.Component {
   }
 
   goToBugZap = () => {
-    this.props.navigator.replace({id: 6});
+    this.props.navigator.replace({id: 23});
   }
 
   goToGameTwo = () => {
