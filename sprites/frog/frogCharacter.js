@@ -38,6 +38,7 @@ const frogCharacter = {
     require("./frog_eat00deg07.png"),
     require("./frog_eat00deg08.png"),
     require("./frog_eat00deg09.png"),
+    require("./frog_eat00deg10.png"),
   ],
 
   eat1: [

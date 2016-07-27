@@ -9,9 +9,11 @@ import {
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
+import shallowCompare from "react-addons-shallow-compare";
 
 /*****PROPS LIST*****/
 /*Required:
@@ -76,6 +78,8 @@ class AnimatedSprite extends React.Component{
     this.fps = 10;
   }
 
+
+
   componentWillMount() {
     if(this.props.draggable){
       // note that with PanResponder we setNativeProps for performance reasons,
@@ -129,6 +133,10 @@ class AnimatedSprite extends React.Component{
 
     this.renderTime = Date.now();
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return (shallowCompare(this, nextProps, nextState));
+  // }
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
@@ -295,7 +303,7 @@ class AnimatedSprite extends React.Component{
             activeOpacity={1.0}
             hitSlop={this.props.hitSlop}
             onPress={ (evt) => this.handlePress(evt) }>
-            <Animated.Image
+            <Image
               ref={(ref) => {
                 this.refAnimatedImage = ref;
               }}
