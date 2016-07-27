@@ -127,9 +127,10 @@ class GameTwo1 extends Component {
       phase0Left: grassCharacter,
       phase0Right: grassCharacter,
       phase0Correct: "left",
-      foodTween1: tweenInitial,
+      foodTween01: tweenInitial,
+      foodTween02: tweenInitial,
       foodTween2: tweenInitial,
-      signTween1: tweenInitial,
+      signTween01: tweenInitial,
       signTween2: tweenInitial,
       timeoutHuh: false,
       foodPressed: false,
@@ -170,8 +171,9 @@ class GameTwo1 extends Component {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
       if (this.state.gamePhase) {
-          this.setState({foodTween1: tweenTimeout(foodEndTop,startTop),
-                         signTween1: tweenTimeout(signEndTop,startTop)});
+          this.setState({foodTween01: tweenTimeout(foodEndTop,startTop),
+                         foodTween02: tweenTimeout(foodEndTop,startTop),
+                         signTween01: tweenTimeout(signEndTop,startTop)});
         } else {
           this.setState({foodTween2: tweenTimeout(foodEndTop,startTop),
                          signTween2: tweenTimeout(signEndTop,startTop)});
@@ -185,8 +187,9 @@ class GameTwo1 extends Component {
     //console.warn("timeout");
     if (!this.state.foodPressed) {
       if (this.state.gamePhase) {
-        this.setState({foodTween1: tweenHop(foodEndTop),
-                       signTween1: tweenHop(signEndTop)});
+        this.setState({foodTween01: tweenHop(foodEndTop),
+                       foodTween02: tweenHop(foodEndTop),
+                       signTween01: tweenHop(signEndTop)});
       } else {
         this.setState({foodTween2: tweenHop(foodEndTop),
                        signTween2: tweenHop(signEndTop)});
@@ -224,8 +227,9 @@ class GameTwo1 extends Component {
         setTimeout(this.onTimeoutOne,10000);
         setTimeout(this.onTimeoutTwo,5000);
         if (this.state.gamePhase) {
-          this.setState({foodTween1: tweenDown(startTop,foodEndTop),
-                         signTween1: tweenDown(startTop,signEndTop)});
+          this.setState({foodTween01: tweenDown(startTop,foodEndTop),
+                         foodTween02: tweenDown(startTop, foodEndTop),
+                         signTween01: tweenDown(startTop,signEndTop)});
         } else {
           this.setState({foodTween2: tweenDown(startTop,foodEndTop),
                          signTween2: tweenDown(startTop,signEndTop)});
@@ -254,27 +258,31 @@ class GameTwo1 extends Component {
       case 7:
          this.setState({foodKey4: Math.random()});
          x = startLeft2;
-         if (this.state.phase0Correct === "left") {
-           this.setState({foodPressed: false});
-           this.onTimeoutOne();
-           this.setState({gamePhase: false});
-           this.onLeverTouch();
-         }
+         this.setState({foodTween01: tweenFall(x),
+                        foodPressed: true});
+        //  if (this.state.phase0Correct === "left") {
+        //    this.setState({foodPressed: false});
+        //    this.randomizeKeys();
+        //    this.setState({//foodTween1: tweenTimeout(foodEndTop,startTop),
+        //                   signTween01: tweenTimeout(signEndTop,startTop)});
+        //    this.setState({gamePhase: false});
+        //  }
          break;
       case 9:
          this.setState({foodKey5: Math.random()});
          x= startLeft2+spacing;
-         if (this.state.phase0Correct === "right") {
-           this.setState({foodPressed: false});
-           this.onTimeoutOne();
-           this.setState({gamePhase: false});
-           this.onLeverTouch();
-         }
+         this.setState({foodTween02: tweenFall(x),
+                        foodPressed: true});
+        //  if (this.state.phase0Correct === "right") {
+        //    this.setState({foodPressed: false});
+        //    this.randomizeKeys();
+        //    this.setState({//foodTween1: tweenTimeout(foodEndTop,startTop),
+        //                   signTween01: tweenTimeout(signEndTop,startTop)});
+        //    this.setState({gamePhase: false});
+        // }
          break;
     }
 
-    this.setState({foodTween1: tweenFall(x),
-                   foodPressed: true});
   }
 
 
@@ -364,7 +372,7 @@ class GameTwo1 extends Component {
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
-                    tween={this.state.signTween1}
+                    tween={this.state.signTween01}
                     spriteKey={6}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft2}}
                     size={{width: 60, height: 60}}
@@ -372,7 +380,7 @@ class GameTwo1 extends Component {
                     character={this.state.phase0Left}
                     key={this.state.foodKey4}
                     tweenStart="auto"
-                    tween={this.state.foodTween1}
+                    tween={this.state.foodTween01}
                     onPress={this.onFoodPress}
                     spriteKey={7}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft2+spacing-30}}
@@ -381,7 +389,7 @@ class GameTwo1 extends Component {
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
-                    tween={this.state.signTween1}
+                    tween={this.state.signTween01}
                     spriteKey={8}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft2+spacing}}
                     size={{width: 60, height: 60}}
@@ -389,7 +397,7 @@ class GameTwo1 extends Component {
                     character={this.state.phase0Right}
                     key={this.state.foodKey5}
                     tweenStart="auto"
-                    tween={this.state.foodTween1}
+                    tween={this.state.foodTween02}
                     onPress={this.onFoodPress}
                     spriteKey={9}/>
         </Image>
