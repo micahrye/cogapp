@@ -57,6 +57,7 @@ class AnimatedSprite extends React.Component{
       _width: props.size.width,
       _height: props.size.height,
       _transform: props.rotate,
+      _frameIndex: -1,
     };
 
     this.character = undefined;
@@ -134,9 +135,9 @@ class AnimatedSprite extends React.Component{
     this.renderTime = Date.now();
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return (shallowCompare(this, nextProps, nextState));
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return (shallowCompare(this, nextProps, nextState));
+  }
 
   componentWillUnmount(){
     // Make sure to clear any intervals that have been set.
@@ -155,7 +156,7 @@ class AnimatedSprite extends React.Component{
       if(this.frameIndex > this.numFrames){
         this.frameIndex = 0;
       }
-      this.setState({animate: true});
+      this.setState({frameIndex: this.frameIndex});
     }, 1000 / this.fps);
   }
 
@@ -183,7 +184,7 @@ class AnimatedSprite extends React.Component{
           return;
         }
       }
-      this.setState({animate: true});
+      this.setState({frameIndex: this.frameIndex});
     }, 1000 / this.fps);
   }
 
@@ -289,7 +290,8 @@ class AnimatedSprite extends React.Component{
   }
 
   render() {
-
+    //console.warn(this.frameIndex);
+    //console.warn(this.state.frameIndex);
     return(
         <Animated.View
           {...this._panResponder.panHandlers}
@@ -307,7 +309,7 @@ class AnimatedSprite extends React.Component{
               ref={(ref) => {
                 this.refAnimatedImage = ref;
               }}
-              source={this._animation[this._animationKey][this.frameIndex]}
+              source={this._animation[this._animationKey][this.state.frameIndex]}
               style={{
                 width: this.state._width,
                 height: this.state._height,

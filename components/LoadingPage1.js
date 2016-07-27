@@ -110,13 +110,7 @@ class LoadingPage extends Component {
 
     return (
       <View>
-        <View style={styles.background}>
-          <Animated.View style={{opacity:this.state.textOpacity}}>
-            <Text style={{...text}}>LOADING</Text>
-          </Animated.View>
-          <Animated.View style ={{...loadingbar}}>
-          </Animated.View>
-        </View>
+        
         <View>
             <View>
               <AnimatedSprite 
@@ -219,6 +213,12 @@ const styles = StyleSheet.create({
 export default LoadingPage;
 
 
-
+// <View style={styles.background}>
+//           <Animated.View style={{opacity:this.state.textOpacity}}>
+//             <Text style={{...text}}>LOADING</Text>
+//           </Animated.View>
+//           <Animated.View style ={{...loadingbar}}>
+//           </Animated.View>
+//         </View>
 
 
