@@ -13,18 +13,18 @@ import {
   Easing,
 } from 'react-native';
 
-import AnimatedSprite from "./animatedSprite";
+import AnimatedSprite from "../animatedSprite";
 
 // sprites
-import frogCharacter from "../sprites/frog/frogCharacter";
-import bugCharacter from "../sprites/bug/bugCharacter";
-import bubbleCharacterLarge from "../sprites/bubble/bubbleCharacterLarge";
+import frogCharacter from "../../sprites/frog/frogCharacter";
+import bugCharacter from "../../sprites/bug/bugCharacter";
+import bubbleCharacterLarge from "../../sprites/bubble/bubbleCharacterLarge";
 
 const Window = Dimensions.get('window');
 
 const LoadingTime = 1500;
 
-class LoadingPageBugZap extends Component {
+class BugZapLoading extends Component {
 
     constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ class LoadingPageBugZap extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 6});},LoadingTime);
+    setTimeout(() => {this.props.navigator.replace({id: 'BugZap'});},LoadingTime);
     this.barLoad();
     this.toggleOpacity();
   }
@@ -158,7 +158,7 @@ class LoadingPageBugZap extends Component {
           </View>
         </View>
         <View>
-          <Image style={styles.image} source={require('../backgrounds/Game_1_Background_1280.png')}/>
+          <Image style={styles.image} source={require('../../backgrounds/Game_1_Background_1280.png')}/>
         </View>
       </View>
     );
@@ -182,5 +182,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingPageBugZap
+export default BugZapLoading
 

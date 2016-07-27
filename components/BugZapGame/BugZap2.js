@@ -214,7 +214,7 @@ class BugZap2 extends React.Component {
   // go to next level
   buttonPress = () => {
     this.props.navigator.replace({
-      id: 9,
+      id: 'BugZap3',
     });
   }
 

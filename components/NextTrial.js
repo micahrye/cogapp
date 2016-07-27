@@ -27,10 +27,6 @@ class NextTrial extends Component {
     }, 1000);
   }
 
-  // setId = () => {
-  //   console.warn('here');
-  // }
-
   render() {
     return (
       <View style={styles.background}>

@@ -24,6 +24,7 @@ import DragDragon from "./components/DragDragon/DragDragon";
 import BubblePop from './components/BubbleGame/BubblePop';
 import BubblePopWinPage from './components/BubbleGame/BubblePopWinPage';
 import NextGamePage from './components/BubbleGame/NextGamePage';
+import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
 import BugZapLevel2 from './components/BugZapGame/BugZap2';
@@ -41,7 +42,6 @@ import GameFour from './components/Game4/GameFour';
 import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
 import NextTrial from './components/NextTrial'
-import LoadingPageBugZap from './components/LoadingPageBugZap';
 
 
 class CogApp extends React.Component {
@@ -57,7 +57,7 @@ class CogApp extends React.Component {
   render() {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 0}}
+  initialRoute={{name: 'My First Scene', id: 'Main'}}
   renderScene={(route, navigator) => {
       return this.renderScene(route, navigator);
     }
@@ -67,53 +67,53 @@ class CogApp extends React.Component {
   }
 
   renderScene(route, navigator){
-    if(route.id === 0){
+    if(route.id === 'Main'){
       return <Main navigator={navigator} />
-    }else if(route.id === 2){
+    }else if(route.id === 'DragDragon'){
       return <DragDragon />
-    }if (route.id === 3) {
+    }if (route.id === 'BubblePop') {
       return <BubblePop navigator={navigator} />
-    } else if (route.id === 4){
+    } else if (route.id === 'BubblePopWinPage'){
       return <BubblePopWinPage navigator={navigator} route={route}/>
-    } else if (route.id === 5){
+    } else if (route.id === 'NextGamePage'){
       return <NextGamePage navigator={navigator} route={route}/>
-    } else if (route.id === 6){
+    } else if(route.id === 'BugZapLoading'){
+      return <BugZapLoading navigator={navigator} route={route}/>
+    } else if (route.id === 'BugZap'){
       return <BugZap navigator={navigator} />
-    } else if (route.id === 7){
+    } else if (route.id === 'BugZap1'){
       return <BugZapLevel1 navigator={navigator} />
-    } else if (route.id === 8){
+    } else if (route.id === 'BugZap2'){
       return <BugZapLevel2 navigator={navigator} />
-    } else if (route.id === 9){
+    } else if (route.id === 'BugZap3'){
       return <BugZapLevel3 navigator={navigator} />
-    } else if (route.id === 10){
+    } else if (route.id === 'GameTwo'){
       return <GameTwo navigator={navigator} />
-    } else if (route.id === 11){
+    } else if (route.id === 'GameTwo1'){
       return <GameTwoLevel1 navigator={navigator} />
-    } else if (route.id === 12){
+    } else if (route.id === 'GameTwo2'){
       return <GameTwoLevel2 navigator={navigator} />
-    } else if (route.id === 13){
+    } else if (route.id === 'GameTwo3'){
       return <GameTwoLevel3 navigator={navigator} />
-    } else if (route.id === 14){
+    } else if (route.id === 'GameThree'){
       return <GameThree navigator={navigator} />
-    } else if (route.id === 15){
+    } else if (route.id === 'GameThree1'){
       return <GameThree1 navigator={navigator} />
-    } else if (route.id === 16){
+    } else if (route.id === 'GameThree2'){
       return <GameThreeLevel2 navigator={navigator} />
-    } else if (route.id === 17){
+    } else if (route.id === 'GameThree3'){
       return <GameThreeLevel3 navigator={navigator} />
-    } else if (route.id === 18){
+    } else if (route.id === 'GameThree4'){
       return <GameThreeLevel4 navigator={navigator} />
-    } else if (route.id === 19){
+    } else if (route.id === 'GameFour'){
       return <GameFour navigator={navigator} />
-    } else if (route.id === 20){
+    } else if (route.id === 'GameFive'){
       return <GameFive navigator={navigator} />
-    } else if (route.id === 21){
+    } else if (route.id === 'GameSix'){
       return <GameSix navigator={navigator} />
-    } else if(route.id === 22){
-      return<NextTrial navigator={navigator} route={route}/>
-    } else if(route.id === 23){
-      return<LoadingPageBugZap navigator={navigator} route={route}/>
-    }
+    } else if(route.id === 'NextTrial'){
+      return <NextTrial navigator={navigator} route={route}/>
+    } 
   }
 }
 

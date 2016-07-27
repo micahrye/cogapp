@@ -34,35 +34,35 @@ class Main extends React.Component {
   }
 
   goToBubblePop = () => {
-    this.props.navigator.replace({id: 3});
+    this.props.navigator.replace({id: 'BubblePop'});
   }
 
   goToDragon = () => {
-    this.props.navigator.replace({id: 2});
+    this.props.navigator.replace({id: 'DragDragon'});
   }
 
   goToBugZap = () => {
-    this.props.navigator.replace({id: 23});
+    this.props.navigator.replace({id: 'BugZapLoading'});
   }
 
   goToGameTwo = () => {
-    this.props.navigator.replace({id: 10});
+    this.props.navigator.replace({id: 'GameTwo'});
   }
 
   goToGameThree = () => {
-    this.props.navigator.replace({id: 14})
+    this.props.navigator.replace({id: 'GameThree'})
   }
 
   goToGameFour = () => {
-    this.props.navigator.replace({id: 19})
+    this.props.navigator.replace({id: 'GameFour'})
   }
 
   goToGameFive = () => {
-    this.props.navigator.replace({id:20})
+    this.props.navigator.replace({id: 'GameFive'})
   }
 
   goToGameSix = () => {
-    this.props.navigator.replace({id:21})
+    this.props.navigator.replace({id:'GameSix'})
   }
 
   render() {
