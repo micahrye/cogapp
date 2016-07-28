@@ -35,10 +35,10 @@ class BugZap extends React.Component {
     }
     this.tweenIdle = {};
     this.tweenAway = {};
-    this.timeout0 = undefined;
-    this.timeout1 = undefined;
-    this.timeout2 = undefined;
-    this.timeout3 = undefined;
+    this.timeoutBugAppear = undefined;
+    this.timeoutBugIdle = undefined;
+    this.timeoutFlyAway = undefined;
+    this.timeoutNextTrial = undefined;
 
     xEnd = 0;
     yEnd = 0;
@@ -46,11 +46,11 @@ class BugZap extends React.Component {
 
   componentDidMount() {
     // render bug after the rest of the scene
-    this.timeout0 = setTimeout( () => {
+    this.timeoutBugAppear = setTimeout( () => {
       this.setState({showBug: true});
     }, 500);
 
-    this.timeout1 = setTimeout(()=>{
+    this.timeoutBugIdle = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
       }
@@ -62,10 +62,10 @@ class BugZap extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout0);
-    clearTimeout(this.timeout1);
-    clearTimeout(this.timeout2);
-    clearTimeout(this.timeout3);
+    clearTimeout(this.timeoutBugAppear);
+    clearTimeout(this.timeoutBugIdle);
+    clearTimeout(this.timeoutFlyAway);
+    clearTimeout(this.timeoutNextTrial);
   }
 
   // 4 different spots for bug to land
@@ -145,7 +145,7 @@ class BugZap extends React.Component {
       tweenSettings: this.tweenIdle,
       bugSpriteAnimationKey: 'idle',
     });
-    this.timeout2 = setTimeout(()=>{
+    this.timeoutFlyAway = setTimeout(()=>{
       this.bugFlyAway('startFly');
       this.frogDisgust();
     }, 2000);
@@ -159,7 +159,7 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: animation, // "startFly" after landed, or "default" if zapped too early
       loop: false,
     });
-    timeout3 = setTimeout(() => {
+    timeoutNextTrial = setTimeout(() => {
       this.goToNextTrial();
     }, 2000);
   }
@@ -178,7 +178,7 @@ class BugZap extends React.Component {
 
   catchBug(){
     this.frogEat();
-    clearTimeout(this.timeout2); // so that "bugFlyAway" function doesn't run after bug is "caught"
+    clearTimeout(this.timeoutFlyAway); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // triggered when certain animations finish
@@ -186,11 +186,11 @@ class BugZap extends React.Component {
     if(animationKey === 'splat'){
       this.setState({showBug: false}); // once bug has splatted
     }
-    if(animationKey === 'celebrate'){
-      this.goToNextTrial(); // once bug is done celebrating
-    }
-    if(animationKey === 'eat0' || animationKey === 'eat2'){
+    else if(animationKey === 'eat0' || animationKey === 'eat2'){
       this.frogCelebrate(); // celebrate after eating the bug
+    }
+    else if(animationKey === 'celebrate'){
+      this.goToNextTrial(); // once bug is done celebrating
     }
   }
 

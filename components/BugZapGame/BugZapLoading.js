@@ -36,7 +36,7 @@ class BugZapLoading extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 'BugZap'});},LoadingTime);
+    setTimeout(() => {this.props.navigator.replace({id: 'BugZap3'});},LoadingTime);
     this.barLoad();
     this.toggleOpacity();
   }
@@ -148,6 +148,24 @@ class BugZapLoading extends Component {
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'idle'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'prettyIdle'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'startPrettyFly'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={bugCharacter}
+              spriteAnimationKey={'prettyFly'}
               fps={10}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}

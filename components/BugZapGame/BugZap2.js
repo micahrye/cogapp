@@ -35,31 +35,31 @@ class BugZap2 extends React.Component {
     }
     this.bugSide = 'right';
     this.tweenAway = {};
-    this.timeout0 = undefined;
-    this.timeout1 = undefined;
-    this.timeout2 = undefined;
-    this.timeout3 = undefined;
-    this.timeout4 = undefined;
+    this.timeoutBlackout = undefined;
+    this.timeoutSpotlight = undefined;
+    this.timeoutRemoveSpotlight = undefined;
+    this.timeoutRemoveBlackout = undefined;
+    this.timeoutFlyAway = undefined;
   }
 
   componentDidMount() {
-    this.timeout0 = setTimeout ( () => {
+    this.timeoutBlackout = setTimeout ( () => {
       this.setBlackout();
     }, 3500);
     this.setUpTween();
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout0);
-    clearTimeout(this.timeout1);
-    if(this.timeout2 !== undefined){
-      clearTimeout(this.timeout2);
+    clearTimeout(this.timeoutBlackout);
+    clearTimeout(this.timeoutSpotlight);
+    if(this.timeoutRemoveSpotlight !== undefined){
+      clearTimeout(this.timeoutRemoveSpotlight);
     }
-    if(this.timeout3 !== undefined){
-      clearTimeout(this.timeout3);
+    if(this.timeoutRemoveBlackout !== undefined){
+      clearTimeout(this.timeoutRemoveBlackout);
     }
-    if(this.timeout4 !== undefined){
-      clearTimeout(this.timeout4);
+    if(this.timeoutFlyAway !== undefined){
+      clearTimeout(this.timeoutFlyAway);
     }
   }
 
@@ -104,7 +104,7 @@ class BugZap2 extends React.Component {
     let blackout = [];
     blackout.push(<View key={0} style={styles.blackout}></View>);
     this.setState({blackoutScreen: blackout});
-    this.timeout1 = setTimeout ( () => {
+    this.timeoutSpotlight = setTimeout ( () => {
       this.flashSpotLight();
     }, 1000);
   }
@@ -114,9 +114,9 @@ class BugZap2 extends React.Component {
     let spotLight = [];
     spotLight.push(<View key={0} style={this.getSpotLightStyle()}></View>);
     this.setState({spotLightFlash: spotLight});
-    this.timeout2 = setTimeout ( () => {
+    this.timeoutRemoveSpotlight = setTimeout ( () => {
       this.setState({spotLightFlash: []});
-      this.timeout3 = setTimeout ( () => { // spotlight dissapears just before blackout does
+      this.timeoutRemoveBlackout = setTimeout ( () => { // spotlight dissapears just before blackout does
         this.removeBlackout();
       }, 200);
     }, 500);
@@ -182,14 +182,14 @@ class BugZap2 extends React.Component {
       loop: false,
     });
     this.frogCelebrate(frog);
-    clearTimeout(this.timeout4); // so that frogs aren't disgusted after bug is "caught"
+    clearTimeout(this.timeoutFlyAway); // so that frogs aren't disgusted after bug is "caught"
   }
 
   // frog is disgusted, bug flies away without idling
   wrongFrogTapped(frog){
     this.bugFlyAway();
     this.frogDisgust(frog);
-    clearTimeout(this.timeout4); // so bugFlyAway isn't called again
+    clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
   }
 
   // frog celebrates and bug is hidden

@@ -43,6 +43,27 @@ const bugCharacter = {
     require("../bubble/bubble_clockwise_large06.png"),
     require("../bubble/bubble_clockwise_large07.png"),
     require("../bubble/bubble_clockwise_large08.png"),
+  ],
+
+  prettyIdle: [
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle02.png"),
+    require("./prettybug_idle03.png"),
+  ],
+
+  prettyFly: [
+    require("./prettybug_fly03.png"),
+    require("./prettybug_fly04.png"),
+  ],
+
+  startPrettyFly: [
+    require("./prettybug_fly01.png"),
+    require("./prettybug_fly02.png"),
   ]
 
 };

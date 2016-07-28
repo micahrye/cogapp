@@ -37,18 +37,18 @@ class BugZap1 extends React.Component {
     }
     this.tweenIdle = {};
     this.tweenAway = {};
-    this.timeout0 = undefined;
-    this.timeout1 = undefined;
-    this.timeout2 = undefined;
+    this.timeoutBugAppear = undefined;
+    this.timeoutBugIdle = undefined;
+    this.timeoutFlyAway = undefined;
   }
 
   componentDidMount() {
     // render bug after the rest of the scene
-    this.timeout0 = setTimeout( () => {
+    this.timeoutBugAppear = setTimeout( () => {
       this.setState({showBug: true});
     }, 500);
 
-    this.timeout1 = setTimeout(()=>{
+    this.timeoutBugIdle = setTimeout(()=>{
       if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
       }
@@ -60,9 +60,9 @@ class BugZap1 extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout0);
-    clearTimeout(this.timeout1);
-    clearTimeout(this.timeout2);
+    clearTimeout(this.timeoutBugAppear);
+    clearTimeout(this.timeoutBugIdle);
+    clearTimeout(this.timeoutFlyAway);
   }
 
   // 4 different spots for bug to land
@@ -133,7 +133,7 @@ class BugZap1 extends React.Component {
       });
     }
 
-    this.timeout2 = setTimeout(()=>{
+    this.timeoutFlyAway = setTimeout(()=>{
       this.bugFlyAway('startFly');
       this.frogDisgust(0);
       this.frogDisgust(1);
@@ -184,14 +184,14 @@ class BugZap1 extends React.Component {
       loop: false, // so splat animation is not repeated
     });
     this.frogCelebrate(frog);
-    clearTimeout(this.timeout2); // so frogs aren't disgusted after bug is "caught"
+    clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
   }
 
   // frog is disgusted, bug flies away without idling
   wrongFrogTapped(frog){
     this.bugFlyAway();
     this.frogDisgust(frog);
-    clearTimeout(this.timeout2); // so bugFlyAway isn't called again
+    clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
   }
 
   // once bug has splatted
