@@ -132,7 +132,7 @@ class BugZap2 extends React.Component {
       showBug: true,
       bugSpriteAnimationKey: 'idle',
     });
-    this.timeout4 = setTimeout(()=>{
+    this.timeoutFlyAway = setTimeout(()=>{
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
@@ -159,7 +159,7 @@ class BugZap2 extends React.Component {
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
       if(this.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
-          this.correctFrogTapped();
+          this.correctFrogTapped(frog);
         }
         else{
           this.wrongFrogTapped(frog);
@@ -170,7 +170,7 @@ class BugZap2 extends React.Component {
           this.wrongFrogTapped(frog);
         }
         else{
-          this.correctFrogTapped();
+          this.correctFrogTapped(frog);
         }
       }
     }

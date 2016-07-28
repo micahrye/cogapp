@@ -32,26 +32,25 @@ class BugZap3 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       signKey: 3,
-      bugTween: {},
-      signTween: {},
-      signTweenStart: ' ',
-      zappedTooEarly: false,
-      frogSpriteAnimationKey: 'default',
-      bugSpriteAnimationKey: 'default',
-      loop: true,
-      bugSize: [128, 128],
     }
     this.tweenIdle = {};
     this.tweenAway = {};
+    this.bugTween = {};
+    this.signTween = {};
+    this.signTweenStart = ' ';
     this.timeoutBugAppear = undefined;
     this.timeoutBugIdle = undefined;
     this.timeoutFlyAway = undefined;
     this.timeoutPrettyBug = undefined;
     this.timeoutPrettyBugSave = undefined;
-    this.prettyBug = true;
+    this.prettyBug = undefined;
     this.bugSaveSpot = undefined;
+    this.bugSize = [128, 128];
+    this.frogSpriteAnimationKey = 'default';
+    this.bugSpriteAnimationKey = 'default';
+    this.zappedTooEarly = false;
+    this.loop = true;
     this.xEnd = undefined;
-
   }
 
   componentDidMount() {
@@ -61,7 +60,7 @@ class BugZap3 extends React.Component {
     }, 500);
 
     this.timeoutBugIdle = setTimeout(()=>{
-      if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
+      if(!this.zappedTooEarly){ // after first tween is completed, bug idles
         this.bugIdle();
       }
       else{
@@ -116,46 +115,41 @@ class BugZap3 extends React.Component {
       loop: false,
     };
 
-    this.setState({
-      bugTween: // initial tween onto screen
-      {
+    // initial tween onto screen
+    this.bugTween = {
         tweenType: "sine-wave",
         startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
         xTo: [450, 500, this.xEnd],
         yTo: [0, 120, 0, 120],
         duration: 2000,
         loop: false,
-      },
-    });
+      };
   }
 
   // switch to idle bug character and pause tweening
   bugIdle() {
     let bugColorChoice = Math.random();
-    //this.prettyBug = Boolean(Math.floor(Math.random() * 2));
+    this.prettyBug = Boolean(Math.floor(Math.random() * 2));
 
     if(bugColorChoice < .5){
-      this.setState({
-        bugKey: Math.random(),
-        bugSpriteAnimationKey: 'idle', // one type of bug color
-        bugTween: this.tweenIdle,
-      });
+      this.bugSpriteAnimationKey = 'idle'; // one type of bug color
     }
     else{
-      this.setState({
-        bugKey: Math.random(),
-        bugSpriteAnimationKey: 'bubble', // other type of bug color
-        bugTween: this.tweenIdle,
-      });
+      this.bugSpriteAnimationKey = 'bubble'; // other type of bug color
     }
+    this.bugTween = this.tweenIdle;
+    this.setState({
+      bugKey: Math.random(),
+    });
 
     if(this.prettyBug){
       timeoutPrettyBug = setTimeout(() => {
+        this.bugSpriteAnimationKey = 'prettyIdle'; // 50% of time it changes to prettybug
         this.setState({
           bugKey: Math.random(),
-          bugSpriteAnimationKey: 'prettyIdle', // 50% of time it changes to prettybug
-        })
-        timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
+        });
+
+        this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
           this.saveBug();
         }, 1000);
       }, 250);
@@ -172,17 +166,15 @@ class BugZap3 extends React.Component {
 
   // switch to flying bug character and start next tween
   bugFlyAway(animation) {
+    this.bugSpriteAnimationKey = animation;
+    this.bugTween = this.tweenAway;
+
+    if(!this.prettyBug){
+      this.loop = false;
+    }
     this.setState({
       bugKey: Math.random(),
-      bugSpriteAnimationKey: animation,
-      loop: false,
-      bugTween: this.tweenAway,   
     });
-    if(this.prettyBug){
-      this.setState({
-        loop: true,
-      });
-    }
   }
 
   // drop sign and put bug on it
@@ -194,24 +186,25 @@ class BugZap3 extends React.Component {
       duration: 1700,
       loop: false,
     };
+    this.signTweenStart = 'auto';
+    this.bugTween = {
+      tweenType: 'move',
+      startXY: [this.xEnd, 120],
+      endXY: [100, 40],
+      duration: 2000,
+      loop: false,
+    };
+    this.bugSize = [70, 70];
+
     this.setState({
       signKey: Math.random(),
-      signTweenStart: 'auto',
       bugKey: Math.random(),
-      bugSize: [70, 70],
-      bugTween: {
-        tweenType: 'move',
-        startXY: [this.xEnd, 120],
-        endXY: [100, 40],
-        duration: 2000,
-        loop: false,
-      },
     });
   }
 
   frogTap = (frog) => {
-    let bugType = this.state.bugSpriteAnimationKey;
-    if(this.state.showBug && this.state.bugSize[0] === 128){ // if bug isn't already eaten or saved
+    let bugType = this.bugSpriteAnimationKey;
+    if(this.state.showBug && this.bugSize[0] === 128){ // if bug isn't already eaten or saved
       if(bugType === 'idle'){ 
         if(frog === 0){ // celebrate if right "color"
           this.correctFrogTapped(frog);
@@ -231,20 +224,21 @@ class BugZap3 extends React.Component {
       else if(bugType === 'prettyIdle'){ // frog is disgusted and prettybug flies away
         this.incorrectFrogTap(frog);
       }
-      else if(this.state.bugTween != this.tweenAway){ // zapped too early  
+      else if(this.bugTween != this.tweenAway){ // zapped too early  
         this.frogDisgust(frog);
-        this.setState({zappedTooEarly: true});
+        this.zappedTooEarly = true;
       }
     }
   }
 
   // bug splats and is hidden, frog celebrates
   correctFrogTapped(frog){
+    this.loop =false; // so splat animation is not repeated
+    this.bugSpriteAnimationKey = 'splat';
     this.setState({
       bugKey: Math.random(), 
-      bugSpriteAnimationKey: 'splat',
-      loop: false, // so splat animation is not repeated
     });
+
     this.frogCelebrate(frog);
     clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
   }
@@ -259,6 +253,7 @@ class BugZap3 extends React.Component {
     }
     this.frogDisgust(frog);
     clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
+    clearTimeout(this.timeoutPrettyBugSave); // so bug isn't saved
   }
 
   // once bug has finished specific animation
@@ -270,19 +265,23 @@ class BugZap3 extends React.Component {
 
   frogCelebrate(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
+      this.setState({frogKey0: Math.random()});
+      this.frogSpriteAnimationKey = 'celebrate';
     }
     else{
-      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
+      this.setState({frogKey1: Math.random()}); 
+      this.frogSpriteAnimationKey = 'celebrate';
     }
   }
 
   frogDisgust(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'disgust'});
+      this.setState({frogKey0: Math.random()}) 
+      this.frogSpriteAnimationKey = 'disgust';
     }
     else{
-      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
+      this.setState({frogKey1: Math.random()});
+      this.frogSpriteAnimationKey = 'disgust';
     }
   }
 
@@ -308,19 +307,19 @@ class BugZap3 extends React.Component {
                 draggable={false}
                 character={signCharacter}
                 tween={this.signTween}
-                tweenStart={this.state.signTweenStart}/> 
+                tweenStart={this.signTweenStart}/> 
 
             {this.state.showBug ? 
               <AnimatedSprite
                 key={this.state.bugKey}
                 coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                size={{width: this.state.bugSize[0], height: this.state.bugSize[1]}}
+                size={{width: this.bugSize[0], height: this.bugSize[1]}}
                 draggable={false}
                 character={bugCharacter}
-                tween={this.state.bugTween}
+                tween={this.bugTween}
                 tweenStart='auto'
-                spriteAnimationKey={this.state.bugSpriteAnimationKey}
-                loopAnimation={this.state.loop}
+                spriteAnimationKey={this.bugSpriteAnimationKey}
+                loopAnimation={this.loop}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
             : null}
 
@@ -331,7 +330,7 @@ class BugZap3 extends React.Component {
               size={{width: 256, height: 256}}
               draggable={false}
               character={frogCharacter}
-              spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+              spriteAnimationKey={this.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
 
@@ -343,7 +342,7 @@ class BugZap3 extends React.Component {
               rotate={[{rotateY: '180deg'}]}
               draggable={false}
               character={frogCharacter}
-              spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+              spriteAnimationKey={this.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}} 
               hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>
         </Image> 

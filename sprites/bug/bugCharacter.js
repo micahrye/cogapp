@@ -10,6 +10,8 @@ const bugCharacter = {
     require("./bug_idle01.png"),
     require("./bug_idle01.png"),
     require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
+    require("./bug_idle01.png"),
     require("./bug_idle02.png"),
     require("./bug_idle03.png"),
   ],
@@ -46,6 +48,8 @@ const bugCharacter = {
   ],
 
   prettyIdle: [
+    require("./prettybug_idle01.png"),
+    require("./prettybug_idle01.png"),
     require("./prettybug_idle01.png"),
     require("./prettybug_idle01.png"),
     require("./prettybug_idle01.png"),
