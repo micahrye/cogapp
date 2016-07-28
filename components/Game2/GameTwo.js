@@ -22,6 +22,8 @@ import Tweener from "../Tweener";
 // import different characters to feed to animated sprite
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
+import canCharacter from "../../sprites/can/canCharacter";
+import bugCharacter from "../../sprites/bug/bugCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
 
@@ -94,12 +96,12 @@ class GameTwo extends Component {
 
     super(props);
     this.state = {
-      canKey: 0,
+      foodKey: 0,
       signKey: 0.5,
-      canTween: tweenInitial,
+      foodTween: tweenInitial,
       signTween: tweenInitial,
-      timeoutHuh: false,
-      foodPressed: false,
+      onboarding: 1,
+      foodCharacter: grassCharacter,
     }
 
   }
@@ -122,44 +124,45 @@ class GameTwo extends Component {
 
 
 
-  onTimeoutOne = () => {
-    //console.warn("timeout");
-    if (!this.state.foodPressed) {
-      this.setState({canTween: tweenTimeout(endTopCan,startTop),
-                     signTween: tweenTimeout(endTopSign,startTop),
-                     canKey: Math.random(),
-                     signKey: Math.random(),
-                     timeoutHuh: false});
-    }
-  }
-
-  onTimeoutTwo = () => {
-    //console.warn("timeout");
-    if (!this.state.foodPressed) {
-      this.setState({canTween: tweenHop(endTopCan),
-                     signTween: tweenHop(endTopSign),
-                     canKey: Math.random(),
-                     signKey: Math.random(),});
-    }
-  }
-
   onLeverTouch = () => {
-    if(!this.state.timeoutHuh && !this.state.foodPressed) {
-      setTimeout(this.onTimeoutOne,10000);
-      setTimeout(this.onTimeoutTwo,5000);
-      this.setState({canTween: tweenDown(startTop,endTopCan),
-                     signTween: tweenDown(startTop,endTopSign),
-                     canKey: Math.random(),
-                     signKey: Math.random(),
-                     timeoutHuh: true,});
-    }
+
+      switch(this.state.onboarding) {
+        case 1:
+          // grass/gopher character first
+          this.setState({foodTween: tweenDown(startTop,endTopCan),
+                         signTween: tweenDown(startTop,endTopSign),
+                         foodKey: Math.random(),
+                         signKey: Math.random()});
+          break;
+        case 2:
+          this.setState({foodCharacter: canCharacter,
+                         foodTween: tweenDown(startTop,endTopCan),
+                         signTween: tweenDown(startTop,endTopSign),
+                         foodKey: Math.random(),
+                         signKey: Math.random()});
+          break;
+        case 3:
+          this.setState({foodCharacter: bugCharacter,
+                         foodTween: tweenDown(startTop,endTopCan),
+                         signTween: tweenDown(startTop,endTopSign),
+                         foodKey: Math.random(),
+                         signKey: Math.random()});
+          break;
+      }
+
+
+
   }
 
   onFoodPress = () => {
-    this.setState({canTween: tweenFall,
-                   canKey: Math.random(),
-                   foodPressed: true});
-    setTimeout(this.buttonPress,2000); // move to next stage after 3 seconds
+    this.setState({foodTween: tweenFall,
+                   foodKey: Math.random(),
+                   signTween: tweenTimeout(endTopSign,startTop),
+                   signKey: Math.random(),
+                   onboarding: this.state.onboarding+1});
+    if (this.state.onboarding === 3) {
+      setTimeout(this.buttonPress,2000); 
+    }
   }
 
 
@@ -199,12 +202,12 @@ class GameTwo extends Component {
                     tweenStart="auto"
                     tween={this.state.signTween}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+32}}
-                    key={this.state.canKey}
+                    key={this.state.foodKey}
                     size={{width: 60, height: 60}}
                     draggable={false}
-                    character={grassCharacter}
+                    character={this.state.foodCharacter}
                     tweenStart="auto"
-                    tween={this.state.canTween}
+                    tween={this.state.foodTween}
                     onPress={this.onFoodPress}/>
         </Image>
       </View>

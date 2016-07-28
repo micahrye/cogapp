@@ -143,6 +143,9 @@ class GameTwo1 extends Component {
       foodPressed: false,
       gamePhase: true,
     }
+    this.timeout1 = undefined;
+    this.timeout2 = undefined;
+
   }
 
   componentDidMount() {
@@ -178,7 +181,7 @@ class GameTwo1 extends Component {
                          foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random(),
-                         signKey3: Math.random(),});
+                         signKey3: Math.random()});
         }
         this.setState({timeoutHuh: false});
     }
@@ -254,10 +257,11 @@ class GameTwo1 extends Component {
     }
   }
 
+
   onLeverTouch = () => {
     if (!this.state.timeoutHuh && !this.state.foodPressed) {
-        setTimeout(this.onTimeoutOne,10000);
-        setTimeout(this.onTimeoutTwo,5000);
+        this.timeout1 = setTimeout(this.onTimeoutOne,10000);
+        this.timeout2 = setTimeout(this.onTimeoutTwo,5000);
         if (this.state.gamePhase) {
           this.selectFoodPhase0();
           this.setState({foodTween01: tweenDown(startTop,foodEndTop),
@@ -280,7 +284,7 @@ class GameTwo1 extends Component {
                          signKey2: Math.random(),
                          signKey3: Math.random()});
         }
-        this.setState({timeout: true});
+        this.setState({timeoutHuh: true});
 
     }
   }
@@ -306,7 +310,7 @@ class GameTwo1 extends Component {
          this.setState({foodKey2: Math.random(),
                         foodTween12: tweenFall(x),
                         foodPressed: true});
-         if (this.state.phase1Correct[0] === "correct") {
+         if (this.state.phase1Correct[1] === "correct") {
            if (this.state.phase1AnsweredCorrectly === true) {
              setTimeout(this.buttonPress,2000);
            } else {
@@ -319,7 +323,7 @@ class GameTwo1 extends Component {
          this.setState({foodKey3: Math.random(),
                         foodTween13: tweenFall(x),
                         foodPressed: true});
-         if (this.state.phase1Correct[0] === "correct") {
+         if (this.state.phase1Correct[2] === "correct") {
            if (this.state.phase1AnsweredCorrectly === true) {
              setTimeout(this.buttonPress,2000);
            } else {
@@ -333,13 +337,16 @@ class GameTwo1 extends Component {
                         foodTween01: tweenFall(x),
                         foodPressed: true});
          if (this.state.phase0Correct === "left") {
+            clearTimeout(this.timeout1);
+            clearTimeout(this.timeout2);
             this.setState({signTween01: tweenTimeout(signEndTop,startTop),
                            foodTween02: tweenTimeout(foodEndTop,startTop),
                            signKey4: Math.random(),
                            signKey5: Math.random(),
                            foodKey5: Math.random(),
                            gamePhase: false,
-                           foodPressed: false});
+                           foodPressed: false,
+                           timeoutHuh: false});
           }
          break;
       case 9:
@@ -348,13 +355,16 @@ class GameTwo1 extends Component {
                         foodTween02: tweenFall(x),
                         foodPressed: true});
          if (this.state.phase0Correct === "right") {
+           clearTimeout(this.timeout1);
+           clearTimeout(this.timeout2);
              this.setState({signTween01: tweenTimeout(signEndTop,startTop),
                             foodTween01: tweenTimeout(foodEndTop,startTop),
                             signKey4: Math.random(),
                             signKey5: Math.random(),
                             foodKey4: Math.random(),
                             gamePhase: false,
-                            foodPressed: false});
+                            foodPressed: false,
+                            timeoutHuh: false});
             }
          break;
     }
