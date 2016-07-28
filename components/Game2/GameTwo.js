@@ -116,7 +116,7 @@ class GameTwo extends Component {
   // GameTwo1.js
   buttonPress = () => {
       this.props.navigator.replace({
-          id: 11,
+          id: 'GameTwo1',
       });
   }
 
@@ -159,6 +159,7 @@ class GameTwo extends Component {
     this.setState({canTween: tweenFall,
                    canKey: Math.random(),
                    foodPressed: true});
+    setTimeout(this.buttonPress,2000); // move to next stage after 3 seconds
   }
 
 
