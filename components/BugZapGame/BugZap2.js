@@ -9,11 +9,13 @@ import {
   Navigator,
 } from 'react-native';
 
+//import characters for animatedSprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
-import AnimatedSprite from "../animatedSprite";
 import Background from '../../backgrounds/Game_1_Background_1280.png';
+
+import AnimatedSprite from "../animatedSprite";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;

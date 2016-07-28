@@ -24,27 +24,33 @@ const Tweener = function () {
 
   const move = function (options, state) {
 
-    state.top.setValue(options.startXY[0]);
-    Animated.timing(          // Uses easing functions
-       state.top,    // The value to drive
-       {toValue: options.endXY[0],
-         easing: Easing.elastic(2),
-       duration: 1000, }            // Configuration
-     ).start();
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
 
-     state.left.setValue(options.startXY[1]);
-     Animated.timing(          // Uses easing functions
+    Animated.parallel([
+      Animated.timing(          // Uses easing functions
         state.left,    // The value to drive
-        {toValue: options.endXY[1],
-          easing: Easing.inOut(Easing.poly(2)),
-        duration: 1000, }            // Configuration
-      ).start(() => {
-        if (options.loop === false) {
-          return
-        }else{
-          move(options, state);
-        }
-      });
+        {
+          toValue: options.endXY[0],
+          easing: Easing.linear,
+          duration: options.duration, 
+        }            // Configuration
+      ),
+
+      Animated.timing(          // Uses easing functions
+        state.top,    // The value to drive
+        {
+          toValue: options.endXY[1],
+          easing: Easing.linear,
+          duration: options.duration,
+        }            // Configuration
+      ),
+    ]).start(() => {
+      if (options.loop === false) {
+        return;
+      }
+      move(options, state);
+    });
   };
 
   const sineWave = function(options, state){
@@ -199,7 +205,7 @@ const Tweener = function () {
      }
    ).start(() => {
      if (options.loop === false) {
-       looping = false;
+       return;
      }
      zoom(options, state);
    });
@@ -316,41 +322,41 @@ const Tweener = function () {
         ),
       ]),
       Animated.sequence([
-          Animated.timing(
-            state.top,
-            {
-              toValue: options.yTo[0],
-              easing: Easing.linear,
-              duration: options.duration/4,
-            }
-          ),
-          Animated.timing(
-            state.top,
-            {
-              toValue: options.startXY[1],
-              easing: Easing.linear,
-              duration: options.duration/4,
-            }
-          ),
-          Animated.timing(
-            state.top,
-            {
-              toValue: options.yTo[0],
-              easing: Easing.linear,
-              duration: options.duration/4,
-              delay: 100,
-            }
-          ),
-          Animated.timing(
-            state.top,
-            {
-              toValue: options.startXY[1],
-              easing: Easing.linear,
-              duration: options.duration/4,
-            }
-          ),
-        ]),
-      ]).start(() => {
+        Animated.timing(
+          state.top,
+          {
+            toValue: options.yTo[0],
+            easing: Easing.linear,
+            duration: options.duration/4,
+          }
+        ),
+        Animated.timing(
+          state.top,
+          {
+            toValue: options.startXY[1],
+            easing: Easing.linear,
+            duration: options.duration/4,
+          }
+        ),
+        Animated.timing(
+          state.top,
+          {
+            toValue: options.yTo[0],
+            easing: Easing.linear,
+            duration: options.duration/4,
+            delay: 100,
+          }
+        ),
+        Animated.timing(
+          state.top,
+          {
+            toValue: options.startXY[1],
+            easing: Easing.linear,
+            duration: options.duration/4,
+          }
+        ),
+      ]),
+    ]).start(() => {
         if (options.loop === false) {
           return
         }else{
@@ -434,6 +440,7 @@ const Tweener = function () {
       'sendOffScreen': sendOffScreen,
       'basic-back': basicBack,
       'curve-spin': curveSpin,
+      'move': move,
     }
   );
 
