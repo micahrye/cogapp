@@ -39,26 +39,26 @@ class BugZap extends React.Component {
     this.timeoutBugIdle = undefined;
     this.timeoutFlyAway = undefined;
     this.timeoutNextTrial = undefined;
-
-    xEnd = 0;
-    yEnd = 0;
+    this.flyInDuration = undefined;
   }
 
   componentDidMount() {
+    this.flyInDuration = Math.random() *  (4000 - 1500) + 1500;
+    this.setUpTweens();
+
     // render bug after the rest of the scene
     this.timeoutBugAppear = setTimeout( () => {
       this.setState({showBug: true});
-    }, 500);
 
-    this.timeoutBugIdle = setTimeout(()=>{
-      if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
-        this.bugIdle();
-      }
-      else{
-        this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
-      }
-    }, 2500);
-    this.setUpTweens();
+      this.timeoutBugIdle = setTimeout(()=>{
+        if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
+          this.bugIdle();
+        }
+        else{
+          this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
+        }
+      }, this.flyInDuration);
+    }, 500);
   }
 
   componentWillUnmount() {
@@ -68,59 +68,37 @@ class BugZap extends React.Component {
     clearTimeout(this.timeoutNextTrial);
   }
 
-  // 4 different spots for bug to land
+  // TODO REWORK THIS BC WE ALWAYS KNOW EXACTLY WHERE BUG IS GOING TO GO
   setUpTweens() {
-    let landingSpot = Math.random();
+    let sequenceChoice = Math.random();
+    xLand = 350;
+    yLand = 70;
+    let flySequenceX = [450, 500, xLand];
+    let flySequenceY = [];
 
-    x0 = SCREEN_WIDTH - 325;
-    y0 = SCREEN_HEIGHT - 200;
-
-    x1 = SCREEN_WIDTH - 300;
-    y1 = SCREEN_HEIGHT - 240;
-
-    if(landingSpot < .5){
-      xEnd = x0;
-      yEnd = y0;
-      this.setState({tongueType: 'eat0'});
+    if(sequenceChoice < .5){
+      flySequenceY = [0, yLand, 0, yLand];
     }
-    else if(landingSpot > .5){
-      xEnd = x1;
-      yEnd = y1;
-      this.setState({tongueType: 'eat2'});
+    else{
+      flySequenceY = [200, 100, 50, yLand];
     }
-
-    
-
-
-    // if(sequenceChoice < .25){
-    //   x = 200;
-    // }
-    // else if(sequenceChoice > .25 && sequenceChoice <.5){
-    //   x = 275;
-    // }
-    // else if(sequenceChoice > .5 && sequenceChoice <.75){
-    //   x = SCREEN_WIDTH - 400;
-    // }
-    // else{
-    //   x = SCREEN_WIDTH - 300;
-    // }
 
     // when landed
     this.tweenIdle = {
       tweenType: "sine-wave",
-      startXY: [xEnd, yEnd],
-      xTo: [xEnd],
-      yTo: [yEnd],
+      startXY: [xLand, yLand],
+      xTo: [xLand],
+      yTo: [yLand],
       duration: 0,
       loop: false,
     };
 
-    // tween offscreen
-    this.tweenAway = {
+    // tween offscreen  
+    this.tweenAway = { 
       tweenType: "sine-wave",
-      startXY: [xEnd, yEnd],
+      startXY: [xLand, yLand],
       xTo: [-150],
-      yTo: [0, 120, 0],
+      yTo: [0, yLand, 0],
       duration: 2000,
       loop: false,
     };
@@ -130,9 +108,9 @@ class BugZap extends React.Component {
       {
         tweenType: "sine-wave",
         startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-        xTo: [xEnd],
-        yTo: [0, 120, 0, yEnd],
-        duration: 2000,
+        xTo: flySequenceX,
+        yTo: flySequenceY,
+        duration: this.flyInDuration,
         loop: false,
       },
     });
@@ -159,7 +137,7 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: animation, // "startFly" after landed, or "default" if zapped too early
       loop: false,
     });
-    timeoutNextTrial = setTimeout(() => {
+    this.timeoutNextTrial = setTimeout(() => {
       this.goToNextTrial();
     }, 2000);
   }
@@ -186,7 +164,7 @@ class BugZap extends React.Component {
     if(animationKey === 'splat'){
       this.setState({showBug: false}); // once bug has splatted
     }
-    else if(animationKey === 'eat0' || animationKey === 'eat2'){
+    else if(animationKey === 'eat'){
       this.frogCelebrate(); // celebrate after eating the bug
     }
     else if(animationKey === 'celebrate'){
@@ -194,9 +172,9 @@ class BugZap extends React.Component {
     }
   }
 
-  // indicates which frame animation is currently on
+  // indicates which frame the animation is currently on
   getFrameIndex(animationKey, frameIndex) {
-    if((animationKey === 'eat0' || animationKey === 'eat2') && frameIndex === 6){
+    if(animationKey === 'eat' && frameIndex === 6){
       this.bugSplat(); // when tongue has reached bug
     }
   }
@@ -210,7 +188,7 @@ class BugZap extends React.Component {
   }
 
   frogEat(){
-    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: this.state.tongueType});
+    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'eat'});
   }
 
   frogCelebrate() {
@@ -251,7 +229,7 @@ class BugZap extends React.Component {
               <AnimatedSprite
                 key={this.state.bugKey}
                 spriteKey={0}
-                coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+                coordinates={{top: 0, left: 0}}
                 size={{width: 128, height: 128}}
                 draggable={false}
                 character={bugCharacter}

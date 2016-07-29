@@ -9,12 +9,10 @@ import {
   Navigator,
 } from 'react-native';
 
-
-// import characters for animatedSprite to use
+//import characters for animatedSprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
-import bugCharacter from "../../sprites/bug/bugCharacter"
-import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
-import signCharacter from "../../sprites/sign/signCharacter";
+import bugCharacter from '../../sprites/bug/bugCharacter';
+import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 import Background from '../../backgrounds/Game_1_Background_1280.png';
 
 import AnimatedSprite from "../animatedSprite";
@@ -23,265 +21,197 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class BugZap3 extends React.Component {
-
   constructor(props){
     super(props);
     this.state = {
-      showBug: false,
+      blackoutScreen: [],
+      spotLightFlash: [],
+      bugSpriteAnimationKey: 'default',
+      frogSpriteAnimationKey: 'default',
+      tweenSettings: {},
       bugKey: 0,
       frogKey0: 1,
       frogKey1: 2,
-      signKey: 3,
+      showBug: false,
+      loop: true,
     }
-    this.tweenIdle = {};
+    this.bugSide = undefined;
     this.tweenAway = {};
-    this.bugTween = {};
-    this.signTween = {};
-    this.signTweenStart = ' ';
-    this.timeoutBugAppear = undefined;
-    this.timeoutBugIdle = undefined;
+    this.timeoutBlackout = undefined;
+    this.timeoutSpotlight = undefined;
+    this.timeoutRemoveSpotlight = undefined;
+    this.timeoutRemoveBlackout = undefined;
     this.timeoutFlyAway = undefined;
-    this.timeoutPrettyBug = undefined;
-    this.timeoutPrettyBugSave = undefined;
-    this.prettyBug = undefined;
-    this.bugSaveSpot = undefined;
-    this.bugSize = [128, 128];
-    this.frogSpriteAnimationKey = 'default';
-    this.bugSpriteAnimationKey = 'default';
-    this.zappedTooEarly = false;
-    this.loop = true;
-    this.xEnd = undefined;
+    this.bulbTweenSettings = {
+      tweenType: "bounce-drop",
+      startY: -128,
+      endY: 0,
+      duration: 2000,
+      loop: false,
+    };
   }
 
   componentDidMount() {
-    // render bug after the rest of the scene
-    this.timeoutBugAppear = setTimeout( () => {
-      this.setState({showBug: true});
-    }, 500);
-
-    this.timeoutBugIdle = setTimeout(()=>{
-      if(!this.zappedTooEarly){ // after first tween is completed, bug idles
-        this.bugIdle();
-      }
-      else{
-        this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
-      }
+    this.timeoutBlackout = setTimeout ( () => {
+      this.setBlackout();
     }, 2500);
     this.setUpTweens();
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeoutBugAppear);
-    clearTimeout(this.timeoutBugIdle);
+    clearTimeout(this.timeoutBlackout);
+    clearTimeout(this.timeoutSpotlight);
+    clearTimeout(this.timeoutRemoveSpotlight);
+    clearTimeout(this.timeoutRemoveBlackout);
     clearTimeout(this.timeoutFlyAway);
-    clearTimeout(this.timeoutPrettyBug);
-    clearTimeout(this.timeoutPrettyBugSave);
   }
 
-  // 4 different spots for bug to land
+  // bug either appears on the left or the right
   setUpTweens() {
-    let sequenceChoice = Math.random();
-    this.xEnd = 0;
-    if(sequenceChoice < .25){
-      this.xEnd = 200;
-    }
-    else if(sequenceChoice > .25 && sequenceChoice <.5){
-      this.xEnd = 275;
-    }
-    else if(sequenceChoice > .5 && sequenceChoice <.75){
-      this.xEnd = SCREEN_WIDTH - 400;
+    let sideChoice = Math.random();
+    let xStart = undefined;
+    if(sideChoice < .5){
+      this.bugSide = 'left';
+      xStart = 150;
     }
     else{
-      this.xEnd = SCREEN_WIDTH - 300;
+      this.bugSide = 'right';
+      xStart = SCREEN_WIDTH - 300;
     }
 
-    // when landed
-    this.tweenIdle = {
+    // tween offscreen
+    this.tweenAway = {
       tweenType: "sine-wave",
-      startXY: [this.xEnd, 120],
-      xTo: [this.xEnd],
-      yTo: [120],
-      duration: 0,
-      loop: false,
-    };
-
-    // tween offscreen  
-    this.tweenAway = { 
-      tweenType: "sine-wave",
-      startXY: [this.xEnd, 120],
+      startXY: [xStart, 120],
       xTo: [-150],
       yTo: [0, 120, 0],
       duration: 2000,
       loop: false,
     };
 
-    // initial tween onto screen
-    this.bugTween = {
+    this.setState({
+      tweenSettings: // idle tween
+      {
         tweenType: "sine-wave",
-        startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - 275],
-        xTo: [450, 500, this.xEnd],
-        yTo: [0, 120, 0, 120],
+        startXY: [xStart, 120],
+        xTo: [xStart],
+        yTo: [120],
         duration: 2000,
         loop: false,
-      };
-  }
-
-  // switch to idle bug character and pause tweening
-  bugIdle() {
-    let bugColorChoice = Math.random();
-    this.prettyBug = Boolean(Math.floor(Math.random() * 2));
-
-    if(bugColorChoice < .5){
-      this.bugSpriteAnimationKey = 'idle'; // one type of bug color
-    }
-    else{
-      this.bugSpriteAnimationKey = 'bubble'; // other type of bug color
-    }
-    this.bugTween = this.tweenIdle;
-    this.setState({
-      bugKey: Math.random(),
-    });
-
-    if(this.prettyBug){
-      timeoutPrettyBug = setTimeout(() => {
-        this.bugSpriteAnimationKey = 'prettyIdle'; // 50% of time it changes to prettybug
-        this.setState({
-          bugKey: Math.random(),
-        });
-
-        this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
-          this.saveBug();
-        }, 1000);
-      }, 250);
-    }
-
-    else{
-      this.timeoutFlyAway = setTimeout(()=>{
-        this.bugFlyAway('startFly');
-        this.frogDisgust(0);
-        this.frogDisgust(1);
-      }, 2000);
-    }
-  }
-
-  // switch to flying bug character and start next tween
-  bugFlyAway(animation) {
-    this.bugSpriteAnimationKey = animation;
-    this.bugTween = this.tweenAway;
-
-    if(!this.prettyBug){
-      this.loop = false;
-    }
-    this.setState({
-      bugKey: Math.random(),
+      },
     });
   }
 
-  // drop sign and put bug on it
-  saveBug(){
-    this.signTween = {
-      tweenType: "bounce-drop",
-      startY: -105,
-      endY: 0,
-      duration: 1700,
+  // screen goes black
+  setBlackout() {
+    let blackout = [];
+    blackout.push(<View key={0} style={styles.blackout}></View>);
+    this.setState({blackoutScreen: blackout});
+    this.timeoutSpotlight = setTimeout ( () => {
+      this.flashSpotLight();
+    }, 1000);
+  }
+
+  // spotlight is flashed briefly after blackout
+  flashSpotLight() {
+    let spotLight = [];
+    let timeToRemoveBlackout = Math.random() * 2000; // average is 1 second
+    spotLight.push(<View key={0} style={this.getSpotLightStyle()}></View>);
+    this.setState({spotLightFlash: spotLight});
+    this.timeoutRemoveSpotlight = setTimeout ( () => {
+      this.setState({spotLightFlash: []});
+      this.timeoutRemoveBlackout = setTimeout ( () => { // spotlight dissapears just before blackout does
+        this.removeBlackout();
+      }, timeToRemoveBlackout);
+    }, 500);
+  }
+
+  // screen goes back to normal and bug appears
+  removeBlackout() {
+    let bug = [];
+    this.setState({
+      blackoutScreen: [],
+      showBug: true,
+      bugSpriteAnimationKey: 'idle',
+    });
+    this.timeoutFlyAway = setTimeout(()=>{
+      this.bugFlyAway();
+      this.frogDisgust(0);
+      this.frogDisgust(1);
+    }, 2000);
+  }
+
+  bugFlyAway() {
+    this.setState({
+      bugKey: Math.random(),
+      bugSpriteAnimationKey: 'startFly',
       loop: false,
-    };
-    this.signTweenStart = 'auto';
-    this.bugTween = {
-      tweenType: 'move',
-      startXY: [this.xEnd, 120],
-      endXY: [100, 40],
-      duration: 2000,
-      loop: false,
-    };
-    this.bugSize = [70, 70];
-
-    this.setState({
-      signKey: Math.random(),
-      bugKey: Math.random(),
+      tweenSettings: this.tweenAway,
     });
   }
 
-  frogTap = (frog) => {
-    let bugType = this.bugSpriteAnimationKey;
-    if(this.state.showBug && this.bugSize[0] === 128){ // if bug isn't already eaten or saved
-      if(bugType === 'idle'){ 
-        if(frog === 0){ // celebrate if right "color"
-          this.correctFrogTapped(frog);
-        }
-        else{ // wrong frog tapped for that "color"
-          this.incorrectFrogTap(frog);
-        }
-      }
-      else if(bugType === 'bubble'){ 
-        if(frog === 0){
-          this.incorrectFrogTap(frog);
-        }
-        else{
-          this.correctFrogTapped(frog);
-        }
-      }
-      else if(bugType === 'prettyIdle'){ // frog is disgusted and prettybug flies away
-        this.incorrectFrogTap(frog);
-      }
-      else if(this.bugTween != this.tweenAway){ // zapped too early  
-        this.frogDisgust(frog);
-        this.zappedTooEarly = true;
-      }
-    }
-  }
-
-  // bug splats and is hidden, frog celebrates
-  correctFrogTapped(frog){
-    this.loop =false; // so splat animation is not repeated
-    this.bugSpriteAnimationKey = 'splat';
-    this.setState({
-      bugKey: Math.random(), 
-    });
-
-    this.frogCelebrate(frog);
-    clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
-  }
-
-  // frog is disgusted, bug flies away without idling
-  incorrectFrogTap(frog){
-    if(this.prettyBug){
-      this.bugFlyAway('prettyFly');
-    }
-    else{
-      this.bugFlyAway('startFly');
-    }
-    this.frogDisgust(frog);
-    clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
-    clearTimeout(this.timeoutPrettyBugSave); // so bug isn't saved
-  }
-
-  // once bug has finished specific animation
+  // once bug has splatted
   onAnimationFinish(animationKey) {
     if(animationKey === "splat"){
       this.setState({showBug: false});
     }
   }
 
+  frogTap = (frog) => {
+    if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
+      if(this.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
+        if(frog === 0){
+          this.correctFrogTapped(frog);
+        }
+        else{
+          this.wrongFrogTapped(frog);
+        }
+      }
+      else { // bug landed on left side
+        if(frog === 0){
+          this.wrongFrogTapped(frog);
+        }
+        else{
+          this.correctFrogTapped(frog);
+        }
+      }
+    }
+  }
+
+  // bug splats and is hidden, frog celebrates
+  correctFrogTapped(frog) {
+    this.setState({
+      bugKey: Math.random(), 
+      bugSpriteAnimationKey: 'splat',
+      loop: false,
+    });
+    this.frogCelebrate(frog);
+    clearTimeout(this.timeoutFlyAway); // so that frogs aren't disgusted after bug is "caught"
+  }
+
+  // frog is disgusted, bug flies away without idling
+  wrongFrogTapped(frog){
+    this.bugFlyAway();
+    this.frogDisgust(frog);
+    clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
+  }
+
+  // frog celebrates and bug is hidden
   frogCelebrate(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random()});
-      this.frogSpriteAnimationKey = 'celebrate';
+      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
     else{
-      this.setState({frogKey1: Math.random()}); 
-      this.frogSpriteAnimationKey = 'celebrate';
+      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
   }
 
   frogDisgust(frog) {
     if(frog === 0){
-      this.setState({frogKey0: Math.random()}) 
-      this.frogSpriteAnimationKey = 'disgust';
+      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
     else{
-      this.setState({frogKey1: Math.random()});
-      this.frogSpriteAnimationKey = 'disgust';
+      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
   }
 
@@ -292,60 +222,89 @@ class BugZap3 extends React.Component {
     });
   }
 
+  getSpotLightStyle() {
+    let side = Math.random();
+    let posX = 0;
+    if(side < .5){
+      posX = 150;
+    }
+    else{
+      posX = SCREEN_WIDTH - 300
+    }
+    return(
+      {
+        flex: 1,
+        backgroundColor: 'white',
+        height: 150,
+        width: 150,
+        left: posX,
+        top: 100,
+        position: 'absolute',
+        borderRadius: 100,
+      }
+    )
+  }
+
   render(){
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>Go to Game Two</Text>
-            </TouchableOpacity>
+            <Text>Go to Game 2</Text>
+          </TouchableOpacity>
 
+          <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH/2 -50}}
+            size={{width: 128, height: 128}}
+            draggable={false}
+            character={lightbulbCharacter}
+            tween={this.bulbTweenSettings}
+            tweenStart="auto"/>
+      
+          {this.state.showBug ? 
             <AnimatedSprite
-                key={this.state.signKey}
-                coordinates={{top: -105, left: 100}}
-                size={{width: 70, height: 105}}
-                draggable={false}
-                character={signCharacter}
-                tween={this.signTween}
-                tweenStart={this.signTweenStart}/> 
-
-            {this.state.showBug ? 
-              <AnimatedSprite
-                key={this.state.bugKey}
-                coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-                size={{width: this.bugSize[0], height: this.bugSize[1]}}
-                draggable={false}
-                character={bugCharacter}
-                tween={this.bugTween}
-                tweenStart='auto'
-                spriteAnimationKey={this.bugSpriteAnimationKey}
-                loopAnimation={this.loop}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
-            : null}
-
-            <AnimatedSprite
-              key={this.state.frogKey0}
-              spriteKey={0}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-              size={{width: 256, height: 256}}
+              key={this.state.bugKey}
+              coordinates={{top: 0, left: 0}}
+              size={{width: 128, height: 128}}
               draggable={false}
-              character={frogCharacter}
-              spriteAnimationKey={this.frogSpriteAnimationKey} 
-              onPress={(frog) => {this.frogTap(frog)}}
-              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
+              character={bugCharacter}
+              tween={this.state.tweenSettings}
+              tweenStart="auto"
+              spriteAnimationKey={this.state.bugSpriteAnimationKey}
+              loopAnimation={this.state.loop}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
+          : null}
 
-            <AnimatedSprite 
-              key={this.state.frogKey1}
-              spriteKey={1}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: - 50}}
-              size={{width: 256, height: 256}}
-              rotate={[{rotateY: '180deg'}]}
-              draggable={false}
-              character={frogCharacter}
-              spriteAnimationKey={this.frogSpriteAnimationKey} 
-              onPress={(frog) => {this.frogTap(frog)}} 
-              hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>
-        </Image> 
+          <AnimatedSprite
+            key={this.state.frogKey0}
+            spriteKey={0}
+            coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+            size={{width: 256, height: 256}}
+            draggable={false}
+            character={frogCharacter}
+            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+            onPress={(frog) => {this.frogTap(frog)}}
+            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
+
+       
+          <AnimatedSprite 
+            key={this.state.frogKey1}
+            spriteKey={1}
+            coordinates={{top: SCREEN_HEIGHT - 275, left: -50}}
+            size={{width: 256, height: 256}}
+            rotate={[{rotateY: '180deg'}]}
+            draggable={false}
+            character={frogCharacter}
+            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+            onPress={(frog) => {this.frogTap(frog)}} 
+            hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>          
+
+          <View>
+            {this.state.blackoutScreen}
+          </View>
+          <View>
+            {this.state.spotLightFlash}
+          </View>
+        </Image>
       </View>
     );
   }
@@ -366,8 +325,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 90,
     height: 30,
+    position: 'absolute',
+  },
+  blackout: {
+    flex: 1,
+    backgroundColor: 'black',
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+    position: 'absolute',
+  },
+  spotLight: {
+    flex: 1,
+    backgroundColor: 'white',
+    height: 150,
+    width: 150,
+    left: 450,
+    top: 100,
+    position: 'absolute',
+    borderRadius: 100,
   },
 });
 
 export default BugZap3;
-

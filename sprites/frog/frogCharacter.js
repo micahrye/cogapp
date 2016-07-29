@@ -28,7 +28,7 @@ const frogCharacter = {
     require("./frog_disgust03.png"),
   ],
 
-  eat0:[
+  eat:[
     require("./frog_eat00deg01.png"),
     require("./frog_eat00deg02.png"),
     require("./frog_eat00deg03.png"),
@@ -39,25 +39,6 @@ const frogCharacter = {
     require("./frog_eat00deg08.png"),
     require("./frog_eat00deg09.png"),
     require("./frog_eat00deg10.png"),
-  ],
-
-  eat1: [
-  ],
-
-  eat2:[
-    require("./frog_eat45deg01.png"),
-    require("./frog_eat45deg02.png"),
-    require("./frog_eat45deg03.png"),
-    require("./frog_eat45deg04.png"),
-    require("./frog_eat45deg05.png"),
-    require("./frog_eat45deg06.png"),
-    require("./frog_eat45deg07.png"),
-    require("./frog_eat45deg08.png"),
-    require("./frog_eat45deg09.png"),
-    require("./frog_eat45deg10.png"),
-  ],
-
-  eat3: [
   ],
 
 };

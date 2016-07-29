@@ -18,7 +18,6 @@ import AnimatedSprite from "../animatedSprite";
 // sprites
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from "../../sprites/bug/bugCharacter";
-import bubbleCharacterLarge from "../../sprites/bubble/bubbleCharacterLarge";
 
 const Window = Dimensions.get('window');
 
@@ -36,7 +35,11 @@ class BugZapLoading extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {this.props.navigator.replace({id: 'BugZap3'});},LoadingTime);
+    setTimeout(() => {
+      this.props.navigator.replace({
+        id: 'BugZap',
+      });
+    },LoadingTime);
     this.barLoad();
     this.toggleOpacity();
   }
@@ -166,12 +169,6 @@ class BugZapLoading extends Component {
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'prettyFly'}
-              fps={10}/>
-            <AnimatedSprite 
-              coordinates={{top:250,left:550}}
-              size={{width:100,height:100}}
-              character={bubbleCharacterLarge}
-              spriteAnimationKey={'default'}
               fps={10}/>
           </View>
         </View>

@@ -23,8 +23,9 @@ class NextTrial extends Component {
     setTimeout(()=>{
       this.props.navigator.replace({
         id: this.props.route.getId(),
+        bugTags: this.props.route.bugTags,
       });
-    }, 1000);
+    }, 2000);
   }
 
   render() {
