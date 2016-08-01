@@ -74,16 +74,6 @@ class GameTwo extends Component {
       );
     }
 
-    tweenHop = function(startTop) {
-      return (
-        {
-          tweenType: "hop",
-          startY: startTop,
-          loop: false,
-        }
-      );
-    }
-
    tweenInitial = {
                   tweenType: "hop",
                   startY: startTop,
@@ -181,7 +171,8 @@ class GameTwo extends Component {
   toggleCreatureCharacter() {
 
     this.setState({foodKey: Math.random(),
-                   foodTween: tweenInitial});
+                   foodTween: tweenInitial,
+                   leverPressed: false});
 
     switch(this.state.onboarding) {
       case 2:
@@ -197,14 +188,22 @@ class GameTwo extends Component {
                       creatureKey2: Math.random(),
                       creatureKey3: Math.random(),
                       creatureTween2: tweenMove(creatureEnd,creatureStart),
-                      creatureTween3: tweenMove(creatureStart,creatureEnd),
+                      creatureTween3: tweenMove([600,115],[Window.width-250,115]),
                      })
         break;
     }
   }
 
+  toggleLevel = () => {
+    this.props.navigator.replace({id: 'GameTwo1',});
+  }
+
   nextLevel = () => {
-    this.props.navigator.replace({id: 'GameTwo1'});
+    this.setState({
+      creatureKey3: Math.random(),
+      creatureTween3: tweenMove([Window.width-250,115],[700,115]),
+    });
+    setTimeout(this.toggleLevel,1500);
   }
 
   onFoodPress = () => {
@@ -215,11 +214,10 @@ class GameTwo extends Component {
                      signTween: tweenTimeout(endTopSign,startTop),
                      signKey: Math.random(),
                      onboarding: this.state.onboarding+1,
-                     foodPressed: true,
-                     leverPressed: false});
+                     foodPressed: true});
       setTimeout(this.toggleCreatureCharacter.bind(this),2000);
       if (this.state.onboarding === 3) {
-        setTimeout(this.nextLevel,2000);
+        setTimeout(this.nextLevel,1000);
       }
     }
   }
@@ -253,8 +251,8 @@ class GameTwo extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
                     key={this.state.creatureKey2}/>
-                <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: 200, height: 160}}
+                <AnimatedSprite coordinates={{top: Window.height -50, left: Window.width - 120}}
+                    size={{width: 256, height: 256}}
                     draggable={false}
                     character={frogCharacter}
                     tweenStart={"auto"}
