@@ -31,7 +31,6 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
       loop: true,
-      tongueType: undefined,
     }
     this.tweenIdle = {};
     this.tweenAway = {};
@@ -68,7 +67,7 @@ class BugZap extends React.Component {
     clearTimeout(this.timeoutNextTrial);
   }
 
-  // TODO REWORK THIS BC WE ALWAYS KNOW EXACTLY WHERE BUG IS GOING TO GO
+  // 2 different ways bug can reach landing spot
   setUpTweens() {
     let sequenceChoice = Math.random();
     xLand = 350;

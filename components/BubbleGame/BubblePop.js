@@ -48,7 +48,6 @@ class BubblePop extends React.Component {
   // set up scene based on score from storage
   setUpScene (score) {
     this.createBubbles(NUM_BUBBLES - score);
-    this.setState({score});
     this.youLost(); // start game timeout
   }
 
@@ -56,7 +55,7 @@ class BubblePop extends React.Component {
   youLost = () => {
     timeout = setTimeout ( () => {
       this.props.navigator.push({ // go to NextGamePage after game timeout
-        id: 5,
+        id: 'NextGamePage',
         callback: this.resetGame,
       });
       return <NextGamePage />;

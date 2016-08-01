@@ -82,7 +82,7 @@ class CogApp extends React.Component {
     } else if (route.id === 'BugZap'){
       return <BugZap navigator={navigator} />
     } else if (route.id === 'BugZap1'){
-      return <BugZapLevel1 navigator={navigator} />
+      return <BugZapLevel1 navigator={navigator} route={route}/>
     } else if (route.id === 'BugZap2'){
       return <BugZapLevel2 navigator={navigator} />
     } else if (route.id === 'BugZap3'){

@@ -148,12 +148,18 @@ class BugZap3 extends React.Component {
       loop: false,
       tweenSettings: this.tweenAway,
     });
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial();
+    }, 2000);
   }
 
   // once bug has splatted
   onAnimationFinish(animationKey) {
     if(animationKey === "splat"){
       this.setState({showBug: false});
+    }
+    else if(animationKey === 'celebrate'){
+      this.goToNextTrial();
     }
   }
 
@@ -222,6 +228,17 @@ class BugZap3 extends React.Component {
     });
   }
 
+  goToNextTrial() {
+    this.props.navigator.push({
+      id: 'NextTrial',
+      getId: this.getCurrId,
+    });
+  }
+
+  getCurrId() {
+    return 'BugZap3';
+  }
+
   getSpotLightStyle() {
     let side = Math.random();
     let posX = 0;
@@ -283,7 +300,8 @@ class BugZap3 extends React.Component {
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
             onPress={(frog) => {this.frogTap(frog)}}
-            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
+            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
 
        
           <AnimatedSprite 
@@ -296,7 +314,8 @@ class BugZap3 extends React.Component {
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
             onPress={(frog) => {this.frogTap(frog)}} 
-            hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>          
+            hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>          
 
           <View>
             {this.state.blackoutScreen}

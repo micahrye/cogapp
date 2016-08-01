@@ -68,6 +68,10 @@ const bugCharacter = {
   startPrettyFly: [
     require("./prettybug_fly01.png"),
     require("./prettybug_fly02.png"),
+  ],
+
+  caught: [
+    require("./prettybug_idle01.png"),
   ]
 
 };

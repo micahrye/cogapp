@@ -75,17 +75,16 @@ class BugZap2 extends React.Component {
   setUpTweens() {
     let sideChoice = Math.random();
     let sequenceChoice = Math.random(); // to help choose two ways bug can approach both the right and left landing spots
-    let flySequenceX = [];
-    let flySequenceY = [0, yLand, 0, yLand];
-    let yLand = 70;
     let xLand = undefined;
+    let flySequenceX = [];
+    let flySequenceY = [0, 70, 0, 70];
 
     if(sideChoice < .5){ // bug lands on left side
       this.bugSide = 'left';
       xLand = 200;
       flySequenceX = [300, 350, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 50, 100, 50, yLand];
+        flySequenceY = [200, 50, 100, 50, 70];
       }
     }
     else{ // bug lands on right side
@@ -93,17 +92,16 @@ class BugZap2 extends React.Component {
       xLand = 350;
       flySequenceX = [450, 500, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 100, 50, yLand];
+        flySequenceY = [200, 100, 50, 70];
       }
     }
     
-
     // when landed
     this.tweenIdle = {
       tweenType: "sine-wave",
-      startXY: [xLand, yLand],
+      startXY: [xLand, 70],
       xTo: [xLand],
-      yTo: [yLand],
+      yTo: [70],
       duration: 0,
       loop: false,
     };
@@ -111,9 +109,9 @@ class BugZap2 extends React.Component {
     // tween offscreen  
     this.tweenAway = { 
       tweenType: "sine-wave",
-      startXY: [xLand, yLand],
+      startXY: [xLand, 70],
       xTo: [-150],
-      yTo: [0, yLand, 0],
+      yTo: [0, 70, 0],
       duration: 2000,
       loop: false,
     };
@@ -154,6 +152,9 @@ class BugZap2 extends React.Component {
       loop: false,
       tweenSettings: this.tweenAway,   
     }); 
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial();
+    }, 2000);
   }
 
   frogTap = (frog) => {
@@ -203,8 +204,11 @@ class BugZap2 extends React.Component {
 
   // once bug has splatted
   onAnimationFinish(animationKey) {
-    if(animationKey === "splat"){
+    if(animationKey === 'splat'){
       this.setState({showBug: false});
+    }
+    else if(animationKey === 'celebrate'){
+      this.goToNextTrial();
     }
   }
 
@@ -231,6 +235,17 @@ class BugZap2 extends React.Component {
     this.props.navigator.replace({
       id: 'BugZap3',
     });
+  }
+
+  goToNextTrial() {
+    this.props.navigator.push({
+      id: 'NextTrial',
+      getId: this.getCurrId,
+    });
+  }
+
+  getCurrId() {
+    return 'BugZap2';
   }
 
   render(){
@@ -264,7 +279,8 @@ class BugZap2 extends React.Component {
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}}
-              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
+              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
 
             <AnimatedSprite 
               key={this.state.frogKey1}
@@ -276,7 +292,8 @@ class BugZap2 extends React.Component {
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={(frog) => {this.frogTap(frog)}} 
-              hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}/>
+              hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
         </Image> 
       </View>
     );

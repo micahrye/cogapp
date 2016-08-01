@@ -28,9 +28,9 @@ class BugZap1 extends React.Component {
     super(props);
     this.state = {
       showBug: false,
-      bugKey: 0,
-      frogKey: 1,
-      signKey: 2,
+      bugKey: 10,
+      frogKey: 11,
+      bugTags: [],
     }
     this.tweenIdle = {};
     this.tweenAway = {};
@@ -44,18 +44,22 @@ class BugZap1 extends React.Component {
     this.timeoutPrettyBugSave = undefined;
     this.timeoutNextTrial = undefined;
     this.prettyBug = undefined;
-    this.bugSaveSpot = undefined;
     this.bugSize = [128, 128];
     this.frogSpriteAnimationKey = 'default';
     this.bugSpriteAnimationKey = 'default';
     this.zappedTooEarly = false;
     this.loop = true;
-    this.xLand = undefined;
+    this.xLand = 350;
+    this.yLand = 70;    
     this.flyInDuration = undefined;
-    this.bugTags = 0;
+    this.signs = [];
+    this.farthestTag = 0;
   }
 
   componentDidMount() {
+    if(this.props.route.bugTags){
+      this.createBugTags(this.props.route.bugTags);
+    }
     this.flyInDuration = Math.random() *  (4000 - 1500) + 1500;
     this.setUpTweens();
 
@@ -85,11 +89,40 @@ class BugZap1 extends React.Component {
     clearTimeout(this.timeoutNextTrial);
   }
 
-  // bug either lands on left or right
+  // load bug tags with already caught pretty bugs
+  createBugTags(numBugTags){
+    let spacing = 90;
+    if(numBugTags > 7){
+      spacing = SCREEN_WIDTH/numBugTags - 20;
+    }
+    for(let i = 0; i < numBugTags; i++){
+      this.signs.push(
+        <View key={Math.random()} style={{left: spacing*i}}>
+          <AnimatedSprite
+            coordinates={{top: 0, left: 0}}
+            size={{width: 70, height: 105}}
+            draggable={false}
+            character={signCharacter}/>
+
+          <AnimatedSprite
+            coordinates={{top: 40, left: 0}}
+            size={{width: 70, height: 70}}
+            draggable={false}
+            character={bugCharacter}
+            spriteAnimationKey='caught'
+            loopAnimation={this.loop}/>
+        </View> 
+      );
+    }
+    this.farthestTag = spacing*numBugTags;
+    this.setState({
+      bugTags: this.signs,
+    });
+  }
+
+  // two different ways bug can reach landing spot
   setUpTweens() {
     let sequenceChoice = Math.random();
-    this.xLand = 350;
-    this.yLand = 70;
     let flySequenceX = [450, 500, this.xLand];
     let flySequenceY = [];
 
@@ -163,12 +196,15 @@ class BugZap1 extends React.Component {
     this.bugSpriteAnimationKey = animation;
     this.bugTween = this.tweenAway;
 
-    if(!this.prettyBug){
+    if(!this.prettyBug){ // because non pretty bugs have a starting-to-fly animation that only loops once
       this.loop = false;
     }
     this.setState({
       bugKey: Math.random(),
     });
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial();
+    }, 2000);
   }
 
   // drop sign and put bug on it
@@ -180,23 +216,34 @@ class BugZap1 extends React.Component {
       duration: 1700,
       loop: false,
     };
-    this.signTweenStart = 'auto';
-    this.bugTween = {
+
+    this.signs.push( // place new sign at end of row of existing signs
+      <AnimatedSprite
+        key={Math.random()}
+        coordinates={{top: 0, left: this.farthestTag}}
+        size={{width: 70, height: 105}}
+        draggable={false}
+        character={signCharacter}
+        tween={this.signTween}
+        tweenStart='auto'/>
+    );
+
+    this.bugTween = { // bug moves up to new sign
       tweenType: 'move',
       startXY: [this.xLand, this.yLand],
-      endXY: [100, 40],
+      endXY: [this.farthestTag, 40],
       duration: 2000,
       loop: false,
     };
     this.bugSize = [70, 70];
 
     this.setState({
-      signKey: Math.random(),
       bugKey: Math.random(),
+      bugTags: this.signs,
     });
 
     this.timeoutNextTrial = setTimeout(() => {
-      this.goToNextTrial();
+      this.goToNextTrial(); // pass number of existing bug tags through to next trial
     }, 3000);
   }
 
@@ -240,8 +287,11 @@ class BugZap1 extends React.Component {
 
   // once bug has finished specific animation
   onAnimationFinish(animationKey) {
-    if(animationKey === "splat"){
+    if(animationKey === 'splat'){
       this.setState({showBug: false});
+    }
+    else if(animationKey === 'celebrate'){
+      this.goToNextTrial();
     }
   }
 
@@ -263,10 +313,10 @@ class BugZap1 extends React.Component {
   }
 
   goToNextTrial() {
-    this.props.navigator.replace({
+    this.props.navigator.push({
       id: 'NextTrial',
       getId: this.getCurrId,
-      bugTags: this.bugTags+ 1,
+      bugTags: this.state.bugTags.length,
     });
   }
 
@@ -278,43 +328,37 @@ class BugZap1 extends React.Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
-          <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>Go to Level 2</Text>
-            </TouchableOpacity>
+          {this.state.bugTags}
 
+          {this.state.showBug ? 
             <AnimatedSprite
-                key={this.state.signKey}
-                coordinates={{top: -105, left: 100}}
-                size={{width: 70, height: 105}}
-                draggable={false}
-                character={signCharacter}
-                tween={this.signTween}
-                tweenStart={this.signTweenStart}/> 
-
-            {this.state.showBug ? 
-              <AnimatedSprite
-                key={this.state.bugKey}
-                coordinates={{top: 0, left: 0}}
-                size={{width: this.bugSize[0], height: this.bugSize[1]}}
-                draggable={false}
-                character={bugCharacter}
-                tween={this.bugTween}
-                tweenStart='auto'
-                spriteAnimationKey={this.bugSpriteAnimationKey}
-                loopAnimation={this.loop}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
-            : null}
-
-            <AnimatedSprite
-              key={this.state.frogKey}
-              spriteKey={0}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-              size={{width: 256, height: 256}}
+              key={this.state.bugKey}
+              coordinates={{top: 0, left: 0}}
+              size={{width: this.bugSize[0], height: this.bugSize[1]}}
               draggable={false}
-              character={frogCharacter}
-              spriteAnimationKey={this.frogSpriteAnimationKey} 
-              onPress={(frog) => {this.frogTap(frog)}}
-              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}/>
+              character={bugCharacter}
+              tween={this.bugTween}
+              tweenStart='auto'
+              spriteAnimationKey={this.bugSpriteAnimationKey}
+              loopAnimation={this.loop}
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
+          : null}
+
+          <AnimatedSprite
+            key={this.state.frogKey}
+            spriteKey={0}
+            coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
+            size={{width: 256, height: 256}}
+            draggable={false}
+            character={frogCharacter}
+            spriteAnimationKey={this.frogSpriteAnimationKey} 
+            onPress={(frog) => {this.frogTap(frog)}}
+            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+
+          <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+            <Text>Go to Level 2</Text>
+          </TouchableOpacity> 
         </Image> 
       </View>
     );
