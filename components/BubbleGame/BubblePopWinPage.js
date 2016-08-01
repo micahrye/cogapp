@@ -19,7 +19,7 @@ class BubblePopWinPage extends React.Component {
       <View style={styles.container}>
         <TouchableOpacity onPress={this.handlePress}>
           <View style={styles.alert}>
-            <Text style={{fontSize: 20}}>Congratulations! You won! Press to reset.</Text>
+            <Text style={{fontSize: 20}}>Congratulations! You won!</Text>
           </View>
         </TouchableOpacity>
      </View>

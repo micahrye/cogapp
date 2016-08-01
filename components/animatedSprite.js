@@ -27,7 +27,7 @@ spriteAnimationKey: string, takes name of the key you want to use in character f
     if not included: defaults to 'default', startIdleAnimation automatically runs
     (change to a different value to switch animation)
 loopAnimation: bool, whether to loop animation given in spriteAnimationKey
-    ('idle' animation always looped as default)
+    ('default' animation always looped as default)
 tween: object, takes in tween settings
 tweenStart: string, takes either "touch" or "auto"
 spriteKey: object, unique key for the character
@@ -129,7 +129,7 @@ class AnimatedSprite extends React.Component{
     this.character && this.character.setNativeProps(this._characterStyles)
 
     if(this.props.tweenStart == "auto"){
-      this.startTween();
+      this.configureTween();
     }
 
     this.renderTime = Date.now();
@@ -250,8 +250,9 @@ class AnimatedSprite extends React.Component{
       this.props.onPress(this.props.spriteKey);
     }
 
-    if(this.props.draggable){
-      return;
+    if(this.props.tween.stopTweenOnTouch){
+      this.stopTween = true;
+      this.configureTween();
     }
 
     if(this.props.soundOnTouch){
@@ -266,7 +267,7 @@ class AnimatedSprite extends React.Component{
     }
 
     if(this.props.tweenStart === "touch"){
-      this.startTween();
+      this.configureTween();
     }
 
     if(this.props.timeSinceMounted){
@@ -275,9 +276,17 @@ class AnimatedSprite extends React.Component{
         (Date.now() - this.renderTime ) / 1000
       );
     }
+
+    if(this.props.draggable){
+      return;
+    }
   }
 
-  startTween() {
+  configureTween() {
+    let stopTween = false;
+    if(this.stopTween){
+      stopTween = true;
+    }
     const tweenType = this.props.tween.tweenType;
     const tweenOptions = this.props.tween;
     const tweenState = {
@@ -286,7 +295,7 @@ class AnimatedSprite extends React.Component{
       // scale: this.state._scale,
       // rotation: this.state._rotation,
     }
-    this._Tweener[tweenType](tweenOptions, tweenState);
+    this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
   }
 
   render() {

@@ -37,7 +37,7 @@ class BugZapLoading extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.navigator.replace({
-        id: 'BugZap2',
+        id: 'BugZap',
       });
     },LoadingTime);
     this.barLoad();

@@ -14,17 +14,13 @@ import {
 
 import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from '../animatedSprite';
-import NextGamePage from './NextGamePage';
-import bubbleCharacterLarge from '../../sprites/bubble/bubbleCharacterLarge';
-import bubbleCharacterSmall from '../../sprites/bubble/bubbleCharacterSmall';
+import bubbleCharacter from '../../sprites/bubble/bubbleCharacterLarge';
 import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
-import frogCharacter from "../../sprites/frog/frogCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-const NUM_BUBBLES = 15;
 const BUBBLE_SIZE = 60;
-const OFFSET = 60;
+const OFFSET = 80;
 
 class BubblePop extends React.Component {
   constructor(props){
@@ -33,102 +29,212 @@ class BubblePop extends React.Component {
         score: 0,
         popTime: 0,
         bubbleCharacters: [],
-        spriteAnimationKey: 'default',
-        bubbleKey: 0,
+        targetBubbleKey: 0,
+        showTargetBubble: true,
     }
+    this.numBubbles = 15;
+    this.targetLocation = SCREEN_WIDTH/2 - 100;
+    this.targetSpriteAnimationKey = 'pop';
+
+    this.targetSequence = [
+      this.targetLocation + OFFSET/2,
+      this.targetLocation - OFFSET/2, 
+      this.targetLocation + OFFSET/2, 
+      this.targetLocation - OFFSET/2
+    ];
+    this.targetTween = {
+      tweenType: "sine-wave",
+      startXY: [this.targetLocation, SCREEN_HEIGHT - 80],
+      xTo: this.targetSequence,
+      yTo: [-200],
+      duration: 6000,
+      loop: false,
+      stopTweenOnTouch: true,
+    };
   }
 
   componentDidMount () {
-    // get old score from storage if there is one and set up the scene
-    AsyncStorage.getItem('score').then((value) => {
-    this.setUpScene(JSON.parse(value));
-    }).done();
-  }
+    this.createBackgroundBubbles();
+    timeout = setTimeout ( () => { // start game timeout
+      this.youLost(); 
+    }, 30000);
 
-  // set up scene based on score from storage
-  setUpScene (score) {
-    this.createBubbles(NUM_BUBBLES - score);
-    this.youLost(); // start game timeout
   }
-
+  
   // game timeout
   youLost = () => {
-    timeout = setTimeout ( () => {
-      this.props.navigator.push({ // go to NextGamePage after game timeout
-        id: 'NextGamePage',
-        callback: this.resetGame,
-      });
-      return <NextGamePage />;
-    }, 30000);
+    this.goToNextTrial();
   }
 
+
   // populate array of bubbles
-  createBubbles(numBubbles) {
+  createBackgroundBubbles() {
     let bubbles = [];
-    for(let i=0; i < numBubbles; i++){
+    for(let i=0; i < this.numBubbles; i++){
       let size = {};
       let sequence = [];
-      let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/NUM_BUBBLES);
+      let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/this.numBubbles);
 
       if(i%2 == 0){ // every other bubble gets different size and x transition sequence
         size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE}
-        sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
+        sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft];
       }
       else{
         size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}
-        for(let i=0; i < 4; i++){
-          sequence.push(startLeft);
-          sequence.push(startLeft + OFFSET);
-        } // not sure if this or the above sequence assignment is better...both seem weird
+        sequence = [startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
       }
 
-      const tweenSettings = {
+      let backgroundBubbleTween = {
         tweenType: "sine-wave",
         startXY: [startLeft, SCREEN_HEIGHT],
         xTo: sequence,
-        yTo: [0, SCREEN_HEIGHT],
-        duration: this.getDuration(),
+        yTo: [-60],
+        duration: this.getRandomDuration(),
         loop: true,
       };
 
       bubbles.push(
         <AnimatedSprite
-          key={this.state.bubbleKey + i}
+          key={i}
           spriteKey={i}
           coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
           size={size}
           draggable={false}
-          character={bubbleCharacterLarge}
-          tween={tweenSettings}
+          character={bubbleCharacter}
+          tween={backgroundBubbleTween}
           tweenStart="auto"
-          timeSinceMounted={
-            (spriteKey, duration)=>this.popBubble(spriteKey, duration)
-          }
           soundOnTouch={true}
           soundFile="bubblePop"
-          spriteAnimationKey={this.state.spriteAnimationKey}/>
+          spriteAnimationKey='default'/>
 
       );
     }
     this.setState({bubbleCharacters: bubbles});
   }
 
-  // random duration
-  getDuration () {
-    return( Math.random() *  (12000 - 4000) + 4000 );
+  // random time for background bubbles to be on screen, between 2 and 6 seconds
+  getRandomDuration () {
+    return( Math.random() *  (6000 - 2000) + 2000 ); 
   }
 
   // remove bubble and record time it took to pop it
-  popBubble = (bubblePos, popTime) => {
-    //this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});
-    let bubbles = [];
+  popBubble = (popTime) => {
+    this.targetSpriteAnimationKey = 'pop';
+    this.setState({
+      popTime: popTime,
+      //showTargetBubble: false,
+      //targetBubbleKey: Math.random(),
+    });
+    //this.goToNextTrial();
+    //this.updateScore();
+  }
 
-    //this.createBubbles(this.state.bubbleCharacters.length - 1);
+  goToNextTrial(){
+    this.props.navigator.replace({ 
+      id: 'NextTrial',
+      getId: this.getCurrId,
+    });
+  }
 
-    this.state.bubbleCharacters.forEach((item)=>{
-      if(bubblePos !== item.props.spriteKey){
-        bubbles.push(item)
-      }
+  getCurrId() {
+    return 'BubblePop';
+  }
+
+  updateScore = () => {
+    //newScore = this.state.score + 1;
+    // this.setState({score: this.state.score + 1});
+    // //this.saveScore(newScore);
+    // if(this.state.score > this){ // navigate to win page if all bubbles are popped
+    //   console.warn('here');
+    //   clearTimeout(timeout); // reset the game timer
+    //   this.props.navigator.replace({
+    //     id: "BubblePopWinPage",
+    //   });
+    // }
+  }
+
+  
+
+  // saveScore = (data) => {
+  //   AsyncStorage.setItem('score', JSON.stringify(data));
+  // }
+
+  // reset score, bubbles and game timer once game has been won
+  // resetGame = () => {
+  //   this.setState({popTime: 0});
+  //   this.setState({score: 0});
+  //   newScore = 0;
+  //   this.saveScore(newScore);
+  //   this.createBubbles(NUM_BUBBLES);
+  //   this.youLost();
+  // };
+
+  render(){
+    return (
+      <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
+          <View style={styles.topBar}>
+            <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
+              <Text>Seconds To Pop: {this.state.popTime}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.gameWorld}>
+            {this.state.bubbleCharacters}
+            {this.state.showTargetBubble ?
+              <AnimatedSprite
+                key={this.state.targetBubbleKey}
+                coordinates={{top: SCREEN_HEIGHT, left: SCREEN_WIDTH/2 - 100}}
+                size={{width: 200, height: 200}}
+                draggable={false}
+                character={bubbleCharacter}
+                soundOnTouch={true}
+                soundFile="bubblePop"
+                tween={this.targetTween}
+                tweenStart='auto'
+                timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
+                spriteAnimationKey={this.targetSpriteAnimationKey}/>
+            : null}
+          </View>
+      </Image>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  topLevel :{
+    alignItems: 'center',
+  },
+  gameWorld: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
+  topBar: {
+    alignItems: 'center',
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - 700,
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+});
+
+export default BubblePop;
+
+
+    // //this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});
+  
+
+    // //this.createBubbles(this.state.bubbleCharacters.length - 1);
+
+    // this.state.bubbleCharacters.forEach((item)=>{
+    //   if(bubblePos !== item.props.spriteKey){
+    //     bubbles.push(item)
+    //   }
      //  else{
      //    bubbles.push(item);
      //    console.log(bubbles[bubblePos].props.spriteKey);
@@ -163,80 +269,4 @@ class BubblePop extends React.Component {
 
      //   // );
      // }
-      });
-
-      this.setState({bubbleCharacters: bubbles});
-      this.setState({popTime: popTime});
-      this.updateScore();
-  }
-
-  updateScore = () => {
-    newScore = this.state.score + 1;
-    this.setState({score: newScore});
-    this.saveScore(newScore);
-
-    if(newScore > NUM_BUBBLES - 1){ // navigate to win page if all bubbles are popped
-      clearTimeout(timeout); // reset the game timer
-      this.props.navigator.push({
-        id: 4,
-        callback: this.resetGame,
-      });
-     // clearTimeout(timeout); // reset the game timer
-    }
-  }
-
-  saveScore = (data) => {
-    AsyncStorage.setItem('score', JSON.stringify(data));
-  }
-
-  // reset score, bubbles and game timer once game has been won
-  resetGame = () => {
-    this.setState({popTime: 0});
-    this.setState({score: 0});
-    newScore = 0;
-    this.saveScore(newScore);
-    this.createBubbles(NUM_BUBBLES);
-    this.youLost();
-  };
-
-  render(){
-    return (
-      <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
-          <View style={styles.topBar}>
-            <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>SCORE: {this.state.score} Seconds To Pop: {this.state.popTime}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.gameWorld}>
-            {this.state.bubbleCharacters}
-          </View>
-      </Image>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  topLevel :{
-    alignItems: 'center',
-  },
-  gameWorld: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    borderStyle: 'solid',
-    borderWidth: 2,
-  },
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null,
-  },
-  topBar: {
-    alignItems: 'center',
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT - 700,
-    borderStyle: 'solid',
-    borderWidth: 2,
-  },
-});
-
-export default BubblePop;
+      //});

@@ -24,6 +24,8 @@ const Tweener = function () {
 
   const move = function (options, state) {
 
+
+
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
 
@@ -53,23 +55,27 @@ const Tweener = function () {
     });
   };
 
-  const sineWave = function(options, state){
+  const sineWave = function(options, state, stopTween){
+    if(stopTween){
+      state.left.stopAnimation();
+    }
+    else{
+      state.top.setValue(options.startXY[1]);
+      state.left.setValue(options.startXY[0]);
+      Animated.parallel(
+        [
+          Animated.sequence(_getSequenceX(options, state)),
+          Animated.sequence(_getSequenceY(options, state)),
+        ]
+      ).start(() => {
+        if (options.loop === false) {
+          return
+        }else{
+          sineWave(options, state);
+        }
 
-    state.top.setValue(options.startXY[1]);
-    state.left.setValue(options.startXY[0]);
-    Animated.parallel(
-      [
-        Animated.sequence(_getSequenceX(options, state)),
-        Animated.sequence(_getSequenceY(options, state)),
-      ]
-    ).start(() => {
-      if (options.loop === false) {
-        return
-      }else{
-        sineWave(options, state);
-      }
-
-    });
+      });
+    }
 
   }
 
