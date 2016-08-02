@@ -35,7 +35,7 @@ const Tweener = function () {
         {
           toValue: options.endXY[0],
           easing: Easing.linear,
-          duration: options.duration, 
+          duration: options.duration,
         }            // Configuration
       ),
 
@@ -396,31 +396,40 @@ const Tweener = function () {
   const curveSpin = function(options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
-    Animated.parallel([
+    Animated.sequence([
+      Animated.parallel([
+       Animated.timing(
+          state.top,
+          {
+            toValue: options.endXY[1],
+            easing: Easing.quad,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.left,
+          {
+            toValue: options.endXY[0],
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+        // Animated.timing(
+        //   state.rotation,
+        //   {
+        //     toValue: 400,
+        //     easing: Easing.quad,
+        //     duration: options.duration,
+        //   }
+        // ),
+      ]),
       Animated.timing(
         state.top,
         {
-          toValue: options.endXY[1],
-          easing: Easing.quad,
-          duration: options.duration,
+          toValue: -500,
+          duration: 0,
         }
       ),
-      Animated.timing(
-        state.left,
-        {
-          toValue: options.endXY[0],
-          easing: Easing.linear,
-          duration: options.duration,
-        }
-      ),
-      // Animated.timing(
-      //   state.rotation,
-      //   {
-      //     toValue: 400,
-      //     easing: Easing.quad,
-      //     duration: options.duration,
-      //   }
-      // ),
     ]).start(() => {
       if (options.loop === false) {
         return

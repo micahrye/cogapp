@@ -170,9 +170,7 @@ class GameTwo extends Component {
 
   toggleCreatureCharacter() {
 
-    this.setState({foodKey: Math.random(),
-                   foodTween: tweenInitial,
-                   leverPressed: false});
+    this.setState({leverPressed: false});
 
     switch(this.state.onboarding) {
       case 2:

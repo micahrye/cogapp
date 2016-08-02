@@ -21,6 +21,8 @@ import Tweener from "../Tweener";
 
 // import different characters to feed to animated sprite
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
+import goatCharacter from "../../sprites/goat/goatCharacter";
+import frogCharacter from "../../sprites/frog/frogCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
@@ -39,6 +41,9 @@ const startTop = -200;
 const spacing = 150;
 const foodEndTop = 80;
 const signEndTop = -15;
+
+const creatureStart = [Window.width+150,Window.height-190];
+const creatureEnd = [Window.width-200,Window.height-190];
 
 
 class GameTwo1 extends Component {
@@ -96,22 +101,42 @@ class GameTwo1 extends Component {
       );
     }
 
+    tweenMove = function(start,end) {
+      return(
+        {
+          tweenType: "move",
+          startXY: start,
+          endXY: end,
+          duration: 750,
+          repeatable: false,
+          loop: false,
+        }
+      );
+    }
+
     tweenInitial = {
        tweenType: "hop",
        startY: startTop,
        loop: false,
     };
 
-    randomFood = function() {
-      diceRoll = Math.random();
-      if (diceRoll < 0.33) {
-        return canCharacter;
-      } else if (diceRoll > 0.66) {
-        return bugCharacter;
-      } else {
-        return appleCharacter;
-      }
+    tweenOff = {
+      tweenType: "sendOffScreen",
+      loop: false,
     }
+
+    // randomFood = function() {
+    //   diceRoll = Math.random();
+    //   if (diceRoll < 0.33) {
+    //     return canCharacter;
+    //   } else if (diceRoll > 0.66) {
+    //     return bugCharacter;
+    //   } else {
+    //     return appleCharacter;
+    //   }
+    // }
+
+
 
     this.state = {
       foodKey1: Math.random(),
@@ -124,6 +149,9 @@ class GameTwo1 extends Component {
       signKey3: Math.random(),
       signKey4: Math.random(),
       signKey5: Math.random(),
+      creatureKey1: Math.random(),
+      creatureKey2: Math.random(),
+      creatureKey3: Math.random(),
       phase0Left: grassCharacter,
       phase0Right: grassCharacter,
       phase0Correct: "left",
@@ -131,7 +159,7 @@ class GameTwo1 extends Component {
       phase1Middle: grassCharacter,
       phase1Right: grassCharacter,
       phase1Correct: ["incorrect","incorrect","incorrect"],
-      phase1AnsweredCorrectly: false,
+      phase1AnsweredCorrectly: 0,
       foodTween01: tweenInitial,
       foodTween02: tweenInitial,
       foodTween11: tweenInitial,
@@ -139,6 +167,10 @@ class GameTwo1 extends Component {
       foodTween13: tweenInitial,
       signTween01: tweenInitial,
       signTween2: tweenInitial,
+      creatureTween1: tweenMove(creatureStart,creatureEnd),
+      creatureTween2: tweenMove(creatureStart,creatureStart),
+      creatureTween3: tweenMove(creatureStart,creatureStart),
+      currentCreature: 1,
       timeoutHuh: false,
       foodPressed: false,
       gamePhase: true,
@@ -162,6 +194,10 @@ class GameTwo1 extends Component {
       });
   }
 
+  sendOffScreen = (foodTween) => {
+    this.setState({foodTween: tweenOff});
+  }
+
   onTimeoutOne = () => {
     if (!this.state.foodPressed) {
       if (this.state.gamePhase) {
@@ -177,7 +213,7 @@ class GameTwo1 extends Component {
                          foodTween12: tweenTimeout(foodEndTop,startTop),
                          foodTween13: tweenTimeout(foodEndTop,startTop),
                          signTween2: tweenTimeout(signEndTop,startTop),
-                         foodkey1: Math.random(),
+                         foodKey1: Math.random(),
                          foodKey2: Math.random(),
                          foodKey3: Math.random(),
                          signKey1: Math.random(),
@@ -213,48 +249,93 @@ class GameTwo1 extends Component {
     }
   }
 
-  randomFood() {
+  randomFood(food1,food2,food3) {
     diceRoll = Math.random();
     if (diceRoll < 0.33) {
-      return canCharacter;
+      return food1;
     } else if (diceRoll > 0.66) {
-      return bugCharacter;
+      return food2;
     } else {
-      return appleCharacter;
+      return food3;
+    }
+  }
+
+  excludeFoodType(type) {
+    switch(type) {
+      case "bug":
+        return this.randomFood(grassCharacter,canCharacter,appleCharacter);
+        break;
+      case "apple":
+        return this.randomFood(grassCharacter,canCharacter,bugCharacter);
+        break;
+      case "can":
+        return this.randomFood(grassCharacter,bugCharacter,appleCharacter);
+        break;
+      case "grass":
+        return this.randomFood(bugCharacter,canCharacter,appleCharacter);
+        break;
+    }
+  }
+
+  selectFoodPhase0Helper(food,foodString) {
+    diceRoll = Math.random();
+    if (diceRoll <= 0.5) {
+      this.setState({phase0Left: food,
+                     phase0Right: this.excludeFoodType(foodString),
+                     phase0Correct: "left"});
+    } else {
+      this.setState({phase0Left: this.excludeFoodType(foodString),
+                     phase0Right: food,
+                     phase0Correct: "right"});
     }
   }
 
   selectFoodPhase0() {
+    switch(this.state.currentCreature) {
+      case 1:
+        this.selectFoodPhase0Helper(grassCharacter,"grass");
+        break;
+      case 2:
+        this.selectFoodPhase0Helper(canCharacter,"can");
+        break;
+      case 3:
+        this.selectFoodPhase0Helper(bugCharacter,"bug");
+        break;
+    }
+  }
+
+  selectFoodPhase1Helper(food,foodString) {
     diceRoll = Math.random();
-    if (diceRoll < 0.5) {
-      this.setState({phase0Left: grassCharacter,
-                     phase0Right: this.randomFood(),
-                     phase0Correct: "left"});
+    if (diceRoll < 0.33) {
+      this.setState({phase1Left: food,
+                     phase1Middle: food,
+                     phase1Right: this.excludeFoodType(foodString),
+                     phase1Correct: ["correct","correct","incorrect"]});
+    } else if (diceRoll > 0.66){
+      this.setState({phase1Left: this.excludeFoodType(foodString),
+                     phase1Middle: food,
+                     phase1Right: food,
+                     phase1Correct: ["incorrect","correct","correct"]});
     } else {
-      this.setState({phase0Right: grassCharacter,
-                     phase0Left: this.randomFood(),
-                     phase0Correct: "right"});
+      this.setState({phase1Left: food,
+                     phase1Middle: this.excludeFoodType(foodString),
+                     phase1Right: food,
+                     phase1Correct: ["correct","incorrect","correct"]});
     }
   }
 
 
   selectFoodPhase1() {
-    diceRoll = Math.random();
-    if (diceRoll < 0.33) {
-      this.setState({phase1Left: grassCharacter,
-                     phase1Middle: grassCharacter,
-                     phase1Right: this.randomFood(),
-                     phase1Correct: ["correct","correct","incorrect"]});
-    } else if (diceRoll > 0.66){
-      this.setState({phase1Left: this.randomFood(),
-                     phase1Middle: grassCharacter,
-                     phase1Right: grassCharacter,
-                     phase1Correct: ["incorrect","correct","correct"]});
-    } else {
-      this.setState({phase1Left: grassCharacter,
-                     phase1Middle: this.randomFood(),
-                     phase1Right: grassCharacter,
-                     phase1Correct: ["correct","incorrect","correct"]});
+    switch(this.state.currentCreature) {
+      case 1:
+        this.selectFoodPhase1Helper(grassCharacter,"grass");
+        break;
+      case 2:
+        this.selectFoodPhase1Helper(canCharacter,"can");
+        break;
+      case 3:
+        this.selectFoodPhase1Helper(bugCharacter,"bug");
+        break;
     }
   }
 
@@ -293,53 +374,135 @@ class GameTwo1 extends Component {
     }
   }
 
+  toggleCreature = () => {
+    if (this.state.currentCreature === 1) {
+      this.setState({
+        creatureKey1: Math.random(),
+        creatureTween1: tweenMove(creatureEnd,creatureStart)});
+    } else if (this.state.currentCreature === 2) {
+      this.setState({
+        creatureKey2: Math.random(),
+        creatureTween2: tweenMove(creatureEnd,creatureStart)});
+    } else {
+      this.setState({
+        creatureKey3: Math.random(),
+        creatureTween3: tweenMove([Window.width-250,115],[700,115])});
+    }
+    diceRoll = Math.random();
+    if (diceRoll < 0.33) {
+      this.setState({
+        creatureKey1: Math.random(),
+        creatureTween1: tweenMove(creatureStart, creatureEnd),
+        currentCreature: 1,
+      });
+    } else if (diceRoll > 0.66) {
+      this.setState({
+        creatureKey2: Math.random(),
+        creatureTween2: tweenMove(creatureStart, creatureEnd),
+        currentCreature: 2,
+      });
+    } else {
+      this.setState({
+        creatureKey3: Math.random(),
+        creatureTween3: tweenMove([700,115], [Window.width-250,115]),
+        currentCreature: 3,
+      });
+    }
+  }
+
   onFoodPress = (spriteKey) => {
     xvalue = 0;
     switch(spriteKey) {
       case 1:
+         clearTimeout(this.timeout1);
+         clearTimeout(this.timeout2);
          x = startLeft;
          this.setState({foodKey1: Math.random(),
                         foodTween11: tweenFall(x),
                         foodPressed: true});
         if (this.state.phase1Correct[0] === "correct") {
+          this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
+          if (this.state.phase1AnsweredCorrectly >= 1) {
+            setTimeout(this.toggleCreature,2000);
+            this.setState({signKey1: Math.random(),
+                           signKey2: Math.random(),
+                           signKey3: Math.random(),
+                           foodKey1: Math.random(),
+                           foodKey2: Math.random(),
+                           foodKey3: Math.random(),
+                           signTween2: tweenTimeout(signEndTop,startTop),
+                           foodTween13: tweenTimeout(foodEndTop,startTop),
+                           foodTween12: tweenTimeout(foodEndTop,startTop),
+                           foodPressed: false,
+                           timeoutHuh: false,
+                           phase1AnsweredCorrectly: 0,
+                           numTrials: this.state.numTrials+1});
+          }
           if (this.state.numTrials >= 9) {
             setTimeout(this.buttonPress,2000);
-          } else {
-            clearTimeout(this.timeout1);
-            clearTimeout(this.timeout2);
-            this.setState({numTrials: this.state.numTrials+1,
-                           });
           }
         }
          break;
       case 2:
+         clearTimeout(this.timeout1);
+         clearTimeout(this.timeout2);
          x = startLeft+spacing;
          this.setState({foodKey2: Math.random(),
                         foodTween12: tweenFall(x),
                         foodPressed: true});
          if (this.state.phase1Correct[1] === "correct") {
+           this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
+           if (this.state.phase1AnsweredCorrectly >= 1) {
+             setTimeout(this.toggleCreature,2000);
+             this.setState({signKey1: Math.random(),
+                            signKey2: Math.random(),
+                            signKey3: Math.random(),
+                            foodKey1: Math.random(),
+                            foodKey2: Math.random(),
+                            foodKey3: Math.random(),
+                            signTween2: tweenTimeout(signEndTop,startTop),
+                            foodTween13: tweenTimeout(foodEndTop,startTop),
+                            foodTween11: tweenTimeout(foodEndTop,startTop),
+                            timeoutHuh: false,
+                            foodPressed: false,
+                            phase1AnsweredCorrectly: 0,
+                            numTrials: this.state.numTrials+1});
+           }
            if (this.state.numTrials >= 9) {
              setTimeout(this.buttonPress,2000);
-           } else {
-             clearTimeout(this.timeout1);
-             clearTimeout(this.timeout2);
-             this.setState({numTrials: this.state.numTrials+1});
            }
+           //setTimeout(this.sendOffScreen(this.state.foodTween12),1000);
          }
          break;
       case 3:
+         clearTimeout(this.timeout1);
+         clearTimeout(this.timeout2);
          x = startLeft+spacing*2;
          this.setState({foodKey3: Math.random(),
                         foodTween13: tweenFall(x),
                         foodPressed: true});
          if (this.state.phase1Correct[2] === "correct") {
+           this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
+           if (this.state.phase1AnsweredCorrectly >= 1) {
+             setTimeout(this.toggleCreature,2000);
+             this.setState({signKey1: Math.random(),
+                            signKey2: Math.random(),
+                            signKey3: Math.random(),
+                            foodKey1: Math.random(),
+                            foodKey2: Math.random(),
+                            foodKey3: Math.random(),
+                            signTween2: tweenTimeout(signEndTop,startTop),
+                            foodTween11: tweenTimeout(foodEndTop,startTop),
+                            foodTween12: tweenTimeout(foodEndTop,startTop),
+                            foodPressed: false,
+                            timeoutHuh: false,
+                            phase1AnsweredCorrectly: 0,
+                            numTrials: this.state.numTrials+1});
+           }
            if (this.state.numTrials >= 9) {
              setTimeout(this.buttonPress,2000);
-           } else {
-             clearTimeout(this.timeout1);
-             clearTimeout(this.timeout2);
-             this.setState({numTrials: this.state.numTrials+1});
            }
+
          }
          break;
       case 4:
@@ -359,6 +522,7 @@ class GameTwo1 extends Component {
         if (this.state.phase0Correct === "left") {
             this.setState({numTrials: this.state.numTrials+1});
           }
+         setTimeout(this.toggleCreature,2000);
          break;
       case 5:
          x= startLeft2+spacing;
@@ -376,8 +540,9 @@ class GameTwo1 extends Component {
           clearTimeout(this.timeout2);
           if (this.state.phase0Correct === "right") {
              this.setState({numTrials: this.state.numTrials+1});
-            }
-         break;
+          }
+          setTimeout(this.toggleCreature,2000);
+          break;
     }
   }
 
@@ -399,7 +564,24 @@ class GameTwo1 extends Component {
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
-                    character={mammalCharacter} />
+                    tweenStart={"auto"}
+                    tween={this.state.creatureTween1}
+                    key={this.state.creatureKey1}
+                    character={mammalCharacter}/>
+                <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
+                    size={{width: 115, height: 160}}
+                    draggable={false}
+                    tweenStart={"auto"}
+                    tween={this.state.creatureTween2}
+                    key={this.state.creatureKey2}
+                    character={goatCharacter}/>
+                <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
+                    size={{width: 256, height: 256}}
+                    draggable={false}
+                    tweenStart={"auto"}
+                    tween={this.state.creatureTween3}
+                    key={this.state.creatureKey3}
+                    character={frogCharacter}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
