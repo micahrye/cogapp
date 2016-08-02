@@ -14,6 +14,7 @@ import {
 import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
 import shallowCompare from "react-addons-shallow-compare";
+import Soundhandler from './Soundhandler';
 
 /*****PROPS LIST*****/
 /*Required:
@@ -75,6 +76,7 @@ class AnimatedSprite extends React.Component{
     this.otherAnimationInterval = undefined;
 
     this._Tweener = Tweener();
+    this._Sound = Soundhandler();
     this.renderTime = 0;
     this.fps = 10;
   }
@@ -128,8 +130,15 @@ class AnimatedSprite extends React.Component{
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    if(this.props.tweenStart == "auto"){
+    if(this.props.tweenStart == "auto" && !this.props.tweenStop){
       this.configureTween();
+    }
+
+    if(this.props.tweenStop){
+      console.warn('stop');
+      this.stopTween = true;
+      let stopValues = this.configureTween();
+      console.warn(stopValues);
     }
 
     this.renderTime = Date.now();
@@ -255,23 +264,14 @@ class AnimatedSprite extends React.Component{
       this.configureTween();
     }
 
-    else if(this.props.tween){
-      if(this.props.tween.stopTweenOnTouch){
-        this.stopTween = true;
-        let stopValues = this.configureTween();
-        this.props.tween.stopTweenOnTouch(stopValues);
-      }
+    else if(this.props.stopTweenOnTouch){
+      this.stopTween = true;
+      let stopValues = this.configureTween();
+      this.props.stopTweenOnTouch(stopValues);
     }
 
     if(this.props.soundOnTouch){
-      let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
-        if (error) {
-          console.log('failed to load the sound', error);
-        } else { // loaded successfully
-          console.log('sound did load');
-          tile.play();
-        }
-      });
+      this._Sound['playSound'](this.props.soundFile);
     }
 
     if(this.props.timeSinceMounted){

@@ -59,7 +59,7 @@ class BubblePop extends React.Component {
       yTo: [-200],
       duration: this.targetDuration,
       loop: false,
-      stopTweenOnTouch: (stopValues) => this.stopValues = stopValues,
+      delay: 200,
     };
 
     this.state = {
@@ -214,6 +214,7 @@ class BubblePop extends React.Component {
                 character={bubbleCharacter}
                 tween={this.state.targetTween}
                 tweenStart='auto'
+                stopTweenOnTouch={(stopValues) => this.stopValues = stopValues}
                 soundOnTouch={true}
                 soundFile="bubblePop"
                 timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}

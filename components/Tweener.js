@@ -65,12 +65,15 @@ const Tweener = function () {
     else{
       state.top.setValue(options.startXY[1]);
       state.left.setValue(options.startXY[0]);
-      Animated.parallel(
-        [
-          Animated.sequence(_getSequenceX(options, state)),
-          Animated.sequence(_getSequenceY(options, state)),
-        ]
-      ).start(() => {
+      Animated.sequence([
+        Animated.delay(options.delay),
+        Animated.parallel(
+          [
+            Animated.sequence(_getSequenceX(options, state)),
+            Animated.sequence(_getSequenceY(options, state)),
+          ]
+        )
+      ]).start(() => {
         if (options.loop === false) {
           return
         }else{

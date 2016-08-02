@@ -31,6 +31,7 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
       loop: true,
+      stopTween: false,
     }
     this.tweenIdle = {};
     this.tweenAway = {};
@@ -147,6 +148,10 @@ class BugZap extends React.Component {
         this.catchBug();
       }
       else if(this.state.tweenSettings != this.tweenAway){ // bug has not landed yet
+        this.setState({
+          // stopTween: true,
+          // bugKey: Math.random(),
+        });
         this.frogDisgust();
         this.setState({zappedTooEarly: true}); // now bug doesn't land, just keeps flying offscreen
       }
@@ -234,6 +239,8 @@ class BugZap extends React.Component {
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
+                tweenStop={this.state.stopTween}
+                stopTweenOnTouch={(values) => console.warn(values)}
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loop}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
