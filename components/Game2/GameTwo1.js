@@ -33,7 +33,7 @@ import signCharacter from "../../sprites/sign/signCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [550,330];
+const endCoordinates = [450,250];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 200;
 const startLeft2 = 275;
@@ -93,7 +93,7 @@ class GameTwo1 extends Component {
         {
           tweenType: "curve-spin",
           startXY: [leftValue,foodEndTop],
-          endXY: [540,250],
+          endXY: endCoordinates,
           duration: 750,
           repeatable: false,
           loop: false,
@@ -124,18 +124,6 @@ class GameTwo1 extends Component {
       tweenType: "sendOffScreen",
       loop: false,
     }
-
-    // randomFood = function() {
-    //   diceRoll = Math.random();
-    //   if (diceRoll < 0.33) {
-    //     return canCharacter;
-    //   } else if (diceRoll > 0.66) {
-    //     return bugCharacter;
-    //   } else {
-    //     return appleCharacter;
-    //   }
-    // }
-
 
 
     this.state = {
@@ -174,7 +162,7 @@ class GameTwo1 extends Component {
       timeoutHuh: false,
       foodPressed: false,
       gamePhase: true,
-      numTrials: 1,
+      numTrials: 0,
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
@@ -344,9 +332,6 @@ class GameTwo1 extends Component {
     if (!this.state.timeoutHuh && !this.state.foodPressed) {
         this.timeout1 = setTimeout(this.onTimeoutOne,10000);
         this.timeout2 = setTimeout(this.onTimeoutTwo,5000);
-    if (this.state.numTrials >= 3) {
-      this.setState({gamePhase:false});
-    }
         if (this.state.gamePhase) {
           this.selectFoodPhase0();
           this.setState({foodTween01: tweenDown(startTop,foodEndTop),
@@ -370,9 +355,17 @@ class GameTwo1 extends Component {
                          signKey3: Math.random()});
         }
         this.setState({timeoutHuh: true});
-
     }
   }
+
+  // selectCreature(creature1,creature2,key1,key2) {
+  //   diceRoll = Math.random();
+  //   if (diceRoll <= 0.5) {
+  //     this.setState({
+  //
+  //     });
+  //   }
+  // }
 
   toggleCreature = () => {
     if (this.state.currentCreature === 1) {
@@ -438,7 +431,7 @@ class GameTwo1 extends Component {
                            phase1AnsweredCorrectly: 0,
                            numTrials: this.state.numTrials+1});
           }
-          if (this.state.numTrials >= 9) {
+          if (this.state.numTrials >= 8) {
             setTimeout(this.buttonPress,2000);
           }
         }
@@ -468,7 +461,7 @@ class GameTwo1 extends Component {
                             phase1AnsweredCorrectly: 0,
                             numTrials: this.state.numTrials+1});
            }
-           if (this.state.numTrials >= 9) {
+           if (this.state.numTrials >= 8) {
              setTimeout(this.buttonPress,2000);
            }
            //setTimeout(this.sendOffScreen(this.state.foodTween12),1000);
@@ -499,7 +492,7 @@ class GameTwo1 extends Component {
                             phase1AnsweredCorrectly: 0,
                             numTrials: this.state.numTrials+1});
            }
-           if (this.state.numTrials >= 9) {
+           if (this.state.numTrials >= 8) {
              setTimeout(this.buttonPress,2000);
            }
 
@@ -520,10 +513,13 @@ class GameTwo1 extends Component {
         clearTimeout(this.timeout1);
         clearTimeout(this.timeout2);
         if (this.state.phase0Correct === "left") {
-            this.setState({numTrials: this.state.numTrials+1});
+          if (this.state.numTrials === 2) {
+            this.setState({gamePhase: false});
           }
-         setTimeout(this.toggleCreature,2000);
-         break;
+          this.setState({numTrials: this.state.numTrials+1});
+        }
+        setTimeout(this.toggleCreature,2000);
+        break;
       case 5:
          x= startLeft2+spacing;
          this.setState({foodKey5: Math.random(),
@@ -539,7 +535,10 @@ class GameTwo1 extends Component {
           clearTimeout(this.timeout1);
           clearTimeout(this.timeout2);
           if (this.state.phase0Correct === "right") {
-             this.setState({numTrials: this.state.numTrials+1});
+            if (this.state.numTrials === 2) {
+              this.setState({gamePhase: false});
+            }
+            this.setState({numTrials: this.state.numTrials+1});
           }
           setTimeout(this.toggleCreature,2000);
           break;
@@ -558,9 +557,6 @@ class GameTwo1 extends Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
-                <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                    <Text>Go to Level 3</Text>
-                </TouchableOpacity>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
