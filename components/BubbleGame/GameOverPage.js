@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-class BubblePopWinPage extends React.Component {
+class GameOverPage extends React.Component {
   handlePress = () => {
     this.props.route.callback();
     this.props.navigator.pop();
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BubblePopWinPage;
+export default GameOverPage;

@@ -21,8 +21,9 @@ import TimerMixin from 'react-timer-mixin';
 
 import Main from "./components/main";
 import DragDragon from "./components/DragDragon/DragDragon";
+import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
-import BubblePopWinPage from './components/BubbleGame/BubblePopWinPage';
+import GameOverPage from './components/BubbleGame/GameOverPage';
 import NextGamePage from './components/BubbleGame/NextGamePage';
 import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
@@ -71,10 +72,12 @@ class CogApp extends React.Component {
       return <Main navigator={navigator} />
     } else if(route.id === 'DragDragon'){
       return <DragDragon />
-    } if (route.id === 'BubblePop') {
+    } else if(route.id === 'BubblePopLoading'){
+      return <BubblePopLoading navigator={navigator} route={route}/>
+    } else if (route.id === 'BubblePop') {
       return <BubblePop navigator={navigator} route={route}/>
-    } else if (route.id === 'BubblePopWinPage'){
-      return <BubblePopWinPage navigator={navigator} route={route}/>
+    } else if (route.id === 'GameOverPage'){
+      return <GameOverPage navigator={navigator} route={route}/>
     } else if (route.id === 'NextGamePage'){
       return <NextGamePage navigator={navigator} route={route}/>
     } else if(route.id === 'BugZapLoading'){

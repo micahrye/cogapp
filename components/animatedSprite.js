@@ -251,15 +251,15 @@ class AnimatedSprite extends React.Component{
       this.props.onPress(this.props.spriteKey);
     }
 
-    if(this.props.tweenStart === "touch" && !this.tweenAlreadyStarted){
+    if(this.props.tweenStart === "touch"){
       this.configureTween();
-      this.tweenAlreadyStarted = true;
     }
 
-    // else if(this.props.tween.stopTweenOnTouch){
-    //   this.stopTween = true;
-    //   this.configureTween();
-    // }
+    else if(this.props.tween.stopTweenOnTouch){
+      this.stopTween = true;
+      let stopValues = this.configureTween();
+      this.props.tween.stopTweenOnTouch(stopValues);
+    }
 
     if(this.props.soundOnTouch){
       let tile = new Sound('tile.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -285,10 +285,10 @@ class AnimatedSprite extends React.Component{
   }
 
   configureTween() {
-    // let stopTween = false;
-    // if(this.stopTween){
-    //   stopTween = true;
-    // }
+    let stopTween = false;
+    if(this.stopTween){
+      stopTween = true;
+    }
     const tweenType = this.props.tween.tweenType;
     const tweenOptions = this.props.tween;
     const tweenState = {
@@ -297,7 +297,8 @@ class AnimatedSprite extends React.Component{
       // scale: this.state._scale,
       // rotation: this.state._rotation,
     }
-    this._Tweener[tweenType](tweenOptions, tweenState, /*stopTween*/);
+    let stopValues = this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
+    return stopValues;
   }
 
   render() {
