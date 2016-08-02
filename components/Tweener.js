@@ -445,6 +445,37 @@ const Tweener = function () {
     });
   }
 
+  const curveFall = function(options, state) {
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(
+          state.top,
+          {
+            toValue: options.endXY[1],
+            easing: Easing.quad,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.left,
+          {
+            toValue: options.endXY[0],
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+      ]),
+    ]).start(() => {
+      if (options.loop === false) {
+        return
+      }else {
+        curveSpin(options, state);
+      }
+    });
+  }
+
   return (
     {
       'bounce': bounce,
@@ -462,6 +493,7 @@ const Tweener = function () {
       'basic-back': basicBack,
       'curve-spin': curveSpin,
       'move': move,
+      'curve-fall': curveFall,
     }
   );
 

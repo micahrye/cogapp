@@ -31,6 +31,7 @@ class BubblePop extends React.Component {
     this.timeoutGameOver = undefined;
     this.timeoutAfterBubblePop = undefined;
     this.stopValues = undefined;
+    this.foodTween = {};
 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
@@ -38,12 +39,12 @@ class BubblePop extends React.Component {
       this.targetLocation + OFFSET/2, 
       this.targetLocation - OFFSET/2
     ];
-    this.foodSequence = [
-      this.foodLocation + OFFSET/2,
-      this.foodLocation - OFFSET/2, 
-      this.foodLocation + OFFSET/2, 
-      this.foodLocation - OFFSET/2
-    ];
+    // this.foodSequence = [
+    //   this.foodLocation + OFFSET/2,
+    //   this.foodLocation - OFFSET/2, 
+    //   this.foodLocation + OFFSET/2, 
+    //   this.foodLocation - OFFSET/2
+    // ];
 
     if(this.props.route.targetDuration){
       this.targetDuration = this.props.route.targetDuration - 500;
@@ -54,12 +55,12 @@ class BubblePop extends React.Component {
 
     this.targetTween = {
       tweenType: "sine-wave",
-      startXY: [this.targetLocation, SCREEN_HEIGHT - 72],
+      startXY: [this.targetLocation, SCREEN_HEIGHT - 69],
       xTo: this.targetSequence,
       yTo: [-200],
       duration: this.targetDuration,
       loop: false,
-      delay: 200,
+      delay: 500,
     };
 
     this.state = {
@@ -70,14 +71,14 @@ class BubblePop extends React.Component {
       showTargetBubble: true,
       showFood: false,
       targetTween: this.targetTween,
-      foodTween: {
-        tweenType: "sine-wave",
-        startXY: [this.foodLocation, SCREEN_HEIGHT - 10],
-        xTo: this.foodSequence,
-        yTo: [-200],
-        duration: this.targetDuration,
-        loop: true,
-      },
+      // foodTween: {
+      //   tweenType: "sine-wave",
+      //   startXY: [this.foodLocation, SCREEN_HEIGHT - 10],
+      //   xTo: this.foodSequence,
+      //   yTo: [-200],
+      //   duration: this.targetDuration,
+      //   loop: true,
+      // },
     }
   }
 
@@ -167,6 +168,20 @@ class BubblePop extends React.Component {
       },
       targetBubbleKey: Math.random(),
     });
+
+    this.foodFall();
+  }
+
+  // food falls out of bubble and down to character
+  foodFall(){
+    this.foodTween = {
+      tweenType: 'curve-fall',
+      startXY: [this.stopValues[0] +50 , this.stopValues[1] +50],
+      endXY: [500, 200],
+      duration: 2000,
+      loop: false,
+    }
+    this.setState({showFood: true});
   }
 
   // triggered when an animation finishes
@@ -208,7 +223,7 @@ class BubblePop extends React.Component {
             {this.state.showTargetBubble ?
               <AnimatedSprite
                 key={this.state.targetBubbleKey}
-                coordinates={{top: SCREEN_HEIGHT - 72, left: this.targetLocation}}
+                coordinates={{top: SCREEN_HEIGHT - 69, left: this.targetLocation}}
                 size={{width: 200, height: 200}}
                 draggable={false}
                 character={bubbleCharacter}
@@ -224,14 +239,14 @@ class BubblePop extends React.Component {
             {this.state.showFood ?
               <AnimatedSprite
                 key={this.state.foodKey}
-                coordinates={{top: SCREEN_HEIGHT - 80, left: this.targetLocation + 200}}
+                coordinates={{top: this.stopValues[0] + 50 , left: this.stopValues[1] + 50}}
                 size={{width: 100, height: 100}}
                 draggable={false}
                 character={canCharacter}
-                tween={this.state.foodTween}
+                tween={this.foodTween}
                 tweenStart='auto'
                 timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
-                spriteAnimationKey={this.targetSpriteAnimationKey}/>
+                spriteAnimationKey='default'/>
             : null}
           </View>
       </Image>
