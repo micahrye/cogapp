@@ -12,10 +12,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import BubblePopWinPage from './BubblePopWinPage';
 import AnimatedSprite from '../animatedSprite';
 import bubbleCharacter from '../../sprites/bubble/bubbleCharacterLarge';
-import poppedBubble from "../../sprites/bubble/bubbleCharacterSmall";
+import canCharacter from '../../sprites/can/canCharacter';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -25,47 +24,74 @@ const OFFSET = 80;
 class BubblePop extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-        score: 0,
-        popTime: 0,
-        bubbleCharacters: [],
-        targetBubbleKey: 0,
-        showTargetBubble: true,
-    }
-    this.numBubbles = 15;
     this.targetLocation = SCREEN_WIDTH/2 - 100;
-    this.targetSpriteAnimationKey = 'pop';
-
+    this.foodLocation = SCREEN_WIDTH/2 - 40; 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
       this.targetLocation - OFFSET/2, 
       this.targetLocation + OFFSET/2, 
       this.targetLocation - OFFSET/2
     ];
-    this.targetTween = {
-      tweenType: "sine-wave",
-      startXY: [this.targetLocation, SCREEN_HEIGHT - 80],
-      xTo: this.targetSequence,
-      yTo: [-200],
-      duration: 6000,
-      loop: false,
-      stopTweenOnTouch: true,
-    };
+    this.foodSequence = [
+      this.foodLocation + OFFSET/2,
+      this.foodLocation - OFFSET/2, 
+      this.foodLocation + OFFSET/2, 
+      this.foodLocation - OFFSET/2
+    ];
+
+    if(this.props.route.targetDuration){
+      this.targetDuration = this.props.route.targetDuration - 500;
+    }
+    else{
+      this.targetDuration = 5000;
+    }
+
+    this.state = {
+        score: 0,
+        popTime: 0,
+        bubbleCharacters: [],
+        targetBubbleKey: 0,
+        foodKey: 1,
+        showTargetBubble: true,
+        showFood: true,
+        targetTween: {
+          tweenType: "sine-wave",
+          startXY: [this.targetLocation, SCREEN_HEIGHT - 80],
+          xTo: this.targetSequence,
+          yTo: [-200],
+          duration: this.targetDuration,
+          loop: true,
+        },
+        foodTween: {
+          tweenType: "sine-wave",
+          startXY: [this.foodLocation, SCREEN_HEIGHT - 10],
+          xTo: this.foodSequence,
+          yTo: [-200],
+          duration: this.targetDuration + this.targetDuration/50,
+          loop: true,
+        },
+    }
+    this.numBubbles = 15;
+    this.targetSpriteAnimationKey = 'default';
+    this.timeoutGameOver = undefined;
+    this.timeoutAfterBubblePop = undefined;
   }
 
   componentDidMount () {
+    
     this.createBackgroundBubbles();
-    timeout = setTimeout ( () => { // start game timeout
-      this.youLost(); 
-    }, 30000);
+    this.timeoutGameOver = setTimeout ( () => { // start trial timeout
+      this.props.navigator.replace({
+        id: "BubblePopWinPage",
+      });
+    }, 15000); // game over when 15 seconds go by without bubble being popped
 
   }
-  
-  // game timeout
-  youLost = () => {
-    this.goToNextTrial();
-  }
 
+  componentWillUnmount(){
+    clearTimeout(this.timeoutGameOver);
+    clearTimeout(this.timeoutAfterBubblePop);
+  }
 
   // populate array of bubbles
   createBackgroundBubbles() {
@@ -96,17 +122,13 @@ class BubblePop extends React.Component {
       bubbles.push(
         <AnimatedSprite
           key={i}
-          spriteKey={i}
           coordinates={{top: SCREEN_HEIGHT, left: startLeft}}
           size={size}
           draggable={false}
           character={bubbleCharacter}
           tween={backgroundBubbleTween}
           tweenStart="auto"
-          soundOnTouch={true}
-          soundFile="bubblePop"
           spriteAnimationKey='default'/>
-
       );
     }
     this.setState({bubbleCharacters: bubbles});
@@ -119,55 +141,36 @@ class BubblePop extends React.Component {
 
   // remove bubble and record time it took to pop it
   popBubble = (popTime) => {
-    this.targetSpriteAnimationKey = 'pop';
+    // this.targetSpriteAnimationKey = 'pop';
+    clearTimeout(this.timeoutGameOver);
     this.setState({
       popTime: popTime,
-      //showTargetBubble: false,
-      //targetBubbleKey: Math.random(),
+      showTargetBubble: false,
+      showFood: false,
     });
-    //this.goToNextTrial();
-    //this.updateScore();
+    this.timeoutAfterBubblePop = setTimeout(() => {
+      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
+        this.props.navigator.replace({
+          id: "BubblePopWinPage",
+        });
+      }
+      else{
+        this.goToNextTrial();
+      }
+    }, 500)
   }
 
   goToNextTrial(){
     this.props.navigator.replace({ 
       id: 'NextTrial',
       getId: this.getCurrId,
+      targetDuration: this.targetDuration,
     });
   }
 
   getCurrId() {
     return 'BubblePop';
   }
-
-  updateScore = () => {
-    //newScore = this.state.score + 1;
-    // this.setState({score: this.state.score + 1});
-    // //this.saveScore(newScore);
-    // if(this.state.score > this){ // navigate to win page if all bubbles are popped
-    //   console.warn('here');
-    //   clearTimeout(timeout); // reset the game timer
-    //   this.props.navigator.replace({
-    //     id: "BubblePopWinPage",
-    //   });
-    // }
-  }
-
-  
-
-  // saveScore = (data) => {
-  //   AsyncStorage.setItem('score', JSON.stringify(data));
-  // }
-
-  // reset score, bubbles and game timer once game has been won
-  // resetGame = () => {
-  //   this.setState({popTime: 0});
-  //   this.setState({score: 0});
-  //   newScore = 0;
-  //   this.saveScore(newScore);
-  //   this.createBubbles(NUM_BUBBLES);
-  //   this.youLost();
-  // };
 
   render(){
     return (
@@ -182,13 +185,25 @@ class BubblePop extends React.Component {
             {this.state.showTargetBubble ?
               <AnimatedSprite
                 key={this.state.targetBubbleKey}
-                coordinates={{top: SCREEN_HEIGHT, left: SCREEN_WIDTH/2 - 100}}
+                coordinates={{top: SCREEN_HEIGHT - 80, left: this.targetLocation}}
                 size={{width: 200, height: 200}}
                 draggable={false}
                 character={bubbleCharacter}
                 soundOnTouch={true}
                 soundFile="bubblePop"
-                tween={this.targetTween}
+                tween={this.state.targetTween}
+                tweenStart='auto'
+                timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
+                spriteAnimationKey={this.targetSpriteAnimationKey}/>
+            : null}
+            {this.state.showFood ?
+              <AnimatedSprite
+                key={this.state.foodKey}
+                coordinates={{top: SCREEN_HEIGHT - 40, left: this.targetLocation + 200}}
+                size={{width: 100, height: 100}}
+                draggable={false}
+                character={canCharacter}
+                tween={this.state.foodTween}
                 tweenStart='auto'
                 timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
                 spriteAnimationKey={this.targetSpriteAnimationKey}/>
@@ -224,6 +239,35 @@ const styles = StyleSheet.create({
 });
 
 export default BubblePop;
+
+// updateScore = () => {
+//     //newScore = this.state.score + 1;
+//     // this.setState({score: this.state.score + 1});
+//     // //this.saveScore(newScore);
+//     // if(this.state.score > this){ // navigate to win page if all bubbles are popped
+//     //   console.warn('here');
+//     //   clearTimeout(timeout); // reset the game timer
+//     //   this.props.navigator.replace({
+//     //     id: "BubblePopWinPage",
+//     //   });
+//     // }
+//   }
+
+  
+
+  // saveScore = (data) => {
+  //   AsyncStorage.setItem('score', JSON.stringify(data));
+  // }
+
+  // reset score, bubbles and game timer once game has been won
+  // resetGame = () => {
+  //   this.setState({popTime: 0});
+  //   this.setState({score: 0});
+  //   newScore = 0;
+  //   this.saveScore(newScore);
+  //   this.createBubbles(NUM_BUBBLES);
+  //   this.youLost();
+  // };
 
 
     // //this.setState({bubbleKey: Math.random(), spriteAnimationKey: 'pop'});

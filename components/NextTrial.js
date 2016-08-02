@@ -24,6 +24,7 @@ class NextTrial extends Component {
       this.props.navigator.replace({
         id: this.props.route.getId(),
         bugTags: this.props.route.bugTags,
+        targetDuration: this.props.route.targetDuration,
       });
     }, 2000);
   }

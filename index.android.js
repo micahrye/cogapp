@@ -69,9 +69,9 @@ class CogApp extends React.Component {
   renderScene(route, navigator){
     if(route.id === 'Main'){
       return <Main navigator={navigator} />
-    }else if(route.id === 'DragDragon'){
+    } else if(route.id === 'DragDragon'){
       return <DragDragon />
-    }if (route.id === 'BubblePop') {
+    } if (route.id === 'BubblePop') {
       return <BubblePop navigator={navigator} route={route}/>
     } else if (route.id === 'BubblePopWinPage'){
       return <BubblePopWinPage navigator={navigator} route={route}/>

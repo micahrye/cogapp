@@ -197,5 +197,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BugZapLoading
+export default BugZapLoading;
 

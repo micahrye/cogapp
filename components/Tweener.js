@@ -56,10 +56,10 @@ const Tweener = function () {
   };
 
   const sineWave = function(options, state, stopTween){
-    if(stopTween){
-      state.left.stopAnimation();
-    }
-    else{
+    // if(stopTween){
+    //   state.left.stopAnimation();
+    // }
+    //else{
       state.top.setValue(options.startXY[1]);
       state.left.setValue(options.startXY[0]);
       Animated.parallel(
@@ -75,7 +75,7 @@ const Tweener = function () {
         }
 
       });
-    }
+    //}
 
   }
 
