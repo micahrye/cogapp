@@ -255,10 +255,12 @@ class AnimatedSprite extends React.Component{
       this.configureTween();
     }
 
-    else if(this.props.tween.stopTweenOnTouch){
-      this.stopTween = true;
-      let stopValues = this.configureTween();
-      this.props.tween.stopTweenOnTouch(stopValues);
+    else if(this.props.tween){
+      if(this.props.tween.stopTweenOnTouch){
+        this.stopTween = true;
+        let stopValues = this.configureTween();
+        this.props.tween.stopTweenOnTouch(stopValues);
+      }
     }
 
     if(this.props.soundOnTouch){
