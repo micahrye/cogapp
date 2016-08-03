@@ -75,14 +75,15 @@ const Tweener = function () {
         )
       ]).start(() => {
         if (options.loop === false) {
-          return
+          // let tweenHasEnded = true;
+          // console.warn(tweenHasEnded);
+          // return tweenHasEnded;
         }else{
           sineWave(options, state, stopTween);
         }
 
       });
     }
-
   }
 
   const _getSequenceX = function (options, state) {

@@ -131,7 +131,8 @@ class AnimatedSprite extends React.Component{
     this.character && this.character.setNativeProps(this._characterStyles)
 
     if(this.props.tweenStart == "auto" && !this.props.tweenStop){
-      this.configureTween();
+      this.tweenHasEnded = this.configureTween();
+      console.warn(this.tweenHasEnded);
     }
 
     if(this.props.tweenStop){
@@ -261,7 +262,7 @@ class AnimatedSprite extends React.Component{
     }
 
     if(this.props.tweenStart === "touch"){
-      this.configureTween();
+      this.tweenHasEnded = this.configureTween();
     }
 
     else if(this.props.stopTweenOnTouch){
@@ -299,8 +300,8 @@ class AnimatedSprite extends React.Component{
       // scale: this.state._scale,
       // rotation: this.state._rotation,
     }
-    let stopValues = this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
-    return stopValues;
+    let endValues = this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
+    return endValues;
   }
 
   render() {
