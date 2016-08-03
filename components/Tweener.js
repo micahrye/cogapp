@@ -232,7 +232,7 @@ const Tweener = function () {
         {
           toValue: (options.startY - 75),
           easing: Easing.linear,
-          duration: 100,
+          duration: 300,
         }
       ),
       Animated.timing(
@@ -240,7 +240,7 @@ const Tweener = function () {
         {
           toValue: options.startY,
           easing: Easing.bounce,
-          duration: 500,
+          duration: 700,
         }
       ),
     ]).start(() => {
