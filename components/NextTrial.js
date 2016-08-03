@@ -25,6 +25,8 @@ class NextTrial extends Component {
         id: this.props.route.getId(),
         bugTags: this.props.route.bugTags,
         targetDuration: this.props.route.targetDuration,
+        trialNumber: this.props.route.trialNumber,
+        numFails: this.props.route.numFails,
       });
     }, 2000);
   }

@@ -22,6 +22,8 @@ import AnimatedSprite from "../animatedSprite";
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+const TRIAL_CYCLE = 3; // 3 trials = 1 cycle, before reset to 0
+
 class BugZap1 extends React.Component {
 
   constructor(props){
@@ -54,6 +56,9 @@ class BugZap1 extends React.Component {
     this.flyInDuration = undefined;
     this.signs = [];
     this.farthestTag = 0;
+    this.fail = false;
+    this.numFails = 0;
+    this.trialNumber = -(TRIAL_CYCLE - 1); // first TRIAL_CYCLE trials always run, then reset trialNumber to 0 every 3rd trial 
   }
 
   componentDidMount() {
@@ -303,6 +308,7 @@ class BugZap1 extends React.Component {
   frogDisgust() {
     this.setState({frogKey: Math.random()}) 
     this.frogSpriteAnimationKey = 'disgust';
+    this.fail = true;
   }
 
   // go to next level
@@ -312,16 +318,66 @@ class BugZap1 extends React.Component {
     });
   }
 
+  // TODO: rework this, kind of a mess
   goToNextTrial() {
+    if(this.props.route.numFails != undefined){
+      if(this.fail){
+        this.numFails = this.props.route.numFails + 1; // if trial was a failure, increase fails by one
+      }
+      else{
+        this.numFails = this.props.route.numFails; // otherwise fails stays the same
+      }
+    }
+    else if(this.fail){ // on first load, this.props.route.numFails is not defined
+      this.numFails = 1;
+    } // put this in its own function called from frogDisgust
+
+    //MAYBE MAKE ALL THIS ONE FUNCTION CALLED FROM COMPONENTDIDMOUNT CALLED UPDATE/CHECKTRIAL (actually don't think you can bc of the fail checks, won't know until down here)
+    if(this.props.route.trialNumber != undefined){
+      this.trialNumber = this.props.route.trialNumber + 1; // increase number of completed trials by one
+    } // put this in componentDidMount
+
+    if(this.trialNumber === 0){ // after first TRIAL_CYCLE trials
+      if(this.numFails === TRIAL_CYCLE){ // if first TRIAL_CYCLE trials are all fails, go to next bug game
+        this.goToNextBugGame();
+        return;
+      }
+      else{
+        this.numFails = 0;
+      }
+    }
+
+    if(this.trialNumber === TRIAL_CYCLE){
+      if(this.numFails > TRIAL_CYCLE/2){ // if failure rate over 50% after 3 more trials, go to next bug game
+        this.goToNextBugGame();
+        return;
+      }
+      else{
+        this.trialNumber = 0; // reset trial and fail counter if succesfully made it thru trial cycle
+        this.numFails = 0;
+      }
+    }
+    console.warn('trialnum' + this.trialNumber);
+    console.warn('failnum' + this.numFails);
+    
+
     this.props.navigator.push({
       id: 'NextTrial',
       getId: this.getCurrId,
       bugTags: this.state.bugTags.length,
+      numFails: this.numFails,
+      trialNumber: this.trialNumber,
     });
   }
 
   getCurrId() {
     return 'BugZap1';
+  }
+
+  goToNextBugGame() {
+    this.props.navigator.replace({
+      id: 'BugZap2',
+    });
   }
 
   render(){

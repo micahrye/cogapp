@@ -19,6 +19,8 @@ import AnimatedSprite from "../animatedSprite";
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+const NUM_TRIALS = 3;
+
 class BugZap extends React.Component {
   constructor(props){
     super(props);
@@ -40,6 +42,7 @@ class BugZap extends React.Component {
     this.timeoutFlyAway = undefined;
     this.timeoutNextTrial = undefined;
     this.flyInDuration = undefined;
+    this.trialNumber = 1;
   }
 
   componentDidMount() {
@@ -210,15 +213,30 @@ class BugZap extends React.Component {
     });
   }
 
+  // trial count goes up, go to next trial, or next level if max trials reached
   goToNextTrial() {
+    if(this.props.route.trialNumber != undefined){
+      this.trialNumber = this.props.route.trialNumber + 1;
+      if(this.trialNumber === NUM_TRIALS){
+        this.goToNextLevel();
+        return;
+      }
+    }
     this.props.navigator.replace({
       id: 'NextTrial',
       getId: this.getCurrId,
+      trialNumber: this.trialNumber,
     });
   }
 
   getCurrId() {
     return 'BugZap';
+  }
+
+  goToNextLevel() {
+    this.props.navigator.replace({
+      id: 'BugZap1',
+    });
   }
 
   render(){

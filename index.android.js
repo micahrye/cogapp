@@ -81,15 +81,15 @@ class CogApp extends React.Component {
     } else if (route.id === 'NextGamePage'){
       return <NextGamePage navigator={navigator} route={route}/>
     } else if(route.id === 'BugZapLoading'){
-      return <BugZapLoading navigator={navigator} route={route}/>
+      return <BugZapLoading navigator={navigator} route={route} />
     } else if (route.id === 'BugZap'){
-      return <BugZap navigator={navigator} />
+      return <BugZap navigator={navigator} route={route} />
     } else if (route.id === 'BugZap1'){
       return <BugZapLevel1 navigator={navigator} route={route}/>
     } else if (route.id === 'BugZap2'){
-      return <BugZapLevel2 navigator={navigator} />
+      return <BugZapLevel2 navigator={navigator} route={route} />
     } else if (route.id === 'BugZap3'){
-      return <BugZapLevel3 navigator={navigator} />
+      return <BugZapLevel3 navigator={navigator} route={route} />
     } else if (route.id === 'GameTwo'){
       return <GameTwo navigator={navigator} />
     } else if (route.id === 'GameTwo1'){

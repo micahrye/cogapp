@@ -84,12 +84,12 @@ class BubblePop extends React.Component {
 
   componentDidMount () {
     this.createBackgroundBubbles();
-    // this.timeoutBubbleRepeat = setInterval(() => { // so bubble repeats its tween up the screen if not popped
-    //   this.setState({
-    //     targetTween: this.targetTween,
-    //     targetBubbleKey: Math.random(),
-    //   })
-    // }, this.targetDuration + 500);
+    this.timeoutBubbleRepeat = setInterval(() => { // so bubble repeats its tween up the screen if not popped
+      this.setState({
+        targetTween: this.targetTween,
+        targetBubbleKey: Math.random(),
+      })
+    }, this.targetDuration + 500);
 
     this.timeoutGameOver = setTimeout(() => { // start trial timeout
       this.props.navigator.replace({

@@ -20,6 +20,8 @@ import AnimatedSprite from "../animatedSprite";
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+const NUM_TRIALS = 3;
+
 class BugZap3 extends React.Component {
   constructor(props){
     super(props);
@@ -42,6 +44,7 @@ class BugZap3 extends React.Component {
     this.timeoutRemoveSpotlight = undefined;
     this.timeoutRemoveBlackout = undefined;
     this.timeoutFlyAway = undefined;
+    this.trialNumber = 1;
     this.bulbTweenSettings = {
       tweenType: "bounce-drop",
       startY: -128,
@@ -229,14 +232,28 @@ class BugZap3 extends React.Component {
   }
 
   goToNextTrial() {
+    if(this.props.route.trialNumber != undefined){
+      this.trialNumber = this.props.route.trialNumber + 1;
+      if(this.trialNumber === NUM_TRIALS){
+        this.goToNextLevel();
+        return;
+      }
+    }
     this.props.navigator.push({
       id: 'NextTrial',
       getId: this.getCurrId,
+      trialNumber: this.trialNumber,
     });
   }
 
   getCurrId() {
     return 'BugZap3';
+  }
+
+  goToNextLevel() {
+    this.props.navigator.replace({
+      id: 'GameTwo',
+    });
   }
 
   getSpotLightStyle() {
