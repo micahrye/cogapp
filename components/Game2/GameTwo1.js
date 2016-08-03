@@ -382,24 +382,53 @@ class GameTwo1 extends Component {
         creatureTween3: tweenMove([Window.width-250,115],[700,115])});
     }
     diceRoll = Math.random();
-    if (diceRoll < 0.33) {
-      this.setState({
-        creatureKey1: Math.random(),
-        creatureTween1: tweenMove(creatureStart, creatureEnd),
-        currentCreature: 1,
-      });
-    } else if (diceRoll > 0.66) {
-      this.setState({
-        creatureKey2: Math.random(),
-        creatureTween2: tweenMove(creatureStart, creatureEnd),
-        currentCreature: 2,
-      });
-    } else {
-      this.setState({
-        creatureKey3: Math.random(),
-        creatureTween3: tweenMove([700,115], [Window.width-250,115]),
-        currentCreature: 3,
-      });
+    // ensures the same creature is not selected twice in a row
+    switch(this.state.currentCreature) {
+      case 1:
+        if (diceRoll < 0.5) {
+          this.setState({
+            creatureKey2: Math.random(),
+            creatureTween2: tweenMove(creatureStart, creatureEnd),
+            currentCreature: 2,
+          });
+        } else {
+          this.setState({
+            creatureKey3: Math.random(),
+            creatureTween3: tweenMove([700,115], [Window.width-250,115]),
+            currentCreature: 3,
+          });
+        }
+        break;
+      case 2:
+      if (diceRoll < 0.5) {
+        this.setState({
+          creatureKey1: Math.random(),
+          creatureTween1: tweenMove(creatureStart, creatureEnd),
+          currentCreature: 1,
+        });
+      } else {
+        this.setState({
+          creatureKey3: Math.random(),
+          creatureTween3: tweenMove([700,115], [Window.width-250,115]),
+          currentCreature: 3,
+        });
+      }
+        break;
+      case 3:
+      if (diceRoll < 0.5) {
+        this.setState({
+          creatureKey1: Math.random(),
+          creatureTween1: tweenMove(creatureStart, creatureEnd),
+          currentCreature: 1,
+        });
+      } else {
+        this.setState({
+          creatureKey2: Math.random(),
+          creatureTween2: tweenMove([700,115], [Window.width-250,115]),
+          currentCreature: 2,
+        });
+      }
+        break;
     }
   }
 
