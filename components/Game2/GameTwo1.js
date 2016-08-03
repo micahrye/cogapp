@@ -163,6 +163,9 @@ class GameTwo1 extends Component {
       foodPressed: false,
       gamePhase: true,
       numTrials: 0,
+      showFood1: true,
+      showFood2: true,
+      showFood: true,
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
@@ -187,7 +190,7 @@ class GameTwo1 extends Component {
   }
 
   onTimeoutOne = () => {
-    if (!this.state.foodPressed) {
+
       if (this.state.gamePhase) {
           this.setState({foodTween01: tweenTimeout(foodEndTop,startTop),
                          foodTween02: tweenTimeout(foodEndTop,startTop),
@@ -195,7 +198,9 @@ class GameTwo1 extends Component {
                          foodKey4: Math.random(),
                          foodKey5: Math.random(),
                          signKey4: Math.random(),
-                         signKey5: Math.random()});
+                         signKey5: Math.random(),
+                         timeoutHuh: false});
+          this.toggleCreature();
         } else {
           this.setState({foodTween11: tweenTimeout(foodEndTop,startTop),
                          foodTween12: tweenTimeout(foodEndTop,startTop),
@@ -206,14 +211,21 @@ class GameTwo1 extends Component {
                          foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random(),
-                         signKey3: Math.random()});
+                         signKey3: Math.random(),
+                         numTrials: this.state.numTrials+1,
+                         timeoutHuh: false,
+                         foodPressed: false,});
+          this.toggleCreature();
+          if (this.state.numTrials >= 8) {
+            setTimeout(this.buttonPress,2000);
+          }
         }
         this.setState({timeoutHuh: false});
-    }
+
   }
 
   onTimeoutTwo = () => {
-    if (!this.state.foodPressed) {
+
       if (this.state.gamePhase) {
         this.setState({foodTween01: tweenHop(foodEndTop),
                        foodTween02: tweenHop(foodEndTop),
@@ -234,7 +246,7 @@ class GameTwo1 extends Component {
                        signKey2: Math.random(),
                        signKey3: Math.random()});
       }
-    }
+
   }
 
   randomFood(food1,food2,food3) {
@@ -354,18 +366,12 @@ class GameTwo1 extends Component {
                          signKey2: Math.random(),
                          signKey3: Math.random()});
         }
-        this.setState({timeoutHuh: true});
+        this.setState({timeoutHuh: true,
+                       showFood1: true,
+                       showFood2: true,
+                       showFood3: true,});
     }
   }
-
-  // selectCreature(creature1,creature2,key1,key2) {
-  //   diceRoll = Math.random();
-  //   if (diceRoll <= 0.5) {
-  //     this.setState({
-  //
-  //     });
-  //   }
-  // }
 
   toggleCreature = () => {
     if (this.state.currentCreature === 1) {
@@ -424,7 +430,7 @@ class GameTwo1 extends Component {
       } else {
         this.setState({
           creatureKey2: Math.random(),
-          creatureTween2: tweenMove([700,115], [Window.width-250,115]),
+          creatureTween2: tweenMove(creatureStart, creatureEnd),
           currentCreature: 2,
         });
       }
@@ -432,19 +438,32 @@ class GameTwo1 extends Component {
     }
   }
 
+  removeFood1 = () => {
+    this.setState({showFood1: false});
+  }
+
+  removeFood2 = () => {
+    this.setState({showFood2: false});
+  }
+
+  removeFood3 = () => {
+    this.setState({showFood3: false});
+  }
+
   onFoodPress = (spriteKey) => {
     xvalue = 0;
     switch(spriteKey) {
       case 1:
-         clearTimeout(this.timeout1);
-         clearTimeout(this.timeout2);
          x = startLeft;
          this.setState({foodKey1: Math.random(),
                         foodTween11: tweenFall(x),
                         foodPressed: true});
+         setTimeout(this.removeFood1,750);
         if (this.state.phase1Correct[0] === "correct") {
           this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
           if (this.state.phase1AnsweredCorrectly >= 1) {
+            clearTimeout(this.timeout1);
+            clearTimeout(this.timeout2);
             setTimeout(this.toggleCreature,2000);
             this.setState({signKey1: Math.random(),
                            signKey2: Math.random(),
@@ -459,6 +478,12 @@ class GameTwo1 extends Component {
                            timeoutHuh: false,
                            phase1AnsweredCorrectly: 0,
                            numTrials: this.state.numTrials+1});
+            if (this.state.phase1Correct[1] === "correct") {
+              this.removeFood2();
+            }
+            if (this.state.phase1Correct[2] === "correct") {
+              this.removeFood3();
+            }
           }
           if (this.state.numTrials >= 8) {
             setTimeout(this.buttonPress,2000);
@@ -466,15 +491,17 @@ class GameTwo1 extends Component {
         }
          break;
       case 2:
-         clearTimeout(this.timeout1);
-         clearTimeout(this.timeout2);
+
          x = startLeft+spacing;
          this.setState({foodKey2: Math.random(),
                         foodTween12: tweenFall(x),
                         foodPressed: true});
+         setTimeout(this.removeFood2,750);
          if (this.state.phase1Correct[1] === "correct") {
            this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
            if (this.state.phase1AnsweredCorrectly >= 1) {
+             clearTimeout(this.timeout1);
+             clearTimeout(this.timeout2);
              setTimeout(this.toggleCreature,2000);
              this.setState({signKey1: Math.random(),
                             signKey2: Math.random(),
@@ -489,23 +516,30 @@ class GameTwo1 extends Component {
                             foodPressed: false,
                             phase1AnsweredCorrectly: 0,
                             numTrials: this.state.numTrials+1});
+              if (this.state.phase1Correct[0] === "correct") {
+                this.removeFood1();
+              }
+              if (this.state.phase1Correct[2] === "correct") {
+                this.removeFood3();
+              }
            }
            if (this.state.numTrials >= 8) {
              setTimeout(this.buttonPress,2000);
            }
-           //setTimeout(this.sendOffScreen(this.state.foodTween12),1000);
          }
          break;
       case 3:
-         clearTimeout(this.timeout1);
-         clearTimeout(this.timeout2);
+
          x = startLeft+spacing*2;
          this.setState({foodKey3: Math.random(),
                         foodTween13: tweenFall(x),
                         foodPressed: true});
+         setTimeout(this.removeFood3,750);
          if (this.state.phase1Correct[2] === "correct") {
            this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
            if (this.state.phase1AnsweredCorrectly >= 1) {
+             clearTimeout(this.timeout1);
+             clearTimeout(this.timeout2);
              setTimeout(this.toggleCreature,2000);
              this.setState({signKey1: Math.random(),
                             signKey2: Math.random(),
@@ -520,6 +554,12 @@ class GameTwo1 extends Component {
                             timeoutHuh: false,
                             phase1AnsweredCorrectly: 0,
                             numTrials: this.state.numTrials+1});
+            if (this.state.phase1Correct[0] === "correct") {
+              this.removeFood1();
+            }
+            if (this.state.phase1Correct[1] === "correct") {
+              this.removeFood2();
+            }
            }
            if (this.state.numTrials >= 8) {
              setTimeout(this.buttonPress,2000);
@@ -541,12 +581,11 @@ class GameTwo1 extends Component {
                         timeoutHuh: false});
         clearTimeout(this.timeout1);
         clearTimeout(this.timeout2);
-        if (this.state.phase0Correct === "left") {
-          if (this.state.numTrials === 2) {
-            this.setState({gamePhase: false});
-          }
-          this.setState({numTrials: this.state.numTrials+1});
+        this.setState({numTrials: this.state.numTrials+1});
+        if (this.state.numTrials === 2) {
+          this.setState({gamePhase: false});
         }
+        if (this.state.phase0Correct === "left") {}
         setTimeout(this.toggleCreature,2000);
         break;
       case 5:
@@ -563,12 +602,11 @@ class GameTwo1 extends Component {
                         timeoutHuh: false});
           clearTimeout(this.timeout1);
           clearTimeout(this.timeout2);
-          if (this.state.phase0Correct === "right") {
-            if (this.state.numTrials === 2) {
-              this.setState({gamePhase: false});
-            }
-            this.setState({numTrials: this.state.numTrials+1});
+          this.setState({numTrials: this.state.numTrials+1});
+          if (this.state.numTrials === 2) {
+            this.setState({gamePhase: false});
           }
+          if (this.state.phase0Correct === "right") {}
           setTimeout(this.toggleCreature,2000);
           break;
     }
@@ -586,6 +624,7 @@ class GameTwo1 extends Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+                <Text> numtrials: {this.state.numTrials} </Text>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
@@ -621,6 +660,7 @@ class GameTwo1 extends Component {
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
+                {this.state.showFood1 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     size={{width: 60, height: 60}}
                     draggable={false}
@@ -630,6 +670,7 @@ class GameTwo1 extends Component {
                     tween={this.state.foodTween11}
                     onPress={this.onFoodPress}
                     spriteKey={1}/>
+                : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing-30}}
                     key={this.state.signKey2}
                     size={{width: 110, height: 170}}
@@ -637,6 +678,7 @@ class GameTwo1 extends Component {
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
+                {this.state.showFood2 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
                     size={{width: 60, height: 60}}
                     draggable={false}
@@ -646,6 +688,7 @@ class GameTwo1 extends Component {
                     tween={this.state.foodTween12}
                     onPress={this.onFoodPress}
                     spriteKey={2}/>
+                : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
                     key={this.state.signKey3}
                     size={{width: 110, height: 170}}
@@ -653,6 +696,7 @@ class GameTwo1 extends Component {
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
+                {this.state.showFood3 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
                     size={{width: 60, height: 60}}
                     draggable={false}
@@ -662,6 +706,7 @@ class GameTwo1 extends Component {
                     tween={this.state.foodTween13}
                     onPress={this.onFoodPress}
                     spriteKey={3}/>
+                : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft2-30}}
                     key={this.state.signKey4}
                     size={{width: 110, height: 170}}
