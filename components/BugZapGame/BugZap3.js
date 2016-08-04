@@ -35,7 +35,6 @@ class BugZap3 extends React.Component {
       frogKey0: 1,
       frogKey1: 2,
       showBug: false,
-      //loop: true,
     }
     this.bugSide = undefined;
     this.tweenAway = {};
@@ -45,6 +44,7 @@ class BugZap3 extends React.Component {
     this.timeoutRemoveBlackout = undefined;
     this.timeoutFlyAway = undefined;
     this.trialNumber = 1;
+    this.loopAnimation = true,
     this.bulbTweenSettings = {
       tweenType: "bounce-drop",
       startY: -128,
@@ -146,10 +146,10 @@ class BugZap3 extends React.Component {
   }
 
   bugFlyAway() {
+    this.loopAnimation = false;
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: 'startFly',
-      // loop: false,
       tweenSettings: this.tweenAway,
     });
     this.timeoutNextTrial = setTimeout(() => {
@@ -311,7 +311,6 @@ class BugZap3 extends React.Component {
 
           <AnimatedSprite coordinates={{top: -128, left: SCREEN_WIDTH/2 -50}}
             size={{width: 128, height: 128}}
-            draggable={false}
             character={lightbulbCharacter}
             tween={this.bulbTweenSettings}
             tweenStart="auto"/>
@@ -321,11 +320,11 @@ class BugZap3 extends React.Component {
               key={this.state.bugKey}
               coordinates={{top: 0, left: 0}}
               size={{width: 128, height: 128}}
-              draggable={false}
               character={bugCharacter}
               tween={this.state.tweenSettings}
               tweenStart="auto"
               spriteAnimationKey={this.state.bugSpriteAnimationKey}
+              loopAnimation={this.loopAnimation}
               onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
           : null}
 
@@ -334,7 +333,6 @@ class BugZap3 extends React.Component {
             spriteKey={0}
             coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
             size={{width: 512, height: 256}}
-            draggable={false}
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
             onPress={() => {this.frogTap(0)}}
@@ -349,7 +347,6 @@ class BugZap3 extends React.Component {
             coordinates={{top: SCREEN_HEIGHT - 275, left: -150}}
             size={{width: 512, height: 256}}
             rotate={[{rotateY: '180deg'}]}
-            draggable={false}
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey} 
             onPress={() => {this.frogTap(1)}} 

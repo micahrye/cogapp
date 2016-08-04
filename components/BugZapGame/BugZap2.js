@@ -43,6 +43,7 @@ class BugZap2 extends React.Component {
     this.timeoutFlyAway = undefined;
     this.flyInDuration = undefined;
     this.trialNumber = 1;
+    this.loopAnimation = true;
   }
 
   componentDidMount() {
@@ -141,6 +142,7 @@ class BugZap2 extends React.Component {
     });
 
     this.timeoutFlyAway = setTimeout(()=>{
+      this.loopAnimation = false;
       this.bugFlyAway('startFly');
       this.frogDisgust(0);
       this.frogDisgust(1);
@@ -298,11 +300,11 @@ class BugZap2 extends React.Component {
                 key={this.state.bugKey}
                 coordinates={{top: 0, left: 0}}
                 size={{width: 128, height: 128}}
-                draggable={false}
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
+                loopAnimation={this.loopAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
             : null}
 
@@ -311,7 +313,6 @@ class BugZap2 extends React.Component {
               spriteKey={0}
               coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
               size={{width: 512, height: 256}}
-              draggable={false}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={() => this.frogTap(0)}
@@ -325,7 +326,6 @@ class BugZap2 extends React.Component {
               coordinates={{top: SCREEN_HEIGHT - 275, left: - 150}}
               size={{width: 512, height: 256}}
               rotate={[{rotateY: '180deg'}]}
-              draggable={false}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={() => {this.frogTap(1)}} 

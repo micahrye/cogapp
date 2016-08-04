@@ -32,7 +32,7 @@ class BugZap extends React.Component {
       zappedTooEarly: false,
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
-      loop: true,
+      loopAnimation: true,
       //stopTween: false,
     }
     this.tweenIdle = {};
@@ -138,7 +138,7 @@ class BugZap extends React.Component {
       bugKey: Math.random(),
       tweenSettings: this.tweenAway,
       bugSpriteAnimationKey: animation, // "startFly" after landed, or "default" if zapped too early
-      loop: false,
+      loopAnimation: false,
     });
     this.timeoutNextTrial = setTimeout(() => {
       this.goToNextTrial();
@@ -186,7 +186,7 @@ class BugZap extends React.Component {
     this.setState({
       bugKey: Math.random(), 
       bugSpriteAnimationKey: 'splat',
-      loop: false, // does not loop splat animation
+      loopAnimation: false, // does not loop splat animation
     });
   }
 
@@ -249,14 +249,13 @@ class BugZap extends React.Component {
                 spriteKey={0}
                 coordinates={{top: 0, left: 0}}
                 size={{width: 128, height: 128}}
-                draggable={false}
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
                 tweenStop={this.state.stopTween}
                 stopTweenOnTouch={(values) => console.warn(values)}
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
-                loopAnimation={this.state.loop}
+                loopAnimation={this.state.loopAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
             : null}
 

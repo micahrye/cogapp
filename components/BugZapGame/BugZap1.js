@@ -122,13 +122,11 @@ class BugZap1 extends React.Component {
           <AnimatedSprite
             coordinates={{top: 0, left: 0}}
             size={{width: 70, height: 105}}
-            draggable={false}
             character={signCharacter}/>
 
           <AnimatedSprite
             coordinates={{top: 40, left: 0}}
             size={{width: 70, height: 70}}
-            draggable={false}
             character={bugCharacter}
             spriteAnimationKey='caught'
             loopAnimation={this.loop}/>
@@ -246,7 +244,6 @@ class BugZap1 extends React.Component {
         key={Math.random()}
         coordinates={{top: 0, left: this.farthestTag}}
         size={{width: 70, height: 105}}
-        draggable={false}
         character={signCharacter}
         tween={this.signTween}
         tweenStart='auto'/>
@@ -420,7 +417,6 @@ class BugZap1 extends React.Component {
               key={this.state.bugKey}
               coordinates={{top: 0, left: 0}}
               size={{width: this.bugSize[0], height: this.bugSize[1]}}
-              draggable={false}
               character={bugCharacter}
               tween={this.bugTween}
               tweenStart='auto'
@@ -434,7 +430,6 @@ class BugZap1 extends React.Component {
             spriteKey={0}
             coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
             size={{width: 512, height: 256}}
-            draggable={false}
             character={frogCharacter}
             spriteAnimationKey={this.frogSpriteAnimationKey}
             onPress={(frog) => {this.frogTap(frog)}}

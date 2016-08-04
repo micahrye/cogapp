@@ -10,18 +10,12 @@ import {
 } from 'react-native';
 
 class GameOverPage extends React.Component {
-  handlePress = () => {
-    this.props.route.callback();
-    this.props.navigator.pop();
-  }
   render () {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.handlePress}>
-          <View style={styles.alert}>
-            <Text style={{fontSize: 20}}>Time for the next activity</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.alert}>
+          <Text style={{fontSize: 20}}>Activity finished</Text>
+        </View>
      </View>
     )
   }
