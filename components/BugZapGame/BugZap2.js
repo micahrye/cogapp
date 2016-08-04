@@ -34,7 +34,6 @@ class BugZap2 extends React.Component {
       zappedTooEarly: false,
       frogSpriteAnimationKey: 'default',
       bugSpriteAnimationKey: 'default',
-      loop: true,
     }
     this.bugSide = undefined;
     this.tweenIdle = {};
@@ -79,15 +78,16 @@ class BugZap2 extends React.Component {
     let sideChoice = Math.random();
     let sequenceChoice = Math.random(); // to help choose two ways bug can approach both the right and left landing spots
     let xLand = undefined;
+    let yLand = 70;
     let flySequenceX = [];
-    let flySequenceY = [0, 70, 0, 70];
+    let flySequenceY = [0, yLand, 0, yLand];
 
     if(sideChoice < .5){ // bug lands on left side
       this.bugSide = 'left';
       xLand = 200;
       flySequenceX = [300, 350, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 50, 100, 50, 70];
+        flySequenceY = [200, 50, 100, 50, yLand];
       }
     }
     else{ // bug lands on right side
@@ -95,16 +95,16 @@ class BugZap2 extends React.Component {
       xLand = 350;
       flySequenceX = [450, 500, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 100, 50, 70];
+        flySequenceY = [200, 100, 50, yLand];
       }
     }
     
     // when landed
     this.tweenIdle = {
       tweenType: "sine-wave",
-      startXY: [xLand, 70],
+      startXY: [xLand, yLand],
       xTo: [xLand],
-      yTo: [70],
+      yTo: [yLand],
       duration: 0,
       loop: false,
     };
@@ -144,7 +144,7 @@ class BugZap2 extends React.Component {
       this.bugFlyAway('startFly');
       this.frogDisgust(0);
       this.frogDisgust(1);
-    }, 2000);
+    }, 750);
   }
 
   // switch to flying bug character and start next tween
@@ -152,7 +152,6 @@ class BugZap2 extends React.Component {
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: animation,
-      loop: false,
       tweenSettings: this.tweenAway,   
     }); 
     this.timeoutNextTrial = setTimeout(() => {
@@ -187,14 +186,9 @@ class BugZap2 extends React.Component {
     }
   }
 
-  // bug splats and is hidden, frog celebrates
+  // frog eats bug
   correctFrogTapped(frog){
-    this.setState({
-      bugKey: Math.random(), 
-      bugSpriteAnimationKey: 'splat',
-      loop: false, // so splat animation is not repeated
-    });
-    this.frogCelebrate(frog);
+    this.frogEat(frog);
     clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
   }
 
@@ -205,13 +199,39 @@ class BugZap2 extends React.Component {
     clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
   }
 
-  // once bug has splatted
-  onAnimationFinish(animationKey) {
+  // triggered when certain animations finish
+  onAnimationFinish(animationKey, frog) {
     if(animationKey === 'splat'){
       this.setState({showBug: false});
     }
+    else if(animationKey === 'eat'){
+      this.frogCelebrate(frog);
+    }
     else if(animationKey === 'celebrate'){
       this.goToNextTrial();
+    }
+  }
+
+  // indicates which frame the animation is currently on
+  getFrameIndex(animationKey, frameIndex) {
+    if(animationKey === 'eat' && frameIndex === 5){
+      this.bugSplat(); // when tongue has reached bug
+    }
+  }
+
+  bugSplat() {
+    this.setState({
+      bugKey: Math.random(), 
+      bugSpriteAnimationKey: 'splat',
+    });
+  }
+
+  frogEat(frog){
+    if(frog === 0){
+      this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'eat'});
+    }
+    else{
+      this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'eat'});
     }
   }
 
@@ -283,34 +303,35 @@ class BugZap2 extends React.Component {
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
-                loopAnimation={this.state.loop}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
             : null}
 
             <AnimatedSprite
               key={this.state.frogKey0}
               spriteKey={0}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-              size={{width: 256, height: 256}}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
+              size={{width: 512, height: 256}}
               draggable={false}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-              onPress={(frog) => {this.frogTap(frog)}}
+              onPress={() => this.frogTap(0)}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 0)}}
+              getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
 
             <AnimatedSprite 
               key={this.state.frogKey1}
               spriteKey={1}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: - 50}}
-              size={{width: 256, height: 256}}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: - 150}}
+              size={{width: 512, height: 256}}
               rotate={[{rotateY: '180deg'}]}
               draggable={false}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-              onPress={(frog) => {this.frogTap(frog)}} 
+              onPress={() => {this.frogTap(1)}} 
               hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 1)}}
+              getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
         </Image> 
       </View>
     );

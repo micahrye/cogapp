@@ -33,7 +33,7 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
       loop: true,
-      stopTween: false,
+      //stopTween: false,
     }
     this.tweenIdle = {};
     this.tweenAway = {};
@@ -129,7 +129,7 @@ class BugZap extends React.Component {
     this.timeoutFlyAway = setTimeout(()=>{
       this.bugFlyAway('startFly');
       this.frogDisgust();
-    }, 2000);
+    }, 750);
   }
 
   // switch to flying bug character and start next tween
@@ -151,10 +151,6 @@ class BugZap extends React.Component {
         this.catchBug();
       }
       else if(this.state.tweenSettings != this.tweenAway){ // bug has not landed yet
-        this.setState({
-          // stopTween: true,
-          // bugKey: Math.random(),
-        });
         this.frogDisgust();
         this.setState({zappedTooEarly: true}); // now bug doesn't land, just keeps flying offscreen
       }
@@ -181,7 +177,7 @@ class BugZap extends React.Component {
 
   // indicates which frame the animation is currently on
   getFrameIndex(animationKey, frameIndex) {
-    if(animationKey === 'eat' && frameIndex === 6){
+    if(animationKey === 'eat' && frameIndex === 5){
       this.bugSplat(); // when tongue has reached bug
     }
   }
@@ -267,8 +263,8 @@ class BugZap extends React.Component {
             <AnimatedSprite
               key={this.state.frogKey}
               spriteKey={1}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-              size={{width: 256, height: 256}}
+              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
+              size={{width: 512, height: 256}}
               character={frogCharacter}
               onPress={this.frogTap}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}

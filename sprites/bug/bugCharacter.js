@@ -3,13 +3,12 @@
 const bugCharacter = {
   name:"bug",
 
+  default:[
+    require("./bug_fly03.png"),
+    require("./bug_fly04.png"),
+  ],
+
   idle: [
-    require("./bug_idle01.png"),
-    require("./bug_idle01.png"),
-    require("./bug_idle01.png"),
-    require("./bug_idle01.png"),
-    require("./bug_idle01.png"),
-    require("./bug_idle01.png"),
     require("./bug_idle01.png"),
     require("./bug_idle01.png"),
     require("./bug_idle02.png"),
@@ -25,26 +24,10 @@ const bugCharacter = {
     require("./bug_fly05.png"),
   ],
 
-  default:[
-    require("./bug_fly03.png"),
-    require("./bug_fly04.png"),
-  ],
-
   splat:[
     require("./bug_splat01.png"),
     require("./bug_splat02.png"),
     require("./bug_splat03.png"),
-  ],
-
-  bubble: [
-  	require("../bubble/bubble_clockwise_large01.png"),
-    require("../bubble/bubble_clockwise_large02.png"),
-    require("../bubble/bubble_clockwise_large03.png"),
-    require("../bubble/bubble_clockwise_large04.png"),
-    require("../bubble/bubble_clockwise_large05.png"),
-    require("../bubble/bubble_clockwise_large06.png"),
-    require("../bubble/bubble_clockwise_large07.png"),
-    require("../bubble/bubble_clockwise_large08.png"),
   ],
 
   prettyIdle: [

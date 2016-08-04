@@ -197,7 +197,7 @@ class BugZap1 extends React.Component {
         this.timeToPrettyBugAppear = this.timeToPrettyBugAppear + 25;
       }
       this.timeoutPrettyBug = setTimeout(() => {
-        this.bugSpriteAnimationKey = 'prettyIdle'; 
+        this.bugSpriteAnimationKey = 'prettyIdle';
         this.setState({bugKey: Math.random()});
         this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
           this.saveBug();
@@ -211,7 +211,7 @@ class BugZap1 extends React.Component {
         this.bugFlyAway('startFly');
         this.frogDisgust(0);
         this.frogDisgust(1);
-      }, 2000);
+      }, 750);
     }
   }
 
@@ -220,7 +220,7 @@ class BugZap1 extends React.Component {
     this.bugSpriteAnimationKey = animation;
     this.bugTween = this.tweenAway;
 
-    if(!this.prettyBug){ // because non pretty bugs have a starting-to-fly animation that only loops once
+    if(!this.prettyBug){ // need to loop prettybug fly
       this.loop = false;
     }
     this.setState({
@@ -291,12 +291,9 @@ class BugZap1 extends React.Component {
     }
   }
 
-  // bug splats and is hidden, frog celebrates
+  // frog eats bug
   correctFrogTap(){
-    this.loop = false; // so splat animation is not repeated
-    this.bugSpriteAnimationKey = 'splat';
-    this.setState({bugKey: Math.random()}); // so that component re-render is triggered
-    this.frogCelebrate();
+    this.frogEat();
     clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
   }
 
@@ -309,19 +306,40 @@ class BugZap1 extends React.Component {
     clearTimeout(this.timeoutPrettyBug); // in case frog was tapped before prettybug appeared on a prettybug trial
   }
 
-  // once bug has finished specific animation
+  // indicates which frame the animation is currently on
+  getFrameIndex(animationKey, frameIndex) {
+    if(animationKey === 'eat' && frameIndex === 5){
+      this.bugSplat(); // when tongue has reached bug
+    }
+  }
+
+  // triggered when certain animations finish
   onAnimationFinish(animationKey) {
     if(animationKey === 'splat'){
       this.setState({showBug: false});
+    }
+    else if(animationKey === 'eat'){
+      this.frogCelebrate();
     }
     else if(animationKey === 'celebrate'){
       this.goToNextTrial();
     }
   }
 
-  frogCelebrate() {
+  bugSplat(){
+    this.loop = false // so splat animation doesn't loop
+    this.bugSpriteAnimationKey = 'splat';
+    this.setState({bugKey: Math.random()}); // so component re-render is triggered
+  }
+
+  frogEat(){
+    this.frogSpriteAnimationKey = 'eat';
     this.setState({frogKey: Math.random()});
+  }
+
+  frogCelebrate() {
     this.frogSpriteAnimationKey = 'celebrate';
+    this.setState({frogKey: Math.random()});
   }
 
   frogDisgust() {
@@ -414,14 +432,15 @@ class BugZap1 extends React.Component {
           <AnimatedSprite
             key={this.state.frogKey}
             spriteKey={0}
-            coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 200}}
-            size={{width: 256, height: 256}}
+            coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
+            size={{width: 512, height: 256}}
             draggable={false}
             character={frogCharacter}
-            spriteAnimationKey={this.frogSpriteAnimationKey} 
+            spriteAnimationKey={this.frogSpriteAnimationKey}
             onPress={(frog) => {this.frogTap(frog)}}
             hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
+            getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
 
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
             <Text>Go to Level 2</Text>

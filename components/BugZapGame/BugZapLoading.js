@@ -125,6 +125,12 @@ class BugZapLoading extends Component {
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
+              character={frogCharacter}
+              spriteAnimationKey={'eat'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'splat'}
               fps={10}/>
@@ -144,25 +150,7 @@ class BugZapLoading extends Component {
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
-              spriteAnimationKey={'landing'}
-              fps={10}/>
-            <AnimatedSprite 
-              coordinates={{top:250,left:550}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'idle'}
-              fps={10}/>
-            <AnimatedSprite 
-              coordinates={{top:250,left:550}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
               spriteAnimationKey={'prettyIdle'}
-              fps={10}/>
-            <AnimatedSprite 
-              coordinates={{top:250,left:550}}
-              size={{width:100,height:100}}
-              character={bugCharacter}
-              spriteAnimationKey={'startPrettyFly'}
               fps={10}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
