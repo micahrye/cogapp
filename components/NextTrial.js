@@ -27,6 +27,8 @@ class NextTrial extends Component {
         targetDuration: this.props.route.targetDuration,
         trialNumber: this.props.route.trialNumber,
         numFails: this.props.route.numFails,
+        timeToPrettyBugAppear: this.props.route.timeToPrettyBugAppear,
+        prettyBugHasAppeared: this.props.route.prettyBugHasAppeared,
       });
     }, 2000);
   }

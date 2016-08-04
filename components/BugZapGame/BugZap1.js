@@ -22,7 +22,7 @@ import AnimatedSprite from "../animatedSprite";
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-const TRIAL_CYCLE = 3; // 3 trials = 1 cycle, before reset to 0
+const TRIAL_CYCLE = 3; // 3 trials = 1 cycle, then reset to 0
 
 class BugZap1 extends React.Component {
 
@@ -46,6 +46,8 @@ class BugZap1 extends React.Component {
     this.timeoutPrettyBugSave = undefined;
     this.timeoutNextTrial = undefined;
     this.prettyBug = undefined;
+    this.timeToPrettyBugAppear = 100;
+    this.prettyBugHasAppeared = false;
     this.bugSize = [128, 128];
     this.frogSpriteAnimationKey = 'default';
     this.bugSpriteAnimationKey = 'default';
@@ -56,15 +58,29 @@ class BugZap1 extends React.Component {
     this.flyInDuration = undefined;
     this.signs = [];
     this.farthestTag = 0;
-    this.fail = false;
     this.numFails = 0;
-    this.trialNumber = -(TRIAL_CYCLE - 1); // first TRIAL_CYCLE trials always run, then reset trialNumber to 0 every 3rd trial 
+    this.trialNumber = 1 - TRIAL_CYCLE; 
+      // first TRIAL_CYCLE trials always run, then reset trialNumber to 0 every TRIAL_CYLE trials
+      // this.trialNumber starts negative so the first TRIAL_CYCLE trials can be checked as their own separate case
   }
 
   componentDidMount() {
-    if(this.props.route.bugTags){
+    if(this.props.route.numFails != undefined){ // on first load, this.props.route.* not defined
+      this.numFails = this.props.route.numFails;
+    }
+    if(this.props.route.trialNumber != undefined){
+      this.trialNumber = this.props.route.trialNumber + 1;
+    }
+    if(this.props.route.bugTags != undefined){
       this.createBugTags(this.props.route.bugTags);
     }
+    if(this.props.route.timeToPrettyBugAppear != undefined){
+      this.timeToPrettyBugAppear = this.props.route.timeToPrettyBugAppear;
+    }
+    if(this.props.route.prettyBugHasAppeared != undefined){
+      this.prettyBugHasAppeared = this.props.route.prettyBugHasAppeared;
+    }
+
     this.flyInDuration = Math.random() *  (4000 - 1500) + 1500;
     this.setUpTweens();
 
@@ -177,14 +193,17 @@ class BugZap1 extends React.Component {
 
     this.prettyBug = Boolean(Math.floor(Math.random() * 2)); // 50% of time it changes to prettybug
     if(this.prettyBug){
-      let timeToPrettyBugAppear = Math.random() * 400; // average is 200ms
+      if(this.props.route.timeToPrettyBugAppear != undefined && this.prettyBugHasAppeared){ // if prettybug has already appeared once at 100ms delay
+        this.timeToPrettyBugAppear = this.timeToPrettyBugAppear + 25;
+      }
       this.timeoutPrettyBug = setTimeout(() => {
         this.bugSpriteAnimationKey = 'prettyIdle'; 
         this.setState({bugKey: Math.random()});
         this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
           this.saveBug();
         }, 1000);
-      }, 400);
+      }, this.timeToPrettyBugAppear);
+      this.prettyBugHasAppeared = true;
     }
 
     else{
@@ -308,7 +327,17 @@ class BugZap1 extends React.Component {
   frogDisgust() {
     this.setState({frogKey: Math.random()}) 
     this.frogSpriteAnimationKey = 'disgust';
-    this.fail = true;
+    this.fail();
+  }
+
+  // increase number of fails for that trial cycle by one
+  fail(){
+    if(this.props.route.numFails != undefined){
+      this.numFails = this.props.route.numFails + 1; // increase fails by one
+    }
+    else{ // on first load, this.props.route.numFails is not defined
+      this.numFails = 1;
+    }
   }
 
   // go to next level
@@ -318,26 +347,9 @@ class BugZap1 extends React.Component {
     });
   }
 
-  // TODO: rework this, kind of a mess
+  // if too many fails go to next bug game, reset trial counter if needed, go to next trial
   goToNextTrial() {
-    if(this.props.route.numFails != undefined){
-      if(this.fail){
-        this.numFails = this.props.route.numFails + 1; // if trial was a failure, increase fails by one
-      }
-      else{
-        this.numFails = this.props.route.numFails; // otherwise fails stays the same
-      }
-    }
-    else if(this.fail){ // on first load, this.props.route.numFails is not defined
-      this.numFails = 1;
-    } // put this in its own function called from frogDisgust
-
-    //MAYBE MAKE ALL THIS ONE FUNCTION CALLED FROM COMPONENTDIDMOUNT CALLED UPDATE/CHECKTRIAL (actually don't think you can bc of the fail checks, won't know until down here)
-    if(this.props.route.trialNumber != undefined){
-      this.trialNumber = this.props.route.trialNumber + 1; // increase number of completed trials by one
-    } // put this in componentDidMount
-
-    if(this.trialNumber === 0){ // after first TRIAL_CYCLE trials
+    if(this.trialNumber === 0){ // only runs after first TRIAL_CYCLE trials
       if(this.numFails === TRIAL_CYCLE){ // if first TRIAL_CYCLE trials are all fails, go to next bug game
         this.goToNextBugGame();
         return;
@@ -347,7 +359,7 @@ class BugZap1 extends React.Component {
       }
     }
 
-    if(this.trialNumber === TRIAL_CYCLE){
+    else if(this.trialNumber === TRIAL_CYCLE){
       if(this.numFails > TRIAL_CYCLE/2){ // if failure rate over 50% after 3 more trials, go to next bug game
         this.goToNextBugGame();
         return;
@@ -356,10 +368,7 @@ class BugZap1 extends React.Component {
         this.trialNumber = 0; // reset trial and fail counter if succesfully made it thru trial cycle
         this.numFails = 0;
       }
-    }
-    console.warn('trialnum' + this.trialNumber);
-    console.warn('failnum' + this.numFails);
-    
+    }    
 
     this.props.navigator.push({
       id: 'NextTrial',
@@ -367,6 +376,8 @@ class BugZap1 extends React.Component {
       bugTags: this.state.bugTags.length,
       numFails: this.numFails,
       trialNumber: this.trialNumber,
+      timeToPrettyBugAppear: this.timeToPrettyBugAppear,
+      prettyBugHasAppeared: this.prettyBugHasAppeared,
     });
   }
 
