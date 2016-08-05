@@ -44,6 +44,7 @@ class BugZap2 extends React.Component {
     this.flyInDuration = undefined;
     this.trialNumber = 1;
     this.loopAnimation = true;
+    this.noMoreFrogTap = false;
   }
 
   componentDidMount() {
@@ -162,6 +163,9 @@ class BugZap2 extends React.Component {
   }
 
   frogTap = (frog) => {
+    if(this.noMoreFrogTap){
+      return;
+    }
     if(this.state.showBug){ // if bug is idling and not already eaten
       if(this.state.bugSpriteAnimationKey === 'idle'){  
         if(this.bugSide === 'right'){ 
@@ -236,6 +240,7 @@ class BugZap2 extends React.Component {
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'eat'});
     }
+    this.noMoreFrogTap = true;
   }
 
   frogCelebrate(frog) {

@@ -45,6 +45,7 @@ class BugZap3 extends React.Component {
     this.timeoutFlyAway = undefined;
     this.trialNumber = 1;
     this.loopAnimation = true,
+    this.noMoreFrogTap = false,
     this.bulbTweenSettings = {
       tweenType: "bounce-drop",
       startY: -128,
@@ -142,7 +143,7 @@ class BugZap3 extends React.Component {
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
-    }, 750);
+    }, 2000);
   }
 
   bugFlyAway() {
@@ -171,6 +172,9 @@ class BugZap3 extends React.Component {
   }
 
   frogTap = (frog) => {
+    if(this.noMoreFrogTap){
+      return;
+    }
     if(this.state.bugSpriteAnimationKey === 'idle' && this.state.showBug){
       if(this.bugSide === 'right'){ // celebrate if correct side and bug isn't already eaten
         if(frog === 0){
@@ -226,6 +230,7 @@ class BugZap3 extends React.Component {
     else{
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'eat'});
     }
+    this.noMoreFrogTap = true;
   }
 
   // frog celebrates and bug is hidden
