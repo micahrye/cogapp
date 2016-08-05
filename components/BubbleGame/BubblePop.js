@@ -204,7 +204,7 @@ class BubblePop extends React.Component {
     this.foodTween = {
       tweenType: 'curve-fall',
       startXY: [this.stopValues[0] + 50, this.stopValues[1] + 50],
-      endXY: [450, 230],
+      endXY: [SCREEN_WIDTH - 250, SCREEN_HEIGHT - 200], // 450, 230 in emulator ...
       duration: 2000,
       loop: false,
     }

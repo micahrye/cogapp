@@ -42,8 +42,9 @@ class BugZap1 extends React.Component {
     this.timeoutBugAppear = undefined;
     this.timeoutBugIdle = undefined;
     this.timeoutFlyAway = undefined;
-    this.timeoutPrettyBug = undefined;
+    this.timeoutPrettyBugAppear = undefined;
     this.timeoutPrettyBugSave = undefined;
+    //this.timeoutPrettyBugFlyAway = undefined;
     this.timeoutNextTrial = undefined;
     this.prettyBug = undefined;
     this.timeToPrettyBugAppear = 100;
@@ -53,8 +54,8 @@ class BugZap1 extends React.Component {
     this.bugSpriteAnimationKey = 'default';
     this.zappedTooEarly = false;
     this.loop = true;
-    this.xLand = 350;
-    this.yLand = 70;    
+    this.xLand = 580;
+    this.yLand = 120;    
     this.flyInDuration = undefined;
     this.signs = [];
     this.farthestTag = 0;
@@ -105,9 +106,10 @@ class BugZap1 extends React.Component {
     clearTimeout(this.timeoutBugAppear);
     clearTimeout(this.timeoutBugIdle);
     clearTimeout(this.timeoutFlyAway);
-    clearTimeout(this.timeoutPrettyBug);
+    clearTimeout(this.timeoutPrettyBugAppear);
     clearTimeout(this.timeoutPrettyBugSave);
     clearTimeout(this.timeoutNextTrial);
+    //clearTimeout(this.timeoutPrettyBugFlyAway);
   }
 
   // load bug tags with already caught pretty bugs
@@ -121,7 +123,7 @@ class BugZap1 extends React.Component {
         <View key={Math.random()} style={{left: spacing*i}}>
           <AnimatedSprite
             coordinates={{top: 0, left: 0}}
-            size={{width: 70, height: 105}}
+            size={{width: 70, height: 110}}
             character={signCharacter}/>
 
           <AnimatedSprite
@@ -142,14 +144,14 @@ class BugZap1 extends React.Component {
   // two different ways bug can reach landing spot
   setUpTweens() {
     let sequenceChoice = Math.random();
-    let flySequenceX = [450, 500, this.xLand];
+    let flySequenceX = [680, 730, this.xLand];
     let flySequenceY = [];
 
     if(sequenceChoice < .5){
-      flySequenceY = [0, this.yLand, 0, this.yLand];
+      flySequenceY = [50, this.yLand, 50, this.yLand];
     }
     else{
-      flySequenceY = [200, 100, 50, this.yLand];
+      flySequenceY = [250, 150, 100, this.yLand];
     }
 
     // when landed
@@ -194,7 +196,7 @@ class BugZap1 extends React.Component {
       if(this.props.route.timeToPrettyBugAppear != undefined && this.prettyBugHasAppeared){ // if prettybug has already appeared once at 100ms delay
         this.timeToPrettyBugAppear = this.timeToPrettyBugAppear + 25;
       }
-      this.timeoutPrettyBug = setTimeout(() => {
+      this.timeoutPrettyBugAppear = setTimeout(() => {
         this.bugSpriteAnimationKey = 'prettyIdle';
         this.setState({bugKey: Math.random()});
         this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
@@ -207,8 +209,7 @@ class BugZap1 extends React.Component {
     else{
       this.timeoutFlyAway = setTimeout(()=>{
         this.bugFlyAway('startFly');
-        this.frogDisgust(0);
-        this.frogDisgust(1);
+        this.frogDisgust();
       }, 750);
     }
   }
@@ -243,7 +244,7 @@ class BugZap1 extends React.Component {
       <AnimatedSprite
         key={Math.random()}
         coordinates={{top: 0, left: this.farthestTag}}
-        size={{width: 70, height: 105}}
+        size={{width: 70, height: 110}}
         character={signCharacter}
         tween={this.signTween}
         tweenStart='auto'/>
@@ -270,16 +271,12 @@ class BugZap1 extends React.Component {
 
   frogTap = () => {
     if(this.state.showBug && this.bugSize[0] === 128){ // if bug isn't already eaten or saved
-      if(this.bugSpriteAnimationKey === 'idle'){
-        if(this.prettyBug) {
-          this.incorrectFrogTap();
+      if(this.bugSpriteAnimationKey === 'idle' || this.bugSpriteAnimationKey === 'prettyIdle'){
+        this.frogEat();
+        clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called if it shouldn't be
+        if(this.prettyBug){
+          clearTimeout(this.timeoutPrettyBugSave); // so bug isn't saved
         }
-        else{
-          this.correctFrogTap();
-        }
-      }
-      else if(this.bugSpriteAnimationKey === 'prettyIdle'){ // frog is disgusted and prettybug flies away
-        this.incorrectFrogTap();
       }
       else if(this.bugTween != this.tweenAway){ // zapped too early  
         this.frogDisgust();
@@ -288,24 +285,9 @@ class BugZap1 extends React.Component {
     }
   }
 
-  // frog eats bug
-  correctFrogTap(){
-    this.frogEat();
-    clearTimeout(this.timeoutFlyAway); // so frogs aren't disgusted after bug is "caught"
-  }
-
-  // frog is disgusted, prettybug flies away
-  incorrectFrogTap(){
-    this.bugFlyAway('prettyFly');
-    this.frogDisgust();
-    clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
-    clearTimeout(this.timeoutPrettyBugSave); // so bug isn't saved
-    clearTimeout(this.timeoutPrettyBug); // in case frog was tapped before prettybug appeared on a prettybug trial
-  }
-
   // indicates which frame the animation is currently on
   getFrameIndex(animationKey, frameIndex) {
-    if(animationKey === 'eat' && frameIndex === 5){
+    if(animationKey === 'eat' && frameIndex === 5 && this.bugSpriteAnimationKey != 'prettyIdle'){
       this.bugSplat(); // when tongue has reached bug
     }
   }
@@ -316,7 +298,13 @@ class BugZap1 extends React.Component {
       this.setState({showBug: false});
     }
     else if(animationKey === 'eat'){
-      this.frogCelebrate();
+      if(this.bugSpriteAnimationKey != 'prettyIdle'){
+       this.frogCelebrate();
+      }
+      else{ // if it's a prettybug 
+        this.bugFlyAway('prettyFly');
+        this.frogDisgust();
+      }
     }
     else if(animationKey === 'celebrate'){
       this.goToNextTrial();
@@ -340,8 +328,8 @@ class BugZap1 extends React.Component {
   }
 
   frogDisgust() {
-    this.setState({frogKey: Math.random()}) 
     this.frogSpriteAnimationKey = 'disgust';
+    this.setState({frogKey: Math.random()}) 
     this.fail();
   }
 
@@ -428,8 +416,8 @@ class BugZap1 extends React.Component {
           <AnimatedSprite
             key={this.state.frogKey}
             spriteKey={0}
-            coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
-            size={{width: 512, height: 256}}
+            coordinates={{top: 200, left: 500}}
+            size={{width: 750, height: 375}}
             character={frogCharacter}
             spriteAnimationKey={this.frogSpriteAnimationKey}
             onPress={(frog) => {this.frogTap(frog)}}
@@ -450,17 +438,21 @@ class BugZap1 extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
+    height: 600,
+    width: 1024,
   },
   backgroundImage: {
     flex: 1,
-    width: null,
-    height: null,
+    height: 600,
+    width: 1024,
   },
   button: {
     backgroundColor: '#4d94ff',
     borderRadius: 10,
-    width: 90,
+    width: 100,
     height: 30,
+    justifyContent: 'center',
   },
 });
 

@@ -79,24 +79,24 @@ class BugZap2 extends React.Component {
     let sideChoice = Math.random();
     let sequenceChoice = Math.random(); // to help choose two ways bug can approach both the right and left landing spots
     let xLand = undefined;
-    let yLand = 70;
+    let yLand = 120;
     let flySequenceX = [];
-    let flySequenceY = [0, yLand, 0, yLand];
+    let flySequenceY = [50, yLand, 50, yLand];
 
     if(sideChoice < .5){ // bug lands on left side
       this.bugSide = 'left';
-      xLand = 200;
-      flySequenceX = [300, 350, xLand];
+      xLand = 280;
+      flySequenceX = [450, 500, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 50, 100, 50, yLand];
+        flySequenceY = [300, 130, 170, 130, yLand];
       }
     }
     else{ // bug lands on right side
       this.bugSide = 'right'
-      xLand = 350;
-      flySequenceX = [450, 500, xLand];
+      xLand = 580;
+      flySequenceX = [680, 730, xLand];
       if(sequenceChoice < .5){
-        flySequenceY = [200, 100, 50, yLand];
+        flySequenceY = [250, 150, 100, yLand];
       }
     }
     
@@ -226,6 +226,7 @@ class BugZap2 extends React.Component {
       bugKey: Math.random(), 
       bugSpriteAnimationKey: 'splat',
     });
+    this.loopAnimation = false;
   }
 
   frogEat(frog){
@@ -311,8 +312,8 @@ class BugZap2 extends React.Component {
             <AnimatedSprite
               key={this.state.frogKey0}
               spriteKey={0}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
-              size={{width: 512, height: 256}}
+              coordinates={{top: 200, left: 500}}
+              size={{width: 750, height: 375}}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
               onPress={() => this.frogTap(0)}
@@ -323,8 +324,8 @@ class BugZap2 extends React.Component {
             <AnimatedSprite 
               key={this.state.frogKey1}
               spriteKey={1}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: - 150}}
-              size={{width: 512, height: 256}}
+              coordinates={{top: 200, left: - 250}}
+              size={{width: 750, height: 375}}
               rotate={[{rotateY: '180deg'}]}
               character={frogCharacter}
               spriteAnimationKey={this.state.frogSpriteAnimationKey} 
@@ -342,17 +343,22 @@ class BugZap2 extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: 600,
+    width: 1024,
+    flexDirection: 'row',
   },
   backgroundImage: {
     flex: 1,
-    width: null,
-    height: null,
+    height: 600,
+    width: 1024,
   },
   button: {
     backgroundColor: '#4d94ff',
     borderRadius: 10,
-    width: 90,
-    height: 30,
+    width: 100,
+    height: 50,
+    position: 'absolute',
+    justifyContent: 'center',
   },
 });
 

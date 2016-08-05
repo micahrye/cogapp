@@ -113,7 +113,6 @@ class AnimatedSprite extends React.Component{
         top: this._previousTop,
         width: this.state._width,
         height: this.state._height,
-        transform: this.state._transform,
       },
     };
   }
@@ -252,7 +251,6 @@ class AnimatedSprite extends React.Component{
         // borderColor: '#ff00ff',
         // transform: [{rotate: ro},
         //             {scale: this.state._scale}],
-        transform: this.state._transform,
       }
     );
 
@@ -328,6 +326,7 @@ class AnimatedSprite extends React.Component{
               style={{
                 width: this.state._width,
                 height: this.state._height,
+                transform: this.state._transform,
               }}/>
           </TouchableOpacity>
 

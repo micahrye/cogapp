@@ -74,16 +74,16 @@ class BugZap extends React.Component {
   // 2 different ways bug can reach landing spot
   setUpTweens() {
     let sequenceChoice = Math.random();
-    xLand = 350;
-    yLand = 70;
-    let flySequenceX = [450, 500, xLand];
+    xLand = 580 //SCREEN_WIDTH - 330; // 350 in emulator
+    yLand = 120 //SCREEN_HEIGHT - 350; // 70 in emulator
+    let flySequenceX = [680, 730, xLand]; //[SCREEN_WIDTH - 230, SCREEN_WIDTH - 180, xLand]; //  [450, 500, xLand] in emulator
     let flySequenceY = [];
 
     if(sequenceChoice < .5){
-      flySequenceY = [0, yLand, 0, yLand];
+      flySequenceY = [50, yLand, 50, yLand]; //[SCREEN_HEIGHT - 420, yLand, SCREEN_HEIGHT - 420, yLand];
     }
     else{
-      flySequenceY = [200, 100, 50, yLand];
+      flySequenceY = [250, 150, 100, yLand]; //[SCREEN_HEIGHT - 220, SCREEN_HEIGHT - 320, SCREEN_HEIGHT - 370, yLand]; // 200, 100, 50, yLand in emulator
     }
 
     // when landed
@@ -262,8 +262,8 @@ class BugZap extends React.Component {
             <AnimatedSprite
               key={this.state.frogKey}
               spriteKey={1}
-              coordinates={{top: SCREEN_HEIGHT - 275, left: SCREEN_WIDTH - 360}}
-              size={{width: 512, height: 256}}
+              coordinates={{top: 200, left: 500}}
+              size={{width: 750, height: 375}}
               character={frogCharacter}
               onPress={this.frogTap}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
@@ -279,17 +279,22 @@ class BugZap extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: 600,
+    width: 1024,
+    flexDirection: 'row',
   },
   backgroundImage: {
     flex: 1,
-    width: null,
-    height: null,
+    width: 1024,
+    height: 600,
   },
   button: {
     backgroundColor: '#4d94ff',
     borderRadius: 10,
-    width: 90,
-    height: 30,
+    width: 100,
+    height: 50,
+    position: 'absolute',
+    justifyContent: 'center',
   },
 });
 export default BugZap;
