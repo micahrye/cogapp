@@ -143,7 +143,7 @@ class BugZap3 extends React.Component {
       this.bugFlyAway();
       this.frogDisgust(0);
       this.frogDisgust(1);
-    }, 2000);
+    }, 750);
   }
 
   bugFlyAway() {
