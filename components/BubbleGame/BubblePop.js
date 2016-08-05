@@ -42,6 +42,7 @@ class BubblePop extends React.Component {
     this.timeoutGameOver = undefined;
     this.timeoutAfterBubblePop = undefined;
     this.timeoutFoodFall = undefined;
+    this.timeoutBubbleRepeat = undefined;
 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
@@ -49,12 +50,6 @@ class BubblePop extends React.Component {
       this.targetLocation + OFFSET/2, 
       this.targetLocation - OFFSET/2
     ];
-    // this.foodSequence = [
-    //   this.foodLocation + OFFSET/2,
-    //   this.foodLocation - OFFSET/2, 
-    //   this.foodLocation + OFFSET/2, 
-    //   this.foodLocation - OFFSET/2
-    // ];
 
     if(this.props.route.targetDuration){
       this.targetDuration = this.props.route.targetDuration - 500;
@@ -79,14 +74,7 @@ class BubblePop extends React.Component {
       targetBubbleKey: 0,
       foodKey: 1,
       targetTween: this.targetTween,
-      // foodTween: {
-      //   tweenType: "sine-wave",
-      //   startXY: [this.foodLocation, SCREEN_HEIGHT - 10],
-      //   xTo: this.foodSequence,
-      //   yTo: [-200],
-      //   duration: this.targetDuration,
-      //   loop: true,
-      // },
+      sound: true,
     }
   }
 
@@ -187,12 +175,16 @@ class BubblePop extends React.Component {
 
   // make bubble pop and record time it took to pop it
   popBubble = (popTime) => {
+    if(this.targetSpriteAnimationKey === 'pop'){ // so you can't pop bubble while it is already popping
+      this.setState({sound: false});
+      return;
+    }
     clearTimeout(this.timeoutGameOver); // so game timeout screen doesn't load
     clearInterval(this.timeoutBubbleRepeat); // so bubble tween doesn't repeat up the screen anymore
     this.targetSpriteAnimationKey = 'pop';
     this.loopAnimation = false; // so popped bubble doesn't repeat
     this.setState({
-      popTime: popTime,
+      popTime: popTime - .5,
       targetTween: { // so bubble stays in place
         tweenType: "sine-wave",
         startXY: [this.stopValues[0], this.stopValues[1]],
@@ -225,12 +217,14 @@ class BubblePop extends React.Component {
       this.showTargetBubble = false;
       this.setState({targetBubbleKey: Math.random()});
       if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
-        this.props.navigator.replace({
-          id: "GameOverPage",
-        });
+        this.timeoutFoodFall = setTimeout(()=> {
+          this.props.navigator.replace({
+            id: "GameOverPage",
+          });
+        }, 2000); 
       }
       else{ // otherwise, next trial is started
-        this.timeoutFoodFall = setTimeout(()=> {
+        this.timeoutFoodFall = setTimeout(()=> { // after food tween is over
           this.goToNextTrial();
         }, 2000);  
       }
@@ -268,7 +262,7 @@ class BubblePop extends React.Component {
                 tween={this.state.targetTween}
                 tweenStart='auto'
                 stopTweenOnTouch={(stopValues) => this.stopValues = stopValues}
-                soundOnTouch={true}
+                soundOnTouch={this.state.sound}
                 soundFile="bubblePop"
                 timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
                 spriteAnimationKey={this.targetSpriteAnimationKey}
