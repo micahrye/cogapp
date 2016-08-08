@@ -33,12 +33,20 @@ class GameSix extends React.Component {
     this.state = {
       targetNumber: undefined,
       numbers: undefined,
+      foodKey: Math.random(),
     };
     this.trialNum = 1;
     this.numbers = [];
   }
 
   componentDidMount() {
+    if(this.trialNum === 1){
+      this.gameTimeout = setTimeout(() => {
+        this.props.navigator.replace({
+          id: 'Main',
+        });
+      }, 120000);
+    }
     if(this.props.route.trialNum != undefined){
       this.trialNum = this.props.route.trialNum;
     }
@@ -56,9 +64,14 @@ class GameSix extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    if(this.trialNum > 3){
+      clearTimeout(this.gameTimeout);
+    }
+  }
+
   setNumber() {
     let choice = Math.random();
-    let newTargetNumber = undefined;
     if(choice <= .25){
       this.numbers.push(1);
     }
@@ -72,43 +85,44 @@ class GameSix extends React.Component {
       this.numbers.push(4);
     }
   }
-    
 
   checkTarget(left, top, signKey){
     // console.warn(left);
     // console.warn(top);
     let withinRange = false;
-    if(top > 450 && top < 520){
-      if(signKey === 1 && left > 570 && left < 800){
+    if(top > 380 && top < 520){
+      if(signKey === 1 && left > 640 && left < 870){
         withinRange = true;
       }
-      else if(signKey === 2 && left > 410 && left < 600){
+      else if(signKey === 2 && left > 480 && left < 670){
         withinRange = true;
       }
-      else if(signKey === 3 && left > 230 && left < 400){
+      else if(signKey === 3 && left > 300 && left < 470){
         withinRange = true;
       }
-      else if(signKey === 4 && left > 90 && left < 300){
+      else if(signKey === 4 && left > 160 && left < 370){
         withinRange = true;
       }
       if(withinRange && signKey === this.state.targetNumber){
-        this.success();
+        this.attempt();
         console.warn('SUCCESS');
-        this.goToNextTrial();
       }
       else{
+        this.attempt();
         console.warn("FAILLLLLLL");
-        this.goToNextTrial();
       }
     };
   }
 
-  success(){
+  attempt(){
     this.numbers.shift();
+    this.setNumber();
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0],
+      foodKey: Math.random(),
     });
+    this.goToNextTrial();
   }
 
   goToNextTrial(){
@@ -121,6 +135,29 @@ class GameSix extends React.Component {
     });
   }
   
+  getBubbleStyle(){
+    let width = undefined;
+    let padding = undefined
+    if(this.trialNum <= 3){
+      width = 150;
+      padding = 50;
+    }
+    else{
+      width = 400;
+      padding = 50;
+    }
+    return (
+      {
+        borderWidth: 1.5,
+        borderRadius: 100,
+        height: 120,
+        width: width,
+        left: 100,
+        paddingLeft: padding,
+      }
+    );
+  }
+
 
   render(){
     return(
@@ -132,9 +169,11 @@ class GameSix extends React.Component {
               size={{width: 140, height: 220}}
               draggable={false}
               character={signCharacter}
-              spriteAnimationKey='gameSix1'/>
-            <AnimatedSprite coordinates={{top: 95, left: 40}}
-              key={1}
+              spriteAnimationKey='gameSix1'
+              loopAnimation={true}/>
+            <AnimatedSprite 
+              key={this.state.foodKey}
+              coordinates={{top: 95, left: 40}}
               size={{width: 70, height: 70}}
               draggable={true}
               draggedTo={(left, top) => this.checkTarget(left, top, 1)}
@@ -148,8 +187,11 @@ class GameSix extends React.Component {
               size={{width: 140, height: 220}}
               draggable={false}
               character={signCharacter}
-              spriteAnimationKey='gameSix2'/>
-            <AnimatedSprite coordinates={{top: 85, left: 30}}
+              spriteAnimationKey='gameSix2'
+              loopAnimation={true}/>
+            <AnimatedSprite 
+              key={this.state.foodKey}
+              coordinates={{top: 90, left: 30}}
               size={{width: 90, height: 90}}
               draggable={true}
               draggedTo={(left, top) => this.checkTarget(left, top, 2)}
@@ -163,8 +205,11 @@ class GameSix extends React.Component {
               size={{width: 140, height: 220}}
               draggable={false}
               character={signCharacter}
-              spriteAnimationKey='gameSix3'/>
-            <AnimatedSprite coordinates={{top: 85, left: 20}}
+              spriteAnimationKey='gameSix3'
+              loopAnimation={true}/>
+            <AnimatedSprite 
+              key={this.state.foodKey}
+              coordinates={{top: 85, left: 20}}
               size={{width: 100, height: 100}}
               draggable={true}
               draggedTo={(left, top) => this.checkTarget(left, top, 3)}
@@ -180,8 +225,11 @@ class GameSix extends React.Component {
               size={{width: 140, height: 220}}
               draggable={false}
               character={signCharacter}
-              spriteAnimationKey='gameSix4'/>
-            <AnimatedSprite coordinates={{top: 90, left: 30}}
+              spriteAnimationKey='gameSix4'
+              loopAnimation={true}/>
+            <AnimatedSprite 
+              key={this.state.foodKey}
+              coordinates={{top: 90, left: 30}}
               size={{width: 80, height: 80}}
               draggable={true}
               draggedTo={(left, top) => this.checkTarget(left, top, 4)}
@@ -189,12 +237,12 @@ class GameSix extends React.Component {
               />
           </View>
 
-          <AnimatedSprite coordinates={{top: 450, left: 750}}
-            size={{width: 200, height: 140}}
+          <AnimatedSprite coordinates={{top: 410, left: 810}}
+            size={{width: 210, height: 160}}
             character={omnivoreCharacter}/>
 
           <View style={styles.thoughtBubbles}>
-            <View style={styles.bubble1}><Text style={styles.thoughtText}>{this.state.numbers}</Text></View>
+            <View style={this.getBubbleStyle()}><Text style={styles.thoughtText}>{this.state.numbers}</Text></View>
             <View style={styles.bubble2} />
             <View style={styles.bubble3} />
           </View>
@@ -235,17 +283,9 @@ const styles = StyleSheet.create({
     height: 200,
     width: 500,
     //borderWidth: 2,
-    top: 250,
-    left: 650,
+    top: 210,
+    left: 750,
     position: 'absolute',
-  },
-  bubble1: {
-    borderWidth: 1.5,
-    borderRadius: 100,
-    height: 120,
-    width: 150,
-    left: 100,
-    alignItems: 'center',
   },
   bubble2: {
     borderWidth: 1,
@@ -264,8 +304,8 @@ const styles = StyleSheet.create({
     top: -10,
   },
   thoughtText: {
-    fontSize: 50,
-    top: 20,
+    fontSize: 70,
+    top: 10,
   },
 });
 
