@@ -30,11 +30,21 @@ class BugZap3 extends React.Component {
       spotLightFlash: [],
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
+      bulbSpriteAnimationKey: 'default',
       tweenSettings: {},
       bugKey: 0,
       frogKey0: 1,
       frogKey1: 2,
+      bulbKey: 3,
       showBug: false,
+      bulbTweenSettings: {
+        tweenType: "bounce-drop",
+        startY: -200,
+        endY: -80,
+        duration: 2000,
+        loop: false,
+      },
+      sound: false,
     }
     this.bugSide = undefined;
     this.tweenAway = {};
@@ -44,21 +54,14 @@ class BugZap3 extends React.Component {
     this.timeoutRemoveBlackout = undefined;
     this.timeoutFlyAway = undefined;
     this.trialNumber = 1;
-    this.loopAnimation = true,
-    this.noMoreFrogTap = false,
-    this.bulbTweenSettings = {
-      tweenType: "bounce-drop",
-      startY: -128,
-      endY: 0,
-      duration: 2000,
-      loop: false,
-    };
+    this.loopAnimation = true;
+    this.noMoreFrogTap = false;
   }
 
   componentDidMount() {
-    this.timeoutBlackout = setTimeout ( () => {
-      this.setBlackout();
-    }, 2500);
+    this.timeoutBulbOff = setTimeout(()=>{
+      this.bulbOff();
+    }, 2500)
     this.setUpTweens();
   }
 
@@ -68,6 +71,7 @@ class BugZap3 extends React.Component {
     clearTimeout(this.timeoutRemoveSpotlight);
     clearTimeout(this.timeoutRemoveBlackout);
     clearTimeout(this.timeoutFlyAway);
+    clearTimeout(this.timeoutBulbOff);
   }
 
   // bug either appears on the left or the right
@@ -107,12 +111,31 @@ class BugZap3 extends React.Component {
     });
   }
 
+  // lightbulb turns off
+  bulbOff(){
+    this.setState({
+      bulbSpriteAnimationKey: 'off',
+      bulbKey: Math.random(),
+      bulbTweenSettings: {
+        tweenType: 'bounce-drop',
+        startY: -80,
+        endY: -80,
+        duration: 0,
+        loop: false,
+      },
+      sound: true,
+    });
+    this.timeoutBlackout = setTimeout(() => {
+      this.setBlackout();
+    }, 500);
+  }
+
   // screen goes black
   setBlackout() {
     let blackout = [];
     blackout.push(<View key={0} style={styles.blackout}></View>);
     this.setState({blackoutScreen: blackout});
-    this.timeoutSpotlight = setTimeout ( () => {
+    this.timeoutSpotlight = setTimeout(() => {
       this.flashSpotLight();
     }, 1000);
   }
@@ -233,7 +256,6 @@ class BugZap3 extends React.Component {
     this.noMoreFrogTap = true;
   }
 
-  // frog celebrates and bug is hidden
   frogCelebrate(frog) {
     if(frog === 0){
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
@@ -315,11 +337,16 @@ class BugZap3 extends React.Component {
             <Text>Go to Game 2</Text>
           </TouchableOpacity>
 
-          <AnimatedSprite coordinates={{top: -128, left: 450}}
-            size={{width: 128, height: 128}}
+          <AnimatedSprite 
+            key={this.state.bulbKey}
+            coordinates={{top: -128, left: 450}}
+            size={{width: 128, height: 300}}
             character={lightbulbCharacter}
-            tween={this.bulbTweenSettings}
-            tweenStart="auto"/>
+            spriteAnimationKey={this.state.bulbSpriteAnimationKey}
+            tween={this.state.bulbTweenSettings}
+            tweenStart="auto"
+            sound={this.state.sound}
+            soundFile='lightswitch'/>
       
           {this.state.showBug ? 
             <AnimatedSprite

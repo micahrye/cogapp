@@ -19,6 +19,14 @@ if (error) {
   }
 });
 
+const LIGHT_SWITCH = new Sound('lightswitch.mp3', Sound.MAIN_BUNDLE, (error) => {
+// if (error) {
+//   console.warn('failed to load the sound bubble', error);
+// } else { // loaded successfully
+//   console.warn('sound did load');
+//  }
+});
+
 const BUBBLE_POP = new Sound('bubblepop.mp3', Sound.MAIN_BUNDLE, (error) => {
 // if (error) {
 //   console.warn('failed to load the sound bubble', error);
@@ -26,6 +34,8 @@ const BUBBLE_POP = new Sound('bubblepop.mp3', Sound.MAIN_BUNDLE, (error) => {
 //   console.warn('sound did load');
 //  }
 });
+
+
 
 const Soundhandler = function () {
 
@@ -39,6 +49,9 @@ const Soundhandler = function () {
         break;
       case "bubblePop":
         playSoundHelper(BUBBLE_POP, BUBBLE_POP);
+        break;
+      case 'lightswitch':
+        playSoundHelper(LIGHT_SWITCH, LIGHT_SWITCH);
         break;
     }
   };

@@ -136,11 +136,15 @@ class AnimatedSprite extends React.Component{
       this.configureTween();
     }
 
-    if(this.props.tweenStop){
-      console.warn('stop');
-      this.stopTween = true;
-      let stopValues = this.configureTween();
-      console.warn(stopValues);
+    // if(this.props.tweenStop){
+    //   console.warn('stop');
+    //   this.stopTween = true;
+    //   let stopValues = this.configureTween();
+    //   console.warn(stopValues);
+    // }
+
+    if(this.props.sound){
+      this._Sound['playSound'](this.props.soundFile);
     }
 
     this.renderTime = Date.now();

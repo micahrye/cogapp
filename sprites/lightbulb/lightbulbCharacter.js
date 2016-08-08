@@ -4,8 +4,12 @@ const lightbulbCharacter = {
   name:"lightbulb",
 
   default:[
-    require("./lightbulb.png"),
+    require("./lightbulb_on.png"),
   ],
+
+  off: [
+  	require("./lightbulb_off.png"),
+  ]
 
 };
 
