@@ -160,6 +160,7 @@ class GameTwo3 extends Component {
       showFood1: true, // allows food sprites in phase 1 to be turned on/off
       showFood2: true,
       showFood3: true,
+      animation: "default",
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
@@ -311,6 +312,19 @@ class GameTwo3 extends Component {
     }
   }
 
+  randomFood2() {
+    diceRoll = Math.random();
+    if (diceRoll < 0.25) {
+      return [grassCharacter,"grass"];
+    } else if (diceRoll > 0.25 && diceRoll < 0.5) {
+      return [canCharacter,"can"];
+    } else if (diceRoll > 0.25 && diceRoll < 0.75){
+      return [bugCharacter,"bug"];
+    } else {
+      return [appleCharacter,"apple"];
+    }
+  }
+
   // used in selecting food sprites for each trial: given a certain kind of food,
   // excludeFoodType will select one of the remaining three types at random.
   excludeFoodType(type) {
@@ -363,7 +377,7 @@ class GameTwo3 extends Component {
 
   // works the same way as the phase0 helper function but handles three
   // food sprites, instead of just two.
-  selectFoodPhase1Helper(food,foodString) {
+  selectFoodPhase1HelperNeutral(food,foodString) {
     diceRoll = Math.random();
     diceRoll2 = Math.random();
     c1 = this.randomColor();
@@ -413,6 +427,64 @@ class GameTwo3 extends Component {
     }
   }
 
+  selectFoodPhase1HelperOmnivore(color) {
+    diceRoll = Math.random();
+    color2 = this.excludeColor(color);
+    f = this.randomFood2();
+    char1 = f[0];
+    char2 = this.excludeFoodType(f[1]);
+    if (diceRoll < 0.16) {
+      this.setState({phase1Left: char1,
+                     phase1Middle: char1,
+                     phase1Right: char2,
+                     spriteAnimationKey1: color2,
+                     spriteAnimationKey2: color,
+                     spriteAnimationKey3: color,
+                     phase1Correct: ["incorrect","correct","correct"]});
+    } else if (diceRoll > 0.16 && diceRoll < 0.32) {
+      this.setState({phase1Left: char1,
+                     phase1Middle: char2,
+                     phase1Right: char1,
+                     spriteAnimationKey1: color2,
+                     spriteAnimationKey2: color,
+                     spriteAnimationKey3: color,
+                     phase1Correct: ["incorrect","correct","correct"]});
+    } else if (diceRoll > 0.32 && diceRoll < 0.48) {
+      this.setState({phase1Left: char1,
+                     phase1Middle: char2,
+                     phase1Right: char1,
+                     spriteAnimationKey1: color,
+                     spriteAnimationKey2: color,
+                     spriteAnimationKey3: color2,
+                     phase1Correct: ["correct","correct","incorrect"]});
+    } else if (diceRoll > 0.48 && diceRoll < 0.64) {
+      this.setState({phase1Left: char2,
+                     phase1Middle: char1,
+                     phase1Right: char1,
+                     spriteAnimationKey1: color,
+                     spriteAnimationKey2: color,
+                     spriteAnimationKey3: color2,
+                     phase1Correct: ["correct","correct","incorrect"]});
+    } else if (diceRoll > 0.64 && diceRoll < 0.8) {
+      this.setState({phase1Left: char2,
+                     phase1Middle: char1,
+                     phase1Right: char1,
+                     spriteAnimationKey1: color,
+                     spriteAnimationKey2: color2,
+                     spriteAnimationKey3: color,
+                     phase1Correct: ["correct","incorrect","correct"]});
+    } else {
+      this.setState({phase1Left: char1,
+                     phase1Middle: char1,
+                     phase1Right: char2,
+                     spriteAnimationKey1: color,
+                     spriteAnimationKey2: color2,
+                     spriteAnimationKey3: color,
+                     phase1Correct: ["correct","incorrect","correct"]});
+    }
+
+  }
+
   generateFood() {
     diceRoll = Math.random();
       if (diceRoll < 0.25) {
@@ -431,25 +503,25 @@ class GameTwo3 extends Component {
     f = this.generateFood();
     switch (this.state.currentCreature) {
       case 1:
-        this.selectFoodPhase1Helper(grassCharacter,"grass");
+        this.selectFoodPhase1HelperNeutral(grassCharacter,"grass");
         break;
       case 2:
-        this.selectFoodPhase1Helper(canCharacter,"can");
+        this.selectFoodPhase1HelperNeutral(canCharacter,"can");
         break;
       case 3:
-        this.selectFoodPhase1Helper(bugCharacter,"bug");
+        this.selectFoodPhase1HelperNeutral(bugCharacter,"bug");
         break;
       case 4:
-        this.selectFoodPhase1Helper(f[0],f[1]);
+        this.selectFoodPhase1HelperOmnivore("green");
         break;
       case 5:
-        this.selectFoodPhase1Helper(f[0],f[1]);
+        this.selectFoodPhase1HelperOmnivore("blue");
         break;
       case 6:
-        this.selectFoodPhase1Helper(f[0],f[1]);
+        this.selectFoodPhase1HelperOmnivore("red");
         break;
       case 7:
-        this.selectFoodPhase1Helper(f[0],f[1]);
+        this.selectFoodPhase1HelperOmnivore("yellow");
         break;
     }
   }
@@ -601,9 +673,22 @@ class GameTwo3 extends Component {
               this.removeFood3();
             }
           }
-          if (this.state.numTrials >= 8) {
+          if (this.state.numTrials >= 11) {
             this.setState({timeoutHuh: true});
             setTimeout(this.buttonPress,2000);
+          }
+          switch(this.state.currentCreature) {
+            case 3:
+              this.setState({animation: "celebrate",
+                             creatureKey3: Math.random()});
+              break;
+          }
+        } else {
+          switch(this.state.currentCreature) {
+            case 3:
+              this.setState({animation: "disgust",
+                             creatureKey3: Math.random()});
+              break;
           }
         }
          break;
@@ -639,9 +724,22 @@ class GameTwo3 extends Component {
                 this.removeFood3();
               }
            }
-           if (this.state.numTrials >= 8) {
+           if (this.state.numTrials >= 11) {
              this.setState({timeoutHuh: true});
              setTimeout(this.buttonPress,2000);
+           }
+           switch(this.state.currentCreature) {
+             case 3:
+               this.setState({animation: "celebrate",
+                              creatureKey3: Math.random()});
+               break;
+           }
+         } else {
+           switch(this.state.currentCreature) {
+             case 3:
+               this.setState({animation: "disgust",
+                              creatureKey3: Math.random()});
+               break;
            }
          }
          break;
@@ -677,11 +775,23 @@ class GameTwo3 extends Component {
               this.removeFood2();
             }
            }
-           if (this.state.numTrials >= 8) {
+           if (this.state.numTrials >= 11) {
              this.setState({timeoutHuh: true});
              setTimeout(this.buttonPress,2000);
            }
-
+           switch(this.state.currentCreature) {
+             case 3:
+               this.setState({animation: "celebrate",
+                              creatureKey3: Math.random(),});
+               break;
+           }
+         } else {
+           switch(this.state.currentCreature) {
+            case 3:
+              this.setState({animation: "disgust",
+                             creatureKey3: Math.random(),});
+              break;
+           }
          }
          break;
     }
@@ -722,6 +832,9 @@ class GameTwo3 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween3}
                     key={this.state.creatureKey3}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    fps={10}
                     character={frogCharacter}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
                     size={{width: 215, height: 160}}

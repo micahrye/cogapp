@@ -31,6 +31,7 @@ import BugZapLevel1 from './components/BugZapGame/BugZap1';
 import BugZapLevel2 from './components/BugZapGame/BugZap2';
 import BugZapLevel3 from './components/BugZapGame/BugZap3';
 import GameTwo from './components/Game2/GameTwo';
+import GameTwoLoading from './components/Game2/Game2Loading';
 import GameTwoLevel1 from './components/Game2/GameTwo1';
 import GameTwoLevel2 from './components/Game2/GameTwo2';
 import GameTwoLevel3 from './components/Game2/GameTwo3';
@@ -90,6 +91,8 @@ class CogApp extends React.Component {
       return <BugZapLevel2 navigator={navigator} route={route} />
     } else if (route.id === 'BugZap3'){
       return <BugZapLevel3 navigator={navigator} route={route} />
+    } else if (route.id === 'GameTwoLoading') {
+      return <GameTwoLoading navigator={navigator} route={route} />
     } else if (route.id === 'GameTwo'){
       return <GameTwo navigator={navigator} />
     } else if (route.id === 'GameTwo1'){
@@ -116,7 +119,7 @@ class CogApp extends React.Component {
       return <GameSix navigator={navigator} route={route}/>
     } else if(route.id === 'NextTrial'){
       return <NextTrial navigator={navigator} route={route}/>
-    } 
+    }
   }
 }
 

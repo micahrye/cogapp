@@ -102,6 +102,19 @@ class GameTwo extends Component {
       );
     }
 
+    tweenStatic = function(pos) {
+      return(
+        {
+         tweenType: "move",
+         startXY: pos,
+         endXY: pos,
+         duration: 0,
+         repeatable: false,
+         loop: false,
+        }
+      );
+    }
+
     super(props);
     this.state = {
       foodKey: 0,
@@ -119,6 +132,7 @@ class GameTwo extends Component {
       creatureKey3: Math.random(),
       leverPressed: false,
       foodPressed: false,
+      animation: "default",
     }
 
   }
@@ -187,6 +201,7 @@ class GameTwo extends Component {
                       creatureKey3: Math.random(),
                       creatureTween2: tweenMove(creatureEnd,creatureStart),
                       creatureTween3: tweenMove([600,115],[Window.width-250,115]),
+                      animation: "default",
                      })
         break;
     }
@@ -215,14 +230,15 @@ class GameTwo extends Component {
                      foodPressed: true});
       setTimeout(this.toggleCreatureCharacter.bind(this),2000);
       if (this.state.onboarding === 3) {
-        setTimeout(this.nextLevel,1000);
+        this.setState({animation: "celebrate",
+                       creatureKey3: Math.random(),
+                       creatureTween3: tweenStatic([Window.width-250,115])});
+        setTimeout(this.nextLevel,3000);
       }
     }
   }
 
-
   render() {
-
 
     const tweenOptsLever = {
       tweenType: "hop",
@@ -255,7 +271,9 @@ class GameTwo extends Component {
                     character={frogCharacter}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween3}
-                    key={this.state.creatureKey3}/>
+                    key={this.state.creatureKey3}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
