@@ -62,7 +62,7 @@ class Main extends React.Component {
   }
 
   goToGameSix = () => {
-    this.props.navigator.replace({id:'GameSix'})
+    this.props.navigator.replace({id:'GameSixLoading'})
   }
 
   render() {

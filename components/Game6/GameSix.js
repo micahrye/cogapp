@@ -105,11 +105,11 @@ class GameSix extends React.Component {
       }
       if(withinRange && signKey === this.state.targetNumber){
         this.attempt();
-        console.warn('SUCCESS');
+        //console.warn('SUCCESS');
       }
       else{
         this.attempt();
-        console.warn("FAILLLLLLL");
+        //console.warn("FAILLLLLLL");
       }
     };
   }
