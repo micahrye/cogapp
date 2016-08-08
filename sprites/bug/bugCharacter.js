@@ -57,6 +57,10 @@ const bugCharacter = {
     require("./prettybug_idle01.png"),
   ],
 
+  stillIdle: [
+    require("./bug_idle01.png"),
+  ],
+
   green:[
     require("./bug_green.png"),
   ],
