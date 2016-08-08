@@ -158,9 +158,17 @@ class GameTwo1 extends Component {
       showFood1: true, // allows food sprites in phase 1 to be turned on/off
       showFood2: true,
       showFood3: true,
+      spriteAnimationKey1: "blue",
+      spriteAnimationKey2: "blue",
+      spriteAnimationKey3: "blue",
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout1);
+    clearTimeout(this.timeout2);
   }
 
   // moves the app to level 2
@@ -296,25 +304,85 @@ class GameTwo1 extends Component {
     }
   }
 
+  excludeColor(color) {
+    switch(color) {
+      case "green":
+        return this.randomFood("blue","red","yellow");
+        break;
+      case "blue":
+        return this.randomFood("green","red","yellow");
+        break;
+      case "red":
+        return this.randomFood("green","blue","yellow");
+        break;
+      case "yellow":
+        return this.randomFood("green","blue","red");
+        break;
+    }
+  }
+
+  randomColor() {
+    diceRoll = Math.random();
+    if (diceRoll < 0.25) {
+      return "green";
+    } else if (diceRoll > 0.5 && diceRoll > 0.25) {
+      return "blue";
+    } else if (diceRoll < 0.75 && diceRoll > 0.5) {
+      return "red";
+    } else {
+      return "yellow";
+    }
+  }
+
   // works the same way as the phase0 helper function but handles three
   // food sprites, instead of just two.
   selectFoodPhase1Helper(food,foodString) {
     diceRoll = Math.random();
+    diceRoll2 = Math.random();
+    c1 = this.randomColor();
+    c2 = this.excludeColor(c1);
     if (diceRoll < 0.33) {
       this.setState({phase1Left: food,
                      phase1Middle: food,
                      phase1Right: this.excludeFoodType(foodString),
                      phase1Correct: ["correct","correct","incorrect"]});
+      if (diceRoll2 < 0.5) {
+        this.setState({spriteAnimationKey1: c1,
+                       spriteAnimationKey2: c2,
+                       spriteAnimationKey3: c2});
+      } else {
+        this.setState({spriteAnimationKey1: c2,
+                       spriteAnimationKey2: c1,
+                       spriteAnimationKey3: c2,});
+      }
     } else if (diceRoll > 0.66){
       this.setState({phase1Left: this.excludeFoodType(foodString),
                      phase1Middle: food,
                      phase1Right: food,
                      phase1Correct: ["incorrect","correct","correct"]});
+       if (diceRoll2 < 0.5) {
+         this.setState({spriteAnimationKey1: c2,
+                       spriteAnimationKey2: c1,
+                       spriteAnimationKey3: c2});
+        } else {
+         this.setState({spriteAnimationKey1: c2,
+                        spriteAnimationKey2: c2,
+                        spriteAnimationKey3: c1,});
+         }
     } else {
       this.setState({phase1Left: food,
                      phase1Middle: this.excludeFoodType(foodString),
                      phase1Right: food,
                      phase1Correct: ["correct","incorrect","correct"]});
+      if (diceRoll2 < 0.5) {
+        this.setState({spriteAnimationKey1: c2,
+                       spriteAnimationKey2: c2,
+                       spriteAnimationKey3: c1});
+        } else {
+          this.setState({spriteAnimationKey1: c1,
+                         spriteAnimationKey2: c2,
+                         spriteAnimationKey3: c2,});
+        }
     }
   }
 
@@ -625,7 +693,9 @@ class GameTwo1 extends Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
+                <TouchableOpacity onPress={this.buttonPress}>
                 <Text> numtrials: {this.state.numTrials} </Text>
+                </TouchableOpacity>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
@@ -670,7 +740,9 @@ class GameTwo1 extends Component {
                     tweenStart="auto"
                     tween={this.state.foodTween11}
                     onPress={this.onFoodPress}
-                    spriteKey={1}/>
+                    spriteKey={1}
+                    spriteAnimationKey={this.state.spriteAnimationKey1}
+                    loopAnimation={true}/>
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing-30}}
                     key={this.state.signKey2}
@@ -688,7 +760,9 @@ class GameTwo1 extends Component {
                     tweenStart="auto"
                     tween={this.state.foodTween12}
                     onPress={this.onFoodPress}
-                    spriteKey={2}/>
+                    spriteKey={2}
+                    spriteAnimationKey={this.state.spriteAnimationKey2}
+                    loopAnimation={true}/>
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
                     key={this.state.signKey3}
@@ -706,7 +780,9 @@ class GameTwo1 extends Component {
                     tweenStart="auto"
                     tween={this.state.foodTween13}
                     onPress={this.onFoodPress}
-                    spriteKey={3}/>
+                    spriteKey={3}
+                    spriteAnimationKey={this.state.spriteAnimationKey3}
+                    loopAnimation={true}/>
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft2-30}}
                     key={this.state.signKey4}

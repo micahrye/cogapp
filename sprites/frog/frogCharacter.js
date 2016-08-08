@@ -45,6 +45,22 @@ const frogCharacter = {
     // require("./frog_eat14.png"),
   ],
 
+  green:[
+    require("./frog_green.png"),
+  ],
+
+  blue:[
+    require("./frog_blue.png"),
+  ],
+
+  red:[
+    require("./frog_red.png"),
+  ],
+
+  yellow:[
+    require("./frog_yellow.png"),
+  ],
+
 };
 
 export default frogCharacter;

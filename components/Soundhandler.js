@@ -43,31 +43,31 @@ const Soundhandler = function () {
     }
   };
 
-  const playSoundHelper = function(sound, backupSound) {
-    if (flipflop) {
-      //console.warn("backup sound");
-      backupSound.stop();
-      backupSound.play();
-    } else {
-    //  console.warn("sound");
-      sound.stop();
-      sound.play();
-    }
-    flipflop = !flipflop;
-  }
-
-
   // const playSoundHelper = function(sound, backupSound) {
-  //   if (sound.getCurrentTime((isPlaying) => {return(isPlaying);})) {
-  //     console.warn("anyone?");
+  //   if (flipflop) {
+  //     //console.warn("backup sound");
   //     backupSound.stop();
   //     backupSound.play();
   //   } else {
-  //     console.warn("hey");
+  //   //  console.warn("sound");
   //     sound.stop();
   //     sound.play();
   //   }
+  //   flipflop = !flipflop;
   // }
+
+
+  const playSoundHelper = function(sound, backupSound) {
+    if (sound.getCurrentTime((isPlaying) => {return(isPlaying);})) {
+      console.warn("anyone?");
+      backupSound.stop();
+      backupSound.play();
+    } else {
+      console.warn("hey");
+      sound.stop();
+      sound.play();
+    }
+  }
 
   return (
     {

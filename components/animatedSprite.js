@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Sound from 'react-native-sound';
+//import Sound from 'react-native-sound';
 import Tweener from "./Tweener";
 import shallowCompare from "react-addons-shallow-compare";
 import Soundhandler from './Soundhandler';

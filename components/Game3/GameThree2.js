@@ -9,7 +9,7 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
-import Sound from 'react-native-sound';
+//import Sound from 'react-native-sound';
 
 import AnimatedSprite from "../animatedSprite";
 import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
