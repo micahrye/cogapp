@@ -132,7 +132,7 @@ class GameTwo extends Component {
       creatureKey3: Math.random(),
       leverPressed: false,
       foodPressed: false,
-      animation: "default",
+      animation: "walk",
     }
 
   }
@@ -257,7 +257,9 @@ class GameTwo extends Component {
                     character={mammalCharacter}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween1}
-                    key={this.state.creatureKey1}/>
+                    key={this.state.creatureKey1}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}/>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
