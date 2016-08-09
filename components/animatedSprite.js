@@ -309,9 +309,8 @@ class AnimatedSprite extends React.Component{
       // rotation: this.state._rotation,
     }
     
+    
     let tweener1 = [];
-          console.warn('here');
-
 
     tweener1.push(
       <Tweener1
@@ -320,7 +319,7 @@ class AnimatedSprite extends React.Component{
         options={tweenOptions}
         state={tweenState}
         stop={stopTween}
-        tweenHasEnded={(ended) => console.warn(ended)}
+        tweenHasEnded={(ended) => this.tweenHasEnded(ended)}
         stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
     );
 
@@ -328,13 +327,18 @@ class AnimatedSprite extends React.Component{
       _tweener1: tweener1,
     });
 
-    // let endValues = this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
-    // return endValues;
   }
 
-  sendStopValues(stopValues){
-    console.warn(stopValues);
+  // pass up the coordinates of character when stopped
+  sendStopValues(stopValues){ 
     this.props.stopTweenOnTouch(stopValues);
+  }
+
+  // notify parent that tween has ended
+  tweenHasEnded(){
+    if(this.props.tweenHasEnded){
+      this.props.tweenHasEnded(this.props.spriteKey);
+    }
   }
 
   render() {
