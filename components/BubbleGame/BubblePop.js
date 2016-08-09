@@ -31,7 +31,7 @@ class BubblePop extends React.Component {
     this.targetLocation = SCREEN_WIDTH/2 - 100;
     this.foodLocation = SCREEN_WIDTH/2 - 40; 
     this.numBubbles = 10;
-    this.stopValues = undefined;
+    this.stopValues = [];
     this.foodTween = {};
     this.loopAnimation = true;
     this.showTargetBubble = true;
@@ -188,8 +188,8 @@ class BubblePop extends React.Component {
       targetTween: { // so bubble stays in place
         tweenType: "sine-wave",
         startXY: [this.stopValues[0], this.stopValues[1]],
-        xTo: [this.stopValues[0]],
-        yTo: [this.stopValues[1]],
+        xTo: this.stopValues[0],
+        yTo: this.stopValues[1],
         duration: 5000,
         loop: false,
       },
