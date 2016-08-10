@@ -240,6 +240,35 @@ class GameTwo extends Component {
     }
   }
 
+  onTweenEnd(key) {
+    console.warn("yo");
+    switch(key) {
+      case this.state.foodKey:
+        if (this.state.foodPressed) {
+          this.setState({animation: "eat",creatureKey1:Math.random()});
+        }
+        break;
+
+    }
+
+
+  }
+
+  onAnimationFinish(animationKey, creatureKey) {
+    switch(animationKey) {
+      case "walk":
+      this.setState({animation: "default",creatureKey: Math.random()})
+        break;
+      case "celebrate":
+        this.setState({animation: "walk",creatureKey: Math.random()})
+        break;
+      case "eat":
+        this.setState({animation: "celebrate",creatureKey: Math.random()})
+        break;
+    }
+
+  }
+
   render() {
 
     const tweenOptsLever = {
@@ -261,7 +290,9 @@ class GameTwo extends Component {
                     tween={this.state.creatureTween1}
                     key={this.state.creatureKey1}
                     spriteAnimationKey={this.state.animation}
-                    loopAnimation={false}/>
+                    loopAnimation={false}
+                    tweenHasEnded={this.onTweenEnd}
+                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
@@ -299,7 +330,8 @@ class GameTwo extends Component {
                     character={this.state.foodCharacter}
                     tweenStart="auto"
                     tween={this.state.foodTween}
-                    onPress={this.onFoodPress}/>
+                    onPress={this.onFoodPress}
+                    tweenHasEnded={(key) => this.onTweenEnd(key)}/>
         </Image>
       </View>
     );
