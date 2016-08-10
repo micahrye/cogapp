@@ -205,7 +205,7 @@ class BugZap2 extends React.Component {
     clearTimeout(this.timeoutFlyAway); // so bugFlyAway isn't called again
   }
 
-  // triggered when certain animations finish
+  // triggered when an animation finishes
   onAnimationFinish(animationKey, frog) {
     if(animationKey === 'splat'){
       this.setState({showBug: false});

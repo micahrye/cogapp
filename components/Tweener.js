@@ -66,7 +66,6 @@ class Tweener extends React.Component{
         )
       ]).start(() => {
         if (options.loop === false) {
-          console.warn("tween ended");
           this.props.tweenHasEnded(true);
         }else{
           this.sineWave(options, state);

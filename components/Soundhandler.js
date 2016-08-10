@@ -76,7 +76,7 @@ const Soundhandler = function () {
       backupSound.stop();
       backupSound.play();
     } else {
-      console.warn("hey");
+      //console.warn("hey");
       sound.stop();
       sound.play();
     }

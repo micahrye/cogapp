@@ -20,7 +20,7 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const NUM_TRIALS = 3;
-const IDLE_DURATION = 750; // how long the bug is catchable
+const IDLE_DURATION = 750;
 
 class BugZap extends React.Component {
   constructor(props){
@@ -38,9 +38,11 @@ class BugZap extends React.Component {
     this.tweenIdle = {};
     this.tweenAway = {};
     this.timeoutBugAppear = undefined;
+    this.timeoutBugIdle = undefined;
+    this.timeoutFlyAway = undefined;
+    this.timeoutNextTrial = undefined;
     this.flyInDuration = undefined;
     this.trialNumber = 1;
-    this.tweenKey = undefined;
   }
 
   componentDidMount() {
@@ -50,12 +52,23 @@ class BugZap extends React.Component {
     // render bug after the rest of the scene
     this.timeoutBugAppear = setTimeout( () => {
       this.setState({showBug: true});
+
+      this.timeoutBugIdle = setTimeout(()=>{
+        if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
+          this.bugIdle();
+        }
+        else{
+          this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
+        }
+      }, this.flyInDuration);
     }, 500);
   }
 
   componentWillUnmount() {
     clearTimeout(this.timeoutBugAppear);
-    this.tweenKey = undefined; // so that bugIdle isn't called if level is advanced before bug lands
+    clearTimeout(this.timeoutBugIdle);
+    clearTimeout(this.timeoutFlyAway);
+    clearTimeout(this.timeoutNextTrial);
   }
 
   // 2 different ways bug can reach landing spot
@@ -79,7 +92,7 @@ class BugZap extends React.Component {
       startXY: [xLand, yLand],
       xTo: [xLand],
       yTo: [yLand],
-      duration: IDLE_DURATION,
+      duration: 0,
       loop: false,
     };
 
@@ -104,7 +117,6 @@ class BugZap extends React.Component {
         loop: false,
       },
     });
-    this.tweenKey = 'fly-on';
   }
 
   // switch to idle bug character and pause tweening
@@ -114,7 +126,10 @@ class BugZap extends React.Component {
       tweenSettings: this.tweenIdle,
       bugSpriteAnimationKey: 'idle',
     });
-    this.tweenKey = 'idle';
+    this.timeoutFlyAway = setTimeout(()=>{
+      this.bugFlyAway('startFly');
+      this.frogDisgust();
+    }, IDLE_DURATION);
   }
 
   // switch to flying bug character and start next tween
@@ -125,7 +140,9 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: animation, // "startFly" after landed, or "default" if zapped too early
       loopAnimation: false,
     });
-    this.tweenKey = 'fly-off';
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial();
+    }, 2000);
   }
 
   frogTap = () => {
@@ -142,27 +159,7 @@ class BugZap extends React.Component {
 
   catchBug(){
     this.frogEat();
-    this.tweenKey = undefined; // so bug doesn't fly away when idle tween finishes
-  }
-
-  // triggered when a tween finishes
-  onTweenFinish(){
-    console.warn('here2');
-    if(this.tweenKey === 'fly-on'){
-      if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
-        this.bugIdle();
-      }
-      else{
-        this.bugFlyAway('default'); // if bug is zapped too early, it just flies away after first tween, no idling
-      }
-    }
-    else if(this.tweenKey === 'idle'){
-      this.bugFlyAway('startFly');
-      this.frogDisgust();
-    }
-    else if(this.tweenKey === 'fly-off'){ // after bug flies offscreen
-      this.goToNextTrial();
-    }
+    clearTimeout(this.timeoutFlyAway); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // triggered when an animation finishes
@@ -174,7 +171,7 @@ class BugZap extends React.Component {
       this.frogCelebrate(); // celebrate after eating the bug
     }
     else if(animationKey === 'celebrate'){
-      this.goToNextTrial(); // once frog is done celebrating
+      this.goToNextTrial(); // once bug is done celebrating
     }
   }
 
@@ -255,7 +252,8 @@ class BugZap extends React.Component {
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
                 tweenStart="auto"
-                tweenHasEnded={(spriteKey) => this.onTweenFinish()}
+                tweenStop={this.state.stopTween}
+                stopTweenOnTouch={(values) => console.warn(values)}
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loopAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>

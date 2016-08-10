@@ -46,7 +46,7 @@ class BugZap1 extends React.Component {
     this.timeoutPrettyBugSave = undefined;
     //this.timeoutPrettyBugFlyAway = undefined;
     this.timeoutNextTrial = undefined;
-    this.prettyBug = true;
+    this.prettyBug = undefined;
     this.timeToPrettyBugAppear = 100;
     this.prettyBugHasAppeared = false;
     this.bugSize = [128, 128];
@@ -60,7 +60,6 @@ class BugZap1 extends React.Component {
     this.signs = [];
     this.farthestTag = 0;
     this.numFails = 0;
-    this.tweenKey = undefined;
     this.trialNumber = 1 - TRIAL_CYCLE; 
       // first TRIAL_CYCLE trials always run, then reset trialNumber to 0 every TRIAL_CYLE trials
       // this.trialNumber starts negative so the first TRIAL_CYCLE trials can be checked as their own separate case
@@ -90,27 +89,26 @@ class BugZap1 extends React.Component {
     this.timeoutBugAppear = setTimeout( () => {
       this.setState({showBug: true});
       
-      // this.timeoutBugIdle = setTimeout(()=>{
-      //   if(!this.zappedTooEarly){ // after first tween is completed, bug idles
-      //     this.bugIdle();
-      //   }
-      //   else{
-      //     this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
-      //   }
-      // }, this.flyInDuration);
+      this.timeoutBugIdle = setTimeout(()=>{
+        if(!this.zappedTooEarly){ // after first tween is completed, bug idles
+          this.bugIdle();
+        }
+        else{
+          this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
+        }
+      }, this.flyInDuration);
 
     }, 500);
 
   }
 
   componentWillUnmount() {
-    this.tweenKey = undefined; // so that bugIdle isn't called if level is advanced before bug lands
     clearTimeout(this.timeoutBugAppear);
-    //clearTimeout(this.timeoutBugIdle);
+    clearTimeout(this.timeoutBugIdle);
     clearTimeout(this.timeoutFlyAway);
     clearTimeout(this.timeoutPrettyBugAppear);
     clearTimeout(this.timeoutPrettyBugSave);
-    //clearTimeout(this.timeoutNextTrial);
+    clearTimeout(this.timeoutNextTrial);
     //clearTimeout(this.timeoutPrettyBugFlyAway);
   }
 
@@ -162,7 +160,7 @@ class BugZap1 extends React.Component {
       startXY: [this.xLand, this.yLand],
       xTo: [this.xLand],
       yTo: [this.yLand],
-      duration: 750,
+      duration: 0,
       loop: false,
     };
 
@@ -185,8 +183,6 @@ class BugZap1 extends React.Component {
       duration: this.flyInDuration,
       loop: false,
     };
-
-    this.tweenKey = 'fly-on';
   }
 
   // switch to idle bug character and pause tweening
@@ -194,9 +190,8 @@ class BugZap1 extends React.Component {
     this.bugSpriteAnimationKey = 'idle';
     this.bugTween = this.tweenIdle;
     this.setState({bugKey: Math.random()}); // so that component re-render is triggered
-    this.tweenKey = 'idle';
 
-    //this.prettyBug = Boolean(Math.floor(Math.random() * 2)); // 50% of time it changes to prettybug
+    this.prettyBug = Boolean(Math.floor(Math.random() * 2)); // 50% of time it changes to prettybug
     if(this.prettyBug){
       if(this.props.route.timeToPrettyBugAppear != undefined && this.prettyBugHasAppeared){ // if prettybug has already appeared once at 100ms delay
         this.timeToPrettyBugAppear = this.timeToPrettyBugAppear + 25;
@@ -205,7 +200,7 @@ class BugZap1 extends React.Component {
         this.bugSpriteAnimationKey = 'prettyIdle';
         this.setState({bugKey: Math.random()});
         this.timeoutPrettyBugSave = setTimeout(() => { // if frog isn't tapped, prettybug is saved on screen
-         this.saveBug();
+          this.saveBug();
         }, 1000);
       }, this.timeToPrettyBugAppear);
       this.prettyBugHasAppeared = true;
@@ -223,7 +218,6 @@ class BugZap1 extends React.Component {
   bugFlyAway(animation) {
     this.bugSpriteAnimationKey = animation;
     this.bugTween = this.tweenAway;
-    this.tweenKey = 'fly-off';
 
     if(!this.prettyBug){ // need to loop prettybug fly
       this.loop = false;
@@ -231,9 +225,9 @@ class BugZap1 extends React.Component {
     this.setState({
       bugKey: Math.random(),
     });
-    // this.timeoutNextTrial = setTimeout(() => {
-    //   this.goToNextTrial();
-    // }, 2000);
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial();
+    }, 2000);
   }
 
   // drop sign and put bug on it
@@ -263,7 +257,6 @@ class BugZap1 extends React.Component {
       duration: 2000,
       loop: false,
     };
-    this.tweenKey = 'save';
     this.bugSize = [70, 70];
 
     this.setState({
@@ -271,9 +264,9 @@ class BugZap1 extends React.Component {
       bugTags: this.signs,
     });
 
-    // this.timeoutNextTrial = setTimeout(() => {
-    //   this.goToNextTrial(); // pass number of existing bug tags through to next trial
-    // }, 3000);
+    this.timeoutNextTrial = setTimeout(() => {
+      this.goToNextTrial(); // pass number of existing bug tags through to next trial
+    }, 3000);
   }
 
   frogTap = () => {
@@ -292,26 +285,6 @@ class BugZap1 extends React.Component {
     }
   }
 
-  // triggered when a tween finishes
-  onTweenFinish(){
-    console.warn("finisheddddd");
-    if(this.tweenKey === 'fly-on'){
-      if(!this.zappedTooEarly){ // after first tween is completed, bug idles
-        this.bugIdle();
-      }
-      else{
-        this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
-      }
-    }
-    else if(this.tweenKey === 'save'){
-      console.warn('here');
-      this.goToNextTrial();
-    }
-    else if(this.tweenKey ==='fly-off'){
-      this.goToNextTrial();
-    }
-  }
-
   // indicates which frame the animation is currently on
   getFrameIndex(animationKey, frameIndex) {
     if(animationKey === 'eat' && frameIndex === 5 && this.bugSpriteAnimationKey != 'prettyIdle'){
@@ -319,7 +292,7 @@ class BugZap1 extends React.Component {
     }
   }
 
-  // triggered when an animation finishes
+  // triggered when certain animations finish
   onAnimationFinish(animationKey) {
     if(animationKey === 'splat'){
       this.setState({showBug: false});
@@ -435,7 +408,6 @@ class BugZap1 extends React.Component {
               character={bugCharacter}
               tween={this.bugTween}
               tweenStart='auto'
-              tweenHasEnded={(spriteKey) => this.onTweenFinish()}
               spriteAnimationKey={this.bugSpriteAnimationKey}
               loopAnimation={this.loop}
               onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
@@ -485,4 +457,3 @@ const styles = StyleSheet.create({
 });
 
 export default BugZap1;
-

@@ -181,7 +181,7 @@ class BugZap3 extends React.Component {
     }, 2000);
   }
 
-  // triggered when certain animations finish
+  // triggered when an animation finishes
   onAnimationFinish(animationKey, frog) {
     if(animationKey === "splat"){
       this.setState({showBug: false});
