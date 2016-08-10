@@ -62,6 +62,7 @@ class AnimatedSprite extends React.Component{
       _height: props.size.height,
       _transform: props.rotate,
       _frameIndex: -1,
+      _tweener: [],
     };
 
     this.character = undefined;
@@ -78,10 +79,10 @@ class AnimatedSprite extends React.Component{
     this.defaultAnimationInterval = undefined;
     this.otherAnimationInterval = undefined;
 
-    this._Tweener = Tweener();
     this._Sound = Soundhandler();
     this.renderTime = 0;
     this.fps = 10;
+    this.endValues = undefined;
   }
 
 
@@ -132,7 +133,7 @@ class AnimatedSprite extends React.Component{
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    if(this.props.tweenStart == "auto" && !this.props.tweenStop){
+    if(this.props.tweenStart == "auto" /*&& !this.props.tweenStop*/){
       this.configureTween();
     }
 
@@ -266,13 +267,14 @@ class AnimatedSprite extends React.Component{
     }
 
     if(this.props.tweenStart === "touch"){
-      this.tweenHasEnded = this.configureTween();
+      this.configureTween();
     }
 
     else if(this.props.stopTweenOnTouch){
       this.stopTween = true;
-      let stopValues = this.configureTween();
-      this.props.stopTweenOnTouch(stopValues);
+      this.configureTween();
+      // console.warn(this.endValues);
+      // this.props.stopTweenOnTouch(this.endValues);
     }
 
     if(this.props.soundOnTouch){
@@ -304,8 +306,37 @@ class AnimatedSprite extends React.Component{
       // scale: this.state._scale,
       // rotation: this.state._rotation,
     }
-    let endValues = this._Tweener[tweenType](tweenOptions, tweenState, stopTween);
-    return endValues;
+    
+    
+    let tweener = [];
+
+    tweener.push(
+      <Tweener
+        key={Math.random()}
+        type={tweenType}
+        options={tweenOptions}
+        state={tweenState}
+        stop={stopTween}
+        tweenHasEnded={(ended) => this.tweenHasEnded(ended)}
+        stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
+    );
+
+    this.setState({
+      _tweener: tweener,
+    });
+
+  }
+
+  // pass up the coordinates of character when stopped
+  sendStopValues(stopValues){ 
+    this.props.stopTweenOnTouch(stopValues);
+  }
+
+  // notify parent that tween has ended
+  tweenHasEnded(){
+    if(this.props.tweenHasEnded){
+      this.props.tweenHasEnded(this.props.spriteKey);
+    }
   }
 
   render() {
@@ -333,6 +364,8 @@ class AnimatedSprite extends React.Component{
                 transform: this.state._transform,
               }}/>
           </TouchableOpacity>
+
+          {this.state._tweener}
 
         </Animated.View>
     );
@@ -363,3 +396,4 @@ AnimatedSprite.defaultProps = {
 
 
 export default AnimatedSprite;
+
