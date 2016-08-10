@@ -1,10 +1,105 @@
 "use strict";
 
-import { Animated, Easing } from 'react-native';
+import React, { Component } from 'react';
+import {
+  Animated,
+  Easing,
+} from 'react-native';
 
-const Tweener = function () {
 
-  const bounce = function(options, state) {
+class Tweener extends React.Component{
+
+  componentDidMount() {
+    let tweenType = this.props.type;
+    switch(tweenType){
+      case 'sine-wave': this.sineWave(this.props.options, this.props.state);
+        break;
+      case 'bounce': this.bounce(this.props.options, this.props.state);
+        break;  
+      case 'slip-slide': this.slipSlide(this.props.options, this.props.state);
+        break;
+      case 'pulse': this.pulse(this.props.options, this.props.state);
+        break;
+      case 'wiggle': this.wiggle(this.props.options, this.props.state);
+        break;
+      case 'bounce-drop': this.bounceDrop(this.props.options, this.props.state);
+        break;
+      case 'zoom': this.zoom(this.props.options, this.props.state);
+        break;
+      case 'hop': this.hop(this.props.options, this.props.state);
+        break;
+      case 'tumble-off': this.tumbleOff(this.props.options, this.props.state);
+        break;
+      case 'spin': this.spin(this.props.options, this.props.state);
+        break;
+      case 'hop-forward': this.hopForward(this.props.options, this.props.state);
+        break;
+      case 'sendOffScreen': this.sendOffScreen(this.props.options, this.props.state);
+        break;
+      case 'basic-back': this.basicBack(this.props.options, this.props.state);
+        break;
+      case 'curve-spin': this.curveSpin(this.props.options, this.props.state);
+        break;
+      case 'move': this.move(this.props.options, this.props.state);
+        break;
+      case 'curve-fall': this.curveFall(this.props.options, this.props.state);
+    }
+  }
+  
+  sineWave(options, state){
+    if(this.props.stop){
+      let stopValues = [];
+      state.left.stopAnimation((value) => stopValues.push(value));
+      state.top.stopAnimation((value) => stopValues.push(value));
+      this.props.stopValues(stopValues);
+    }
+    else{
+      state.top.setValue(options.startXY[1]);
+      state.left.setValue(options.startXY[0]);
+      Animated.sequence([
+        Animated.delay(options.delay),
+        Animated.parallel(
+          [
+            Animated.sequence(this._getSequenceX(options, state)),
+            Animated.sequence(this._getSequenceY(options, state)),
+          ]
+        )
+      ]).start(() => {
+        if (options.loop === false) {
+          this.props.tweenHasEnded(true);
+        }else{
+          this.sineWave(options, state);
+        }
+
+      });
+    }
+  }
+
+  _getSequenceX(options, state) {
+    const duration = options.duration;
+    const numTrasitions = options.xTo.length;
+    return options.xTo.map((x, index, array)=>{
+      return Animated.timing(state.left, {
+          duration: duration / numTrasitions,
+          toValue: x,
+          easing: Easing.sin,
+      })
+    });
+  }
+
+  _getSequenceY(options, state) {
+    const duration = options.duration;
+    const numTrasitions = options.yTo.length;
+    return options.yTo.map((y, index, array)=>{
+      return Animated.timing(state.top, {
+        duration: duration / numTrasitions,
+        toValue: y,
+        easing: Easing.sin,
+      })
+    });
+  }
+
+  bounce (options, state) {
     state.scale.setValue(0.9);
     Animated.spring(
     state.scale,
@@ -22,7 +117,7 @@ const Tweener = function () {
 
   };
 
-  const move = function (options, state) {
+  move  (options, state) {
 
 
 
@@ -55,62 +150,7 @@ const Tweener = function () {
     });
   };
 
-  const sineWave = function(options, state, stopTween){
-    if(stopTween){
-      let stopValues = [];
-      state.left.stopAnimation((value) => stopValues.push(value));
-      state.top.stopAnimation((value) => stopValues.push(value));
-      return stopValues;
-    }
-    else{
-      state.top.setValue(options.startXY[1]);
-      state.left.setValue(options.startXY[0]);
-      Animated.sequence([
-        Animated.delay(options.delay),
-        Animated.parallel(
-          [
-            Animated.sequence(_getSequenceX(options, state)),
-            Animated.sequence(_getSequenceY(options, state)),
-          ]
-        )
-      ]).start(() => {
-        if (options.loop === false) {
-          // let tweenHasEnded = true;
-          // console.warn(tweenHasEnded);
-          // return tweenHasEnded;
-        }else{
-          sineWave(options, state, stopTween);
-        }
-
-      });
-    }
-  }
-
-  const _getSequenceX = function (options, state) {
-    const duration = options.duration;
-    const numTrasitions = options.xTo.length;
-    return options.xTo.map((x, index, array)=>{
-      return Animated.timing(state.left, {
-          duration: duration / numTrasitions,
-          toValue: x,
-          easing: Easing.sin,
-      })
-    });
-  }
-
-  const _getSequenceY = function (options, state) {
-    const duration = options.duration;
-    const numTrasitions = options.yTo.length;
-    return options.yTo.map((y, index, array)=>{
-      return Animated.timing(state.top, {
-          duration: duration / numTrasitions,
-          toValue: y,
-          easing: Easing.sin,
-        })
-      });
-    }
-
- const pulse = function(options, state) {
+ pulse(options, state) {
    state.scale.setValue(1);
    Animated.sequence([
      Animated.timing(
@@ -137,7 +177,8 @@ const Tweener = function () {
      }
    });
  }
- const wiggle = function(options, state) {
+ 
+ wiggle(options, state) {
    Animated.sequence([
    Animated.timing(
      state.rotation,
@@ -171,7 +212,7 @@ const Tweener = function () {
  });
  }
 
- const bounceDrop = function(options, state) {
+ bounceDrop(options, state) {
   //  state.left.setValue(options.startXY[0]);
   //  Animated.timing(
   //    state.left,
@@ -198,7 +239,7 @@ const Tweener = function () {
    });
  }
 
- const zoom = function(options, state) {
+ zoom(options, state) {
    state.left.setValue(options.startXY[0]);
    Animated.timing(
      state.left,
@@ -224,7 +265,7 @@ const Tweener = function () {
    });
  }
 
-  const hop = function(options, state) {
+  hop(options, state) {
     state.top.setValue(options.startY);
     Animated.sequence([
       Animated.timing(
@@ -252,7 +293,7 @@ const Tweener = function () {
     });
   }
 
-  const tumbleOff = function(options, state) {
+  tumbleOff(options, state) {
 
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
@@ -291,7 +332,7 @@ const Tweener = function () {
     });
   }
 
-  const spin = function(options, state) {
+  spin(options, state) {
 
     state.rotation.setValue(0);
     Animated.timing(
@@ -310,7 +351,7 @@ const Tweener = function () {
     });
   }
 
-  const hopForward = function(options, state) {
+  hopForward(options, state) {
 
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
@@ -378,11 +419,11 @@ const Tweener = function () {
       });
   }
 
-  const sendOffScreen = function(options, state) {
+  sendOffScreen(options, state) {
     state.top.setValue(-500);
   }
 
-  const basicBack = function(options, state) {
+  basicBack(options, state) {
     state.top.setValue(options.startY);
     Animated.timing(
       state.top,
@@ -400,7 +441,7 @@ const Tweener = function () {
     });
   }
 
-  const curveSpin = function(options, state) {
+  curveSpin(options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -446,7 +487,7 @@ const Tweener = function () {
     });
   }
 
-  const curveFall = function(options, state) {
+  curveFall(options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -470,34 +511,20 @@ const Tweener = function () {
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        return
+        this.props.tweenHasEnded(true);
+        return;
       }else {
         curveSpin(options, state);
       }
     });
   }
 
-  return (
-    {
-      'bounce': bounce,
-      'slip-slide': move,
-      'sine-wave': sineWave,
-      'pulse': pulse,
-      'wiggle': wiggle,
-      'bounce-drop': bounceDrop,
-      'zoom': zoom,
-      'hop': hop,
-      'tumble-off': tumbleOff,
-      'spin': spin,
-      'hop-forward': hopForward,
-      'sendOffScreen': sendOffScreen,
-      'basic-back': basicBack,
-      'curve-spin': curveSpin,
-      'move': move,
-      'curve-fall': curveFall,
-    }
-  );
+  
 
-};
+  render() {
+    return (null);
+  }
+}
+
 
 export default Tweener;
