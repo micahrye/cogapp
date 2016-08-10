@@ -135,6 +135,8 @@ class GameTwo extends Component {
       animation: "default",
     }
 
+    phase = 0;
+
   }
 
 
@@ -230,7 +232,7 @@ class GameTwo extends Component {
                      signKey: Math.random(),
                      onboarding: this.state.onboarding+1,
                      foodPressed: true});
-      setTimeout(this.toggleCreatureCharacter.bind(this),2000);
+      //setTimeout(this.toggleCreatureCharacter.bind(this),2000);
       if (this.state.onboarding === 3) {
         this.setState({animation: "celebrate",
                        creatureKey3: Math.random(),
@@ -240,18 +242,30 @@ class GameTwo extends Component {
     }
   }
 
-  onTweenEnd(key) {
-    console.warn("yo");
-    switch(key) {
-      case this.state.foodKey:
-        if (this.state.foodPressed) {
-          this.setState({animation: "eat",creatureKey1:Math.random()});
-        }
+  onTweenEndFood = () => {
+    switch(phase) {
+      case 0:
+        phase++
         break;
-
+      case 1:
+        phase++
+        break;
+      case 2:
+        phase++;
+        this.setState({animation: "eat",creatureKey1: Math.random()});
+        break;
+      case 3:
+        phase++
+        break;
     }
+  }
 
-
+  onTweenEndCreature = () => {
+    switch(this.state.onboarding) {
+      case 1:
+        this.setState({creatureTween1: tweenStatic(creatureEnd), creatureKey1: Math.random()})
+        break;
+    }
   }
 
   onAnimationFinish(animationKey, creatureKey) {
@@ -260,13 +274,15 @@ class GameTwo extends Component {
       this.setState({animation: "default",creatureKey: Math.random()})
         break;
       case "celebrate":
+        this.toggleCreatureCharacter();
         this.setState({animation: "walk",creatureKey: Math.random()})
+        this.
         break;
       case "eat":
+        console.warn("yo")
         this.setState({animation: "celebrate",creatureKey: Math.random()})
         break;
     }
-
   }
 
   render() {
@@ -331,7 +347,7 @@ class GameTwo extends Component {
                     tweenStart="auto"
                     tween={this.state.foodTween}
                     onPress={this.onFoodPress}
-                    tweenHasEnded={(key) => this.onTweenEnd(key)}/>
+                    tweenHasEnded={this.onTweenEndFood}/>
         </Image>
       </View>
     );
