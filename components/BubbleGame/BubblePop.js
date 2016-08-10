@@ -25,6 +25,7 @@ const OFFSET = 80;
 class BubblePop extends React.Component {
   constructor(props){
     super(props);
+
     this.targetLocation = SCREEN_WIDTH/2 - 100;
     this.foodLocation = SCREEN_WIDTH/2 - 40; 
     this.numBubbles = 10;
@@ -36,10 +37,12 @@ class BubblePop extends React.Component {
     this.showTargetBubble = true;
     this.showFood = false;
     this.foodCharacter = canCharacter;
-
+    this.foodSpriteAnimationKey = 'default';
+    this.omnivoreSpriteAnimationKey = 'default';
     this.targetSpriteAnimationKey = 'default';
     this.timeoutGameOver = undefined;
     this.timeoutFoodFall = undefined;
+
 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
@@ -69,9 +72,11 @@ class BubblePop extends React.Component {
       bubbleCharacters: [],
       targetBubbleKey: 0,
       foodKey: 1,
+      omnivoreKey: 2,
       targetTween: this.targetTween,
       sound: true,
     }
+
   }
 
   componentDidMount () {
@@ -98,7 +103,7 @@ class BubblePop extends React.Component {
   // alternate food in bubble each new trial
   chooseFood() {
     let choice = Math.random();
-    this.foodSpriteAnimationKey = 'default'
+    //this.foodSpriteAnimationKey = 'default'
     if (choice < .25){
       this.foodCharacter = canCharacter;
       this.targetSpriteAnimationKey = 'canBubble';
@@ -198,11 +203,13 @@ class BubblePop extends React.Component {
     this.foodTween = {
       tweenType: 'curve-fall',
       startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
-      endXY: [SCREEN_WIDTH - 250, SCREEN_HEIGHT - 200], // 450, 230 in emulator ...
+      endXY: [SCREEN_WIDTH - 200, SCREEN_HEIGHT - 230], // 450, 230 in emulator ...
       duration: 2000,
       loop: false,
     }
     this.showFood = true;
+    this.omnivoreSpriteAnimationKey = 'openMouth';
+    this.setState({omnivoreKey: Math.random()})
   }
 
   // triggered when a tween ends
@@ -214,14 +221,10 @@ class BubblePop extends React.Component {
       })
     }
     else if(spriteKey === 2){
-      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
-        this.props.navigator.replace({
-          id: "GameOverPage",
-        });
-      }
-      else{ // otherwise, next trial is started
-        this.goToNextTrial();
-      }
+      this.showFood = false;
+      this.omnivoreSpriteAnimationKey = 'chew';
+      this.setState({omnivoreKey: Math.random()});
+      
     }
   }
 
@@ -230,6 +233,20 @@ class BubblePop extends React.Component {
     if(animationKey === 'pop'){ // after bubble pops, go to next trial or game over
       this.showTargetBubble = false;
       this.setState({targetBubbleKey: Math.random()});
+    }
+    if(animationKey === 'openMouth'){
+      this.omnivoreSpriteAnimationKey = 'readyToEat';
+      this.setState({omnivoreKey: Math.random()});
+    }
+    if(animationKey === 'chew'){
+      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
+        this.props.navigator.replace({
+          id: "GameOverPage",
+        });
+      }
+      else{ // otherwise, next trial is started
+        this.goToNextTrial();
+      }
     }
   }
 
@@ -287,11 +304,13 @@ class BubblePop extends React.Component {
                 loopAnimation={true}/>
             : null}
             <AnimatedSprite
-                key={3}
-                coordinates={{top: SCREEN_HEIGHT - 150 , left: SCREEN_WIDTH - 150}}
-                size={{width: 128, height: 90}}
+                key={this.state.omnivoreKey}
+                coordinates={{top: SCREEN_HEIGHT - 280 , left: SCREEN_WIDTH - 250}}
+                size={{width: 256, height: 256}}
                 character={omnivoreCharacter}
-                spriteAnimationKey='default'/>
+                spriteAnimationKey={this.omnivoreSpriteAnimationKey}
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
+                fps={10}/>
           </View>
       </Image>
     );

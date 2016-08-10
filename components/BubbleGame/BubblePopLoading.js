@@ -17,6 +17,7 @@ import AnimatedSprite from "../animatedSprite";
 
 // sprites
 import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
+import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
 
 const Window = Dimensions.get('window');
 
@@ -144,6 +145,12 @@ class BubblePopLoading extends Component {
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'bugBubble'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={omnivoreCharacter}
+              spriteAnimationKey={'eat'}
               fps={10}/>
           </View>
         </View>

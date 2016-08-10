@@ -20,6 +20,8 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const NUM_TRIALS = 3;
+const IDLE_DURATION = 750; // how long bug is catchable
+
 
 class BugZap2 extends React.Component {
 
@@ -147,7 +149,7 @@ class BugZap2 extends React.Component {
       this.bugFlyAway('startFly');
       this.frogDisgust(0);
       this.frogDisgust(1);
-    }, 750);
+    }, IDLE_DURATION);
   }
 
   // switch to flying bug character and start next tween
