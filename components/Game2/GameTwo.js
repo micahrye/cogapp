@@ -132,7 +132,7 @@ class GameTwo extends Component {
       creatureKey3: Math.random(),
       leverPressed: false,
       foodPressed: false,
-      animation: "walk",
+      animation: "default",
     }
 
   }
@@ -140,6 +140,8 @@ class GameTwo extends Component {
 
 
   componentDidMount() {
+    this.setState({creatureKey1: Math.random(),
+                   animation: "walk"});
 
   }
 
