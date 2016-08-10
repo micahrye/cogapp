@@ -4,11 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
-  AsyncStorage,
   Navigator,
   Image,
-  InteractionManager,
   TouchableOpacity
 } from 'react-native';
 
