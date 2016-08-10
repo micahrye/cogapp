@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   Navigator,
   Image,
   InteractionManager,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 
 import AnimatedSprite from '../animatedSprite';
@@ -31,7 +31,9 @@ class BubblePop extends React.Component {
     this.targetLocation = SCREEN_WIDTH/2 - 100;
     this.foodLocation = SCREEN_WIDTH/2 - 40; 
     this.numBubbles = 10;
-    this.stopValues = undefined;
+    this.stopValuesX = undefined;
+    this.stopValuesY = undefined;
+    this.popTime = undefined;
     this.foodTween = {};
     this.loopAnimation = true;
     this.showTargetBubble = true;
@@ -40,9 +42,7 @@ class BubblePop extends React.Component {
 
     this.targetSpriteAnimationKey = 'default';
     this.timeoutGameOver = undefined;
-    this.timeoutAfterBubblePop = undefined;
     this.timeoutFoodFall = undefined;
-    this.timeoutBubbleRepeat = undefined;
 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
@@ -65,7 +65,6 @@ class BubblePop extends React.Component {
       yTo: [-200],
       duration: this.targetDuration,
       loop: false,
-      delay: 500,
     };
 
     this.state = {
@@ -81,12 +80,10 @@ class BubblePop extends React.Component {
   componentDidMount () {
     this.chooseFood();
     this.createBackgroundBubbles();
-    this.timeoutBubbleRepeat = setInterval(() => { // so bubble repeats its tween up the screen if not popped
-      this.setState({
-        targetTween: this.targetTween,
-        targetBubbleKey: Math.random(),
-      })
-    }, this.targetDuration + 500);
+    this.setState({
+      targetTween: this.targetTween,
+      targetBubbleKey: Math.random(),
+    })
 
     this.timeoutGameOver = setTimeout(() => { // start trial timeout
       this.props.navigator.replace({
@@ -98,8 +95,6 @@ class BubblePop extends React.Component {
 
   componentWillUnmount(){
     clearTimeout(this.timeoutGameOver);
-    clearTimeout(this.timeoutAfterBubblePop);
-    clearInterval(this.timeoutBubbleRepeat);
     clearTimeout(this.timeoutFoodFall);
   }
 
@@ -174,7 +169,9 @@ class BubblePop extends React.Component {
   }
 
   // make bubble pop and record time it took to pop it
-  popBubble = (popTime) => {
+  popBubble = (stopValues) => {
+    this.stopValuesX = stopValues[0];
+    this.stopValuesY = stopValues[1];
     if(this.targetSpriteAnimationKey === 'pop'){ // so you can't pop bubble while it is already popping
       this.setState({sound: false});
       return;
@@ -184,12 +181,12 @@ class BubblePop extends React.Component {
     this.targetSpriteAnimationKey = 'pop';
     this.loopAnimation = false; // so popped bubble doesn't repeat
     this.setState({
-      popTime: popTime - .5,
+      popTime: this.popTime - .5,
       targetTween: { // so bubble stays in place
         tweenType: "sine-wave",
-        startXY: [this.stopValues[0], this.stopValues[1]],
-        xTo: [this.stopValues[0]],
-        yTo: [this.stopValues[1]],
+        startXY: [this.stopValuesX, this.stopValuesY],
+        xTo: [this.stopValuesX],
+        yTo: [this.stopValuesY],
         duration: 5000,
         loop: false,
       },
@@ -203,7 +200,7 @@ class BubblePop extends React.Component {
   foodFall(){
     this.foodTween = {
       tweenType: 'curve-fall',
-      startXY: [this.stopValues[0] + 50, this.stopValues[1] + 50],
+      startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
       endXY: [SCREEN_WIDTH - 250, SCREEN_HEIGHT - 200], // 450, 230 in emulator ...
       duration: 2000,
       loop: false,
@@ -211,23 +208,31 @@ class BubblePop extends React.Component {
     this.showFood = true;
   }
 
+  // triggered when a tween ends
+  onTweenFinish(spriteKey){
+    if(spriteKey === 1){
+      this.setState({
+        targetTween: this.targetTween,
+        targetBubbleKey: Math.random(),
+      })
+    }
+    else if(spriteKey === 2){
+      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
+        this.props.navigator.replace({
+          id: "GameOverPage",
+        });
+      }
+      else{ // otherwise, next trial is started
+        this.goToNextTrial();
+      }
+    }
+  }
+
   // triggered when an animation finishes
   onAnimationFinish(animationKey){
     if(animationKey === 'pop'){ // after bubble pops, go to next trial or game over
       this.showTargetBubble = false;
       this.setState({targetBubbleKey: Math.random()});
-      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
-        this.timeoutFoodFall = setTimeout(()=> {
-          this.props.navigator.replace({
-            id: "GameOverPage",
-          });
-        }, 2000); 
-      }
-      else{ // otherwise, next trial is started
-        this.timeoutFoodFall = setTimeout(()=> { // after food tween is over
-          this.goToNextTrial();
-        }, 2000);  
-      }
     }
   }
 
@@ -256,15 +261,17 @@ class BubblePop extends React.Component {
             {this.showTargetBubble ?
               <AnimatedSprite
                 key={this.state.targetBubbleKey}
+                spriteKey={1}
                 coordinates={{top: SCREEN_HEIGHT - 69, left: this.targetLocation}}
                 size={{width: 200, height: 200}}
                 character={bubbleCharacter}
                 tween={this.state.targetTween}
                 tweenStart='auto'
-                stopTweenOnTouch={(stopValues) => this.stopValues = stopValues}
+                stopTweenOnTouch={(stopValues) => this.popBubble(stopValues)}
+                tweenHasEnded={(spriteKey) => this.onTweenFinish(spriteKey)}
                 soundOnTouch={this.state.sound}
                 soundFile="bubblePop"
-                timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
+                timeSinceMounted={(spriteKey, duration)=> this.popTime = duration}
                 spriteAnimationKey={this.targetSpriteAnimationKey}
                 loopAnimation={this.loopAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
@@ -272,17 +279,18 @@ class BubblePop extends React.Component {
             {this.showFood ?
               <AnimatedSprite
                 key={this.state.foodKey}
-                coordinates={{top: this.stopValues[0] + 50 , left: this.stopValues[1]}}
+                spriteKey={2}
+                coordinates={{top: this.stopValuesX + 50 , left: this.stopValuesY}}
                 size={{width: 125, height: 125}}
                 character={this.foodCharacter}
                 tween={this.foodTween}
                 tweenStart='auto'
-                timeSinceMounted={(spriteKey, duration)=>this.popBubble(duration)}
+                tweenHasEnded={(spriteKey) => this.onTweenFinish(spriteKey)}
                 spriteAnimationKey={this.foodSpriteAnimationKey}
                 loopAnimation={true}/>
             : null}
             <AnimatedSprite
-                key={2}
+                key={3}
                 coordinates={{top: SCREEN_HEIGHT - 150 , left: SCREEN_WIDTH - 150}}
                 size={{width: 128, height: 90}}
                 character={omnivoreCharacter}
@@ -292,6 +300,7 @@ class BubblePop extends React.Component {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   topLevel :{
