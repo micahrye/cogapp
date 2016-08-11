@@ -114,6 +114,18 @@ class GameSixLoading extends Component {
               character={omnivoreCharacter}
               spriteAnimationKey={'eat'}
               fps={10}/>
+             <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={omnivoreCharacter}
+              spriteAnimationKey={'celebrate'}
+              fps={20}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={omnivoreCharacter}
+              spriteAnimationKey={'disgust'}
+              fps={10}/>
           </View>
         </View>
         <View>

@@ -39,40 +39,41 @@ class GameSix extends React.Component {
     this.trialNum = 1;
     this.numbers = [];
     this.omnivoreSpriteAnimationKey = 'default';
-    this.showFood = [true, true, true, true];
+    this.showFood = [true, true, true, true]; // the 4 foods on the signs
   }
 
   componentDidMount() {
     if(this.trialNum === 1){
-      this.gameTimeout = setTimeout(() => {
+      this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
         this.props.navigator.replace({
           id: 'Main',
         });
       }, 120000);
     }
-    if(this.props.route.trialNum != undefined){
+    if(this.props.route.trialNum != undefined){ // is undefined on first load
       this.trialNum = this.props.route.trialNum;
     }
-    if(this.trialNum <= 3){
+    if(this.trialNum <= 3){ // first 3 trials only have 1 number
       this.setNumber();
     }
     else{
-      for(let i = 0; i < 3; i++){
+      for(let i = 0; i < 3; i++){ // on third trial, set up sequence of 3 numbers
         this.setNumber();
       }
     }
     this.setState({
       numbers: this.numbers,
-      targetNumber: this.numbers[0],
+      targetNumber: this.numbers[0], // first number in sequence is target number
     });
   }
 
   componentWillUnmount() {
     if(this.trialNum > 3){
-      clearTimeout(this.gameTimeout);
+      clearTimeout(this.gameTimeout); // only clear timeout if navigating away at end, not during first 3 trials
     }
   }
 
+  // next number randomly chosen between 1 2 3 and 4
   setNumber() {
     let choice = Math.random();
     if(choice <= .25){
@@ -93,62 +94,70 @@ class GameSix extends React.Component {
     // console.warn(left);
     // console.warn(top);
     let withinRange = false;
-    if(top > 380 && top < 520){
-      if(signKey === 1 && left > 640 && left < 870){
+    if(top > 430){
+      if(signKey === 1 && left > 720){
         withinRange = true;
       }
-      else if(signKey === 2 && left > 480 && left < 670){
+      else if(signKey === 2 && left > 560){
         withinRange = true;
       }
-      else if(signKey === 3 && left > 300 && left < 470){
+      else if(signKey === 3 && left > 380){
         withinRange = true;
       }
-      else if(signKey === 4 && left > 160 && left < 370){
+      else if(signKey === 4 && left > 240){
         withinRange = true;
       }
-      if(withinRange && signKey === this.state.targetNumber){
-        this.success(signKey);
-        //console.warn('SUCCESS');
-      }
-      else{
-        this.attempt();
-        //console.warn("FAIL");
+
+      if(withinRange){
+        if(signKey === this.state.targetNumber){
+          this.eat(signKey);
+          this.attempt = 'success';
+        }
+        else{
+          this.attempt = 'fail';
+          this.disgust(signKey);
+        }
       }
     };
   }
 
-  success(signKey){
+  eat(signKey){
     this.omnivoreSpriteAnimationKey = 'eat';
     this.setState({omnivoreKey: Math.random()});
-    this.showFood[signKey] = false;
-    // if(signKey === 1){
-    //   this.showApple = false;
-    // }
-    // else if(signKey === 2){
-    //   this.showCan = false;
-    // }
-    // else if(signKey === 3){
-    //   this.showBug = false;
-    // }
-    // else{
-    //   this.showGrass = false;
-    // }
-    this.attempt();
+    this.showFood[signKey - 1] = false;
   }
 
-  attempt(){
+  disgust(signKey){
+    this.omnivoreSpriteAnimationKey = 'disgust';
+    this.setState({omnivoreKey: Math.random()});
+    this.showFood[signKey - 1] = false;
+  }
+
+  // remove target number, add new number to sequence, and set new target number
+  shiftNumbers(){
     this.numbers.shift();
     this.setNumber();
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0],
-      foodKey: Math.random(),
     });
     this.goToNextTrial();
   }
 
+  onAnimationFinish(animationKey){
+    if(animationKey === 'eat'){
+      this.omnivoreSpriteAnimationKey = 'celebrate';
+      this.setState({omnivoreKey: Math.random()});
+    }
+    else if(animationKey === 'celebrate' || animationKey === 'disgust'){
+      this.shiftNumbers(); // get ready for next trial
+    }
+  }
+
   goToNextTrial(){
     if(this.trialNum > 3){
+      this.showFood = [true, true, true, true];
+      this.setState({foodKey: Math.random()}); // so food returns to its sign
       return;
     }
     this.props.navigator.replace({
@@ -184,6 +193,14 @@ class GameSix extends React.Component {
     return(
       <Image source={require('../../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
         <View style={styles.container}>
+          <AnimatedSprite 
+            key={this.state.omnivoreKey}
+            coordinates={{top: 410, left: 810}}
+            size={{width: 210, height: 210}}
+            character={omnivoreCharacter}
+            spriteAnimationKey={this.omnivoreSpriteAnimationKey}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+
           <View style={styles.itemContainer}>
             <AnimatedSprite
               coordinates={{top: -10, left: 0}}
@@ -230,7 +247,7 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}/>
-            {this.showFood[3] ?
+            {this.showFood[2] ?
               <AnimatedSprite 
                 key={this.state.foodKey}
                 coordinates={{top: 85, left: 20}}
@@ -262,12 +279,7 @@ class GameSix extends React.Component {
             : null}
           </View>
 
-          <AnimatedSprite 
-            key={this.state.omnivoreKey}
-            coordinates={{top: 410, left: 810}}
-            size={{width: 210, height: 210}}
-            character={omnivoreCharacter}
-            spriteAnimationKey={this.omnivoreSpriteAnimationKey}/>
+          
 
           <View style={styles.thoughtBubbles}>
             <View style={this.getBubbleStyle()}><Text style={styles.thoughtText}>{this.state.numbers}</Text></View>
