@@ -19,7 +19,7 @@ import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 500;
+const LoadingTime = 700;
 
 class GameSixLoading extends Component {
 
@@ -112,7 +112,7 @@ class GameSixLoading extends Component {
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
-              spriteAnimationKey={'default'}
+              spriteAnimationKey={'eat'}
               fps={10}/>
           </View>
         </View>

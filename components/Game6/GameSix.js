@@ -34,9 +34,12 @@ class GameSix extends React.Component {
       targetNumber: undefined,
       numbers: undefined,
       foodKey: Math.random(),
+      omnivoreKey: Math.random(),
     };
     this.trialNum = 1;
     this.numbers = [];
+    this.omnivoreSpriteAnimationKey = 'default';
+    this.showFood = [true, true, true, true];
   }
 
   componentDidMount() {
@@ -104,14 +107,33 @@ class GameSix extends React.Component {
         withinRange = true;
       }
       if(withinRange && signKey === this.state.targetNumber){
-        this.attempt();
+        this.success(signKey);
         //console.warn('SUCCESS');
       }
       else{
         this.attempt();
-        //console.warn("FAILLLLLLL");
+        //console.warn("FAIL");
       }
     };
+  }
+
+  success(signKey){
+    this.omnivoreSpriteAnimationKey = 'eat';
+    this.setState({omnivoreKey: Math.random()});
+    this.showFood[signKey] = false;
+    // if(signKey === 1){
+    //   this.showApple = false;
+    // }
+    // else if(signKey === 2){
+    //   this.showCan = false;
+    // }
+    // else if(signKey === 3){
+    //   this.showBug = false;
+    // }
+    // else{
+    //   this.showGrass = false;
+    // }
+    this.attempt();
   }
 
   attempt(){
@@ -158,7 +180,6 @@ class GameSix extends React.Component {
     );
   }
 
-
   render(){
     return(
       <Image source={require('../../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
@@ -171,14 +192,15 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix1'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKey}
-              coordinates={{top: 95, left: 40}}
-              size={{width: 70, height: 70}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 1)}
-              character={appleCharacter}
-              />
+            {this.showFood[0] ?
+              <AnimatedSprite 
+                key={this.state.foodKey}
+                coordinates={{top: 95, left: 40}}
+                size={{width: 70, height: 70}}
+                draggable={true}
+                draggedTo={(left, top) => this.checkTarget(left, top, 1)}
+                character={appleCharacter}/>
+            : null}
           </View>
 
           <View style={styles.itemContainer}>
@@ -189,14 +211,15 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix2'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKey}
-              coordinates={{top: 90, left: 30}}
-              size={{width: 90, height: 90}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 2)}
-              character={canCharacter}
-              />
+            {this.showFood[1] ?
+              <AnimatedSprite 
+                key={this.state.foodKey}
+                coordinates={{top: 90, left: 30}}
+                size={{width: 90, height: 90}}
+                draggable={true}
+                draggedTo={(left, top) => this.checkTarget(left, top, 2)}
+                character={canCharacter}/>
+            : null}
           </View>
 
           <View style={styles.itemContainer}>
@@ -207,16 +230,17 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKey}
-              coordinates={{top: 85, left: 20}}
-              size={{width: 100, height: 100}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 3)}
-              character={bugCharacter}
-              spriteAnimationKey='stillIdle'
-              loopAnimation={true}
-              />
+            {this.showFood[3] ?
+              <AnimatedSprite 
+                key={this.state.foodKey}
+                coordinates={{top: 85, left: 20}}
+                size={{width: 100, height: 100}}
+                draggable={true}
+                draggedTo={(left, top) => this.checkTarget(left, top, 3)}
+                character={bugCharacter}
+                spriteAnimationKey='stillIdle'
+                loopAnimation={true}/>
+            : null}
           </View>
 
           <View style={styles.itemContainer}>
@@ -227,19 +251,23 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix4'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKey}
-              coordinates={{top: 90, left: 30}}
-              size={{width: 80, height: 80}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 4)}
-              character={grassCharacter}
-              />
+            {this.showFood[3] ?
+              <AnimatedSprite 
+                key={this.state.foodKey}
+                coordinates={{top: 90, left: 30}}
+                size={{width: 80, height: 80}}
+                draggable={true}
+                draggedTo={(left, top) => this.checkTarget(left, top, 4)}
+                character={grassCharacter}/>
+            : null}
           </View>
 
-          <AnimatedSprite coordinates={{top: 410, left: 810}}
-            size={{width: 210, height: 160}}
-            character={omnivoreCharacter}/>
+          <AnimatedSprite 
+            key={this.state.omnivoreKey}
+            coordinates={{top: 410, left: 810}}
+            size={{width: 210, height: 210}}
+            character={omnivoreCharacter}
+            spriteAnimationKey={this.omnivoreSpriteAnimationKey}/>
 
           <View style={styles.thoughtBubbles}>
             <View style={this.getBubbleStyle()}><Text style={styles.thoughtText}>{this.state.numbers}</Text></View>
