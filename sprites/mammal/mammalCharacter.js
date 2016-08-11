@@ -4,7 +4,7 @@ const mammalCharacter = {
   name:"mammal",
 
   default:[
-    require("./mammal.png"),
+    require("./dog_celebrate01.png"),
   ],
 
   eat:[

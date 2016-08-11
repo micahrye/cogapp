@@ -41,9 +41,9 @@ fps: object, how many frames per second to run the animations at
 onPress: passes up spriteKey
 draggedTo: passes up character's coordinates after drag
 timeSinceMounted: triggered on press, passes up spriteKey and time since character mounted in seconds
-stopTweenOnTouch: triggered when tweening character is pressed, 
+stopTweenOnTouch: triggered when tweening character is pressed,
   stops tween, and passes up an array containing current x, y coordinates
-onAnimationFinish: is triggered when 'other' animation has finished, 
+onAnimationFinish: is triggered when 'other' animation has finished,
   passes up current spriteAnimationKey
 getFrameIndex: passes up spriteAnimationKey and current frame of animation
 */
@@ -54,13 +54,14 @@ class AnimatedSprite extends React.Component{
 
     this.state = {
       animate: false,
-      //_scale: new Animated.Value(1),
+      _scale: new Animated.Value(1),
       _top: new Animated.Value(props.coordinates.top),
       _left: new Animated.Value(props.coordinates.left),
-      //_rotation: new Animated.Value(0),
+      _rotateZ: new Animated.Value(0),
       _width: props.size.width,
       _height: props.size.height,
-      _transform: props.rotate,
+      //_transform: props.rotate,
+      _rotateY: props.rotate,
       _frameIndex: -1,
       _tweener: [],
     };
@@ -242,10 +243,10 @@ class AnimatedSprite extends React.Component{
 
   getStyle(){
 
-    // let ro = this.state._rotation.interpolate({
-    //   inputRange: [0,100],
-    //   outputRange: ['0deg','180deg'],
-    // });
+    let ro = this.state._rotateZ.interpolate({
+      inputRange: [0,100],
+      outputRange: ['0deg','180deg'],
+    });
 
     return (
       {
@@ -254,8 +255,9 @@ class AnimatedSprite extends React.Component{
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
-        // transform: [{rotate: ro},
-        //             {scale: this.state._scale}],
+        transform: [//{rotateY: this.state._rotateY},
+                    {rotateZ: ro},
+                    {scale: this.state._scale}],
       }
     );
 
@@ -303,11 +305,12 @@ class AnimatedSprite extends React.Component{
     const tweenState = {
       top: this.state._top,
       left: this.state._left,
-      // scale: this.state._scale,
+      scale: this.state._scale,
+      rotateZ: this.state._rotateZ,
       // rotation: this.state._rotation,
     }
-    
-    
+
+
     let tweener = [];
 
     tweener.push(
@@ -328,7 +331,7 @@ class AnimatedSprite extends React.Component{
   }
 
   // pass up the coordinates of character when stopped
-  sendStopValues(stopValues){ 
+  sendStopValues(stopValues){
     this.props.stopTweenOnTouch(stopValues);
   }
 
@@ -361,7 +364,7 @@ class AnimatedSprite extends React.Component{
               style={{
                 width: this.state._width,
                 height: this.state._height,
-                transform: this.state._transform,
+                transform: this.state._rotateY,
               }}/>
           </TouchableOpacity>
 
@@ -396,4 +399,3 @@ AnimatedSprite.defaultProps = {
 
 
 export default AnimatedSprite;
-

@@ -7,6 +7,10 @@ const frogCharacter = {
     require("./frog_celebrate01.png"),
   ],
 
+  walk:[
+    require("./frog_celebrate01.png"),
+  ],
+
   celebrate:[
     require("./frog_celebrate02.png"),
     require("./frog_celebrate03.png"),

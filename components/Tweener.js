@@ -15,7 +15,7 @@ class Tweener extends React.Component{
       case 'sine-wave': this.sineWave(this.props.options, this.props.state);
         break;
       case 'bounce': this.bounce(this.props.options, this.props.state);
-        break;  
+        break;
       case 'slip-slide': this.slipSlide(this.props.options, this.props.state);
         break;
       case 'pulse': this.pulse(this.props.options, this.props.state);
@@ -45,7 +45,7 @@ class Tweener extends React.Component{
       case 'curve-fall': this.curveFall(this.props.options, this.props.state);
     }
   }
-  
+
   sineWave(options, state){
     if(this.props.stop){
       let stopValues = [];
@@ -180,7 +180,7 @@ class Tweener extends React.Component{
      }
    });
  }
- 
+
  wiggle(options, state) {
    Animated.sequence([
    Animated.timing(
@@ -473,14 +473,14 @@ class Tweener extends React.Component{
             duration: options.duration,
           }
         ),
-        // Animated.timing(
-        //   state.rotation,
-        //   {
-        //     toValue: 400,
-        //     easing: Easing.quad,
-        //     duration: options.duration,
-        //   }
-        // ),
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: 400,
+            easing: Easing.quad,
+            duration: options.duration,
+          }
+        ),
       ]),
       Animated.timing(
         state.top,
@@ -531,7 +531,7 @@ class Tweener extends React.Component{
     });
   }
 
-  
+
 
   render() {
     return (null);

@@ -4,7 +4,7 @@ const goatCharacter = {
   name:"goat",
 
   default:[
-    require("./goat.png"),
+    require("./goat_celebrate01.png"),
   ],
 
   walk:[

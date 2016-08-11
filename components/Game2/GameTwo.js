@@ -31,18 +31,17 @@ import goatCharacter from "../../sprites/goat/goatCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [450,250];
+const endCoordinates = [450,200];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
 const startTop = -200;
 const endTopSign = -15;
 const endTopCan = 80;
 
-
 const sprite2Start = [startLeft,startTop];
 
-const creatureStart = [Window.width+150,Window.height-190];
-const creatureEnd = [Window.width-200,Window.height-190];
+const creatureStart = [800,115];
+const creatureEnd = [Window.width-250,115];
 
 class GameTwo extends Component {
 
@@ -135,10 +134,9 @@ class GameTwo extends Component {
       animation: "default",
     }
 
-    phase = 0;
+    readyToEat = false;
 
   }
-
 
 
   componentDidMount() {
@@ -204,8 +202,7 @@ class GameTwo extends Component {
                       creatureKey2: Math.random(),
                       creatureKey3: Math.random(),
                       creatureTween2: tweenMove(creatureEnd,creatureStart),
-                      creatureTween3: tweenMove([600,115],[Window.width-250,115]),
-                      animation: "default",
+                      creatureTween3: tweenMove(creatureStart, creatureEnd),
                      })
         break;
     }
@@ -224,46 +221,48 @@ class GameTwo extends Component {
   }
 
   onFoodPress = () => {
-
+    readyToEat = true;
     if (!this.state.foodPressed) {
       this.setState({foodTween: tweenFall,
                      foodKey: Math.random(),
                      signTween: tweenTimeout(endTopSign,startTop),
                      signKey: Math.random(),
-                     onboarding: this.state.onboarding+1,
                      foodPressed: true});
-      //setTimeout(this.toggleCreatureCharacter.bind(this),2000);
-      if (this.state.onboarding === 3) {
-        this.setState({animation: "celebrate",
-                       creatureKey3: Math.random(),
-                       creatureTween3: tweenStatic([Window.width-250,115])});
-        setTimeout(this.nextLevel,3000);
-      }
     }
   }
 
   onTweenEndFood = () => {
-    switch(phase) {
-      case 0:
-        phase++
-        break;
+    switch(this.state.onboarding) {
       case 1:
-        phase++
+        if (readyToEat) {
+          this.setState({animation: "eat", creatureKey1: Math.random()})
+        }
         break;
       case 2:
-        phase++;
-        this.setState({animation: "eat",creatureKey1: Math.random()});
+        if (readyToEat) {
+          this.setState({animation: "eat", creatureKey2: Math.random()})
+        }
         break;
       case 3:
-        phase++
+        if (readyToEat) {
+          this.setState({animation: "eat", creatureKey3: Math.random()})
+        }
         break;
     }
+    readyToEat = false;
   }
 
   onTweenEndCreature = () => {
+    //readyToEat = true;
     switch(this.state.onboarding) {
       case 1:
-        this.setState({creatureTween1: tweenStatic(creatureEnd), creatureKey1: Math.random()})
+        this.setState({creatureTween1: tweenStatic(creatureEnd)})
+        break;
+      case 2:
+        this.setState({creatureTween2: tweenStatic(creatureEnd)})
+        break;
+      case 3:
+        this.setState({creatureTween3: tweenStatic([Window.width-250,115])})
         break;
     }
   }
@@ -271,16 +270,30 @@ class GameTwo extends Component {
   onAnimationFinish(animationKey, creatureKey) {
     switch(animationKey) {
       case "walk":
-      this.setState({animation: "default",creatureKey: Math.random()})
+        this.setState({animation: "default"})
         break;
       case "celebrate":
-        this.toggleCreatureCharacter();
-        this.setState({animation: "walk",creatureKey: Math.random()})
-        this.
+        this.setState({onboarding: this.state.onboarding+1})
+        this.setState({animation: "walk"})
+        if (this.state.onboarding === 4) {
+          setTimeout(this.nextLevel,1000)
+        } else {
+          this.toggleCreatureCharacter();
+        }
         break;
       case "eat":
-        console.warn("yo")
-        this.setState({animation: "celebrate",creatureKey: Math.random()})
+        this.setState({animation: "celebrate"})
+        switch(this.state.onboarding) {
+          case 1:
+            this.setState({creatureKey1: Math.random()})
+            break;
+          case 2:
+            this.setState({creatureKey2: Math.random()})
+            break;
+          case 3:
+            this.setState({creatureKey3: Math.random()})
+            break;
+        }
         break;
     }
   }
@@ -294,12 +307,11 @@ class GameTwo extends Component {
       loop: false,
     };
 
-
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: 115, height: 160}}
+                    size={{width: 256, height: 256}}
                     draggable={false}
                     character={mammalCharacter}
                     tweenStart={"auto"}
@@ -307,15 +319,19 @@ class GameTwo extends Component {
                     key={this.state.creatureKey1}
                     spriteAnimationKey={this.state.animation}
                     loopAnimation={false}
-                    tweenHasEnded={this.onTweenEnd}
+                    tweenHasEnded={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: 115, height: 160}}
+                    size={{width: 256, height: 256}}
                     draggable={false}
                     character={goatCharacter}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
-                    key={this.state.creatureKey2}/>
+                    key={this.state.creatureKey2}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    tweenHasEnded={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -50, left: Window.width - 120}}
                     size={{width: 256, height: 256}}
                     draggable={false}
@@ -324,7 +340,9 @@ class GameTwo extends Component {
                     tween={this.state.creatureTween3}
                     key={this.state.creatureKey3}
                     spriteAnimationKey={this.state.animation}
-                    loopAnimation={false}/>
+                    loopAnimation={false}
+                    tweenHasEnded={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
