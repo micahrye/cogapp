@@ -15,6 +15,7 @@ import appleCharacter from "../../sprites/apple/appleCharacter";
 import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
+import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCharacter";
 
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -35,11 +36,15 @@ class GameSix extends React.Component {
       numbers: undefined,
       foodKey: Math.random(),
       omnivoreKey: Math.random(),
+      thoughtBubble: Math.random(),
+      showText: false,
     };
     this.trialNum = 1;
     this.numbers = [];
     this.omnivoreSpriteAnimationKey = 'default';
+    this.thoughtBubbleSpriteAnimationKey = 'default';
     this.showFood = [true, true, true, true]; // the 4 foods on the signs
+    this.showThoughtBubble = true;
   }
 
   componentDidMount() {
@@ -53,6 +58,7 @@ class GameSix extends React.Component {
     if(this.props.route.trialNum != undefined){ // is undefined on first load
       this.trialNum = this.props.route.trialNum;
     }
+
     if(this.trialNum <= 3){ // first 3 trials only have 1 number
       this.setNumber();
     }
@@ -61,6 +67,15 @@ class GameSix extends React.Component {
         this.setNumber();
       }
     }
+
+    if(this.trialNum === 1){ // on first trial, bubble appear animation occurs
+      this.thoughtBubbleSpriteAnimationKey = 'appear';
+      this.setState({thoughtBubbleKey: Math.random()});
+    }
+    else{
+      this.setState({showText: true}); // numbers appear immediately on later trials
+    } 
+
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0], // first number in sequence is target number
@@ -125,6 +140,7 @@ class GameSix extends React.Component {
     this.omnivoreSpriteAnimationKey = 'eat';
     this.setState({omnivoreKey: Math.random()});
     this.showFood[signKey - 1] = false;
+    this.showThoughtBubble = false;
   }
 
   disgust(signKey){
@@ -151,6 +167,9 @@ class GameSix extends React.Component {
     }
     else if(animationKey === 'celebrate' || animationKey === 'disgust'){
       this.shiftNumbers(); // get ready for next trial
+    }
+    else if(animationKey === 'appear'){
+      this.setState({showText: true});
     }
   }
 
@@ -195,11 +214,25 @@ class GameSix extends React.Component {
         <View style={styles.container}>
           <AnimatedSprite 
             key={this.state.omnivoreKey}
-            coordinates={{top: 410, left: 810}}
-            size={{width: 210, height: 210}}
+            coordinates={{top: 320, left: 650}}
+            size={{width: 275, height: 275}}
             character={omnivoreCharacter}
             spriteAnimationKey={this.omnivoreSpriteAnimationKey}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+          
+          <AnimatedSprite 
+            key={this.state.thoughtBubbleKey}
+            coordinates={{top: 200, left: 700}}
+            size={{width: 330, height: 200}}
+            character={thoughtBubbleCharacter}
+            spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+          
+          {this.state.showText ?  
+            <View style={styles.textHolder}>
+              <Text style={styles.thoughtText}>{this.state.numbers}</Text>
+            </View>
+          : null}
 
           <View style={styles.itemContainer}>
             <AnimatedSprite
@@ -279,13 +312,9 @@ class GameSix extends React.Component {
             : null}
           </View>
 
-          
 
-          <View style={styles.thoughtBubbles}>
-            <View style={this.getBubbleStyle()}><Text style={styles.thoughtText}>{this.state.numbers}</Text></View>
-            <View style={styles.bubble2} />
-            <View style={styles.bubble3} />
-          </View>
+
+
         </View>
       </Image>
     );
@@ -319,34 +348,14 @@ const styles = StyleSheet.create({
     height: 75,
     width: 75,
   },
-  thoughtBubbles: {
-    height: 200,
-    width: 500,
-    //borderWidth: 2,
-    top: 210,
-    left: 750,
-    position: 'absolute',
-  },
-  bubble2: {
-    borderWidth: 1,
-    borderRadius: 100,
-    height: 50,
-    width: 50,
-    left: 65,
-    top: -20,
-  },
-  bubble3: {
-    borderWidth: .5,
-    borderRadius: 100,
-    height: 30,
-    width: 30,
-    left: 100,
-    top: -10,
-  },
   thoughtText: {
-    fontSize: 70,
-    top: 10,
+    fontSize: 66,
   },
+  textHolder: {
+    top: 244,
+    left: 908,
+    position: 'absolute'
+  }
 });
 
 export default GameSix;

@@ -16,6 +16,8 @@ import AnimatedSprite from "../animatedSprite";
 // sprites
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
+import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCharacter";
+
 
 const Window = Dimensions.get('window');
 
@@ -125,6 +127,12 @@ class GameSixLoading extends Component {
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'disgust'}
+              fps={10}/>
+            <AnimatedSprite 
+              coordinates={{top:250,left:550}}
+              size={{width:100,height:100}}
+              character={thoughtBubbleCharacter}
+              spriteAnimationKey={'appear'}
               fps={10}/>
           </View>
         </View>
