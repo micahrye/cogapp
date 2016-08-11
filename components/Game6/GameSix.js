@@ -17,7 +17,6 @@ import signCharacter from "../../sprites/sign/signCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
 import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCharacter";
 
-
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
@@ -36,7 +35,7 @@ class GameSix extends React.Component {
       numbers: undefined,
       foodKey: Math.random(),
       omnivoreKey: Math.random(),
-      thoughtBubble: Math.random(),
+      thoughtBubbleKey: Math.random(),
       showText: false,
     };
     this.trialNum = 1;
@@ -44,7 +43,6 @@ class GameSix extends React.Component {
     this.omnivoreSpriteAnimationKey = 'default';
     this.thoughtBubbleSpriteAnimationKey = 'default';
     this.showFood = [true, true, true, true]; // the 4 foods on the signs
-    this.showThoughtBubble = true;
   }
 
   componentDidMount() {
@@ -73,7 +71,9 @@ class GameSix extends React.Component {
       this.setState({thoughtBubbleKey: Math.random()});
     }
     else{
-      this.setState({showText: true}); // numbers appear immediately on later trials
+     // setTimeout(()=>{ // so that numbers appear after thought bubble
+        this.setState({showText: true}); // numbers appear immediately on later trials
+      //}, 100);
     } 
 
     this.setState({
@@ -106,20 +106,18 @@ class GameSix extends React.Component {
   }
 
   checkTarget(left, top, signKey){
-    // console.warn(left);
-    // console.warn(top);
     let withinRange = false;
-    if(top > 430){
-      if(signKey === 1 && left > 720){
+    if(top > 370 && top < 530){
+      if(signKey === 1 && left > 560 && left < 780){
         withinRange = true;
       }
-      else if(signKey === 2 && left > 560){
+      else if(signKey === 2 && left > 400 && left < 600){
         withinRange = true;
       }
-      else if(signKey === 3 && left > 380){
+      else if(signKey === 3 && left > 220 && left < 420){
         withinRange = true;
       }
-      else if(signKey === 4 && left > 240){
+      else if(signKey === 4 && left > 80 && left < 280){
         withinRange = true;
       }
 
@@ -140,7 +138,6 @@ class GameSix extends React.Component {
     this.omnivoreSpriteAnimationKey = 'eat';
     this.setState({omnivoreKey: Math.random()});
     this.showFood[signKey - 1] = false;
-    this.showThoughtBubble = false;
   }
 
   disgust(signKey){
@@ -164,6 +161,7 @@ class GameSix extends React.Component {
     if(animationKey === 'eat'){
       this.omnivoreSpriteAnimationKey = 'celebrate';
       this.setState({omnivoreKey: Math.random()});
+
     }
     else if(animationKey === 'celebrate' || animationKey === 'disgust'){
       this.shiftNumbers(); // get ready for next trial
@@ -222,12 +220,12 @@ class GameSix extends React.Component {
           
           <AnimatedSprite 
             key={this.state.thoughtBubbleKey}
-            coordinates={{top: 200, left: 700}}
+            coordinates={{top: 196, left: 700}}
             size={{width: 330, height: 200}}
             character={thoughtBubbleCharacter}
             spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
-          
+        
           {this.state.showText ?  
             <View style={styles.textHolder}>
               <Text style={styles.thoughtText}>{this.state.numbers}</Text>
@@ -352,7 +350,7 @@ const styles = StyleSheet.create({
     fontSize: 66,
   },
   textHolder: {
-    top: 244,
+    top: 240,
     left: 908,
     position: 'absolute'
   }

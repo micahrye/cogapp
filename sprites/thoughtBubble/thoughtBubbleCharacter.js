@@ -16,8 +16,8 @@ const thoughtBubbleCharacter = {
     require("./thought_bubbles_game6_07.png"),
     require("./thought_bubbles_game6_08.png"),
     require("./thought_bubbles_game6_09.png"),
-    require("./thought_bubbles_game6_10.png"),
-    require("./thought_bubbles_game6_11.png"),
+     require("./thought_bubbles_game6_10.png"),
+    // require("./thought_bubbles_game6_11.png"),
   ],
 
 };

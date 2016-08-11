@@ -133,7 +133,7 @@ class GameSixLoading extends Component {
               size={{width:100,height:100}}
               character={thoughtBubbleCharacter}
               spriteAnimationKey={'appear'}
-              fps={10}/>
+              fps={20}/>
           </View>
         </View>
         <View>
