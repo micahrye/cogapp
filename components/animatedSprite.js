@@ -134,16 +134,9 @@ class AnimatedSprite extends React.Component{
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    if(this.props.tweenStart == "auto" /*&& !this.props.tweenStop*/){
+    if(this.props.tweenStart == "auto" && this.props.tween != null){
       this.configureTween();
     }
-
-    // if(this.props.tweenStop){
-    //   console.warn('stop');
-    //   this.stopTween = true;
-    //   let stopValues = this.configureTween();
-    //   console.warn(stopValues);
-    // }
 
     if(this.props.sound){
       this._Sound['playSound'](this.props.soundFile);

@@ -20,12 +20,8 @@ import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCha
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-const startLeft = 15;
-const startTop = 35;
-const spacing = 600;
-const sprite1Start = [startLeft,startTop];
-const sprite2Start = [startLeft+spacing,startTop];
-const sprite3Start = [startLeft+spacing*2,startTop];
+const FOOD_START_X = [40, 30, 20, 30];
+const FOOD_START_Y = [95, 90, 85, 90];
 
 class GameSix extends React.Component {
   constructor(props) {
@@ -33,59 +29,44 @@ class GameSix extends React.Component {
     this.state = {
       targetNumber: undefined,
       numbers: undefined,
-      foodKey: Math.random(),
+      foodKeys: [0,1,2,3],
       omnivoreKey: Math.random(),
       thoughtBubbleKey: Math.random(),
       showText: false,
+      showFood: [true, true, true, true], // the 4 foods on the signs
+      foodTween: null,
     };
     this.trialNum = 1;
     this.numbers = [];
     this.omnivoreSpriteAnimationKey = 'default';
     this.thoughtBubbleSpriteAnimationKey = 'default';
-    this.showFood = [true, true, true, true]; // the 4 foods on the signs
+    this.showFood = [true, true, true, true]; 
+    this.gameTimeout = undefined;
+    this.timeoutNumberAppear = undefined;
+    this.foodTween = null;
+    this.foodKeys = [0,1,2,3]
   }
 
   componentDidMount() {
-    if(this.trialNum === 1){
-      this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
-        this.props.navigator.replace({
-          id: 'Main',
-        });
-      }, 120000);
-    }
-    if(this.props.route.trialNum != undefined){ // is undefined on first load
-      this.trialNum = this.props.route.trialNum;
-    }
+    this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
+      this.props.navigator.replace({
+        id: 'Main',
+      });
+    }, 120000);
 
-    if(this.trialNum <= 3){ // first 3 trials only have 1 number
-      this.setNumber();
-    }
-    else{
-      for(let i = 0; i < 3; i++){ // on third trial, set up sequence of 3 numbers
-        this.setNumber();
-      }
-    }
-
-    if(this.trialNum === 1){ // on first trial, bubble appear animation occurs
-      this.thoughtBubbleSpriteAnimationKey = 'appear';
-      this.setState({thoughtBubbleKey: Math.random()});
-    }
-    else{
-     // setTimeout(()=>{ // so that numbers appear after thought bubble
-        this.setState({showText: true}); // numbers appear immediately on later trials
-      //}, 100);
-    } 
+    this.setNumber();
+    this.thoughtBubbleSpriteAnimationKey = 'appear';  
 
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0], // first number in sequence is target number
+      thoughtBubbleKey: Math.random(),
     });
   }
 
   componentWillUnmount() {
-    if(this.trialNum > 3){
-      clearTimeout(this.gameTimeout); // only clear timeout if navigating away at end, not during first 3 trials
-    }
+    clearTimeout(this.gameTimeout); // only clear timeout if navigating away at end, not during first 3 trials
+    clearTimeout(this.timeoutNumberAppear);
   }
 
   // next number randomly chosen between 1 2 3 and 4
@@ -124,32 +105,57 @@ class GameSix extends React.Component {
       if(withinRange){
         if(signKey === this.state.targetNumber){
           this.eat(signKey);
-          this.attempt = 'success';
         }
         else{
-          this.attempt = 'fail';
           this.disgust(signKey);
         }
       }
-    };
+    }
+    if(!withinRange){ // move food back to sign
+      this.setState({
+        foodTween: {
+          tweenType: "move",
+          startXY: [left, top],
+          endXY: [FOOD_START_X[signKey - 1], FOOD_START_Y[signKey -1]],
+          duration: 0,
+          loop: false,
+        }
+      });
+      this.foodKeys[signKey - 1] = Math.random();
+      this.setState({foodKeys: this.foodKeys});
+    }
+
   }
 
   eat(signKey){
     this.omnivoreSpriteAnimationKey = 'eat';
-    this.setState({omnivoreKey: Math.random()});
     this.showFood[signKey - 1] = false;
+    this.setState({
+      omnivoreKey: Math.random(),
+      showFood: this.showFood,
+    });                    
   }
 
   disgust(signKey){
     this.omnivoreSpriteAnimationKey = 'disgust';
-    this.setState({omnivoreKey: Math.random()});
     this.showFood[signKey - 1] = false;
+    this.setState({
+      omnivoreKey: Math.random(),
+      showFood: this.showFood,
+    });
   }
 
   // remove target number, add new number to sequence, and set new target number
   shiftNumbers(){
     this.numbers.shift();
-    this.setNumber();
+    if(this.trialNum === 3){
+      for(let i = 0; i < 3; i++){ // on third trial, set up sequence of 3 numbers
+        this.setNumber();
+      }
+    }
+    else{
+      this.setNumber();
+    }
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0],
@@ -161,26 +167,23 @@ class GameSix extends React.Component {
     if(animationKey === 'eat'){
       this.omnivoreSpriteAnimationKey = 'celebrate';
       this.setState({omnivoreKey: Math.random()});
-
     }
     else if(animationKey === 'celebrate' || animationKey === 'disgust'){
       this.shiftNumbers(); // get ready for next trial
     }
     else if(animationKey === 'appear'){
-      this.setState({showText: true});
+      this.timeoutNumberAppear = setTimeout(()=>{ // so number appears once thought bubble is set
+        this.setState({showText: true});
+      }, 100)  
     }
   }
 
   goToNextTrial(){
-    if(this.trialNum > 3){
-      this.showFood = [true, true, true, true];
-      this.setState({foodKey: Math.random()}); // so food returns to its sign
-      return;
-    }
-    this.props.navigator.replace({
-      id: "GameSix",
-      trialNum: this.trialNum + 1,
-    });
+    this.showFood = [true, true, true, true];
+    this.setState({
+      showFood: this.showFood,
+    })
+    this.trialNum++;
   }
   
   getBubbleStyle(){
@@ -240,14 +243,16 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix1'
               loopAnimation={true}/>
-            {this.showFood[0] ?
+            {this.state.showFood[0] ?
               <AnimatedSprite 
-                key={this.state.foodKey}
+                key={this.state.foodKeys[0]}
                 coordinates={{top: 95, left: 40}}
                 size={{width: 70, height: 70}}
                 draggable={true}
                 draggedTo={(left, top) => this.checkTarget(left, top, 1)}
-                character={appleCharacter}/>
+                character={appleCharacter}
+                tween={this.state.foodTween}
+                tweenStart='auto'/>
             : null}
           </View>
 
@@ -259,9 +264,9 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix2'
               loopAnimation={true}/>
-            {this.showFood[1] ?
+            {this.state.showFood[1] ?
               <AnimatedSprite 
-                key={this.state.foodKey}
+                key={this.state.foodKeys[1]}
                 coordinates={{top: 90, left: 30}}
                 size={{width: 90, height: 90}}
                 draggable={true}
@@ -278,9 +283,9 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}/>
-            {this.showFood[2] ?
+            {this.state.showFood[2] ?
               <AnimatedSprite 
-                key={this.state.foodKey}
+                key={this.state.foodKeys[2]}
                 coordinates={{top: 85, left: 20}}
                 size={{width: 100, height: 100}}
                 draggable={true}
@@ -299,9 +304,9 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix4'
               loopAnimation={true}/>
-            {this.showFood[3] ?
+            {this.state.showFood[3] ?
               <AnimatedSprite 
-                key={this.state.foodKey}
+                key={this.state.foodKeys[3]}
                 coordinates={{top: 90, left: 30}}
                 size={{width: 80, height: 80}}
                 draggable={true}
@@ -338,13 +343,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
     height: 250,
     width: 140,
-    //borderWidth: 2,
-  },
-  circle: {
-    borderWidth: 3,
-    borderRadius: 100,
-    height: 75,
-    width: 75,
   },
   thoughtText: {
     fontSize: 66,
