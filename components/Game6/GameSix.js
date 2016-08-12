@@ -20,9 +20,6 @@ import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCha
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-const FOOD_START_X = [40, 30, 20, 30];
-const FOOD_START_Y = [95, 90, 85, 90];
-
 class GameSix extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +42,9 @@ class GameSix extends React.Component {
     this.timeoutNumberAppear = undefined;
     this.foodTween = null;
     this.foodKeys = [0,1,2,3]
+    this.foodStartX = [40, 30, 20, 30];
+    this.foodStartY = [95, 90, 85, 90];
+
   }
 
   componentDidMount() {
@@ -116,7 +116,7 @@ class GameSix extends React.Component {
         foodTween: {
           tweenType: "move",
           startXY: [left, top],
-          endXY: [FOOD_START_X[signKey - 1], FOOD_START_Y[signKey -1]],
+          endXY: [this.foodStartX[signKey - 1], this.foodStartY[signKey -1]],
           duration: 0,
           loop: false,
         }
@@ -124,7 +124,6 @@ class GameSix extends React.Component {
       this.foodKeys[signKey - 1] = Math.random();
       this.setState({foodKeys: this.foodKeys});
     }
-
   }
 
   eat(signKey){
@@ -145,31 +144,13 @@ class GameSix extends React.Component {
     });
   }
 
-  // remove target number, add new number to sequence, and set new target number
-  shiftNumbers(){
-    this.numbers.shift();
-    if(this.trialNum === 3){
-      for(let i = 0; i < 3; i++){ // on third trial, set up sequence of 3 numbers
-        this.setNumber();
-      }
-    }
-    else{
-      this.setNumber();
-    }
-    this.setState({
-      numbers: this.numbers,
-      targetNumber: this.numbers[0],
-    });
-    this.goToNextTrial();
-  }
-
   onAnimationFinish(animationKey){
     if(animationKey === 'eat'){
       this.omnivoreSpriteAnimationKey = 'celebrate';
       this.setState({omnivoreKey: Math.random()});
     }
     else if(animationKey === 'celebrate' || animationKey === 'disgust'){
-      this.shiftNumbers(); // get ready for next trial
+      this.goToNextTrial(); // get ready for next trial
     }
     else if(animationKey === 'appear'){
       this.timeoutNumberAppear = setTimeout(()=>{ // so number appears once thought bubble is set
@@ -184,29 +165,41 @@ class GameSix extends React.Component {
       showFood: this.showFood,
     })
     this.trialNum++;
+    this.shiftNumbers();
   }
-  
-  getBubbleStyle(){
-    let width = undefined;
-    let padding = undefined
-    if(this.trialNum <= 3){
-      width = 150;
-      padding = 50;
+
+  // remove target number, add new number to sequence, and set new target number
+  shiftNumbers(){
+    this.numbers.shift();
+    if(this.trialNum === 4){
+      for(let i = 0; i < 3; i++){ // on 4th trial, set up sequence of 3 numbers
+        this.setNumber();
+      }
     }
     else{
-      width = 400;
-      padding = 50;
+      this.setNumber();
     }
-    return (
+    this.setState({
+      numbers: this.numbers,
+      targetNumber: this.numbers[0],
+    });
+  }
+
+  getTextHolderStyle() {
+    let left = undefined;
+    if(this.trialNum < 4){
+      left = 940;
+    }
+    else{
+      left = 908;
+    }
+    return(
       {
-        borderWidth: 1.5,
-        borderRadius: 100,
-        height: 120,
-        width: width,
-        left: 100,
-        paddingLeft: padding,
+        top: 240,
+        left: left,
+        position: 'absolute'
       }
-    );
+    )
   }
 
   render(){
@@ -230,7 +223,7 @@ class GameSix extends React.Component {
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
         
           {this.state.showText ?  
-            <View style={styles.textHolder}>
+            <View style={this.getTextHolderStyle()}>
               <Text style={styles.thoughtText}>{this.state.numbers}</Text>
             </View>
           : null}
@@ -314,10 +307,6 @@ class GameSix extends React.Component {
                 character={grassCharacter}/>
             : null}
           </View>
-
-
-
-
         </View>
       </Image>
     );
@@ -347,11 +336,6 @@ const styles = StyleSheet.create({
   thoughtText: {
     fontSize: 66,
   },
-  textHolder: {
-    top: 240,
-    left: 908,
-    position: 'absolute'
-  }
 });
 
 export default GameSix;
