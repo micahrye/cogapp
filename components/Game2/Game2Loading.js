@@ -47,7 +47,7 @@ class GameTwoLoading extends Component {
     Animated.timing(
       this.state.bar,
       {
-        toValue: 200,
+        toValue: 240,
         easing: Easing.linear,
         duration: LoadingTime,
       }

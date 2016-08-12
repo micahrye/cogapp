@@ -21,7 +21,7 @@ import bugCharacter from "../../sprites/bug/bugCharacter";
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 1500;
+const LoadingTime = 500;
 
 class BugZapLoading extends Component {
 
@@ -48,7 +48,7 @@ class BugZapLoading extends Component {
     Animated.timing(
       this.state.bar,
       {
-        toValue: 200,
+        toValue: 240,
         easing: Easing.linear,
         duration: LoadingTime,
       }
@@ -115,7 +115,7 @@ class BugZapLoading extends Component {
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'celebrate'}
-              fps={10}/>
+              fps={40}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
@@ -127,7 +127,7 @@ class BugZapLoading extends Component {
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'eat'}
-              fps={10}/>
+              fps={40}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}

@@ -21,7 +21,7 @@ import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCha
 
 const Window = Dimensions.get('window');
 
-const LoadingTime = 700;
+const LoadingTime = 500;
 
 class GameSixLoading extends Component {
 
@@ -48,7 +48,7 @@ class GameSixLoading extends Component {
     Animated.timing(
       this.state.bar,
       {
-        toValue: 200,
+        toValue: 240,
         easing: Easing.linear,
         duration: LoadingTime,
       }
@@ -115,25 +115,25 @@ class GameSixLoading extends Component {
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'eat'}
-              fps={10}/>
+              fps={20}/>
              <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'celebrate'}
-              fps={20}/>
+              fps={30}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'disgust'}
-              fps={10}/>
+              fps={20}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={thoughtBubbleCharacter}
               spriteAnimationKey={'appear'}
-              fps={20}/>
+              fps={30}/>
           </View>
         </View>
         <View>
