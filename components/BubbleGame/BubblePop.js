@@ -202,14 +202,14 @@ class BubblePop extends React.Component {
   foodFall(){
     if(this.stopValuesY > 350){ // if food needs to go up first to drop into mouth
       this.initialTween = {
-        tweenType: 'curve-fall',
+        tweenType: 'curve-spin',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400], 
         duration: 1000,
         loop: false,
       }
       this.tweenDown = {
-        tweenType: 'curve-fall',
+        tweenType: 'curve-spin',
         startXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230],
         duration: 500,
@@ -219,7 +219,7 @@ class BubblePop extends React.Component {
     }
     else{
       this.fullTween = {
-        tweenType: 'curve-fall',
+        tweenType: 'curve-spin',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230], 
         duration: 1000,
