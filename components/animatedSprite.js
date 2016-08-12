@@ -381,6 +381,7 @@ AnimatedSprite.propTypes = {
   loopAnimation: React.PropTypes.bool,
   spriteKey: React.PropTypes.number,
   hitSlop: React.PropTypes.object,
+  rotate: React.PropTypes.array,
   //onPress
   //timeSinceMounted
   //draggedTo

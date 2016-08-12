@@ -477,10 +477,18 @@ class Tweener extends React.Component{
           state.rotateZ,
           {
             toValue: 400,
-            easing: Easing.quad,
+            easing: Easing.linear,
             duration: options.duration,
           }
         ),
+        Animated.timing(
+          state.scale,
+          {
+            toValue: 0.5,
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        )
       ]),
       Animated.timing(
         state.top,

@@ -31,7 +31,7 @@ import goatCharacter from "../../sprites/goat/goatCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [450,200];
+const endCoordinates = [480,180];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
 const startTop = -200;
@@ -132,9 +132,11 @@ class GameTwo extends Component {
       leverPressed: false,
       foodPressed: false,
       animation: "default",
+      rotate: new Animated.Value(40),
     }
 
     readyToEat = false;
+
 
   }
 
@@ -181,6 +183,17 @@ class GameTwo extends Component {
 
     }
 
+  }
+
+  flip(num) {
+    Animated.timing(
+      this.state.rotate,
+      {
+        toValue: num,
+        easing: Easing.linear,
+        duration: 500,
+      }
+    ).start();
   }
 
 
@@ -275,10 +288,11 @@ class GameTwo extends Component {
       case "celebrate":
         this.setState({onboarding: this.state.onboarding+1})
         this.setState({animation: "walk"})
+        this.flip(100);
         if (this.state.onboarding === 4) {
           setTimeout(this.nextLevel,1000)
         } else {
-          this.toggleCreatureCharacter();
+          setTimeout(this.toggleCreatureCharacter.bind(this),500);
         }
         break;
       case "eat":
@@ -296,6 +310,15 @@ class GameTwo extends Component {
         }
         break;
     }
+  }
+
+  interpolate() {
+    ro = this.state.rotate.interpolate({
+       inputRange: [0,100],
+       outputRange: ["0deg","180deg"],
+     });
+
+    return ro;
   }
 
   render() {
@@ -318,6 +341,7 @@ class GameTwo extends Component {
                     tween={this.state.creatureTween1}
                     key={this.state.creatureKey1}
                     spriteAnimationKey={this.state.animation}
+                    rotate={[{rotateY: "0deg"}]}
                     loopAnimation={false}
                     tweenHasEnded={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
@@ -328,6 +352,7 @@ class GameTwo extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
                     key={this.state.creatureKey2}
+                    rotate={[{rotateY:"180deg"}]}
                     spriteAnimationKey={this.state.animation}
                     loopAnimation={false}
                     tweenHasEnded={this.onTweenEndCreature}
@@ -340,6 +365,7 @@ class GameTwo extends Component {
                     tween={this.state.creatureTween3}
                     key={this.state.creatureKey3}
                     spriteAnimationKey={this.state.animation}
+                    rotate={[{rotateY:"0deg"}]}
                     loopAnimation={false}
                     tweenHasEnded={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
