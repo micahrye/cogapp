@@ -24,7 +24,7 @@ const mammalCharacter = {
   ],
 
   celebrate:[
-    require("./dog_celebrate01.png"),
+    //require("./dog_celebrate01.png"), // bc the first celebrate is already part of default
     require("./dog_celebrate02.png"),
     require("./dog_celebrate03.png"),
     require("./dog_celebrate04.png"),

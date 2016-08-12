@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 
 import AnimatedSprite from "../animatedSprite";
-import bubbleCharacter from "../../sprites/bubble/bubbleCharacterLarge";
-import frogCharacter from "../../sprites/frog/frogCharacter";
+import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -24,8 +23,9 @@ class GameFour extends React.Component {
     super(props);
     this.state = {
       moveableBoxes: [],
-      key: 0,
-      spriteAnimationKey: 'default',
+      mammalKey: 0,
+      mammalSpriteAnimationKey: 'default',
+      boxSpriteAnimationKey: 'default',
     }
   }
 
@@ -45,8 +45,15 @@ class GameFour extends React.Component {
     }
 
     // create moveable boxes at bottom of matrix
+    let correctChoice = Math.floor(Math.random() * 3); // either 0, 1, or 2
     let boxes = [];
     for(let i=0; i < 3; i++){
+      if(i === correctChoice){
+        this.boxSpriteAnimationKey = 'green';
+      }
+      else{
+        this.boxSpriteAnimationKey = 'red';
+      }
       boxes.push(
         <AnimatedSprite
           key={i}
@@ -55,7 +62,9 @@ class GameFour extends React.Component {
           size={{width: 60, height: 60}}
           draggable={true}
           draggedTo={this.checkLocation.bind(null, i)}
-          character={squareCharacter}/>
+          character={squareCharacter}
+          spriteAnimationKey={this.boxSpriteAnimationKey}
+          loopAnimation={true}/>
       );
     }
     this.setState({moveableBoxes: boxes});
@@ -69,15 +78,25 @@ class GameFour extends React.Component {
         if(numBox !== item.props.spriteKey){
           boxes.push(item)
         }
+        else{
+          if(item.props.spriteAnimationKey === 'green'){ // if correct box chosen
+            this.celebrate();
+          }
+          else{
+            this.disgust();
+          }
+        }
       });
       this.setState({moveableBoxes: boxes});
-      this.frogCelebrate();
     }
   }
 
-  // frog celebrates once when square dissapears
-  frogCelebrate() {
-    this.setState({key: Math.random(), spriteAnimationKey: 'celebrate'});
+  celebrate() {
+    this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'celebrate'});
+  }
+
+  disgust() {
+    this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'disgust'});
   }
 
   getBoxStyles(boxNum) {
@@ -106,12 +125,12 @@ class GameFour extends React.Component {
             {this.state.moveableBoxes}
           </View>
           <AnimatedSprite
-            key={this.state.key}
+            key={this.state.mammalKey}
             coordinates={{top: 100, left: SCREEN_WIDTH-200}}
             size={{width: 256, height: 256}}
             draggable={false}
-            character={frogCharacter}
-            spriteAnimationKey={this.state.spriteAnimationKey}
+            character={mammalCharacter}
+            spriteAnimationKey={this.state.mammalSpriteAnimationKey}
             />
         </View>
       </Image>

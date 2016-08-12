@@ -14,15 +14,14 @@ import {
 import AnimatedSprite from "../animatedSprite";
 
 // sprites
-import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
-import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCharacter";
+import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 
 
 const Window = Dimensions.get('window');
 
 const LoadingTime = 500;
 
-class GameSixLoading extends Component {
+class GameFourLoading extends Component {
 
     constructor(props) {
     super(props);
@@ -36,7 +35,7 @@ class GameSixLoading extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.navigator.replace({
-        id: 'GameSix',
+        id: 'GameFour',
       });
     },LoadingTime);
     this.barLoad();
@@ -112,27 +111,21 @@ class GameSixLoading extends Component {
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={omnivoreCharacter}
+              character={mammalCharacter}
               spriteAnimationKey={'eat'}
               fps={20}/>
              <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={omnivoreCharacter}
+              character={mammalCharacter}
               spriteAnimationKey={'celebrate'}
-              fps={30}/>
-            <AnimatedSprite 
-              coordinates={{top:250,left:550}}
-              size={{width:100,height:100}}
-              character={omnivoreCharacter}
-              spriteAnimationKey={'disgust'}
               fps={20}/>
             <AnimatedSprite 
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={thoughtBubbleCharacter}
-              spriteAnimationKey={'appear'}
-              fps={30}/>
+              character={mammalCharacter}
+              spriteAnimationKey={'disgust'}
+              fps={20}/>
           </View>
         </View>
         <View>
@@ -160,5 +153,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GameSixLoading;
+export default GameFourLoading;
 
