@@ -242,23 +242,35 @@ class GameTwo extends Component {
                      signKey: Math.random(),
                      foodPressed: true});
     }
+    this.setState({animation:"openMouth"})
+    switch(this.state.onboarding) {
+      case 1:
+        this.setState({creatureKey1: Math.random()})
+        break;
+      case 2:
+        this.setState({creatureKey2: Math.random()})
+        break;
+      case 3:
+        this.setState({creatureKey3: Math.random()})
+        break;
+    }
   }
 
   onTweenEndFood = () => {
     switch(this.state.onboarding) {
       case 1:
         if (readyToEat) {
-          this.setState({animation: "eat", creatureKey1: Math.random()})
+          this.setState({animation: "chew", creatureKey1: Math.random()})
         }
         break;
       case 2:
         if (readyToEat) {
-          this.setState({animation: "eat", creatureKey2: Math.random()})
+          this.setState({animation: "chew", creatureKey2: Math.random()})
         }
         break;
       case 3:
         if (readyToEat) {
-          this.setState({animation: "eat", creatureKey3: Math.random()})
+          this.setState({animation: "chew", creatureKey3: Math.random()})
         }
         break;
     }
@@ -295,7 +307,7 @@ class GameTwo extends Component {
           setTimeout(this.toggleCreatureCharacter.bind(this),500);
         }
         break;
-      case "eat":
+      case "chew":
         this.setState({animation: "celebrate"})
         switch(this.state.onboarding) {
           case 1:
@@ -309,7 +321,22 @@ class GameTwo extends Component {
             break;
         }
         break;
+      case "openMouth":
+        this.setState({animation: "readyToEat"})
+        switch(this.state.onboarding) {
+          case 1:
+            this.setState({creatureKey1: Math.random()})
+            break;
+          case 2:
+            this.setState({creatureKey2: Math.random()})
+            break;
+          case 3:
+            this.setState({creatureKey3: Math.random()})
+            break;
+        }
+        break;
     }
+
   }
 
   interpolate() {

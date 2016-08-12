@@ -17,6 +17,22 @@ const mammalCharacter = {
     require("./dog_eat07.png"),
   ],
 
+  openMouth:[
+    require("./dog_eat01.png"),
+    require("./dog_eat02.png"),
+    require("./dog_eat03.png"),
+  ],
+
+  readyToEat:[
+    require("./dog_eat04.png"),
+  ],
+
+  chew:[
+    require("./dog_eat05.png"),
+    require("./dog_eat06.png"),
+    require("./dog_eat07.png"),
+  ],
+
   disgust:[
     require("./dog_disgust01.png"),
     require("./dog_disgust02.png"),

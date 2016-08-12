@@ -42,6 +42,22 @@ const goatCharacter = {
     require("./goat_eat07.png"),
   ],
 
+  openMouth:[
+    require("./goat_eat01.png"),
+    require("./goat_eat02.png"),
+    require("./goat_eat03.png"),
+  ],
+
+  readyToEat:[
+    require("./goat_eat04.png"),
+  ],
+
+  chew:[
+    require("./goat_eat05.png"),
+    require("./goat_eat06.png"),
+    require("./goat_eat07.png"),
+  ],
+
   disgust:[
     require("./goat_disgust01.png"),
     require("./goat_disgust02.png"),
