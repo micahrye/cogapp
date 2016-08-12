@@ -12,6 +12,7 @@ import {
 import AnimatedSprite from "../animatedSprite";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
+import grassCharacter from "../../sprites/grass/grassCharacter";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -25,8 +26,10 @@ class GameFour extends React.Component {
       moveableBoxes: [],
       mammalKey: 0,
       mammalSpriteAnimationKey: 'default',
-      boxSpriteAnimationKey: 'default',
+      showFood: false,
     }
+    this.boxSpriteAnimationKey = 'default';
+
   }
 
   componentDidMount() {
@@ -92,7 +95,11 @@ class GameFour extends React.Component {
   }
 
   celebrate() {
-    this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'celebrate'});
+    this.setState({
+      mammalKey: Math.random(), 
+      mammalSpriteAnimationKey: 'celebrate',
+      showFood: true,
+    });
   }
 
   disgust() {
@@ -130,9 +137,23 @@ class GameFour extends React.Component {
             size={{width: 256, height: 256}}
             draggable={false}
             character={mammalCharacter}
-            spriteAnimationKey={this.state.mammalSpriteAnimationKey}
-            />
+            spriteAnimationKey={this.state.mammalSpriteAnimationKey}/>
         </View>
+        {this.state.showFood ?
+          <AnimatedSprite 
+            key={Math.random()}
+            coordinates={{top: 200, left: 770}}
+            size={{width: 100, height: 100}}
+            tween={{
+              tweenType: 'curve-spin',
+              startXY: [770, 200],
+              endXY: [1000, 200], 
+              duration: 1000,
+              loop: false,
+            }}
+            tweenStart='auto'
+            character={grassCharacter}/>
+          : null}
       </Image>
     );
   }
