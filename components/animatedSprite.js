@@ -40,9 +40,12 @@ fps: object, how many frames per second to run the animations at
 /*Functions:
 onPress: passes up spriteKey
 draggedTo: passes up character's coordinates after drag
-timeSinceMounted: triggered on press, passes up spriteKey and time since character mounted in seconds
+timeSinceMounted: triggered on press, 
+  passes up spriteKey and time since character mounted in seconds
 stopTweenOnTouch: triggered when tweening character is pressed,
   stops tween, and passes up an array containing current x, y coordinates
+onTweenFinish: is triggered when a tween has finished, 
+  passes up spriteKey of character whose tween ended
 onAnimationFinish: is triggered when 'other' animation has finished,
   passes up current spriteAnimationKey
 getFrameIndex: passes up spriteAnimationKey and current frame of animation
@@ -313,7 +316,7 @@ class AnimatedSprite extends React.Component{
         options={tweenOptions}
         state={tweenState}
         stop={stopTween}
-        tweenHasEnded={(ended) => this.tweenHasEnded(ended)}
+        onTweenFinish={(ended) => this.tweenHasEnded(ended)}
         stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
     );
 
@@ -330,8 +333,8 @@ class AnimatedSprite extends React.Component{
 
   // notify parent that tween has ended
   tweenHasEnded(){
-    if(this.props.tweenHasEnded){
-      this.props.tweenHasEnded(this.props.spriteKey);
+    if(this.props.onTweenFinish){
+      this.props.onTweenFinish(this.props.spriteKey);
     }
   }
 

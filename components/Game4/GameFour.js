@@ -61,7 +61,7 @@ class GameFour extends React.Component {
         <AnimatedSprite
           key={i}
           spriteKey={i}
-          coordinates={{top: 300, left: (i*90) + 10}}
+          coordinates={{top: 300, left: (i*90) + 15}}
           size={{width: 60, height: 60}}
           draggable={true}
           draggedTo={this.checkLocation.bind(null, i)}
@@ -106,6 +106,10 @@ class GameFour extends React.Component {
     this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'disgust'});
   }
 
+  onTweenEnd(){
+    console.warn('here');
+  }
+
   getBoxStyles(boxNum) {
     if(boxNum === 8){ // last fixed box is dashed
       borderStyle = 'dashed';
@@ -133,7 +137,7 @@ class GameFour extends React.Component {
           </View>
           <AnimatedSprite
             key={this.state.mammalKey}
-            coordinates={{top: 100, left: SCREEN_WIDTH-200}}
+            coordinates={{top: 300, left: 800}}
             size={{width: 256, height: 256}}
             draggable={false}
             character={mammalCharacter}
@@ -146,12 +150,13 @@ class GameFour extends React.Component {
             size={{width: 100, height: 100}}
             tween={{
               tweenType: 'curve-spin',
-              startXY: [770, 200],
-              endXY: [1000, 200], 
+              startXY: [570, 200],
+              endXY: [800, 300], 
               duration: 1000,
               loop: false,
             }}
             tweenStart='auto'
+            onTweenFinish={(ended) => this.onTweenEnd()}
             character={grassCharacter}/>
           : null}
       </Image>
@@ -163,20 +168,23 @@ class GameFour extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: 600,
+    width: 1024,
+    flexDirection: 'row',
   },
   backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null,
+    width: 1024,
+    height: 600,
   },
   boxContainer: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
     width: 280,
+    height: 400,
     borderWidth: 3,
-    left: SCREEN_WIDTH/2 - 140,
+    left: 372,
+    marginTop: 20,
   },
   text: {
     fontSize: 45,
