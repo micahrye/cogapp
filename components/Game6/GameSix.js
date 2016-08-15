@@ -26,12 +26,13 @@ class GameSix extends React.Component {
     this.state = {
       targetNumber: undefined,
       numbers: undefined,
-      foodKeys: [0,1,2,3],
       omnivoreKey: Math.random(),
       thoughtBubbleKey: Math.random(),
       showText: false,
-      showFood: [true, true, true, true], // the 4 foods on the signs
-      foodTween: null,
+      apples: [],
+      cans: [],
+      bugs: [],
+      grass: [],
     };
     this.trialNum = 1;
     this.numbers = [];
@@ -40,10 +41,11 @@ class GameSix extends React.Component {
     this.gameTimeout = undefined;
     this.timeoutNumberAppear = undefined;
     this.foodTween = null;
-    this.foodKeys = [0,1,2,3]
-    this.foodStartX = [40, 30, 20, 30];
-    this.foodStartY = [95, 90, 85, 90];
-
+    this.apples = [];
+    this.cans = [];
+    this.bugs = [];
+    this.grass = [];
+    this.fail = undefined;
   }
 
   componentDidMount() {
@@ -53,9 +55,12 @@ class GameSix extends React.Component {
       });
     }, 120000);
 
+    for(let i = 0; i < 4; i++){ // set up 4 foods on tags
+      this.setUpFood(i+1);
+    }
+      
     this.setNumber();
     this.thoughtBubbleSpriteAnimationKey = 'appear';  
-
     this.setState({
       numbers: this.numbers,
       targetNumber: this.numbers[0], // first number in sequence is target number
@@ -64,8 +69,87 @@ class GameSix extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.gameTimeout); // only clear timeout if navigating away at end, not during first 3 trials
+    clearTimeout(this.gameTimeout);
     clearTimeout(this.timeoutNumberAppear);
+  }
+
+  // make individualized tweens for each food
+  getFoodTween(startX, startY, endX){
+    return({
+      tweenType: "curve-spin",
+      startXY: [startX, startY], // start on their tags
+      endXY: [endX, 400], // end at character
+      duration: 1000,
+      loop: false,
+    });
+  }
+
+  // place new food on specified tag
+  setUpFood(spriteKey) {
+    if(spriteKey === 1){
+      this.apples.push(
+        <AnimatedSprite 
+          key={Math.random()}
+          spriteKey={1}
+          coordinates={{top: 95, left: 40}}
+          size={{width: 70, height: 70}}
+          character={appleCharacter}
+          onPress={(spriteKey) => this.foodPress(1)}
+          tween={this.getFoodTween(95, 40, 650)}
+          tweenStart='touch'
+          onTweenFinish={(spriteKey) => this.onTweenFinish(1)}/>
+      );
+    }
+    else if(spriteKey === 2){
+      this.cans.push(
+        <AnimatedSprite 
+          key={Math.random()}
+          spriteKey={2}
+          coordinates={{top: 90, left: 30}}
+          size={{width: 90, height: 90}}
+          character={canCharacter}
+          onPress={(spriteKey) => this.foodPress(2)}
+          tween={this.getFoodTween(90, 30, 500)}
+          tweenStart='touch'
+          onTweenFinish={(spriteKey) => this.onTweenFinish(2)}/>
+      );
+    }
+    else if(spriteKey === 3){
+      this.bugs.push(
+        <AnimatedSprite 
+          key={Math.random()}
+          spriteKey={3}
+          coordinates={{top: 85, left: 20}}
+          size={{width: 100, height: 100}}
+          character={bugCharacter}
+          onPress={(spriteKey) => this.foodPress(3)}
+          tween={this.getFoodTween(85, 20, 350)}
+          tweenStart='touch'
+          onTweenFinish={(spriteKey) => this.onTweenFinish(3)}
+          spriteAnimationKey='stillIdle'
+          loopAnimation={true}/>
+      );
+    }
+    else{
+      this.grass.push(
+        <AnimatedSprite 
+          key={Math.random()}
+          spriteKey={4}
+          coordinates={{top: 90, left: 30}}
+          size={{width: 80, height: 80}}
+          character={grassCharacter}
+          onPress={(spriteKey) => this.foodPress(4)}
+          tween={this.getFoodTween(90, 30, 180)}
+          tweenStart='touch'
+          onTweenFinish={(spriteKey) => this.onTweenFinish(4)}/>
+      );
+    }
+    this.setState({
+      apples: this.apples,
+      cans: this.cans,
+      bugs: this.bugs,
+      grass: this.grass,
+    });
   }
 
   // next number randomly chosen between 1 2 3 and 4
@@ -85,77 +169,62 @@ class GameSix extends React.Component {
     }
   }
 
-  checkTarget(left, top, signKey){
-    let withinRange = false;
-    if(top > 370 && top < 530){
-      if(signKey === 1 && left > 560 && left < 780){
-        withinRange = true;
-      }
-      else if(signKey === 2 && left > 400 && left < 600){
-        withinRange = true;
-      }
-      else if(signKey === 3 && left > 220 && left < 420){
-        withinRange = true;
-      }
-      else if(signKey === 4 && left > 80 && left < 280){
-        withinRange = true;
-      }
-
-      if(withinRange){
-        if(signKey === this.state.targetNumber){
-          this.eat(signKey);
-          this.shiftNumbers();
-        }
-        else{
-          this.disgust(signKey);
-        }
-      }
+  // triggered when food item is pressed
+  foodPress(spriteKey) {
+    this.setUpFood(spriteKey); // add another food item to tag while first one is tweening down
+    
+    if(spriteKey === this.state.targetNumber){ // correct press
+      this.omnivoreSpriteAnimationKey = 'readyToEat'; // animal opens it's mouth for food
+      this.setState({
+        omnivoreKey: Math.random(),
+      });
+      this.fail = false;
     }
-    if(!withinRange){ // move food back to tag
-      this.replaceFood(signKey);
+    else{ // incorrect press
+      this.fail = true;
     }
+    this.shiftNumbers();
+    this.trialNum++;
   }
 
-  eat(signKey){
-    this.replaceFood(signKey);
-    this.omnivoreSpriteAnimationKey = 'eat';
-    this.setState({
-      omnivoreKey: Math.random(),
-    });                    
-  }
-
-  disgust(signKey){
-    this.replaceFood(signKey);
-    this.omnivoreSpriteAnimationKey = 'disgust';
-    this.setState({
-      omnivoreKey: Math.random(),
-    });
-  }
 
   onAnimationFinish(animationKey){
-    if(animationKey === 'eat' || animationKey === 'disgust'){
-      this.trialNum++;
-    }
-    else if(animationKey === 'appear'){
-      this.timeoutNumberAppear = setTimeout(()=>{ // so number appears once thought bubble is set
+    if(animationKey === 'appear'){
+      this.timeoutNumberAppear = setTimeout(()=>{ // so number appears after thought bubble is set
         this.setState({showText: true});
       }, 200)  
     }
   }
 
-  // places food back on tags
-  replaceFood(signKey) {
-    this.setState({
-      foodTween: { // no duration, so is unseen
-        tweenType: "move",
-        startXY: [0, 0],
-        endXY: [this.foodStartX[signKey - 1], this.foodStartY[signKey -1]],
-        duration: 0,
-        loop: false,
-      }
-    });
-    this.foodKeys[signKey - 1] = Math.random();
-    this.setState({foodKeys: this.foodKeys});
+  // after food tweens down to animal
+  onTweenFinish(spriteKey) {
+    this.removeFood(spriteKey);
+    if(this.fail){
+      this.omnivoreSpriteAnimationKey = 'disgust';
+      this.setState({
+        omnivoreKey: Math.random(),
+      });
+    }
+  }
+
+  // remove specified food from its array
+  removeFood(spriteKey){
+    if(spriteKey === 1){
+      this.apples.shift();
+      this.setState({apples: this.apples})
+    }
+    else if(spriteKey === 2){
+      this.cans.shift();
+      this.setState({cans: this.cans})
+    }
+    else if(spriteKey === 3){
+      this.bugs.shift();
+      this.setState({bugs: this.bugs})
+    }
+    else {
+      this.grass.shift();
+      this.setState({grass: this.grass})
+    }
   }
 
   // remove target number, add new number to sequence, and set new target number
@@ -177,7 +246,7 @@ class GameSix extends React.Component {
 
   getTextHolderStyle() {
     let left = undefined;
-    if(this.trialNum < 3){
+    if(this.trialNum < 4){
       left = 940;
     }
     else{
@@ -192,6 +261,10 @@ class GameSix extends React.Component {
     )
   }
 
+  getThoughtTextStyle() {
+
+  }
+
   render(){
     return(
       <Image source={require('../../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
@@ -202,7 +275,8 @@ class GameSix extends React.Component {
             size={{width: 275, height: 275}}
             character={omnivoreCharacter}
             spriteAnimationKey={this.omnivoreSpriteAnimationKey}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
+            loopAnimation={this.state.loopAnimation}/>
           
           <AnimatedSprite 
             key={this.state.thoughtBubbleKey}
@@ -226,15 +300,7 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix1'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKeys[0]}
-              coordinates={{top: 95, left: 40}}
-              size={{width: 70, height: 70}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 1)}
-              character={appleCharacter}
-              tween={this.state.foodTween}
-              tweenStart='auto'/>
+            {this.state.apples}
           </View>
 
           <View style={styles.itemContainer}>
@@ -245,13 +311,7 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix2'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKeys[1]}
-              coordinates={{top: 90, left: 30}}
-              size={{width: 90, height: 90}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 2)}
-              character={canCharacter}/>
+            {this.state.cans}
           </View>
 
           <View style={styles.itemContainer}>
@@ -262,15 +322,7 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKeys[2]}
-              coordinates={{top: 85, left: 20}}
-              size={{width: 100, height: 100}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 3)}
-              character={bugCharacter}
-              spriteAnimationKey='stillIdle'
-              loopAnimation={true}/>
+            {this.state.bugs}
           </View>
 
           <View style={styles.itemContainer}>
@@ -281,13 +333,7 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix4'
               loopAnimation={true}/>
-            <AnimatedSprite 
-              key={this.state.foodKeys[3]}
-              coordinates={{top: 90, left: 30}}
-              size={{width: 80, height: 80}}
-              draggable={true}
-              draggedTo={(left, top) => this.checkTarget(left, top, 4)}
-              character={grassCharacter}/>
+            {this.state.grass}
           </View>
         </View>
       </Image>
@@ -309,7 +355,7 @@ const styles = StyleSheet.create({
   },
   itemContainer:{
     top: 0,
-    left: 80,
+    left: 50,
     alignItems: 'center',
     marginRight: 20,
     height: 250,
