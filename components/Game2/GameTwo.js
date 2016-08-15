@@ -370,7 +370,7 @@ class GameTwo extends Component {
                     spriteAnimationKey={this.state.animation}
                     rotate={[{rotateY: "0deg"}]}
                     loopAnimation={false}
-                    tweenHasEnded={this.onTweenEndCreature}
+                    onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
                     size={{width: 256, height: 256}}
@@ -382,7 +382,7 @@ class GameTwo extends Component {
                     rotate={[{rotateY:"180deg"}]}
                     spriteAnimationKey={this.state.animation}
                     loopAnimation={false}
-                    tweenHasEnded={this.onTweenEndCreature}
+                    onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -50, left: Window.width - 120}}
                     size={{width: 256, height: 256}}
@@ -394,7 +394,7 @@ class GameTwo extends Component {
                     spriteAnimationKey={this.state.animation}
                     rotate={[{rotateY:"0deg"}]}
                     loopAnimation={false}
-                    tweenHasEnded={this.onTweenEndCreature}
+                    onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
@@ -418,7 +418,7 @@ class GameTwo extends Component {
                     tweenStart="auto"
                     tween={this.state.foodTween}
                     onPress={this.onFoodPress}
-                    tweenHasEnded={this.onTweenEndFood}/>
+                    onTweenFinish={this.onTweenEndFood}/>
         </Image>
       </View>
     );
