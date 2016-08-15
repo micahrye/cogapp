@@ -187,7 +187,7 @@ class GameSix extends React.Component {
     this.trialNum++;
   }
 
-
+  // triggered after an animation ends
   onAnimationFinish(animationKey){
     if(animationKey === 'appear'){
       this.timeoutNumberAppear = setTimeout(()=>{ // so number appears after thought bubble is set
