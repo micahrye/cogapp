@@ -129,7 +129,7 @@ class GameFourLoading extends Component {
           </View>
         </View>
         <View>
-          <Image style={styles.image} source={require('../../backgrounds/Game_6_Background_1280.png')}/>
+          <Image style={styles.image} source={require('../../backgrounds/Game_4_Background_1280.png')}/>
         </View>
       </View>
     );

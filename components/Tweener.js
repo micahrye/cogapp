@@ -43,6 +43,11 @@ class Tweener extends React.Component{
       case 'move': this.move(this.props.options, this.props.state);
         break;
       case 'curve-fall': this.curveFall(this.props.options, this.props.state);
+        break;
+      case 'curve-spin2': this.curveSpin2(this.props.options, this.props.state);
+        break;
+      case 'curve-spin3': this.curveSpin3(this.props.options, this.props.state);
+        break;
     }
   }
 
@@ -506,6 +511,95 @@ class Tweener extends React.Component{
       }
     });
   }
+
+  curveSpin2(options, state) {
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
+    Animated.sequence([
+      Animated.parallel([
+       Animated.timing(
+          state.top,
+          {
+            toValue: options.endXY[1],
+            easing: Easing.quad,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.left,
+          {
+            toValue: options.endXY[0],
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: 400,
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+      ]),
+    ]).start(() => {
+      if (options.loop === false) {
+        this.props.onTweenFinish(true);
+        return
+      }else {
+        curveSpin(options, state);
+      }
+    });
+  }
+
+  curveSpin3(options, state) {
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
+    Animated.sequence([
+      Animated.parallel([
+       Animated.timing(
+          state.top,
+          {
+            toValue: options.endXY[1],
+            easing: Easing.quad,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.left,
+          {
+            toValue: options.endXY[0],
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: 400,
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        ),
+        Animated.timing(
+          state.scale,
+          {
+            toValue: 0.5,
+            easing: Easing.linear,
+            duration: options.duration,
+          }
+        )
+      ]),
+    ]).start(() => {
+      if (options.loop === false) {
+        this.props.onTweenFinish(true);
+        return
+      }else {
+        curveSpin(options, state);
+      }
+    });
+  }
+
 
   curveFall(options, state) {
     state.left.setValue(options.startXY[0]);

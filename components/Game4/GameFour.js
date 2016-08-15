@@ -27,6 +27,7 @@ class GameFour extends React.Component {
       mammalKey: 0,
       mammalSpriteAnimationKey: 'default',
       showFood: false,
+      loopAnimation: false,
     }
     this.boxSpriteAnimationKey = 'default';
 
@@ -51,12 +52,12 @@ class GameFour extends React.Component {
     let correctChoice = Math.floor(Math.random() * 3); // either 0, 1, or 2
     let boxes = [];
     for(let i=0; i < 3; i++){
-      if(i === correctChoice){
+      //if(i === correctChoice){
         this.boxSpriteAnimationKey = 'green';
-      }
-      else{
-        this.boxSpriteAnimationKey = 'red';
-      }
+      // }
+      // else{
+      //   this.boxSpriteAnimationKey = 'red';
+      // }
       boxes.push(
         <AnimatedSprite
           key={i}
@@ -83,7 +84,7 @@ class GameFour extends React.Component {
         }
         else{
           if(item.props.spriteAnimationKey === 'green'){ // if correct box chosen
-            this.celebrate();
+            this.foodFall();
           }
           else{
             this.disgust();
@@ -94,11 +95,11 @@ class GameFour extends React.Component {
     }
   }
 
-  celebrate() {
+  foodFall() {
     this.setState({
-      mammalKey: Math.random(), 
-      mammalSpriteAnimationKey: 'celebrate',
       showFood: true,
+      mammalKey: Math.random(), 
+      mammalSpriteAnimationKey: 'openMouth',
     });
   }
 
@@ -106,8 +107,29 @@ class GameFour extends React.Component {
     this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'disgust'});
   }
 
-  onTweenEnd(){
-    console.warn('here');
+  onTweenFinish(){
+    // this.setState({
+    //   mammalKey: Math.random(), 
+    //   mammalSpriteAnimationKey: 'chew',
+    //   //showFood: false,
+    //   //loopAnimation: false,
+    // })
+  }
+
+  onAnimationFinish(animation) {
+    if(animation === 'eat'){
+      this.setState({
+        mammalKey: Math.random(), 
+        mammalSpriteAnimationKey: 'celebrate',
+      });
+    }
+    else if(animation === 'openMouth'){
+      this.setState({
+        mammalKey: Math.random(), 
+        mammalSpriteAnimationKey: 'readyToEat',
+        loopAnimation: true,
+      });
+    }
   }
 
   getBoxStyles(boxNum) {
@@ -141,7 +163,9 @@ class GameFour extends React.Component {
             size={{width: 256, height: 256}}
             draggable={false}
             character={mammalCharacter}
-            spriteAnimationKey={this.state.mammalSpriteAnimationKey}/>
+            spriteAnimationKey={this.state.mammalSpriteAnimationKey}
+            onAnimationFinish={(animation) => this.onAnimationFinish(animation)}
+            loopAnimation={this.state.loopAnimation}/>
         </View>
         {this.state.showFood ?
           <AnimatedSprite 
@@ -152,11 +176,11 @@ class GameFour extends React.Component {
               tweenType: 'curve-spin',
               startXY: [570, 200],
               endXY: [800, 300], 
-              duration: 1000,
+              duration: 4000,
               loop: false,
             }}
             tweenStart='auto'
-            onTweenFinish={(ended) => this.onTweenEnd()}
+            onTweenFinish={(ended) => this.onTweenFinish()}
             character={grassCharacter}/>
           : null}
       </Image>

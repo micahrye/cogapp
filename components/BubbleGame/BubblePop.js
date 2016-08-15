@@ -202,14 +202,14 @@ class BubblePop extends React.Component {
   foodFall(){
     if(this.stopValuesY > 350){ // if food needs to go up first to drop into mouth
       this.initialTween = {
-        tweenType: 'curve-spin',
+        tweenType: 'curve-spin2',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400], 
         duration: 1000,
         loop: false,
       }
       this.tweenDown = {
-        tweenType: 'curve-spin',
+        tweenType: 'curve-spin3',
         startXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230],
         duration: 500,
@@ -219,7 +219,7 @@ class BubblePop extends React.Component {
     }
     else{
       this.fullTween = {
-        tweenType: 'curve-spin',
+        tweenType: 'curve-spin3',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230], 
         duration: 1000,
@@ -309,7 +309,7 @@ class BubblePop extends React.Component {
                 tween={this.state.targetTween}
                 tweenStart='auto'
                 stopTweenOnTouch={(stopValues) => this.popBubble(stopValues)}
-                tweenHasEnded={(spriteKey) => this.onTweenFinish(spriteKey)}
+                onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
                 soundOnTouch={this.state.sound}
                 soundFile="bubblePop"
                 timeSinceMounted={(spriteKey, duration)=> this.popTime = duration}
@@ -326,7 +326,7 @@ class BubblePop extends React.Component {
                 character={this.foodCharacter}
                 tween={this.foodTween}
                 tweenStart='auto'
-                tweenHasEnded={(spriteKey) => this.onTweenFinish(spriteKey)}
+                onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
                 spriteAnimationKey={this.foodSpriteAnimationKey}
                 loopAnimation={true}/>
             : null}
