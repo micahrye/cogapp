@@ -32,6 +32,7 @@ import goatCharacter from "../../sprites/goat/goatCharacter";
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
 const endCoordinates = [480,180];
+const endCoordinates2 = [400,160];
 // these constants specify the initial locations and spacing of the food items
 const startLeft = 250;
 const startTop = -200;
@@ -79,13 +80,17 @@ class GameTwo extends Component {
                   loop: false,
                   };
 
-    tweenFall = {
-      tweenType: "curve-spin",
-      startXY: [startLeft+32,endTopCan],
-      endXY: endCoordinates,
-      duration: 750,
-      repeatable: false,
-      loop: false,
+    tweenFall = function(dest){
+      return (
+        {
+         tweenType: "curve-spin",
+         startXY: [startLeft+32,endTopCan],
+         endXY: dest,
+         duration: 750,
+         repeatable: false,
+         loop: false,
+        }
+      )
     };
 
     tweenMove = function(start,end) {
@@ -132,11 +137,9 @@ class GameTwo extends Component {
       leverPressed: false,
       foodPressed: false,
       animation: "default",
-      rotate: new Animated.Value(40),
     }
 
     readyToEat = false;
-
 
   }
 
@@ -185,16 +188,16 @@ class GameTwo extends Component {
 
   }
 
-  flip(num) {
-    Animated.timing(
-      this.state.rotate,
-      {
-        toValue: num,
-        easing: Easing.linear,
-        duration: 500,
-      }
-    ).start();
-  }
+  // flip(num) {
+  //   Animated.timing(
+  //     this.state.rotate,
+  //     {
+  //       toValue: num,
+  //       easing: Easing.linear,
+  //       duration: 500,
+  //     }
+  //   ).start();
+  // }
 
 
   toggleCreatureCharacter() {
@@ -236,22 +239,23 @@ class GameTwo extends Component {
   onFoodPress = () => {
     readyToEat = true;
     if (!this.state.foodPressed) {
-      this.setState({foodTween: tweenFall,
+      this.setState({foodTween: tweenFall(endCoordinates),
                      foodKey: Math.random(),
                      signTween: tweenTimeout(endTopSign,startTop),
                      signKey: Math.random(),
                      foodPressed: true});
     }
-    this.setState({animation:"openMouth"})
     switch(this.state.onboarding) {
       case 1:
-        this.setState({creatureKey1: Math.random()})
+        this.setState({creatureKey1: Math.random(),animation: "openMouth",
+                       foodTween: tweenFall(endCoordinates)})
         break;
       case 2:
-        this.setState({creatureKey2: Math.random()})
+        this.setState({creatureKey2: Math.random(),animation: "openMouth",
+                       foodTween: tweenFall(endCoordinates)})
         break;
       case 3:
-        this.setState({creatureKey3: Math.random()})
+        this.setState({creatureKey3: Math.random(), foodTween: tweenFall(endCoordinates2)})
         break;
     }
   }
@@ -270,7 +274,7 @@ class GameTwo extends Component {
         break;
       case 3:
         if (readyToEat) {
-          this.setState({animation: "chew", creatureKey3: Math.random()})
+          this.setState({animation: "eat", creatureKey3: Math.random()})
         }
         break;
     }
@@ -300,7 +304,7 @@ class GameTwo extends Component {
       case "celebrate":
         this.setState({onboarding: this.state.onboarding+1})
         this.setState({animation: "walk"})
-        this.flip(100);
+        //this.flip(100);
         if (this.state.onboarding === 4) {
           setTimeout(this.nextLevel,1000)
         } else {
@@ -335,18 +339,13 @@ class GameTwo extends Component {
             break;
         }
         break;
+        case "eat":
+          this.setState({animation: "celebrate",creatureKey3: Math.random()})
+          break;
     }
 
   }
 
-  interpolate() {
-    ro = this.state.rotate.interpolate({
-       inputRange: [0,100],
-       outputRange: ["0deg","180deg"],
-     });
-
-    return ro;
-  }
 
   render() {
 
