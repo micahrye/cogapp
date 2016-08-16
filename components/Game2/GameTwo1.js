@@ -161,9 +161,14 @@ class GameTwo1 extends Component {
       spriteAnimationKey1: "blue",
       spriteAnimationKey2: "blue",
       spriteAnimationKey3: "blue",
+      animation: "default",
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
+  }
+
+  componentDidMount() {
+    this.setState({animation: "walk", creatureKey1: Math.random()});
   }
 
   componentWillUnmount() {
@@ -702,21 +707,24 @@ class GameTwo1 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween1}
                     key={this.state.creatureKey1}
-                    character={mammalCharacter}/>
+                    character={mammalCharacter}
+                    spriteAnimationKey={this.state.animation}/>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
                     size={{width: 115, height: 160}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
                     key={this.state.creatureKey2}
-                    character={goatCharacter}/>
+                    character={goatCharacter}
+                    spriteAnimationKey={this.state.animation}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
                     size={{width: 256, height: 256}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween3}
                     key={this.state.creatureKey3}
-                    character={frogCharacter}/>
+                    character={frogCharacter}
+                    spriteAnimationKey={this.state.animation}/>
                 <AnimatedSprite coordinates={{top:80,left:0}}
                     size={{width:143,height:125}}
                     draggable={false}
