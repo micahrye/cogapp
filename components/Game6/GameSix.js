@@ -53,9 +53,6 @@ class GameSix extends React.Component {
   }
 
   componentDidMount() {
-    
-
-
     this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
       this.props.navigator.replace({
         id: 'Main',
@@ -85,7 +82,7 @@ class GameSix extends React.Component {
   }
 
   // make individualized tweens for each food
-  getFoodTween(startX, startY, endX){
+  getFoodTween(startY, startX, endX){
     return({
       tweenType: "curve-spin",
       startXY: [startX, startY], // start on their tags
@@ -102,11 +99,11 @@ class GameSix extends React.Component {
         <AnimatedSprite 
           key={Math.random()}
           spriteKey={1}
-          coordinates={{top: 95, left: 40}}
+          coordinates={{top: 95, left: 90}}
           size={{width: 70, height: 70}}
           character={appleCharacter}
           onPress={(spriteKey) => this.foodPress(1)}
-          tween={this.getFoodTween(95, 40, 620)}
+          tween={this.getFoodTween(95, 90, 660)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(1)}/>
       );
@@ -116,11 +113,11 @@ class GameSix extends React.Component {
         <AnimatedSprite 
           key={Math.random()}
           spriteKey={2}
-          coordinates={{top: 90, left: 30}}
+          coordinates={{top: 90, left: 240}}
           size={{width: 90, height: 90}}
           character={canCharacter}
           onPress={(spriteKey) => this.foodPress(2)}
-          tween={this.getFoodTween(90, 30, 460)}
+          tween={this.getFoodTween(90, 240, 660)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(2)}/>
       );
@@ -130,11 +127,11 @@ class GameSix extends React.Component {
         <AnimatedSprite 
           key={Math.random()}
           spriteKey={3}
-          coordinates={{top: 85, left: 20}}
+          coordinates={{top: 85, left: 390}}
           size={{width: 100, height: 100}}
           character={bugCharacter}
           onPress={(spriteKey) => this.foodPress(3)}
-          tween={this.getFoodTween(85, 20, 300)}
+          tween={this.getFoodTween(85, 390, 660)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(3)}
           spriteAnimationKey='stillIdle'
@@ -146,11 +143,11 @@ class GameSix extends React.Component {
         <AnimatedSprite 
           key={Math.random()}
           spriteKey={4}
-          coordinates={{top: 90, left: 30}}
+          coordinates={{top: 90, left: 560}}
           size={{width: 80, height: 80}}
           character={grassCharacter}
           onPress={(spriteKey) => this.foodPress(4)}
-          tween={this.getFoodTween(90, 30, 150)}
+          tween={this.getFoodTween(90, 560, 660)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(4)}/>
       );
@@ -329,7 +326,6 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix1'
               loopAnimation={true}/>
-            {this.state.apples}
           </View>
 
           <View style={styles.itemContainer}>
@@ -340,7 +336,6 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix2'
               loopAnimation={true}/>
-            {this.state.cans}
           </View>
 
           <View style={styles.itemContainer}>
@@ -351,7 +346,6 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}/>
-            {this.state.bugs}
           </View>
 
           <View style={styles.itemContainer}>
@@ -362,8 +356,11 @@ class GameSix extends React.Component {
               character={signCharacter}
               spriteAnimationKey='gameSix4'
               loopAnimation={true}/>
-            {this.state.grass}
           </View>
+          {this.state.apples}
+          {this.state.cans}
+          {this.state.bugs}
+          {this.state.grass}
         </View>
       </Image>
     );
