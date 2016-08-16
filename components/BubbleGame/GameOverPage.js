@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 
 import {
   AppRegistry,
@@ -14,7 +14,7 @@ class GameOverPage extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.alert}>
-          <Text style={{fontSize: 20}}>Activity finished</Text>
+          <Text style={{fontSize: 20}}>{'Activity finished'}</Text>
         </View>
      </View>
     )

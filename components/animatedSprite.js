@@ -40,11 +40,11 @@ fps: object, how many frames per second to run the animations at
 /*Functions:
 onPress: passes up spriteKey
 draggedTo: passes up character's coordinates after drag
-timeSinceMounted: triggered on press, 
+timeSinceMounted: triggered on press,
   passes up spriteKey and time since character mounted in seconds
 stopTweenOnTouch: triggered when tweening character is pressed,
   stops tween, and passes up an array containing current x, y coordinates
-onTweenFinish: is triggered when a tween has finished, 
+onTweenFinish: is triggered when a tween has finished,
   passes up spriteKey of character whose tween ended
 onAnimationFinish: is triggered when 'other' animation has finished,
   passes up current spriteAnimationKey

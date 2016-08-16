@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  Navigator,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+
+import reactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from '../animatedSprite';
 import bubbleCharacter from '../../sprites/bubble/bubbleCharacterLarge';
@@ -27,7 +28,7 @@ class BubblePop extends React.Component {
     super(props);
 
     this.targetLocation = SCREEN_WIDTH/2 - 100;
-    this.foodLocation = SCREEN_WIDTH/2 - 40; 
+    this.foodLocation = SCREEN_WIDTH/2 - 40;
     this.numBubbles = 10;
     this.stopValuesX = undefined;
     this.stopValuesY = undefined;
@@ -49,8 +50,8 @@ class BubblePop extends React.Component {
 
     this.targetSequence = [
       this.targetLocation + OFFSET/2,
-      this.targetLocation - OFFSET/2, 
-      this.targetLocation + OFFSET/2, 
+      this.targetLocation - OFFSET/2,
+      this.targetLocation + OFFSET/2,
       this.targetLocation - OFFSET/2
     ];
 
@@ -82,13 +83,16 @@ class BubblePop extends React.Component {
 
   }
 
-  componentDidMount () {
-    this.chooseFood();
-    this.createBackgroundBubbles();
+  componentWillMount () {
     this.setState({
       targetTween: this.targetTween,
       targetBubbleKey: Math.random(),
     })
+  }
+
+  componentDidMount () {
+    this.chooseFood();
+    this.createBackgroundBubbles();
 
     this.timeoutGameOver = setTimeout(() => { // start trial timeout
       this.props.navigator.replace({
@@ -103,21 +107,18 @@ class BubblePop extends React.Component {
   }
 
   // alternate food in bubble each new trial
-  chooseFood() {
+  chooseFood () {
     let choice = Math.random();
-    if (choice < .25){
+    if (choice < .25) {
       this.foodCharacter = canCharacter;
       this.targetSpriteAnimationKey = 'canBubble';
-    }
-    else if(choice > .25 && choice < .5){
+    } else if (choice > .25 && choice < .5) {
       this.foodCharacter = appleCharacter;
       this.targetSpriteAnimationKey = 'appleBubble';
-    }
-    else if(choice > .5 && choice < .75){
+    } else if (choice > .5 && choice < .75) {
       this.foodCharacter = grassCharacter;
       this.targetSpriteAnimationKey = 'grassBubble';
-    }
-    else{
+    } else {
       this.foodCharacter = bugCharacter;
       this.foodSpriteAnimationKey = 'stillIdle';
       this.targetSpriteAnimationKey = 'bugBubble';
@@ -127,18 +128,17 @@ class BubblePop extends React.Component {
   }
 
   // populate array of background bubbles
-  createBackgroundBubbles() {
+  createBackgroundBubbles () {
     let bubbles = [];
-    for(let i=0; i < this.numBubbles; i++){
+    for (let i=0; i < this.numBubbles; i++) {
       let size = {};
       let sequence = [];
       let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/this.numBubbles);
 
-      if(i%2 == 0){ // every other bubble gets different size and x transition sequence
+      if (i%2 == 0) { // every other bubble gets different size and x transition sequence
         size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE}
         sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft];
-      }
-      else{
+      } else {
         size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}
         sequence = [startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
       }
@@ -159,8 +159,9 @@ class BubblePop extends React.Component {
           size={size}
           character={bubbleCharacter}
           tween={backgroundBubbleTween}
-          tweenStart="auto"
-          spriteAnimationKey='default'/>
+          tweenStart='auto'
+          spriteAnimationKey='default'
+        />
       );
     }
     this.setState({bubbleCharacters: bubbles});
@@ -168,14 +169,14 @@ class BubblePop extends React.Component {
 
   // random time for background bubbles to be on screen, between 2 and 6 seconds
   getRandomDuration () {
-    return( Math.random() *  (6000 - 2000) + 2000 ); 
+    return ( Math.random() *  (6000 - 2000) + 2000 );
   }
 
   // make bubble pop and record time it took to pop it
   popBubble = (stopValues) => {
     this.stopValuesX = stopValues[0];
     this.stopValuesY = stopValues[1];
-    if(this.targetSpriteAnimationKey === 'pop'){ // so you can't pop bubble while it is already popping
+    if (this.targetSpriteAnimationKey === 'pop') { // so you can't pop bubble while it is already popping
       this.setState({sound: false});
       return;
     }
@@ -204,7 +205,7 @@ class BubblePop extends React.Component {
       this.initialTween = {
         tweenType: 'curve-spin2',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
-        endXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400], 
+        endXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400],
         duration: 1000,
         loop: false,
       }
@@ -221,7 +222,7 @@ class BubblePop extends React.Component {
       this.fullTween = {
         tweenType: 'curve-spin3',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
-        endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230], 
+        endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230],
         duration: 1000,
         loop: false,
       }
@@ -270,15 +271,17 @@ class BubblePop extends React.Component {
         this.props.navigator.replace({
           id: "GameOverPage",
         });
-      }
-      else{ // otherwise, next trial is started
-        this.goToNextTrial();
+      } else { // otherwise, next trial is started
+        // TODO: set one second and so not so fast transition.
+        this.setTimeout(() => {
+          this.goToNextTrial();
+        }, 1000);
       }
     }
   }
 
   goToNextTrial(){
-    this.props.navigator.replace({ 
+    this.props.navigator.replace({
       id: 'NextTrial',
       getId: this.getCurrId, // to return back to this page
       targetDuration: this.targetDuration, // pass current target duration along route
@@ -345,6 +348,10 @@ class BubblePop extends React.Component {
   }
 }
 
+BubblePop.propTypes = {
+  navigator: React.PropTypes.object.isRequired,
+}
+reactMixin.onClass(BubblePop, TimerMixin);
 
 const styles = StyleSheet.create({
   topLevel :{

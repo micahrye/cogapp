@@ -3,26 +3,18 @@
 * https://github.com/facebook/react-native
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Alert,
-  Animated,
-  AppRegistry,
-  Navigator,
-  Image,
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
+  StyleSheet,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
 import TimerMixin from 'react-timer-mixin';
-
 
 class Main extends React.Component {
   constructor(props){
@@ -42,7 +34,7 @@ class Main extends React.Component {
   }
 
   goToBugZap = () => {
-    this.props.navigator.replace({id: 'BugZapLoading'});
+      this.props.navigator.replace({id: 'BugZapLoading'});
   }
 
   goToGameTwo = () => {
@@ -122,6 +114,10 @@ class Main extends React.Component {
 
     );
   }
+}
+
+Main.propTypes = {
+  navigator: React.PropTypes.object.isRequired,
 }
 
 reactMixin.onClass(Main, TimerMixin);

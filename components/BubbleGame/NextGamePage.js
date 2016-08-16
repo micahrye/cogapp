@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 
 import {
     AppRegistry,
@@ -19,7 +19,7 @@ class NextGamePage extends React.Component {
             <View style={styles.container}>
                 <TouchableOpacity onPress={this.handlePress}>
                     <View style={styles.alert}>
-                        <Text style={{fontSize: 20}}>Game Timeout. Time for the next activity! (press to reset)</Text>
+                        <Text style={{fontSize: 20}}>{'Game Timeout. Time for the next activity! (press to reset)'}</Text>
                     </View>
                 </TouchableOpacity>
            </View>

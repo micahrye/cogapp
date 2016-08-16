@@ -34,6 +34,8 @@ class BubblePopLoading extends Component {
     }
   }
 
+  componentWillMount () { 
+  }
   componentDidMount() {
     setTimeout(() => {
       this.props.navigator.replace({
@@ -110,43 +112,43 @@ class BubblePopLoading extends Component {
         </View>
         <View>
           <View>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'default'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'pop'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'canBubble'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'appleBubble'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'grassBubble'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'bugBubble'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
