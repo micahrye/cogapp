@@ -82,11 +82,11 @@ class GameSix extends React.Component {
   }
 
   // make individualized tweens for each food
-  getFoodTween(startY, startX, endX){
+  getFoodTween(startY, startX){
     return({
       tweenType: "curve-spin",
       startXY: [startX, startY], // start on their tags
-      endXY: [endX, 360], // end at character
+      endXY: [650, 360], // end at character
       duration: 1000,
       loop: false,
     });
@@ -103,7 +103,7 @@ class GameSix extends React.Component {
           size={{width: 70, height: 70}}
           character={appleCharacter}
           onPress={(spriteKey) => this.foodPress(1)}
-          tween={this.getFoodTween(95, 90, 660)}
+          tween={this.getFoodTween(95, 90)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(1)}/>
       );
@@ -117,7 +117,7 @@ class GameSix extends React.Component {
           size={{width: 90, height: 90}}
           character={canCharacter}
           onPress={(spriteKey) => this.foodPress(2)}
-          tween={this.getFoodTween(90, 240, 660)}
+          tween={this.getFoodTween(90, 240)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(2)}/>
       );
@@ -131,7 +131,7 @@ class GameSix extends React.Component {
           size={{width: 100, height: 100}}
           character={bugCharacter}
           onPress={(spriteKey) => this.foodPress(3)}
-          tween={this.getFoodTween(85, 390, 660)}
+          tween={this.getFoodTween(85, 390)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(3)}
           spriteAnimationKey='stillIdle'
@@ -147,7 +147,7 @@ class GameSix extends React.Component {
           size={{width: 80, height: 80}}
           character={grassCharacter}
           onPress={(spriteKey) => this.foodPress(4)}
-          tween={this.getFoodTween(90, 560, 660)}
+          tween={this.getFoodTween(90, 560)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(4)}/>
       );
@@ -256,9 +256,10 @@ class GameSix extends React.Component {
     }
     return(
       {
-        top: 230,
+        top: 266,
         left: left,
-        position: 'absolute'
+        position: 'absolute',
+        flexDirection: 'row',
       }
     )
   }
@@ -277,10 +278,9 @@ class GameSix extends React.Component {
 
     return(
       {
-        position: 'absolute',
         opacity: this.state.fade,
       }
-    )
+    );
   }
 
 
@@ -298,7 +298,7 @@ class GameSix extends React.Component {
           
           <AnimatedSprite 
             key={this.state.thoughtBubbleKey}
-            coordinates={{top: 196, left: 700}}
+            coordinates={{top: 230, left: 700}}
             size={{width: 330, height: 200}}
             character={thoughtBubbleCharacter}
             spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
@@ -310,7 +310,7 @@ class GameSix extends React.Component {
                 <Text style={styles.targetNumber}>{this.state.targetNumber}</Text>
               </Animated.View>
               {this.state.showOtherNumbers ?
-                <View>
+                <View style={{position: 'absolute'}}>
                   <Text style={styles.secondNumber}>{this.state.secondNumber}</Text>
                   <Text style={styles.thirdNumber}>{this.state.thirdNumber}</Text>
                 </View>
@@ -389,19 +389,22 @@ const styles = StyleSheet.create({
   },
   secondNumber: {
     fontSize: 66,
-    left: 55,
-    position: 'absolute',
+    left: 10,
+    top: -5,
     color: '#ffa64d',
   },
   thirdNumber: {
     fontSize: 40,
-    left: 100,
+    left: 55,
+    top: 0,
     position: 'absolute',
     color: '#ffcc99',
   },
   targetNumber: {
     fontSize: 80,
     color: '#ff8000',
+    borderWidth: 2,
+
   }
 });
 
