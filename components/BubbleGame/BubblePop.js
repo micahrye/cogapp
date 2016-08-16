@@ -92,7 +92,7 @@ class BubblePop extends React.Component {
 
     this.timeoutGameOver = setTimeout(() => { // start trial timeout
       this.props.navigator.replace({
-        id: "GameOverPage",
+        id: "Main",
       });
     }, 15000); // game over when 15 seconds go by without bubble being popped
 
@@ -268,7 +268,7 @@ class BubblePop extends React.Component {
     if(animationKey === 'chew'){
       if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
         this.props.navigator.replace({
-          id: "GameOverPage",
+          id: "Main",
         });
       }
       else{ // otherwise, next trial is started

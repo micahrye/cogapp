@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Image,
+  Animated,
 } from 'react-native';
 
 import AnimatedSprite from "../animatedSprite";
@@ -25,30 +26,36 @@ class GameSix extends React.Component {
     super(props);
     this.state = {
       targetNumber: undefined,
-      numbers: undefined,
+      secondNumber: undefined,
+      thirdNumber: undefined,
       omnivoreKey: Math.random(),
       thoughtBubbleKey: Math.random(),
-      showText: false,
+      showTargetNumber: false,
+      showOtherNumbers: false,
       apples: [],
       cans: [],
       bugs: [],
       grass: [],
+      fade: new Animated.Value(0),
     };
     this.trialNum = 1;
-    this.numbers = [];
     this.omnivoreSpriteAnimationKey = 'default';
     this.thoughtBubbleSpriteAnimationKey = 'default';
     this.gameTimeout = undefined;
-    this.timeoutNumberAppear = undefined;
     this.foodTween = null;
     this.apples = [];
     this.cans = [];
     this.bugs = [];
     this.grass = [];
     this.fail = undefined;
+    this.reactions = [];
+    this.currentReaction = 0;
   }
 
   componentDidMount() {
+    
+
+
     this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
       this.props.navigator.replace({
         id: 'Main',
@@ -58,19 +65,23 @@ class GameSix extends React.Component {
     for(let i = 0; i < 4; i++){ // set up 4 foods on tags
       this.setUpFood(i+1);
     }
-      
-    this.setNumber();
+
     this.thoughtBubbleSpriteAnimationKey = 'appear';  
+
+    let targetNumber = this.getNumber();
+    let secondNumber = this.getNumber();
+    let thirdNumber = this.getNumber();
+
     this.setState({
-      numbers: this.numbers,
-      targetNumber: this.numbers[0], // first number in sequence is target number
+      targetNumber: targetNumber,
+      secondNumber: secondNumber,
+      thirdNumber: thirdNumber, 
       thoughtBubbleKey: Math.random(),
     });
   }
 
   componentWillUnmount() {
     clearTimeout(this.gameTimeout);
-    clearTimeout(this.timeoutNumberAppear);
   }
 
   // make individualized tweens for each food
@@ -78,7 +89,7 @@ class GameSix extends React.Component {
     return({
       tweenType: "curve-spin",
       startXY: [startX, startY], // start on their tags
-      endXY: [endX, 400], // end at character
+      endXY: [endX, 360], // end at character
       duration: 1000,
       loop: false,
     });
@@ -95,7 +106,7 @@ class GameSix extends React.Component {
           size={{width: 70, height: 70}}
           character={appleCharacter}
           onPress={(spriteKey) => this.foodPress(1)}
-          tween={this.getFoodTween(95, 40, 650)}
+          tween={this.getFoodTween(95, 40, 620)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(1)}/>
       );
@@ -109,7 +120,7 @@ class GameSix extends React.Component {
           size={{width: 90, height: 90}}
           character={canCharacter}
           onPress={(spriteKey) => this.foodPress(2)}
-          tween={this.getFoodTween(90, 30, 500)}
+          tween={this.getFoodTween(90, 30, 460)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(2)}/>
       );
@@ -123,7 +134,7 @@ class GameSix extends React.Component {
           size={{width: 100, height: 100}}
           character={bugCharacter}
           onPress={(spriteKey) => this.foodPress(3)}
-          tween={this.getFoodTween(85, 20, 350)}
+          tween={this.getFoodTween(85, 20, 300)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(3)}
           spriteAnimationKey='stillIdle'
@@ -139,7 +150,7 @@ class GameSix extends React.Component {
           size={{width: 80, height: 80}}
           character={grassCharacter}
           onPress={(spriteKey) => this.foodPress(4)}
-          tween={this.getFoodTween(90, 30, 180)}
+          tween={this.getFoodTween(90, 30, 150)}
           tweenStart='touch'
           onTweenFinish={(spriteKey) => this.onTweenFinish(4)}/>
       );
@@ -152,20 +163,20 @@ class GameSix extends React.Component {
     });
   }
 
-  // next number randomly chosen between 1 2 3 and 4
-  setNumber() {
+  // number randomly chosen between 1 2 3 and 4
+  getNumber() {
     let choice = Math.random();
     if(choice <= .25){
-      this.numbers.push(1);
+      return(1);
     }
     else if(choice > .25 && choice <= .5){
-      this.numbers.push(2);
+      return(2);
     }
     else if(choice > .5 && choice <= .75){
-      this.numbers.push(3);
+      return(3);
     }
     else{
-      this.numbers.push(4);
+      return(4);
     }
   }
 
@@ -173,38 +184,30 @@ class GameSix extends React.Component {
   foodPress(spriteKey) {
     this.setUpFood(spriteKey); // add another food item to tag while first one is tweening down
     
-    if(spriteKey === this.state.targetNumber){ // correct press
-      this.omnivoreSpriteAnimationKey = 'readyToEat'; // animal opens it's mouth for food
-      this.setState({
-        omnivoreKey: Math.random(),
-      });
-      this.fail = false;
+    if(spriteKey === this.state.targetNumber){
+      this.reactions.push('chew'); // line up a successful reaction     
     }
     else{ // incorrect press
-      this.fail = true;
+      this.reactions.push('disgust'); // line up an unsuccessful reaction
     }
     this.shiftNumbers();
-    this.trialNum++;
   }
 
   // triggered after an animation ends
   onAnimationFinish(animationKey){
     if(animationKey === 'appear'){
-      this.timeoutNumberAppear = setTimeout(()=>{ // so number appears after thought bubble is set
-        this.setState({showText: true});
-      }, 200)  
+      this.setState({showTargetNumber: true});
     }
   }
 
   // after food tweens down to animal
   onTweenFinish(spriteKey) {
     this.removeFood(spriteKey);
-    if(this.fail){
-      this.omnivoreSpriteAnimationKey = 'disgust';
-      this.setState({
-        omnivoreKey: Math.random(),
-      });
-    }
+    this.omnivoreSpriteAnimationKey = this.reactions[0]; // execute reactions in order
+    this.setState({
+      omnivoreKey: Math.random(),
+    });
+    this.reactions.shift();
   }
 
   // remove specified food from its array
@@ -227,20 +230,22 @@ class GameSix extends React.Component {
     }
   }
 
-  // remove target number, add new number to sequence, and set new target number
+  // remove old target number, shift numbers up one, and add new number to sequence
   shiftNumbers(){
-    this.numbers.shift();
-    if(this.trialNum === 3){
-      for(let i = 0; i < 3; i++){ // on 4th trial, set up sequence of 3 numbers
-        this.setNumber();
-      }
+    this.trialNum++;
+    if(this.trialNum === 4){
+      this.setState({showOtherNumbers: true}); // show other 2 numbers after 3rd trial
     }
-    else{
-      this.setNumber();
+    if(this.trialNum < 4){
+      this.setState({fade: new Animated.Value(0)}); // so target number can fade in again on first 3 trials
     }
+    let targetNumber = this.state.secondNumber;
+    let secondNumber = this.state.thirdNumber;
+    let thirdNumber = this.getNumber();
     this.setState({
-      numbers: this.numbers,
-      targetNumber: this.numbers[0],
+      targetNumber: targetNumber,
+      secondNumber: secondNumber,
+      thirdNumber: thirdNumber,
     });
   }
 
@@ -250,20 +255,37 @@ class GameSix extends React.Component {
       left = 940;
     }
     else{
-      left = 908;
+      left = 890;
     }
     return(
       {
-        top: 240,
+        top: 230,
         left: left,
         position: 'absolute'
       }
     )
   }
 
-  getThoughtTextStyle() {
+  // allows target number to fade in
+  getFadeStyle() {
+    if(this.trialNum < 4){
+      Animated.timing(          
+        this.state.fade,    
+        {
+          toValue: 1,
+          duration: 1500,
+        },      
+      ).start();
+    }
 
+    return(
+      {
+        position: 'absolute',
+        opacity: this.state.fade,
+      }
+    )
   }
+
 
   render(){
     return(
@@ -275,8 +297,7 @@ class GameSix extends React.Component {
             size={{width: 275, height: 275}}
             character={omnivoreCharacter}
             spriteAnimationKey={this.omnivoreSpriteAnimationKey}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
-            loopAnimation={this.state.loopAnimation}/>
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
           
           <AnimatedSprite 
             key={this.state.thoughtBubbleKey}
@@ -286,9 +307,17 @@ class GameSix extends React.Component {
             spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
         
-          {this.state.showText ?  
+          {this.state.showTargetNumber ?  
             <View style={this.getTextHolderStyle()}>
-              <Text style={styles.thoughtText}>{this.state.numbers}</Text>
+              <Animated.View style={this.getFadeStyle()}>
+                <Text style={styles.targetNumber}>{this.state.targetNumber}</Text>
+              </Animated.View>
+              {this.state.showOtherNumbers ?
+                <View>
+                  <Text style={styles.secondNumber}>{this.state.secondNumber}</Text>
+                  <Text style={styles.thirdNumber}>{this.state.thirdNumber}</Text>
+                </View>
+              : null}
             </View>
           : null}
 
@@ -361,9 +390,22 @@ const styles = StyleSheet.create({
     height: 250,
     width: 140,
   },
-  thoughtText: {
+  secondNumber: {
     fontSize: 66,
+    left: 55,
+    position: 'absolute',
+    color: '#ffa64d',
   },
+  thirdNumber: {
+    fontSize: 40,
+    left: 100,
+    position: 'absolute',
+    color: '#ffcc99',
+  },
+  targetNumber: {
+    fontSize: 80,
+    color: '#ff8000',
+  }
 });
 
 export default GameSix;
