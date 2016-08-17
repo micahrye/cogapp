@@ -24,7 +24,7 @@ const BUBBLE_SIZE = 60;
 const OFFSET = 80;
 
 class BubblePop extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
 
     this.targetLocation = SCREEN_WIDTH/2 - 100;
@@ -52,13 +52,13 @@ class BubblePop extends React.Component {
       this.targetLocation + OFFSET/2,
       this.targetLocation - OFFSET/2,
       this.targetLocation + OFFSET/2,
-      this.targetLocation - OFFSET/2
+      this.targetLocation - OFFSET/2,
     ];
 
-    if(this.props.route.targetDuration){
+    if (this.props.route.targetDuration) {
       this.targetDuration = this.props.route.targetDuration - 500;
     }
-    else{
+    else {
       this.targetDuration = 5000;
     }
 
@@ -79,7 +79,7 @@ class BubblePop extends React.Component {
       omnivoreKey: 2,
       targetTween: this.targetTween,
       sound: true,
-    }
+    };
 
   }
 
@@ -87,7 +87,7 @@ class BubblePop extends React.Component {
     this.setState({
       targetTween: this.targetTween,
       targetBubbleKey: Math.random(),
-    })
+    });
   }
 
   componentDidMount () {
@@ -102,7 +102,7 @@ class BubblePop extends React.Component {
 
   }
 
-  componentWillUnmount(){
+  componentWillUnmount () {
     clearTimeout(this.timeoutGameOver);
   }
 
@@ -136,10 +136,10 @@ class BubblePop extends React.Component {
       let startLeft = i*((SCREEN_WIDTH-BUBBLE_SIZE/2-OFFSET)/this.numBubbles);
 
       if (i%2 == 0) { // every other bubble gets different size and x transition sequence
-        size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE}
+        size = {width: BUBBLE_SIZE, height: BUBBLE_SIZE};
         sequence = [startLeft + OFFSET, startLeft, startLeft + OFFSET, startLeft];
       } else {
-        size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20}
+        size = {width: BUBBLE_SIZE - 20, height: BUBBLE_SIZE - 20};
         sequence = [startLeft, startLeft + OFFSET, startLeft, startLeft + OFFSET];
       }
 
@@ -200,53 +200,53 @@ class BubblePop extends React.Component {
   }
 
   // food falls out of bubble and down to character
-  foodFall(){
-    if(this.stopValuesY > 350){ // if food needs to go up first to drop into mouth
+  foodFall () {
+    if (this.stopValuesY > 350) { // if food needs to go up first to drop into mouth
       this.initialTween = {
         tweenType: 'curve-spin2',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400],
         duration: 1000,
         loop: false,
-      }
+      };
       this.tweenDown = {
         tweenType: 'curve-spin3',
         startXY: [SCREEN_WIDTH - 300, SCREEN_HEIGHT - 400],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230],
         duration: 500,
         loop: false,
-      }
+      };
       this.foodTween = this.initialTween;
     }
-    else{
+    else {
       this.fullTween = {
         tweenType: 'curve-spin3',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],
         endXY: [SCREEN_WIDTH - 210, SCREEN_HEIGHT - 230],
         duration: 1000,
         loop: false,
-      }
+      };
       this.foodTween = this.fullTween;
     }
     this.showFood = true;
     this.omnivoreSpriteAnimationKey = 'openMouth'; // opens mouth to eat
-    this.setState({omnivoreKey: Math.random()})
+    this.setState({omnivoreKey: Math.random()});
   }
 
   // triggered when a tween ends
-  onTweenFinish(spriteKey){
-    if(spriteKey === 1){ // bubble
+  onTweenFinish (spriteKey) {
+    if (spriteKey === 1) { // bubble
       this.setState({
         targetTween: this.targetTween, // repeat tween up the screen
         targetBubbleKey: Math.random(),
-      })
+      });
     }
-    else if(spriteKey === 2){ // food
-      if(this.foodTween === this.initialTween){
+    else if (spriteKey === 2) { // food
+      if (this.foodTween === this.initialTween) {
         this.foodTween = this.tweenDown;
-        this.setState({foodKey: Math.random()})
+        this.setState({foodKey: Math.random()});
       }
-      else{
+      else {
         this.showFood = false;
         this.loopOmnivoreAnimation = false; // so chew only happens once
         this.omnivoreSpriteAnimationKey = 'chew';
@@ -256,18 +256,18 @@ class BubblePop extends React.Component {
   }
 
   // triggered when an animation finishes
-  onAnimationFinish(animationKey){
-    if(animationKey === 'pop'){ // after bubble pops, go to next trial or game over
+  onAnimationFinish (animationKey) {
+    if (animationKey === 'pop') { // after bubble pops, go to next trial or game over
       this.showTargetBubble = false;
       this.setState({targetBubbleKey: Math.random()});
     }
-    if(animationKey === 'openMouth'){
+    if (animationKey === 'openMouth') {
       this.omnivoreSpriteAnimationKey = 'readyToEat'; // an open mouth
       this.loopOmnivoreAnimation = true; // so mouth stays open
       this.setState({omnivoreKey: Math.random()});
     }
-    if(animationKey === 'chew'){
-      if(this.targetDuration === 1000){ //if bubble is popped at 1 second duration, game is over
+    if (animationKey === 'chew') {
+      if (this.targetDuration === 1000) { //if bubble is popped at 1 second duration, game is over
         this.props.navigator.replace({
           id: "Main",
         });
@@ -280,7 +280,7 @@ class BubblePop extends React.Component {
     }
   }
 
-  goToNextTrial(){
+  goToNextTrial () {
     this.props.navigator.replace({
       id: 'NextTrial',
       getId: this.getCurrId, // to return back to this page
@@ -288,11 +288,11 @@ class BubblePop extends React.Component {
     });
   }
 
-  getCurrId() {
+  getCurrId () {
     return 'BubblePop';
   }
 
-  render(){
+  render () {
     return (
       <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
           <View style={styles.topBar}>
@@ -314,11 +314,12 @@ class BubblePop extends React.Component {
                 stopTweenOnTouch={(stopValues) => this.popBubble(stopValues)}
                 onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
                 soundOnTouch={this.state.sound}
-                soundFile="bubblePop"
+                soundFile='bubblePop'
                 timeSinceMounted={(spriteKey, duration)=> this.popTime = duration}
                 spriteAnimationKey={this.targetSpriteAnimationKey}
                 loopAnimation={this.loopBubbleAnimation}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+              />
             : null}
             {this.showFood ?
               <AnimatedSprite
@@ -331,7 +332,8 @@ class BubblePop extends React.Component {
                 tweenStart='auto'
                 onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
                 spriteAnimationKey={this.foodSpriteAnimationKey}
-                loopAnimation={true}/>
+                loopAnimation={true}
+              />
             : null}
             <AnimatedSprite
               key={this.state.omnivoreKey}
@@ -340,8 +342,9 @@ class BubblePop extends React.Component {
               character={omnivoreCharacter}
               spriteAnimationKey={this.omnivoreSpriteAnimationKey}
               loopAnimation={this.loopOmnivoreAnimation}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
-              fps={20}/>
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+              fps={20}
+            />
           </View>
       </Image>
     );
@@ -350,7 +353,7 @@ class BubblePop extends React.Component {
 
 BubblePop.propTypes = {
   navigator: React.PropTypes.object.isRequired,
-}
+};
 reactMixin.onClass(BubblePop, TimerMixin);
 
 const styles = StyleSheet.create({
