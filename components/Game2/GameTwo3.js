@@ -30,25 +30,20 @@ import signCharacter from "../../sprites/sign/signCharacter";
 // window dimensions
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [450,250];
+const endCoordinates = [Window.width*0.65,Window.height*0.5];
+const endCoordinates2 = [Window.width*0.6,Window.height*0.4];
 // these constants specify the initial/final locations and spacing
 // and signs of the food items
-const startLeft = 200;
-const startLeft2 = 275;
-const startTop = -200;
-const spacing = 150;
-const foodEndTop = 80;
+const startLeft = Window.width*0.25;
+const startLeft2 = Window.width*0.35;
+const startTop = -250;
+const spacing = 200;
+const foodEndTop = Window.height*0.2;
 const signEndTop = -15;
 // start/end for goat and mammal (frog has different dimensions and uses slightly
 // different start amd end coordinates)
-const creatureStart = [Window.width+150,Window.height-190];
-const creatureEnd = [Window.width-200,Window.height-190];
-
-const defaultHeight = 160;
-const defaultWidth = 115;
-const frogHeight = 256;
-const frogWidth = 256;
-const omnivoreWidth = 215;
+const creatureStart = [Window.width+500,Window.height*0.5];
+const creatureEnd = [Window.width*0.65,Window.height*0.5];
 
 class GameTwo3 extends Component {
 
@@ -111,7 +106,7 @@ class GameTwo3 extends Component {
           tweenType: "move",
           startXY: start,
           endXY: end,
-          duration: 750,
+          duration: 1500,
           repeatable: false,
           loop: false,
         }
@@ -813,21 +808,21 @@ class GameTwo3 extends Component {
                 <Text> numtrials: {this.state.numTrials} </Text>
                 </TouchableOpacity>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
-                    size={{width: 115, height: 160}}
+                    size={{width: Window.width/4, height: Window.width/4}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween1}
                     key={this.state.creatureKey1}
                     character={mammalCharacter}/>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
-                    size={{width: 115, height: 160}}
+                    size={{width: Window.width/4, height: Window.width/4}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
                     key={this.state.creatureKey2}
                     character={goatCharacter}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 256, height: 256}}
+                    size={{width: Window.height/2, height: Window.height/2}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween3}
@@ -837,7 +832,7 @@ class GameTwo3 extends Component {
                     fps={10}
                     character={frogCharacter}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween4}
@@ -846,7 +841,7 @@ class GameTwo3 extends Component {
                     spriteAnimationKey="green"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween5}
@@ -855,7 +850,7 @@ class GameTwo3 extends Component {
                     spriteAnimationKey="blue"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween6}
@@ -864,7 +859,7 @@ class GameTwo3 extends Component {
                     spriteAnimationKey="red"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween7}
@@ -872,8 +867,8 @@ class GameTwo3 extends Component {
                     character={omnivoreCharacter}
                     spriteAnimationKey="yellow"
                     loopAnimation={true}/>
-                <AnimatedSprite coordinates={{top:80,left:0}}
-                    size={{width:143,height:125}}
+                <AnimatedSprite coordinates={{top:100,left:-5}}
+                    size={{width:Window.width/6,height:(Window.width/6)*0.878}}
                     draggable={false}
                     character={leverCharacter}
                     tweenStart="touch"
@@ -881,14 +876,14 @@ class GameTwo3 extends Component {
                     onPress={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft-30}}
                     key={this.state.signKey1}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
                 {this.state.showFood1 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.phase1Left}
                     key={this.state.foodKey1}
@@ -901,14 +896,14 @@ class GameTwo3 extends Component {
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing-30}}
                     key={this.state.signKey2}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
                 {this.state.showFood2 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.phase1Middle}
                     key={this.state.foodKey2}
@@ -921,14 +916,14 @@ class GameTwo3 extends Component {
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
                     key={this.state.signKey3}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
                 {this.state.showFood3 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.phase1Right}
                     key={this.state.foodKey3}

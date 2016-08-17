@@ -31,18 +31,18 @@ import goatCharacter from "../../sprites/goat/goatCharacter";
 
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [480,180];
-const endCoordinates2 = [400,160];
+const endCoordinates = [Window.width*0.65,Window.height*0.5];
+const endCoordinates2 = [Window.width*0.6,Window.height*0.4];
 // these constants specify the initial locations and spacing of the food items
-const startLeft = 250;
-const startTop = -200;
+const startLeft = Window.width*0.4;
+const startTop = -250;
 const endTopSign = -15;
-const endTopCan = 80;
+const endTopCan = Window.height*0.2;
 
 const sprite2Start = [startLeft,startTop];
 
-const creatureStart = [800,115];
-const creatureEnd = [Window.width-250,115];
+const creatureStart = [Window.width+500,Window.height*0.5];
+const creatureEnd = [Window.width*0.65,Window.height*0.5];
 
 class GameTwo extends Component {
 
@@ -99,7 +99,7 @@ class GameTwo extends Component {
           tweenType: "move",
           startXY: start,
           endXY: end,
-          duration: 750,
+          duration: 1500,
           repeatable: false,
           loop: false,
         }
@@ -218,7 +218,8 @@ class GameTwo extends Component {
                       creatureKey2: Math.random(),
                       creatureKey3: Math.random(),
                       creatureTween2: tweenMove(creatureEnd,creatureStart),
-                      creatureTween3: tweenMove(creatureStart, creatureEnd),
+                      creatureTween3: tweenMove([Window.width+500,Window.height*0.4],
+                                                [Window.width*0.65,Window.height*0.4]),
                      })
         break;
     }
@@ -231,7 +232,7 @@ class GameTwo extends Component {
   nextLevel = () => {
     this.setState({
       creatureKey3: Math.random(),
-      creatureTween3: tweenMove([Window.width-250,115],[700,115]),
+      creatureTween3: tweenMove([Window.width*0.65,Window.height*0.4],[Window.width+500,Window.height*0.4]),
     });
     setTimeout(this.toggleLevel,1500);
   }
@@ -291,7 +292,7 @@ class GameTwo extends Component {
         this.setState({creatureTween2: tweenStatic(creatureEnd)})
         break;
       case 3:
-        this.setState({creatureTween3: tweenStatic([Window.width-250,115])})
+        this.setState({creatureTween3: tweenStatic([Window.width*0.65,Window.height*0.4])})
         break;
     }
   }
@@ -350,7 +351,7 @@ class GameTwo extends Component {
   render() {
 
     const tweenOptsLever = {
-      tweenType: "hop",
+      tweenType: "bounce",
       startY: 80,
       repeatable: true,
       loop: false,
@@ -360,7 +361,7 @@ class GameTwo extends Component {
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: 256, height: 256}}
+                    size={{width: Window.width/4, height: Window.width/4}}
                     draggable={false}
                     character={mammalCharacter}
                     tweenStart={"auto"}
@@ -372,7 +373,7 @@ class GameTwo extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: 256, height: 256}}
+                    size={{width: Window.width/4, height: Window.width/4}}
                     draggable={false}
                     character={goatCharacter}
                     tweenStart={"auto"}
@@ -384,7 +385,7 @@ class GameTwo extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
                 <AnimatedSprite coordinates={{top: Window.height -50, left: Window.width - 120}}
-                    size={{width: 256, height: 256}}
+                    size={{width: Window.height/2, height: Window.height/2}}
                     draggable={false}
                     character={frogCharacter}
                     tweenStart={"auto"}
@@ -395,8 +396,8 @@ class GameTwo extends Component {
                     loopAnimation={false}
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
-                <AnimatedSprite coordinates={{top:80,left:0}}
-                    size={{width:143,height:125}}
+                <AnimatedSprite coordinates={{top:100,left:-5}}
+                    size={{width:Window.width/6,height:(Window.width/6)*0.878}}
                     draggable={false}
                     character={leverCharacter}
                     tweenStart="touch"
@@ -404,14 +405,14 @@ class GameTwo extends Component {
                     onPress={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
                     key={this.state.signKey}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+32}}
                     key={this.state.foodKey}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.foodCharacter}
                     tweenStart="auto"
