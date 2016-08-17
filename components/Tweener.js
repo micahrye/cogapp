@@ -547,7 +547,7 @@ class Tweener extends React.Component{
         this.props.onTweenFinish(true);
         return
       }else {
-        curveSpin(options, state);
+        curveSpin2(options, state);
       }
     });
   }
@@ -595,7 +595,7 @@ class Tweener extends React.Component{
         this.props.onTweenFinish(true);
         return
       }else {
-        curveSpin(options, state);
+        curveSpin3(options, state);
       }
     });
   }

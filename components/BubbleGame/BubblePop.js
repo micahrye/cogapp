@@ -297,7 +297,7 @@ class BubblePop extends React.Component {
       <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
           <View style={styles.topBar}>
             <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>Seconds To Pop: {this.state.popTime}</Text>
+              <Text>{'Seconds To Pop: '}{this.state.popTime}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.gameWorld}>
@@ -379,5 +379,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 });
+
+BubblePop.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
 
 export default BubblePop;

@@ -236,7 +236,7 @@ class BugZap extends React.Component {
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>Go to Level 1</Text>
+              <Text>{'Go to Level 1'}</Text>
             </TouchableOpacity>
 
             {this.state.showBug ?
@@ -295,4 +295,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+BugZap.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
+
 export default BugZap;
