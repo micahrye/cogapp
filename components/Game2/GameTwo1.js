@@ -119,6 +119,19 @@ class GameTwo1 extends Component {
        loop: false,
     };
 
+    tweenStatic = function(pos) {
+      return(
+        {
+         tweenType: "move",
+         startXY: pos,
+         endXY: pos,
+         duration: 0,
+         repeatable: false,
+         loop: false,
+        }
+      );
+    }
+
     this.state = {
       foodKey1: Math.random(), //keys for food,signs,creatures
       foodKey2: Math.random(),

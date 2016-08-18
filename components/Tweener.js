@@ -189,7 +189,7 @@ class Tweener extends React.Component{
  wiggle(options, state) {
    Animated.sequence([
    Animated.timing(
-     state.rotation,
+     state.rotateZ,
      {
        toValue: 3,
        easing: Easing.linear,
@@ -197,7 +197,7 @@ class Tweener extends React.Component{
      }
    ),
    Animated.timing(
-     state.rotation,
+     state.rotateZ,
      {
        toValue: -3,
        easing: Easing.linear,
@@ -205,7 +205,7 @@ class Tweener extends React.Component{
      }
    ),
    Animated.spring(
-     state.rotation,
+     state.rotateZ,
      {
        toValue: 0,
        friction: 1,
