@@ -187,12 +187,17 @@ class Tweener extends React.Component{
  }
 
  wiggle(options, state) {
-   console.warn('here');
+   if (this.props.stop) {
+     let stopValues = [];
+     state.left.stopAnimation((value) => stopValues.push(value));
+     state.top.stopAnimation((value) => stopValues.push(value));
+     this.props.stopValues(stopValues);
+   }
    Animated.sequence([
    Animated.timing(
      state.rotateZ,
      {
-       toValue: 3,
+       toValue: 10,
        easing: Easing.linear,
        duration: 100,
      }
@@ -200,7 +205,7 @@ class Tweener extends React.Component{
    Animated.timing(
      state.rotateZ,
      {
-       toValue: -3,
+       toValue: -10,
        easing: Easing.linear,
        duration: 100,
      }
@@ -210,6 +215,7 @@ class Tweener extends React.Component{
      {
        toValue: 0,
        friction: 1,
+       duration: 0,
      }
    ),
  ]).start(() => {
@@ -217,7 +223,7 @@ class Tweener extends React.Component{
     this.props.onTweenFinish(true);
     return
    }else{
-     wiggle(options, state);
+     this.wiggle(options, state);
    }
  });
  }
