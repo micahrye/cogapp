@@ -45,20 +45,20 @@ import GameFour from './components/Game4/GameFour';
 import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
 import GameSixLoading from './components/Game6/GameSixLoading';
-import NextTrial from './components/NextTrial'
+import NextTrial from './components/NextTrial';
 
 
 class CogApp extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
 
   }
 
-  componentDidMount() {
+  componentDidMount () {
 
   }
 
-  render() {
+  render () {
     return (
       <Navigator
   initialRoute={{name: 'My First Scene', id: 'Main'}}
@@ -115,8 +115,8 @@ class CogApp extends React.Component {
       return <GameThreeLevel4 navigator={navigator} />
     } else if (route.id === 'GameFourLoading'){
       return <GameFourLoading navigator={navigator} />
-    } else if (route.id === 'GameFour'){
-      return <GameFour navigator={navigator} />
+    } else if (route.id === 'GameFour') {
+      return <GameFour navigator={navigator} route={route}/>
     } else if (route.id === 'GameFive'){
       return <GameFive navigator={navigator} />
     } else if (route.id === 'GameSixLoading'){

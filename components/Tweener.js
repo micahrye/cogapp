@@ -187,6 +187,7 @@ class Tweener extends React.Component{
  }
 
  wiggle(options, state) {
+   console.warn('here');
    Animated.sequence([
    Animated.timing(
      state.rotateZ,
