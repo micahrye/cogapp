@@ -186,7 +186,8 @@ class GameTwo3 extends Component {
                        currentCreature: num});
         break;
       case 3:
-        this.setState({creatureTween3:tweenMove([700,115],[Window.width-250,115]),
+        this.setState({creatureTween3: tweenMove([Window.width+500,Window.height*0.4],
+                                                 [Window.width*0.65,Window.height*0.4]),
                        creatureKey3: Math.random(),
                        currentCreature: num});
         break;
@@ -597,7 +598,8 @@ class GameTwo3 extends Component {
     } else if (this.state.currentCreature === 3) {
       this.setState({
         creatureKey3: Math.random(),
-        creatureTween3: tweenMove([Window.width-250,115],[700,115])});
+        creatureTween3: tweenMove([Window.width*0.65,Window.height*0.4],
+                                 [Window.width+500,Window.height*0.4])});
     } else if (this.state.currentCreature === 4) {
       this.setState({
         creatureKey4: Math.random(),
