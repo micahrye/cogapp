@@ -17,99 +17,116 @@ class GameFour extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = {
-      moveableBoxes: [],
-      mammalKey: 0,
-      foodKey: 1,
-      boxKey1: 2,
-      boxKey2: 3,
-      boxKey3: 4,
-      mammalSpriteAnimationKey: 'default',
-      boxSpriteAnimationKey: 'red',
-      targetBoxSpriteAnimationKey: 'green',
-      showFood: false,
-      loopAnimation: false,
-      showBox1: true,
-      showBox2: true,
-      showBox3: true,
-    };
-//    this.boxSpriteAnimationKey = 'default';
     this.boxTween = [{},{},{}];
     this.left = [];
+    this.boxKeys = [0, 1, 2];
+    this.showBoxes = [true, true, true];
+    this.fixedKeys = [];
+    this.boxChosen = false;
+    this.fixedSpriteAnimationKeys = [];
+    this.correctChoice = undefined;
+    this.wrongChoices = [];
 
+    this.state = {
+      moveableBoxes: [],
+      mammalKey: 3,
+      foodKey: 4,
+      boxKeys: this.boxKeys,
+      mammalSpriteAnimationKey: 'default',
+      showFood: false,
+      loopAnimation: false,
+      showBoxes: this.showBoxes,
+    };
   }
 
   componentWillMount () {
+    this.createSequence();
     this.createFixedBoxes();
     this.setUpChoices();
   }
 
+  createSequence () {
+    let sequence = [];
+    let sequenceChoice = Math.floor(Math.random()*2);
+    if (sequenceChoice === 0) {
+      sequence = [
+        'green', 'green', 'green', 'red', 'red', 'red', 'green', 'green',
+      ];
+      this.correctChoice = 'green';
+      this.wrongChoices.push('red', 'red');
+    }
+    else {
+      sequence = [
+        'green', 'red', 'red', 'green', 'red', 'red', 'green', 'red',
+      ];
+      this.correctChoice = 'red';
+      this.wrongChoices.push('green', 'green');
+    }
+    this.fixedSpriteAnimationKeys.push(sequence);
+  }
+
   createFixedBoxes () {
-    // create fixed boxes
+    let top = 25;
     for (let i=0; i < 9; i++) {
-      if (i < 8) { // put text in first 8 boxes
-        fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}><Text style={styles.text}>{i}</Text></View>);
+      if (i > 2 && i < 6) { // first row of boxes
+        top = 110;
       }
-      else if (i === 8) {
-        fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}><Text>{' '}</Text></View>);
+      else if ( i >= 6) { // second row of boxes
+        top = 195;
+      }
+      if (i < 8) {
+        fixedBoxes.push(
+          <AnimatedSprite
+            key={Math.random()}
+            coordinates={{top: top, left: ((i%3)*90) + 15}}
+            size={{width: 60, height: 60}}
+            character={squareCharacter}
+            spriteAnimationKey={this.fixedSpriteAnimationKeys[0][i]}
+            loopAnimation={true}
+          />
+        );
+      }
+      else if (i === 8) { // last box is empty
+        fixedBoxes.push(<View key={Math.random()} style={styles.emptyBox}><Text>{' '}</Text></View>);
       }
     }
   }
 
+  // random location of correct choice
   setUpChoices () {
-    // random location of correct choice
     let correctLocation = Math.floor(Math.random() * 3); // either 0, 1, or 2
     if (correctLocation === 1) {
-      this.setState({ // TODO this all kinda sucks too
-        left1: 15,
-        left2: 105,
-        left3: 195,
-      });
       this.left = [15, 105, 195];
     }
     else if (correctLocation === 2) {
-      this.setState({
-        left1: 105,
-        left2: 15,
-        left3: 195,
-      });
-      this.left = [105, 15, 195]; //TODO I feel like I'm onto something with this, maybe use this.left instead of state in render...
+      this.left = [105, 15, 195];
     }
     else {
-      this.setState({
-        left1: 105,
-        left2: 195,
-        left3: 15,
-      });
       this.left = [105, 195, 15];
     }
-    this.setState({ //TODO this sucks
-      boxKey1: Math.random(),
-      boxKey2: Math.random(),
-      boxKey3: Math.random(),
-    });
   }
 
   // check if a moveable box has been dragged to dashed box and if true remove it
   checkLocation = (newX, newY, numBox) => {
-    if ((newX > 185 && newX < 205) && (newY > 190 && newY < 210)) {
+    if ((newX > 185 && newX < 205) && (newY > 190 && newY < 210) && !this.boxChosen) {
       if (numBox === 1) {
         this.foodFall();
-        this.setState({showBox1: false});
+        this.showBoxes[0] = false;
       }
       else {
         this.disgust();
         if (numBox === 2) {
-          this.setState({showBox2: false});
+          this.showBoxes[1] = false;
         }
         else {
-          this.setState({showBox3: false});
+        this.showBoxes[2] = false;
         }
       }
+      this.setState({showBoxes: this.showBoxes});
+      this.boxChosen = true; // so they can't drag another box while animal reaction happens
     }
 
     else {
-      console.warn('here');
       this.boxTween[numBox] = {
         tweenType: 'move',
         startXY: [newX, newY],
@@ -117,10 +134,9 @@ class GameFour extends React.Component {
         duration: 0,
         loop: false,
       };
-      this.setState({ //TODO figure out some better way of doing this than just resetting all or using if statements
-        boxKey1: Math.random(),
-        boxKey2: Math.random(),
-        boxKey3: Math.random(),
+      this.boxKeys[numBox - 1] = Math.random();
+      this.setState({
+        boxKeys: this.boxKeys,
       });
     }
   }
@@ -134,7 +150,10 @@ class GameFour extends React.Component {
   }
 
   disgust () {
-    this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'disgust'});
+    this.setState({
+      mammalKey: Math.random(),
+      mammalSpriteAnimationKey: 'disgust',
+    });
   }
 
   onTweenFinish () {
@@ -160,71 +179,57 @@ class GameFour extends React.Component {
         loopAnimation: true,
       });
     }
+    else if (animation === 'disgust' || animation === 'celebrate') {
+      this.boxChosen = false; // after animal reacts, player can drag boxes again
+    }
   }
 
-  getBoxStyles (boxNum) {
-    let borderStyle = undefined;
-    if (boxNum === 8) { // last fixed box is dashed
-      borderStyle = 'dashed';
-    }
-    else {
-      borderStyle = 'solid';
-    }
-    return ({
-      borderWidth: 2,
-      borderStyle: borderStyle,
-      width: 60,
-      height: 60,
-      margin: 15,
-      alignItems: 'center',
-    });
-  }
   render () {
     return (
       <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
         <View style={styles.container}>
           <View style={styles.boxContainer}>
             {fixedBoxes}
-            {this.state.showBox1 ?
+            {this.state.showBoxes[0] ?
               <AnimatedSprite
-                key={this.state.boxKey1}
+                key={this.state.boxKeys[0]}
                 spriteKey={1}
-                coordinates={{top: 300, left: this.state.left1}} // can put left in array and just use set state on keys to make less variables
+                coordinates={{top: 300, left: this.left[0]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 1)}
                 character={squareCharacter}
-                spriteAnimationKey={this.state.targetBoxSpriteAnimationKey}
+                spriteAnimationKey={this.correctChoice}
                 loopAnimation={true}
                 tween={this.boxTween[1]}
                 tweenStart='auto'
               />
             : null}
-            {this.state.showBox2 ?
+            {this.state.showBoxes[1] ?
               <AnimatedSprite
-                key={this.state.boxKey2}
+                key={this.state.boxKeys[1]}
                 spriteKey={2}
-                coordinates={{top: 300, left: this.state.left2}}
+                coordinates={{top: 300, left: this.left[1]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 2)}
                 character={squareCharacter}
-                spriteAnimationKey={this.state.boxSpriteAnimationKey}
+                spriteAnimationKey={this.wrongChoices[0]}
                 loopAnimation={true}
                 tween={this.boxTween[2]}
                 tweenStart='auto'
               />
             : null}
-            {this.state.showBox3 ?
+            {this.state.showBoxes[2] ?
               <AnimatedSprite
-                key={this.state.boxKey3}
+                key={this.state.boxKeys[2]}
                 spriteKey={3}
-                coordinates={{top: 300, left: this.state.left3}}
+                coordinates={{top: 300, left: this.left[2]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 3)}
                 character={squareCharacter}
-                spriteAnimationKey={this.state.boxSpriteAnimationKey}
+                spriteAnimationKey={this.wrongChoices[1]}
                 loopAnimation={true}
                 tween={this.boxTween[3]}
                 tweenStart='auto'
@@ -288,6 +293,14 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 45,
+  },
+  emptyBox: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    width: 60,
+    height: 60,
+    top: 30,
+    left: 195,
   },
 });
 
