@@ -105,7 +105,7 @@ class GameTwo1 extends Component {
           tweenType: "move",
           startXY: start,
           endXY: end,
-          duration: 750,
+          duration: 1500,
           repeatable: false,
           loop: false,
         }
@@ -232,8 +232,8 @@ class GameTwo1 extends Component {
                          timeoutHuh: false,
                          foodPressed: false,});
           this.toggleCreature();
-          if (this.state.numTrials >= 8) {
-            setTimeout(this.buttonPress,2000);
+          if (this.state.numTrials >= 9) {
+            setTimeout(this.buttonPress,100);
           }
         }
         this.setState({timeoutHuh: false});

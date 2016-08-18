@@ -17,7 +17,10 @@ import {
 import AnimatedSprite from "../animatedSprite";
 import Tweener from "../Tweener";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
-import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
+import OmnivoreGreen from "../../sprites/omnivore/OmnivoreGreen";
+import OmnivoreBlue from "../../sprites/omnivore/OmnivoreBlue";
+import OmnivoreRed from "../../sprites/omnivore/OmnivoreRed";
+import OmnivoreYellow from "../../sprites/omnivore/OmnivoreYellow";
 import goatCharacter from "../../sprites/goat/goatCharacter";
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
@@ -852,8 +855,8 @@ class GameTwo3 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween4}
                     key={this.state.creatureKey4}
-                    character={omnivoreCharacter}
-                    spriteAnimationKey="green"
+                    character={OmnivoreGreen}
+                    spriteAnimationKey="default"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
                     size={{width: (Window.width/5)*1.344, height: Window.width/5}}
@@ -861,8 +864,8 @@ class GameTwo3 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween5}
                     key={this.state.creatureKey5}
-                    character={omnivoreCharacter}
-                    spriteAnimationKey="blue"
+                    character={OmnivoreBlue}
+                    spriteAnimationKey="default"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
                     size={{width: (Window.width/5)*1.344, height: Window.width/5}}
@@ -870,8 +873,8 @@ class GameTwo3 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween6}
                     key={this.state.creatureKey6}
-                    character={omnivoreCharacter}
-                    spriteAnimationKey="red"
+                    character={OmnivoreRed}
+                    spriteAnimationKey="default"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
                     size={{width: (Window.width/5)*1.344, height: Window.width/5}}
@@ -879,8 +882,8 @@ class GameTwo3 extends Component {
                     tweenStart={"auto"}
                     tween={this.state.creatureTween7}
                     key={this.state.creatureKey7}
-                    character={omnivoreCharacter}
-                    spriteAnimationKey="yellow"
+                    character={OmnivoreYellow}
+                    spriteAnimationKey="default"
                     loopAnimation={true}/>
                 <AnimatedSprite coordinates={{top:100,left:-5}}
                     size={{width:Window.width/6,height:(Window.width/6)*0.878}}
