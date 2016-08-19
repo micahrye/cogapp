@@ -36,7 +36,7 @@ class GameTwoLoading extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.navigator.replace({
-        id: 'GameTwo3',
+        id: 'GameTwo',
       });
     },LoadingTime);
     this.barLoad();

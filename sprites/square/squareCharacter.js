@@ -15,6 +15,10 @@ const squareCharacter = {
     require("./red_square.png"),
   ],
 
+  blue: [
+    require("./blue_square.png"),
+  ],
+
 };
 
 export default squareCharacter;

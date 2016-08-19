@@ -70,28 +70,28 @@ class GameFour extends React.Component {
           'green', 'green', 'green', 'red', 'red', 'red', 'green', 'green',
         ];
         this.correctChoice = 'green';
-        this.wrongChoices.push('red', 'red');
+        this.wrongChoices.push('red', 'blue');
         break;
       case 2:
         sequence = [
-          'green', 'red', 'red', 'green', 'red', 'red', 'green', 'red',
+          'green', 'blue', 'red', 'green', 'blue', 'red', 'green', 'blue',
         ];
         this.correctChoice = 'red';
-        this.wrongChoices.push('green', 'green');
+        this.wrongChoices.push('green', 'blue');
         break;
       case 3:
         sequence = [
-          'green', 'red', 'green', 'red', 'green', 'red', 'green', 'red',
+          'green', 'green', 'green', 'red', 'red', 'red', 'blue', 'blue',
         ];
-        this.correctChoice = 'green';
-        this.wrongChoices.push('red', 'red');
+        this.correctChoice = 'blue';
+        this.wrongChoices.push('red', 'green');
         break;
       case 4:
         sequence = [
-          'green', 'green', 'green', 'green', 'red', 'green', 'green', 'green',
+          'blue', 'red', 'blue', 'blue', 'red', 'blue', 'blue', 'red',
         ];
-        this.correctChoice = 'green';
-        this.wrongChoices.push('red', 'red');
+        this.correctChoice = 'blue';
+        this.wrongChoices.push('green', 'red');
         break;
     }
     this.fixedSpriteAnimationKeys.push(sequence);
@@ -127,20 +127,20 @@ class GameFour extends React.Component {
   // random location of correct choice box
   setUpChoices () {
     let correctLocation = Math.floor(Math.random() * 3); // either 0, 1, or 2
-    if (correctLocation === 1) { // TODO this should be 0, then 1
-      this.left = [15, 105, 195];
+    if (correctLocation === 0) {
+      this.left = [15, 195, 105];
     }
-    else if (correctLocation === 2) {
+    else if (correctLocation === 1) {
       this.left = [105, 15, 195];
     }
     else {
-      this.left = [105, 195, 15];
+      this.left = [195, 15, 105];
     }
   }
 
   // check if a moveable box has been dragged to dashed box and if true remove it
   checkLocation = (newX, newY, numBox) => {
-    if ((newX > 180 && newX < 210) && (newY > 185 && newY < 215) && !this.boxChosen) {
+    if ((newX > 180 && newX < 210) && (newY > 185 && newY < 220) && !this.boxChosen) {
       if (numBox === 1) { // correct box chosen
         this.foodFall();
         this.showBoxes[0] = false;
@@ -251,11 +251,12 @@ class GameFour extends React.Component {
         <View style={styles.container}>
           <View style={styles.boxContainer}>
             {this.fixedBoxes}
+            <View style={styles.separatingLine}><Text>{'ehllo'}</Text></View>
             {this.state.showBoxes[0] ?
               <AnimatedSprite
                 key={this.state.boxKeys[0]}
                 spriteKey={1}
-                coordinates={{top: 450, left: this.left[0]}}
+                coordinates={{top: 420, left: this.left[0]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 1)}
@@ -272,7 +273,7 @@ class GameFour extends React.Component {
               <AnimatedSprite
                 key={this.state.boxKeys[1]}
                 spriteKey={2}
-                coordinates={{top: 450, left: this.left[1]}}
+                coordinates={{top: 420, left: this.left[1]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 2)}
@@ -289,7 +290,7 @@ class GameFour extends React.Component {
               <AnimatedSprite
                 key={this.state.boxKeys[2]}
                 spriteKey={3}
-                coordinates={{top: 450, left: this.left[2]}}
+                coordinates={{top: 420, left: this.left[2]}}
                 size={{width: 60, height: 60}}
                 draggable={true}
                 draggedTo={(endX, endY) => this.checkLocation(endX, endY, 3)}
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     width: 280,
-    height: 550,
+    height: 520,
     borderWidth: 3,
     left: 372,
     marginTop: 20,
@@ -364,8 +365,17 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     width: 60,
     height: 60,
-    top: -45,
+    top: 195,
     left: 195,
+    position: 'absolute',
+  },
+  separatingLine: {
+    height: 0,
+    width: 230,
+    top: 400,
+    left: 20,
+    borderWidth: 1,
+    position: 'absolute',
   },
 });
 

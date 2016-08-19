@@ -21,7 +21,7 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const NUM_TRIALS = 3;
-const IDLE_DURATION = 750; // how long bug is catchable
+const IDLE_DURATION = 1000; // how long bug is catchable
 
 
 class BugZap3 extends React.Component {
@@ -242,7 +242,7 @@ class BugZap3 extends React.Component {
 
   bugSplat() {
     this.setState({
-      bugKey: Math.random(), 
+      bugKey: Math.random(),
       bugSpriteAnimationKey: 'splat',
     });
     this.loopAnimation = false;
@@ -339,7 +339,7 @@ class BugZap3 extends React.Component {
             <Text>Go to Game 2</Text>
           </TouchableOpacity>
 
-          <AnimatedSprite 
+          <AnimatedSprite
             key={this.state.bulbKey}
             coordinates={{top: -128, left: 450}}
             size={{width: 128, height: 300}}
@@ -349,8 +349,8 @@ class BugZap3 extends React.Component {
             tweenStart="auto"
             sound={this.state.sound}
             soundFile='lightswitch'/>
-      
-          {this.state.showBug ? 
+
+          {this.state.showBug ?
             <AnimatedSprite
               key={this.state.bugKey}
               coordinates={{top: 0, left: 0}}
@@ -360,7 +360,7 @@ class BugZap3 extends React.Component {
               tweenStart="auto"
               spriteAnimationKey={this.state.bugSpriteAnimationKey}
               loopAnimation={this.loopAnimation}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/> 
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
           : null}
 
           <AnimatedSprite
@@ -369,25 +369,25 @@ class BugZap3 extends React.Component {
             coordinates={{top: 200, left: 500}}
             size={{width: 750, height: 375}}
             character={frogCharacter}
-            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
+            spriteAnimationKey={this.state.frogSpriteAnimationKey}
             onPress={() => {this.frogTap(0)}}
             hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 0)}}
             getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
 
-       
-          <AnimatedSprite 
+
+          <AnimatedSprite
             key={this.state.frogKey1}
             spriteKey={1}
             coordinates={{top: 200, left: -250}}
             size={{width: 750, height: 375}}
             rotate={[{rotateY: '180deg'}]}
             character={frogCharacter}
-            spriteAnimationKey={this.state.frogSpriteAnimationKey} 
-            onPress={() => {this.frogTap(1)}} 
+            spriteAnimationKey={this.state.frogSpriteAnimationKey}
+            onPress={() => {this.frogTap(1)}}
             hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 1)}}
-            getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>          
+            getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
 
           <View>
             {this.state.blackoutScreen}
