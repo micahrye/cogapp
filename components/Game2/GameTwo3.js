@@ -666,6 +666,7 @@ class GameTwo3 extends Component {
 
   // Handles the events that need to occur when any food item is pressed
   onFoodPress = (spriteKey) => {
+    console.warn(spriteKey);
     readyToEat = true;
     xvalue = 0;
     // open current creature's mouth
@@ -704,6 +705,7 @@ class GameTwo3 extends Component {
           clearTimeout(this.timeout2);
           this.setState({phase1AnsweredCorrectly: 0,
                          numTrials: this.state.numTrials+1});
+          break;
       case 2: // (middle food sprite in phase 1)
          x = startLeft+spacing;
          this.setState({foodKey2: Math.random(),
@@ -714,6 +716,7 @@ class GameTwo3 extends Component {
          clearTimeout(this.timeout2);
          this.setState({timeoutHuh: false,
                          numTrials: this.state.numTrials+1});
+         break;
       case 3:  // (rightmost food sprite in phase 1)
          x = startLeft+spacing*2;
          this.setState({foodKey3: Math.random(),
@@ -799,7 +802,7 @@ class GameTwo3 extends Component {
         this.setState({animation: "default"})
         break;
       case "celebrate":
-        if (this.state.numAnsweredCorrectly) {
+        if (this.state.numAnsweredCorrectly === 2) {
           this.setState({foodFalling: false})
           this.setState({animation: "walk"})
           this.setState({signKey1: Math.random(),
@@ -812,7 +815,7 @@ class GameTwo3 extends Component {
                          foodTween13: tweenTimeout(signEndTop, startTop),
                          foodTween12: tweenTimeout(foodEndTop,startTop),
                          foodTween11: tweenTimeout(foodEndTop,startTop)}),
-           setTimeout(this.toggleCreature,500);
+           this.toggleCreature();
          } else
          {
            this.setState({animation: "default",
@@ -1068,7 +1071,7 @@ class GameTwo3 extends Component {
                     key={this.state.foodKey1}
                     tweenStart="auto"
                     tween={this.state.foodTween11}
-                    onPress={this.onFoodPress}
+                    onPress={(spriteKey) => this.onFoodPress(spriteKey)}
                     spriteKey={1}
                     spriteAnimationKey={this.state.spriteAnimationKey1}
                     loopAnimation={true}
@@ -1089,7 +1092,7 @@ class GameTwo3 extends Component {
                     key={this.state.foodKey2}
                     tweenStart="auto"
                     tween={this.state.foodTween12}
-                    onPress={this.onFoodPress}
+                    onPress={(spriteKey) => this.onFoodPress(spriteKey)}
                     spriteKey={2}
                     spriteAnimationKey={this.state.spriteAnimationKey2}
                     loopAnimation={true}
@@ -1110,7 +1113,7 @@ class GameTwo3 extends Component {
                     key={this.state.foodKey3}
                     tweenStart="auto"
                     tween={this.state.foodTween13}
-                    onPress={this.onFoodPress}
+                    onPress={(spriteKey) => this.onFoodPress(spriteKey)}
                     spriteKey={3}
                     spriteAnimationKey={this.state.spriteAnimationKey3}
                     loopAnimation={true}
