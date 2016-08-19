@@ -1039,7 +1039,7 @@ class GameTwo3 extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween7}
