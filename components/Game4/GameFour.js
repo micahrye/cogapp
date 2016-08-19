@@ -60,6 +60,8 @@ class GameFour extends React.Component {
     this.setUpChoices();
   }
 
+  // create sequence of shapes in matrix
+  // NOTE: temporary, until real assets come in
   createSequence () {
     let sequence = [];
     switch (this.trialNumber) {
@@ -98,10 +100,10 @@ class GameFour extends React.Component {
   createFixedBoxes () {
     let top = 25;
     for (let i=0; i < 9; i++) {
-      if (i > 2 && i < 6) { // first row of boxes
+      if (i > 2 && i < 6) { // second row of boxes
         top = 110;
       }
-      else if ( i >= 6) { // second row of boxes
+      else if ( i >= 6) { // third row of boxes
         top = 195;
       }
       if (i < 8) {
@@ -116,16 +118,16 @@ class GameFour extends React.Component {
           />
         );
       }
-      else if (i === 8) { // last box is empty
+      else if (i === 8) { // last box is empty //TODO can take text out now I know how to close view
         this.fixedBoxes.push(<View key={Math.random()} style={styles.emptyBox}><Text>{' '}</Text></View>);
       }
     }
   }
 
-  // random location of correct choice
+  // random location of correct choice box
   setUpChoices () {
     let correctLocation = Math.floor(Math.random() * 3); // either 0, 1, or 2
-    if (correctLocation === 1) {
+    if (correctLocation === 1) { // TODO this should be 0, then 1
       this.left = [15, 105, 195];
     }
     else if (correctLocation === 2) {
@@ -139,7 +141,7 @@ class GameFour extends React.Component {
   // check if a moveable box has been dragged to dashed box and if true remove it
   checkLocation = (newX, newY, numBox) => {
     if ((newX > 180 && newX < 210) && (newY > 185 && newY < 215) && !this.boxChosen) {
-      if (numBox === 1) {
+      if (numBox === 1) { // correct box chosen
         this.foodFall();
         this.showBoxes[0] = false;
       }
@@ -149,7 +151,7 @@ class GameFour extends React.Component {
           this.showBoxes[1] = false;
         }
         else {
-        this.showBoxes[2] = false;
+          this.showBoxes[2] = false;
         }
       }
       this.setState({showBoxes: this.showBoxes});
@@ -157,7 +159,7 @@ class GameFour extends React.Component {
     }
 
     else {
-      this.boxTween[numBox - 1] = {};
+      this.boxTween[numBox - 1] = {}; //TODO don't think I need this anymore
       this.boxKeys[numBox - 1] = Math.random();
       this.setState({
         boxKeys: this.boxKeys,
@@ -199,7 +201,7 @@ class GameFour extends React.Component {
         this.setState({boxKeys: this.boxKeys});
       }
     }
-    else {
+    else { // TODO make this "if(stopped){...}"
       this.stopWiggling = true;
     }
   }
