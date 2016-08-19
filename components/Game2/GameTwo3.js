@@ -1003,7 +1003,7 @@ class GameTwo3 extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween4}
@@ -1014,7 +1014,7 @@ class GameTwo3 extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween5}
@@ -1025,7 +1025,7 @@ class GameTwo3 extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: (Window.width/5)*1.344, height: Window.width/5}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween6}
@@ -1047,7 +1047,7 @@ class GameTwo3 extends Component {
                     onTweenFinish={this.onTweenEndCreature}
                     onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top:100,left:-5}}
-                    size={{width:Window.width/6,height:(Window.width/6)*0.878}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     character={leverCharacter}
                     tweenStart="touch"
