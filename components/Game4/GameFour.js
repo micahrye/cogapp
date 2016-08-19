@@ -118,8 +118,8 @@ class GameFour extends React.Component {
           />
         );
       }
-      else if (i === 8) { // last box is empty //TODO can take text out now I know how to close view
-        this.fixedBoxes.push(<View key={Math.random()} style={styles.emptyBox}><Text>{' '}</Text></View>);
+      else if (i === 8) { // last box is empty
+        this.fixedBoxes.push(<View key={Math.random()} style={styles.emptyBox} />);
       }
     }
   }
@@ -159,7 +159,6 @@ class GameFour extends React.Component {
     }
 
     else {
-      this.boxTween[numBox - 1] = {}; //TODO don't think I need this anymore
       this.boxKeys[numBox - 1] = Math.random();
       this.setState({
         boxKeys: this.boxKeys,
@@ -201,7 +200,7 @@ class GameFour extends React.Component {
         this.setState({boxKeys: this.boxKeys});
       }
     }
-    else { // TODO make this "if(stopped){...}"
+    if (stopped) {
       this.stopWiggling = true;
     }
   }
