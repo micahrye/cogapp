@@ -807,14 +807,14 @@ class GameTwo3 extends Component {
                        foodKey2: Math.random(),
                        foodKey3: Math.random(),
                        signTween2: tweenTimeout(signEndTop,startTop),
-                       foodTween13: tweenTimeout(signEndTop, startTop)
+                       foodTween13: tweenTimeout(signEndTop, startTop),
                        foodTween12: tweenTimeout(foodEndTop,startTop),
                        foodTween11: tweenTimeout(foodEndTop,startTop)}),
-         setTimeout(this.toggleCreature.bind(this),500);
+         setTimeout(this.toggleCreature,500);
         break;
       case "disgust":
         this.setState({foodFalling: false,
-                       animation: "default"})
+                       animation: "default"});
         break;
       case "chew":
         if (this.state.phase1Pressed === "left") {
@@ -823,18 +823,21 @@ class GameTwo3 extends Component {
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(1);
         } else if (this.state.phase1Pressed === "middle") {
           if (this.state.phase1Correct[1] === "correct") {
             this.setState({animation: "celebrate"})
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(2)
         } else if (this.state.phase1Pressed === "right") {
           if (this.state.phase1Correct[2] === "correct") {
             this.setState({animation: "celebrate"})
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(3)
         }
 
       switch(this.state.currentCreature) {
@@ -894,18 +897,21 @@ class GameTwo3 extends Component {
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(1)
         } else if (this.state.phase1Pressed === "middle") {
           if (this.state.phase1Correct[1] === "correct") {
             this.setState({animation: "celebrate"})
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(2)
         } else if (this.state.phase1Pressed === "right") {
           if (this.state.phase1Correct[2] === "correct") {
             this.setState({animation: "celebrate"})
           } else {
             this.setState({animation: "disgust"})
           }
+          this.removeFood(3)
         }
 
       switch(this.state.currentCreature) {

@@ -22,7 +22,7 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
-import bugfoodCharacter from "../../sprites/bug/bugfoodCharacter";
+import bugfoodCharacter from "../../sprites/bugfood/bugfoodCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 
