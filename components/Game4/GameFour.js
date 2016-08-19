@@ -140,7 +140,7 @@ class GameFour extends React.Component {
 
   // check if a moveable box has been dragged to dashed box and if true remove it
   checkLocation = (newX, newY, numBox) => {
-    if ((newX > 180 && newX < 210) && (newY > 185 && newY < 220) && !this.boxChosen) {
+    if ((newX > 170 && newX < 225) && (newY > 170 && newY < 215) && !this.boxChosen) {
       if (numBox === 1) { // correct box chosen
         this.foodFall();
         this.showBoxes[0] = false;
