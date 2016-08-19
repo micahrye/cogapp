@@ -155,6 +155,7 @@ class GameTwo3 extends Component {
       phase1Right: grassCharacter,
       phase1Correct: ["incorrect","incorrect","incorrect"], // tells which sprites are correct in phase1
       phase1Pressed: "left",
+      numAnsweredCorrectly: 0,
       foodTween11: tweenInitial,
       foodTween12: tweenInitial,
       foodTween13: tweenInitial,
@@ -798,19 +799,25 @@ class GameTwo3 extends Component {
         this.setState({animation: "default"})
         break;
       case "celebrate":
-        this.setState({foodFalling: false})
-        this.setState({animation: "walk"})
-        this.setState({signKey1: Math.random(),
-                       signKey2: Math.random(),
-                       signKey3: Math.random(),
-                       foodKey1: Math.random(),
-                       foodKey2: Math.random(),
-                       foodKey3: Math.random(),
-                       signTween2: tweenTimeout(signEndTop,startTop),
-                       foodTween13: tweenTimeout(signEndTop, startTop),
-                       foodTween12: tweenTimeout(foodEndTop,startTop),
-                       foodTween11: tweenTimeout(foodEndTop,startTop)}),
-         setTimeout(this.toggleCreature,500);
+        if (this.state.numAnsweredCorrectly) {
+          this.setState({foodFalling: false})
+          this.setState({animation: "walk"})
+          this.setState({signKey1: Math.random(),
+                         signKey2: Math.random(),
+                         signKey3: Math.random(),
+                         foodKey1: Math.random(),
+                         foodKey2: Math.random(),
+                         foodKey3: Math.random(),
+                         signTween2: tweenTimeout(signEndTop,startTop),
+                         foodTween13: tweenTimeout(signEndTop, startTop),
+                         foodTween12: tweenTimeout(foodEndTop,startTop),
+                         foodTween11: tweenTimeout(foodEndTop,startTop)}),
+           setTimeout(this.toggleCreature,500);
+         } else
+         {
+           this.setState({animation: "default",
+                          numAnsweredCorrectly: 0})
+         }
         break;
       case "disgust":
         this.setState({foodFalling: false,
@@ -893,21 +900,24 @@ class GameTwo3 extends Component {
       case "eat":
         if (this.state.phase1Pressed === "left") {
           if (this.state.phase1Correct[0] === "correct") {
-            this.setState({animation: "celebrate"})
+            this.setState({animation: "celebrate",
+                           numAnsweredCorrectly: this.state.numAnsweredCorrectly+1})
           } else {
             this.setState({animation: "disgust"})
           }
           this.removeFood(1)
         } else if (this.state.phase1Pressed === "middle") {
           if (this.state.phase1Correct[1] === "correct") {
-            this.setState({animation: "celebrate"})
+            this.setState({animation: "celebrate",
+                           numAnsweredCorrectly: this.state.numAnsweredCorrectly+1})
           } else {
             this.setState({animation: "disgust"})
           }
           this.removeFood(2)
         } else if (this.state.phase1Pressed === "right") {
           if (this.state.phase1Correct[2] === "correct") {
-            this.setState({animation: "celebrate"})
+            this.setState({animation: "celebrate",
+                           numAnsweredCorrectly: this.state.numAnsweredCorrectly+1})
           } else {
             this.setState({animation: "disgust"})
           }
