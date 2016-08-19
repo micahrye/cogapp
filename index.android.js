@@ -96,29 +96,29 @@ class CogApp extends React.Component {
     } else if (route.id === 'GameTwoLoading') {
       return <GameTwoLoading navigator={navigator} route={route} />
     } else if (route.id === 'GameTwo'){
-      return <GameTwo navigator={navigator} />
+      return <GameTwo navigator={navigator} route={route} />
     } else if (route.id === 'GameTwo1'){
-      return <GameTwoLevel1 navigator={navigator} />
+      return <GameTwoLevel1 navigator={navigator} route={route}/>
     } else if (route.id === 'GameTwo2'){
-      return <GameTwoLevel2 navigator={navigator} />
+      return <GameTwoLevel2 navigator={navigator} route={route}/>
     } else if (route.id === 'GameTwo3'){
-      return <GameTwoLevel3 navigator={navigator} />
+      return <GameTwoLevel3 navigator={navigator} route={route}/>
     } else if (route.id === 'GameThree'){
-      return <GameThree navigator={navigator} />
+      return <GameThree navigator={navigator} route={route}/>
     } else if (route.id === 'GameThree1'){
-      return <GameThree1 navigator={navigator} />
+      return <GameThree1 navigator={navigator} route={route}/>
     } else if (route.id === 'GameThree2'){
-      return <GameThreeLevel2 navigator={navigator} />
+      return <GameThreeLevel2 navigator={navigator} route={route}/>
     } else if (route.id === 'GameThree3'){
-      return <GameThreeLevel3 navigator={navigator} />
+      return <GameThreeLevel3 navigator={navigator} route={route}/>
     } else if (route.id === 'GameThree4'){
-      return <GameThreeLevel4 navigator={navigator} />
+      return <GameThreeLevel4 navigator={navigator} route={route}/>
     } else if (route.id === 'GameFourLoading'){
-      return <GameFourLoading navigator={navigator} />
+      return <GameFourLoading navigator={navigator} route={route}/>
     } else if (route.id === 'GameFour') {
       return <GameFour navigator={navigator} route={route}/>
     } else if (route.id === 'GameFive'){
-      return <GameFive navigator={navigator} />
+      return <GameFive navigator={navigator} route={route}/>
     } else if (route.id === 'GameSixLoading'){
       return <GameSixLoading navigator={navigator} route={route}/>
     } else if (route.id === 'GameSix'){

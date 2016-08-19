@@ -4,8 +4,6 @@ import {
   Text,
   View,
   Image,
-  Animated,
-  Easing,
 } from 'react-native';
 
 import AnimatedSprite from "../animatedSprite";
@@ -22,7 +20,13 @@ class GameFour extends React.Component {
     this.boxTween = [{
       tweenType: 'wiggle',
       loop: false,
-    },{},{}];
+    },{
+      tweenType: 'wiggle',
+      loop: false,
+    },{
+      tweenType: 'wiggle',
+      loop: false,
+    }];
     this.left = [];
     this.boxKeys = [0, 1, 2];
     this.showBoxes = [true, true, true];
@@ -33,7 +37,7 @@ class GameFour extends React.Component {
     this.wrongChoices = [];
     this.fixedBoxes = [];
     this.trialNumber = 1;
-    this.touched = false;
+    this.stopWiggling = false;
 
     this.state = {
       moveableBoxes: [],
@@ -44,7 +48,6 @@ class GameFour extends React.Component {
       showFood: false,
       loopAnimation: false,
       showBoxes: this.showBoxes,
-      wiggle: new Animated.Value(0),
     };
   }
 
@@ -154,13 +157,7 @@ class GameFour extends React.Component {
     }
 
     else {
-      // this.boxTween[numBox - 1] = {
-      //   tweenType: 'move',
-      //   startXY: [newX, newY],
-      //   endXY: [this.left[numBox - 1], 450],
-      //   duration: 0,
-      //   loop: false,
-      // };
+      this.boxTween[numBox - 1] = {};
       this.boxKeys[numBox - 1] = Math.random();
       this.setState({
         boxKeys: this.boxKeys,
@@ -183,8 +180,8 @@ class GameFour extends React.Component {
     });
   }
 
-  onTweenFinish (spriteKey) {
-    if (spriteKey === 5) {
+  onTweenFinish (spriteKey, stopped) {
+    if (spriteKey === 5) { // mammal
       this.setState({
         mammalKey: Math.random(),
         mammalSpriteAnimationKey: 'chew',
@@ -192,14 +189,18 @@ class GameFour extends React.Component {
         loopAnimation: false,
       });
     }
-    else if (spriteKey === 1 && !this.touched) {
-      console.warn('here');
-      this.boxTween[0] = {
-        tweenType: 'wiggle',
-        loop: false,
-      };
-      this.boxKeys[0] = Math.random();
-      this.setState({boxKeys: this.boxKeys});
+    if (!stopped && !this.stopWiggling) { // do not repeat wiggle if boxes have already been pressed
+      if (spriteKey === 1 || spriteKey === 2 || spriteKey === 3) { // boxes
+        this.boxTween[spriteKey - 1] = {
+          tweenType: 'wiggle',
+          loop: false,
+        };
+        this.boxKeys[spriteKey - 1] = Math.random();
+        this.setState({boxKeys: this.boxKeys});
+      }
+    }
+    else {
+      this.stopWiggling = true;
     }
   }
 
@@ -243,46 +244,6 @@ class GameFour extends React.Component {
     return 'GameFour';
   }
 
-  // wiggle () {
-  //   Animated.sequence([
-  //     Animated.timing(
-  //       this.state.wiggle,
-  //       {
-  //         toValue: 10,
-  //         easing: Easing.linear,
-  //         duration: 100,
-  //         delay: 800,
-  //       }
-  //     ),
-  //     Animated.timing(
-  //       this.state.wiggle,
-  //       {
-  //         toValue: -10,
-  //         easing: Easing.linear,
-  //         duration: 100,
-  //       }
-  //     ),
-  //     Animated.spring(
-  //       this.state.wiggle,
-  //       {
-  //         toValue: 0,
-  //         duration: 0,
-  //       }
-  //     ),
-  //   ]).start();
-  //
-  //   let ro = this.state.wiggle.interpolate({
-  //     inputRange: [0,100],
-  //     outputRange: ['0deg','180deg'],
-  //   });
-  //
-  //   return (
-  //     {
-  //       transform: [{rotateZ: ro}],
-  //     }
-  //   );
-  // }
-
   render () {
     return (
       <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
@@ -302,8 +263,8 @@ class GameFour extends React.Component {
                 loopAnimation={true}
                 tween={this.boxTween[0]}
                 tweenStart='auto'
-                onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
-                onPress={() => {this.touched = true;}}
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
               />
             : null}
             {this.state.showBoxes[1] ?
@@ -317,6 +278,10 @@ class GameFour extends React.Component {
                 character={squareCharacter}
                 spriteAnimationKey={this.wrongChoices[0]}
                 loopAnimation={true}
+                tween={this.boxTween[1]}
+                tweenStart='auto'
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
               />
             : null}
             {this.state.showBoxes[2] ?
@@ -330,6 +295,10 @@ class GameFour extends React.Component {
                 character={squareCharacter}
                 spriteAnimationKey={this.wrongChoices[1]}
                 loopAnimation={true}
+                tween={this.boxTween[2]}
+                tweenStart='auto'
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
               />
             : null}
           </View>

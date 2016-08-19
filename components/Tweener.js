@@ -158,102 +158,118 @@ class Tweener extends React.Component{
   };
 
  pulse(options, state) {
-   state.scale.setValue(1);
-   Animated.sequence([
-     Animated.timing(
-       state.scale,
-       {
-         toValue: 1.25,
-         easing: Easing.linear,
-         duration: 400,
+   if(this.props.stop){
+     let stopValues = [];
+     state.scale.stopAnimation((value) => stopValues.push(value));
+     this.props.stopValues(stopValues);
+   }
+   else{
+     state.scale.setValue(1);
+     Animated.sequence([
+       Animated.timing(
+         state.scale,
+         {
+           toValue: 1.25,
+           easing: Easing.linear,
+           duration: 400,
+         }
+       ),
+       Animated.timing(
+         state.scale,
+         {
+           toValue: 1,
+           easing: Easing.linear,
+           duration: 400,
+         }
+       ),
+     ]).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true);
+       }else{
+         this.pulse(options, state);
        }
-     ),
-     Animated.timing(
-       state.scale,
-       {
-         toValue: 1,
-         easing: Easing.linear,
-         duration: 400,
-       }
-     ),
-   ]).start(() => {
-     if (options.loop === false) {
-      this.props.onTweenFinish(true);
-      return
-     }else{
-       pulse(options, state);
-     }
-   });
+     });
+   }
  }
 
  wiggle(options, state) {
-   if (this.props.stop) {
+   if(this.props.stop){
+     let stopValues = [];
+     state.rotateZ.stopAnimation((value) => stopValues.push(value));
+     this.props.stopValues(stopValues);
+   }
+   else {
+     Animated.sequence([
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 3,
+           easing: Easing.linear,
+           duration: 100,
+           //delay: 1000,
+         }
+       ),
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: -3,
+           easing: Easing.linear,
+           duration: 100,
+         }
+       ),
+       Animated.spring(
+         state.rotateZ,
+         {
+           toValue: 0,
+           friction: 1,
+           duration: 0,
+         }
+       ),
+     ]).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true);
+        return
+       }else{
+         this.wiggle(options, state);
+       }
+     });
+   }
+ }
+
+ bounceDrop(options, state) {
+   if(this.props.stop){
      let stopValues = [];
      state.left.stopAnimation((value) => stopValues.push(value));
      state.top.stopAnimation((value) => stopValues.push(value));
      this.props.stopValues(stopValues);
    }
-   Animated.sequence([
-   Animated.timing(
-     state.rotateZ,
-     {
-       toValue: 10,
-       easing: Easing.linear,
-       duration: 100,
-     }
-   ),
-   Animated.timing(
-     state.rotateZ,
-     {
-       toValue: -10,
-       easing: Easing.linear,
-       duration: 100,
-     }
-   ),
-   Animated.spring(
-     state.rotateZ,
-     {
-       toValue: 0,
-       friction: 1,
-       duration: 0,
-     }
-   ),
- ]).start(() => {
-   if (options.loop === false) {
-    this.props.onTweenFinish(true);
-    return
-   }else{
-     this.wiggle(options, state);
+   else {
+    //  state.left.setValue(options.startXY[0]);
+    //  Animated.timing(
+    //    state.left,
+    //    {
+    //      toValue: options.endXY[0],
+    //      easing: Easing.spring,
+    //      duration: options.duration,
+    //    }
+    //  ).start();
+     state.top.setValue(options.startY);
+     Animated.timing(
+       state.top,
+       {
+         toValue: options.endY,
+         easing: Easing.bounce,
+         duration: options.duration,
+       }
+     ).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true);
+         return
+       }else{
+         bounceDrop(options, state);
+       }
+     });
    }
- });
- }
-
- bounceDrop(options, state) {
-  //  state.left.setValue(options.startXY[0]);
-  //  Animated.timing(
-  //    state.left,
-  //    {
-  //      toValue: options.endXY[0],
-  //      easing: Easing.spring,
-  //      duration: options.duration,
-  //    }
-  //  ).start();
-   state.top.setValue(options.startY);
-   Animated.timing(
-     state.top,
-     {
-       toValue: options.endY,
-       easing: Easing.bounce,
-       duration: options.duration,
-     }
-   ).start(() => {
-     if (options.loop === false) {
-      this.props.onTweenFinish(true);
-       return
-     }else{
-       bounceDrop(options, state);
-     }
-   });
  }
 
  zoom(options, state) {

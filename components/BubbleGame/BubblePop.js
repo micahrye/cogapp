@@ -272,7 +272,6 @@ class BubblePop extends React.Component {
           id: "Main",
         });
       } else { // otherwise, next trial is started
-        // TODO: set one second and so not so fast transition.
         this.setTimeout(() => {
           this.goToNextTrial();
         }, 1000);
