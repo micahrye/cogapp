@@ -23,7 +23,7 @@ import Tweener from "../Tweener";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
-import bugCharacter from "../../sprites/bug/bugCharacter";
+import bugfoodCharacter from "../../sprites/bugfood/bugfoodCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
 import frogCharacter from "../../sprites/frog/frogCharacter";
@@ -147,7 +147,6 @@ class GameTwo extends Component {
   componentDidMount() {
     this.setState({creatureKey1: Math.random(),
                    animation: "walk"});
-
   }
 
   onLeverTouch = () => {
@@ -174,7 +173,7 @@ class GameTwo extends Component {
                          foodPressed: false});
           break;
         case 3:
-          this.setState({foodCharacter: bugCharacter,
+          this.setState({foodCharacter: bugfoodCharacter,
                          foodTween: tweenDown(startTop,endTopCan),
                          signTween: tweenDown(startTop,endTopSign),
                          foodKey: Math.random(),
@@ -187,17 +186,6 @@ class GameTwo extends Component {
     }
 
   }
-
-  // flip(num) {
-  //   Animated.timing(
-  //     this.state.rotate,
-  //     {
-  //       toValue: num,
-  //       easing: Easing.linear,
-  //       duration: 500,
-  //     }
-  //   ).start();
-  // }
 
 
   toggleCreatureCharacter() {

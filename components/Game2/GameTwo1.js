@@ -22,7 +22,7 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
-import bugCharacter from "../../sprites/bug/bugCharacter";
+import bugfoodCharacter from "../../sprites/bug/bugfoodCharacter";
 import leverCharacter from "../../sprites/lever/leverCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 
@@ -284,13 +284,13 @@ class GameTwo1 extends Component {
         return this.randomFood(grassCharacter,canCharacter,appleCharacter);
         break;
       case "apple":
-        return this.randomFood(grassCharacter,canCharacter,bugCharacter);
+        return this.randomFood(grassCharacter,canCharacter,bugfoodCharacter);
         break;
       case "can":
-        return this.randomFood(grassCharacter,bugCharacter,appleCharacter);
+        return this.randomFood(grassCharacter,bugfoodCharacter,appleCharacter);
         break;
       case "grass":
-        return this.randomFood(bugCharacter,canCharacter,appleCharacter);
+        return this.randomFood(bugfoodCharacter,canCharacter,appleCharacter);
         break;
     }
   }
@@ -322,7 +322,7 @@ class GameTwo1 extends Component {
         this.selectFoodPhase0Helper(canCharacter,"can");
         break;
       case 3:
-        this.selectFoodPhase0Helper(bugCharacter,"bug");
+        this.selectFoodPhase0Helper(bugfoodCharacter,"bug");
         break;
     }
   }
@@ -419,7 +419,7 @@ class GameTwo1 extends Component {
         this.selectFoodPhase1Helper(canCharacter,"can");
         break;
       case 3:
-        this.selectFoodPhase1Helper(bugCharacter,"bug");
+        this.selectFoodPhase1Helper(bugfoodCharacter,"bug");
         break;
     }
   }

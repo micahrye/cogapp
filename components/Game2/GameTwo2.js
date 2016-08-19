@@ -135,16 +135,13 @@ class GameTwo2 extends Component {
     this.state = {
       foodKey1: Math.random(), //keys for food,signs,creatures
       foodKey2: Math.random(),
-      //foodKey3: Math.random(),
       signKey1: Math.random(),
       signKey2: Math.random(),
-      //signKey3: Math.random(),
       creatureKey1: Math.random(),
       creatureKey2: Math.random(),
       creatureKey3: Math.random(),
       creatureKey4: Math.random(),
       phase1Left: grassCharacter, // variables that hold food sprites in phase1
-      //phase1Middle: grassCharacter,
       phase1Right: grassCharacter,
       phase1Pressed: "left",
       phase1Correct: ["incorrect","incorrect"], // tells which sprites are correct in phase1
@@ -163,7 +160,6 @@ class GameTwo2 extends Component {
       numTrials: 0, // keeps track of number of trials done so far (moves to next phase at 9)
       showFood1: true, // allows food sprites in phase 1 to be turned on/off
       showFood2: true,
-      //showFood3: true,
     }
     this.timeout1 = undefined;
     this.timeout2 = undefined;
@@ -185,14 +181,11 @@ class GameTwo2 extends Component {
   onTimeoutOne = () => {
           this.setState({foodTween11: tweenTimeout(foodEndTop,startTop),
                          foodTween12: tweenTimeout(foodEndTop,startTop),
-                         //foodTween13: tweenTimeout(foodEndTop,startTop),
                          signTween2: tweenTimeout(signEndTop,startTop),
                          foodKey1: Math.random(),
                          foodKey2: Math.random(),
-                         //foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random(),
-                        // signKey3: Math.random(),
                          numTrials: this.state.numTrials+1,
                          timeoutHuh: false,
                          foodFalling: false,});
@@ -208,14 +201,11 @@ class GameTwo2 extends Component {
   onTimeoutTwo = () => {
         this.setState({foodTween11: tweenHop(foodEndTop),
                        foodTween12: tweenHop(foodEndTop),
-                       //foodTween13: tweenHop(foodEndTop),
                        signTween2: tweenHop(signEndTop),
                        foodKey1: Math.random(),
                        foodKey2: Math.random(),
-                       //foodKey3: Math.random(),
                        signKey1: Math.random(),
                        signKey2: Math.random()});
-                       //signKey3: Math.random()});
 
   }
 
@@ -361,11 +351,9 @@ class GameTwo2 extends Component {
           this.selectFoodPhase1();
           this.setState({foodTween11: tweenDown(startTop,foodEndTop),
                          foodTween12: tweenDown(startTop,foodEndTop),
-                         //foodTween13: tweenDown(startTop,foodEndTop),
                          signTween2: tweenDown(startTop,signEndTop),
                          foodKey1: Math.random(),
                          foodKey2: Math.random(),
-                         //foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random()});
 
@@ -373,7 +361,6 @@ class GameTwo2 extends Component {
         this.setState({timeoutHuh: true,
                        showFood1: true, // resets all food so it's visible, just in case it's been changed in a previous trial
                        showFood2: true});
-                       //showFood3: true,});
     }
   }
 
@@ -533,7 +520,7 @@ class GameTwo2 extends Component {
                         phase1Pressed: "left"});
             clearTimeout(this.timeout1);
             clearTimeout(this.timeout2);
-            this.setState({foodFalling: false,
+            this.setState({//foodFalling: false,
                            timeoutHuh: false,
                            numTrials: this.state.numTrials+1});
          break;
@@ -546,7 +533,7 @@ class GameTwo2 extends Component {
              clearTimeout(this.timeout1);
              clearTimeout(this.timeout2);
              this.setState({timeoutHuh: false,
-                            foodFalling: false,
+                            //foodFalling: false,
                             numTrials: this.state.numTrials+1});
          break;
     }
@@ -600,16 +587,16 @@ class GameTwo2 extends Component {
         this.setState({animation: "default"})
         break;
       case "celebrate":
-      this.setState({foodFalling: false})
-      this.setState({animation: "walk"})
-      this.setState({signKey1: Math.random(),
+       this.setState({foodFalling: false})
+       this.setState({animation: "walk"})
+       this.setState({signKey1: Math.random(),
                      signKey2: Math.random(),
                      foodKey1: Math.random(),
                      foodKey2: Math.random(),
                      signTween2: tweenTimeout(signEndTop,startTop),
                      foodTween12: tweenTimeout(foodEndTop,startTop),
                      foodTween11: tweenTimeout(foodEndTop,startTop)}),
-         setTimeout(this.toggleCreature.bind(this),500);
+        setTimeout(this.toggleCreature.bind(this),500);
         break;
       case "disgust":
         this.setState({foodFalling: false,
@@ -834,23 +821,3 @@ const styles = StyleSheet.create({
 })
 
 export default GameTwo2
-
-
-// <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
-//     key={this.state.signKey3}
-//     size={{width: 110, height: 170}}
-//     draggable={false}
-//     character={signCharacter}
-//     tweenStart="auto"
-//     tween={this.state.signTween2}/>
-// {this.state.showFood3 ?
-// <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
-//     size={{width: 60, height: 60}}
-//     draggable={false}
-//     character={this.state.phase1Right}
-//     key={this.state.foodKey3}
-//     tweenStart="auto"
-//     tween={this.state.foodTween13}
-//     onPress={this.onFoodPress}
-//     spriteKey={3}/>
-// : null}
