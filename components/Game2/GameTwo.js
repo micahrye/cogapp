@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 
 // imports
-
 import AnimatedSprite from "../animatedSprite";
 import Tweener from "../Tweener";
 
@@ -32,22 +31,21 @@ import goatCharacter from "../../sprites/goat/goatCharacter";
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
 const endCoordinates = [Window.width*0.65,Window.height*0.5];
-const endCoordinates2 = [Window.width*0.6,Window.height*0.4];
+const endCoordinates2 = [Window.width*0.6,Window.height*0.4]; // slightly different end coordinates for when the frog is onscreen
 // these constants specify the initial locations and spacing of the food items
 const startLeft = Window.width*0.4;
 const startTop = -250;
 const endTopSign = -15;
 const endTopCan = Window.height*0.2;
-
-const sprite2Start = [startLeft,startTop];
-
+// these coordinates give two points - one onscreen, one off - that the creatures travel between
 const creatureStart = [Window.width+500,Window.height*0.5];
 const creatureEnd = [Window.width*0.65,Window.height*0.5];
 
 class GameTwo extends Component {
 
   constructor(props) {
-
+    super(props);
+    // customizable function for dropping food/signs into the frame
     tweenDown = function(startTop,endTop) {
       return (
         {
@@ -60,7 +58,7 @@ class GameTwo extends Component {
         }
       );
     }
-
+    // customizable function for moving food/signs offscreen at end of a trial or timeout
     tweenTimeout = function(startTop,endTop) {
       return (
         {
@@ -73,13 +71,13 @@ class GameTwo extends Component {
         }
       );
     }
-
+   // placeholder tween to food into moving components on mounting
    tweenInitial = {
                   tweenType: "hop",
                   startY: startTop,
                   loop: false,
                   };
-
+    // used when food items are pressed
     tweenFall = function(dest){
       return (
         {
@@ -92,20 +90,20 @@ class GameTwo extends Component {
         }
       )
     };
-
+    // used to move creatures on/off screen in a straight line
     tweenMove = function(start,end) {
       return(
         {
           tweenType: "move",
           startXY: start,
           endXY: end,
-          duration: 1500,
+          duration: 1500, // (may need to be longer to match length of walk animation)
           repeatable: false,
           loop: false,
         }
       );
     }
-
+    // keeps creature onscreen during trials when character animations are playing
     tweenStatic = function(pos) {
       return(
         {
@@ -118,44 +116,40 @@ class GameTwo extends Component {
         }
       );
     }
-
-    super(props);
+    // state initial declarations
     this.state = {
-      foodKey: 0,
-      signKey: 0.5,
-      foodTween: tweenInitial,
+      foodKey: Math.random(), // keys for food/sign items
+      signKey: Math.random(),
+      foodTween: tweenInitial, // holds tweens for food/signs
       signTween: tweenInitial,
-      onboarding: 1,
-      foodCharacter: grassCharacter,
-      creatureCharacter: mammalCharacter,
-      creatureTween1: tweenMove(creatureStart,creatureEnd),
+      onboarding: 1, // keeps track of how the onboarding level is progressing - 1: mammal, 2: goat, 3: frog
+      foodCharacter: grassCharacter,  // holds current food character - either grass, can, or bug
+      creatureTween1: tweenMove(creatureStart,creatureEnd),  // tweens for the three different creatures
       creatureTween2: tweenMove(creatureStart,creatureStart),
       creatureTween3: tweenMove(creatureStart,creatureStart),
-      creatureKey1: Math.random(),
+      creatureKey1: Math.random(), // keys for the three different creatures
       creatureKey2: Math.random(),
       creatureKey3: Math.random(),
-      leverPressed: false,
+      leverPressed: false, // booleans that prevent the trial being reset halfway through by an inappropriate lever press
       foodPressed: false,
-      animation: "default",
+      animation: "default", // dictates what animation the creature character should be displaying
     }
-
     readyToEat = false;
-
   }
 
 
   componentDidMount() {
+    // mammal character is the first to walk out - does so automatically on mounting
     this.setState({creatureKey1: Math.random(),
                    animation: "walk"});
   }
 
+  // called when player touches the lever component
   onLeverTouch = () => {
-
     if(!this.state.leverPressed) {
-
       switch(this.state.onboarding) {
         case 1:
-          // grass/gopher character first
+          // grass/mammal character first
           this.setState({foodTween: tweenDown(startTop,endTopCan),
                          signTween: tweenDown(startTop,endTopSign),
                          foodKey: Math.random(),
@@ -164,6 +158,7 @@ class GameTwo extends Component {
                          foodPressed: false});
           break;
         case 2:
+          // can/goat character second
           this.setState({foodCharacter: canCharacter,
                          foodTween: tweenDown(startTop,endTopCan),
                          signTween: tweenDown(startTop,endTopSign),
@@ -173,6 +168,7 @@ class GameTwo extends Component {
                          foodPressed: false});
           break;
         case 3:
+          // bug/frog character last
           this.setState({foodCharacter: bugfoodCharacter,
                          foodTween: tweenDown(startTop,endTopCan),
                          signTween: tweenDown(startTop,endTopSign),
@@ -182,16 +178,12 @@ class GameTwo extends Component {
                          foodPressed: false});
           break;
       }
-
     }
-
   }
 
-
+  //called in onAnimationFinish to move to the next stage of the onboarding level
   toggleCreatureCharacter() {
-
     this.setState({leverPressed: false});
-
     switch(this.state.onboarding) {
       case 2:
         this.setState({
@@ -213,11 +205,13 @@ class GameTwo extends Component {
     }
   }
 
+  // wrapper function that moves the game on to part 1 after onboarding level 3 is completed
   toggleLevel = () => {
     this.props.navigator.replace({id: 'GameTwo1',});
   }
 
   nextLevel = () => {
+    // move the frog offscreen before going on to game 2, part 1
     this.setState({
       creatureKey3: Math.random(),
       creatureTween3: tweenMove([Window.width*0.65,Window.height*0.4],[Window.width+500,Window.height*0.4]),
@@ -225,6 +219,10 @@ class GameTwo extends Component {
     setTimeout(this.toggleLevel,1500);
   }
 
+  // called when a food item is pressed by the player - triggers the falling
+  // tween animation for the food item, calls the "openMouth" animation
+  // for the current creature (unless the current creature is the frog), and
+  // sends the sign character back off screen
   onFoodPress = () => {
     readyToEat = true;
     if (!this.state.foodPressed) {
@@ -249,6 +247,9 @@ class GameTwo extends Component {
     }
   }
 
+  // onTweenEndFood only does anything when the food has finished its descent toward the creature's
+  // mouth (thanks to the readyToEat boolean).  Starts the chew/eat animation in the
+  // current creature character
   onTweenEndFood = () => {
     switch(this.state.onboarding) {
       case 1:
@@ -270,6 +271,8 @@ class GameTwo extends Component {
     readyToEat = false;
   }
 
+  // called after the creature character finishes any tween.  Ensures that
+  // the creature stays put during trials
   onTweenEndCreature = () => {
     //readyToEat = true;
     switch(this.state.onboarding) {
@@ -285,22 +288,26 @@ class GameTwo extends Component {
     }
   }
 
+  // dictates what needs to happen after each different creature animation
   onAnimationFinish(animationKey, creatureKey) {
     switch(animationKey) {
       case "walk":
         this.setState({animation: "default"})
         break;
       case "celebrate":
+        // if the creature is celebrating it means that the subtrial has been
+        // completed successfully and the game can move on to the next creature
         this.setState({onboarding: this.state.onboarding+1})
         this.setState({animation: "walk"})
         //this.flip(100);
         if (this.state.onboarding === 4) {
-          setTimeout(this.nextLevel,1000)
+          setTimeout(this.nextLevel,1000) // go on to game 2, part 1 if frog trials has just been completed
         } else {
           setTimeout(this.toggleCreatureCharacter.bind(this),500);
         }
         break;
       case "chew":
+        // after creaure finishes eating food, it celebrates
         this.setState({animation: "celebrate"})
         switch(this.state.onboarding) {
           case 1:
@@ -315,6 +322,8 @@ class GameTwo extends Component {
         }
         break;
       case "openMouth":
+        // once creature opens its mouth, it should hold it open until the food
+        // has fallen in
         this.setState({animation: "readyToEat"})
         switch(this.state.onboarding) {
           case 1:
@@ -329,6 +338,7 @@ class GameTwo extends Component {
         }
         break;
         case "eat":
+          // used only for frog- after it eats, it should celebrate
           this.setState({animation: "celebrate",creatureKey3: Math.random()})
           break;
     }
@@ -337,7 +347,7 @@ class GameTwo extends Component {
 
 
   render() {
-
+    // simple bounce tween to let player know when they have pressed the lever
     const tweenOptsLever = {
       tweenType: "bounce",
       startY: 80,
@@ -424,16 +434,6 @@ const styles = StyleSheet.create({
       flex: 1,
       width: null,
       height: null,
-  },
-  // style for navigation button
-  button: {
-      backgroundColor: '#4d94ff',
-      borderRadius: 10,
-      width: 90,
-      height: 30,
-      top:0,
-      left:0,
-      position: 'absolute',
   },
 })
 
