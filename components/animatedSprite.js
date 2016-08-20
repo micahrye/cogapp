@@ -39,6 +39,7 @@ fps: object, how many frames per second to run the animations at
 
 /*Functions:
 onPress: passes up spriteKey
+onPressIn: triggered when user presses down, but before release, passes up a spriteKey
 draggedTo: passes up character's coordinates after drag
 timeSinceMounted: triggered on press,
   passes up spriteKey and time since character mounted in seconds
@@ -271,8 +272,6 @@ class AnimatedSprite extends React.Component{
     else if(this.props.stopTweenOnTouch){
       this.stopTween = true;
       this.configureTween();
-      // console.warn(this.endValues);
-      // this.props.stopTweenOnTouch(this.endValues);
     }
 
     if(this.props.soundOnTouch){
@@ -316,7 +315,7 @@ class AnimatedSprite extends React.Component{
         options={tweenOptions}
         state={tweenState}
         stop={stopTween}
-        onTweenFinish={(ended) => this.tweenHasEnded(ended)}
+        onTweenFinish={(ended) => this.tweenHasEnded(ended, this.stopTween)} // whether it just ended, or was stopped
         stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
     );
 
@@ -328,13 +327,29 @@ class AnimatedSprite extends React.Component{
 
   // pass up the coordinates of character when stopped
   sendStopValues(stopValues){
-    this.props.stopTweenOnTouch(stopValues);
+    if (this.props.stopTweenOnTouch) {
+      this.props.stopTweenOnTouch(stopValues);
+    }
+    else if (this.props.stopTweenOnPressIn) {
+      this.props.stopTweenOnPressIn(stopValues);
+    }
   }
 
   // notify parent that tween has ended
-  tweenHasEnded(){
+  tweenHasEnded (ended, stopTween) {
     if(this.props.onTweenFinish){
-      this.props.onTweenFinish(this.props.spriteKey);
+      this.props.onTweenFinish(this.props.spriteKey, stopTween);
+    }
+  }
+
+  handlePressIn () {
+    if (this.props.onPressIn) {
+      this.props.onPressIn(this.props.spriteKey);
+    }
+
+    if (this.props.stopTweenOnPressIn) {
+      this.stopTween = true;
+      this.configureTween();
     }
   }
 
@@ -351,7 +366,8 @@ class AnimatedSprite extends React.Component{
           <TouchableOpacity
             activeOpacity={1.0}
             hitSlop={this.props.hitSlop}
-            onPress={ (evt) => this.handlePress(evt) }>
+            onPress={ (evt) => this.handlePress(evt) }
+            onPressIn={(evt) => this.handlePressIn(evt)}>
             <Image
               ref={(ref) => {
                 this.refAnimatedImage = ref;

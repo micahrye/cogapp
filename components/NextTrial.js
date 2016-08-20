@@ -1,10 +1,7 @@
-"use strict"
+"use strict";
 
 import React, { Component } from 'react';
 import {
-  Animated,
-  AppRegistry,
-  Navigator,
   StyleSheet,
   Text,
   View,
@@ -15,11 +12,11 @@ const WINDOW = Dimensions.get('window');
 
 class NextTrial extends Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     setTimeout(()=>{
       this.props.navigator.replace({
         id: this.props.route.getId(),
@@ -33,10 +30,10 @@ class NextTrial extends Component {
     }, 2000);
   }
 
-  render() {
+  render () {
     return (
       <View style={styles.background}>
-        <Text style={styles.text}>NEXT TRIAL</Text>
+        <Text style={styles.text}>{'NEXT TRIAL'}</Text>
       </View>
     );
   }
@@ -60,4 +57,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NextTrial
+NextTrial.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
+
+export default NextTrial;

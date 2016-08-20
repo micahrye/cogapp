@@ -16,10 +16,10 @@ import {
 // imports
 import AnimatedSprite from "../animatedSprite";
 import Tweener from "../Tweener";
-import omnivoreCharacter from "../../sprites/omnivore/omnivoreCharacter";
-import mammalCharacter from "../../sprites/mammal/mammalCharacter";
-import goatCharacter from "../../sprites/goat/goatCharacter";
-import frogCharacter from "../../sprites/frog/frogCharacter";
+import OmnivoreGreen from "../../sprites/omnivore/OmnivoreGreen";
+import OmnivoreBlue from "../../sprites/omnivore/OmnivoreBlue";
+import OmnivoreRed from "../../sprites/omnivore/OmnivoreRed";
+import OmnivoreYellow from "../../sprites/omnivore/OmnivoreYellow";
 import canCharacter from "../../sprites/can/canCharacter";
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
@@ -30,19 +30,19 @@ import signCharacter from "../../sprites/sign/signCharacter";
 // window dimensions
 const Window = Dimensions.get('window');
 // destination for falling food items (should be close to where creature sits)
-const endCoordinates = [450,250];
+const endCoordinates = [Window.width*0.65,Window.height*0.5];
 // these constants specify the initial/final locations and spacing
 // and signs of the food items
-const startLeft = 250;
+const startLeft = Window.width*0.4;
 //const startLeft2 = 325;
-const startTop = -200;
-const spacing = 150;
-const foodEndTop = 80;
+const startTop = -250;
+const spacing = 200;
+const foodEndTop = Window.height*0.2;
 const signEndTop = -15;
 // start/end for goat and mammal (frog has different dimensions and uses slightly
 // different start amd end coordinates)
-const creatureStart = [Window.width+150,Window.height-190];
-const creatureEnd = [Window.width-200,Window.height-190];
+const creatureStart = [Window.width+500,Window.height*0.55];
+const creatureEnd = [Window.width*0.65,Window.height*0.55];
 
 class GameTwo2 extends Component {
 
@@ -118,28 +118,37 @@ class GameTwo2 extends Component {
        startY: startTop,
        loop: false,
     };
-
+    // keeps creature onscreen during trials when character animations are playing
+    tweenStatic = function(pos) {
+      return(
+        {
+         tweenType: "move",
+         startXY: pos,
+         endXY: pos,
+         duration: 0,
+         repeatable: false,
+         loop: false,
+        }
+      );
+    }
+    // initial state declarations
     this.state = {
       foodKey1: Math.random(), //keys for food,signs,creatures
       foodKey2: Math.random(),
-      //foodKey3: Math.random(),
       signKey1: Math.random(),
       signKey2: Math.random(),
-      //signKey3: Math.random(),
       creatureKey1: Math.random(),
       creatureKey2: Math.random(),
       creatureKey3: Math.random(),
       creatureKey4: Math.random(),
       phase1Left: grassCharacter, // variables that hold food sprites in phase1
-      //phase1Middle: grassCharacter,
       phase1Right: grassCharacter,
+      phase1Pressed: "left", //holds information on which food item has been pressed in a given trial
       phase1Correct: ["incorrect","incorrect"], // tells which sprites are correct in phase1
-      //phase1AnsweredCorrectly: 0, // prevents game from moving on to next trial after 1st correct sprite is pressed
-      foodTween11: tweenInitial,
+      foodTween11: tweenInitial,  // holds tweens for food/signs (initialized with dummy animation)
       foodTween12: tweenInitial,
-      //foodTween13: tweenInitial,
       signTween2: tweenInitial,
-      spriteAnimationKey1: 'default',
+      spriteAnimationKey1: 'default', //controls colors for food items
       spriteAnimationKey2: 'default',
       creatureTween1: tweenMove(creatureStart,creatureEnd), // holds tweens for creatures
       creatureTween2: tweenMove(creatureStart,creatureStart),
@@ -147,17 +156,18 @@ class GameTwo2 extends Component {
       creatureTween4: tweenMove(creatureStart,creatureStart),
       currentCreature: 1, // indicates which kind of creature is currently on screen (starts with mammal) mammal=1,goat=2,frog=3
       timeoutHuh: false,  // these two prevent lever from activating new trial prematurely
-      foodPressed: false,
+      foodFalling: false, // prevents other food items from being pressed while 1 is falling/the creature is reacting to it
       numTrials: 0, // keeps track of number of trials done so far (moves to next phase at 9)
       showFood1: true, // allows food sprites in phase 1 to be turned on/off
       showFood2: true,
-      //showFood3: true,
+      animation: "default",  // dictates what animation the creature character should be displaying
     }
-    this.timeout1 = undefined;
+    this.timeout1 = undefined; // timeouts stored here
     this.timeout2 = undefined;
+    readyToEat = false;
   }
 
-  // moves the app to level 2
+  // moves the app to game2, level 3
   buttonPress = () => {
       this.props.navigator.replace({
           id: 'GameTwo3',
@@ -172,20 +182,17 @@ class GameTwo2 extends Component {
   onTimeoutOne = () => {
           this.setState({foodTween11: tweenTimeout(foodEndTop,startTop),
                          foodTween12: tweenTimeout(foodEndTop,startTop),
-                         //foodTween13: tweenTimeout(foodEndTop,startTop),
                          signTween2: tweenTimeout(signEndTop,startTop),
                          foodKey1: Math.random(),
                          foodKey2: Math.random(),
-                         //foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random(),
-                        // signKey3: Math.random(),
                          numTrials: this.state.numTrials+1,
                          timeoutHuh: false,
-                         foodPressed: false,});
+                         foodFalling: false,});
           this.toggleCreature();
-          if (this.state.numTrials >= 8) {
-            setTimeout(this.buttonPress,2000);
+          if (this.state.numTrials >= 6) {
+            setTimeout(this.buttonPress,100);
           }
         this.setState({timeoutHuh: false});
   }
@@ -195,14 +202,11 @@ class GameTwo2 extends Component {
   onTimeoutTwo = () => {
         this.setState({foodTween11: tweenHop(foodEndTop),
                        foodTween12: tweenHop(foodEndTop),
-                       //foodTween13: tweenHop(foodEndTop),
                        signTween2: tweenHop(signEndTop),
                        foodKey1: Math.random(),
                        foodKey2: Math.random(),
-                       //foodKey3: Math.random(),
                        signKey1: Math.random(),
                        signKey2: Math.random()});
-                       //signKey3: Math.random()});
 
   }
 
@@ -218,6 +222,7 @@ class GameTwo2 extends Component {
     }
   }
 
+  // returns one of the 4 available food items at random
   randomFood2() {
     diceRoll = Math.random();
     if (diceRoll < 0.25) {
@@ -250,6 +255,7 @@ class GameTwo2 extends Component {
     }
   }
 
+  // given a certain color, randomly choose one of the three remaining colors
   excludeColor(color) {
     switch(color) {
       case "green":
@@ -267,30 +273,10 @@ class GameTwo2 extends Component {
     }
   }
 
-
-  // works the same way as the phase0 helper function but handles three
-  // food sprites, instead of just two.
-  // selectFoodPhase1Helper(food,foodString) {
-  //   diceRoll = Math.random();
-  //   if (diceRoll < 0.33) {
-  //     this.setState({phase1Left: food,
-  //                    phase1Middle: food,
-  //                    phase1Right: this.excludeFoodType(foodString),
-  //                    phase1Correct: ["correct","correct","incorrect"]});
-  //   } else if (diceRoll > 0.66){
-  //     this.setState({phase1Left: this.excludeFoodType(foodString),
-  //                    phase1Middle: food,
-  //                    phase1Right: food,
-  //                    phase1Correct: ["incorrect","correct","correct"]});
-  //   } else {
-  //     this.setState({phase1Left: food,
-  //                    phase1Middle: this.excludeFoodType(foodString),
-  //                    phase1Right: food,
-  //                    phase1Correct: ["correct","incorrect","correct"]});
-  //   }
-  // }
-
-  // assigns food sprites for a phase1 trial
+  // Chooses food items for each trial.
+  // Also randomly chooses the colors of the food items in a way meant to be
+  // misleading - the correct food item will always be the same color as one of
+  //the incorrect food items
   selectFoodPhase1() {
     diceRoll = Math.random();
     switch(this.state.currentCreature) {
@@ -365,25 +351,20 @@ class GameTwo2 extends Component {
   // onLeverTouch sets timeouts, selects new food sprites, and drops
   // the food sprites/signs down from the top of the screen so they're visible
   onLeverTouch = () => {
-    if (!this.state.timeoutHuh && !this.state.foodPressed) {
+    if (!this.state.timeoutHuh && !this.state.foodFalling) {
         this.timeout1 = setTimeout(this.onTimeoutOne,15000);
         this.timeout2 = setTimeout(this.onTimeoutTwo,10000);
           this.selectFoodPhase1();
           this.setState({foodTween11: tweenDown(startTop,foodEndTop),
                          foodTween12: tweenDown(startTop,foodEndTop),
-                         //foodTween13: tweenDown(startTop,foodEndTop),
                          signTween2: tweenDown(startTop,signEndTop),
                          foodKey1: Math.random(),
                          foodKey2: Math.random(),
-                         //foodKey3: Math.random(),
                          signKey1: Math.random(),
                          signKey2: Math.random()});
-
-
-        this.setState({timeoutHuh: true,
+        this.setState({timeoutHuh: true, // reset
                        showFood1: true, // resets all food so it's visible, just in case it's been changed in a previous trial
                        showFood2: true});
-                       //showFood3: true,});
     }
   }
 
@@ -407,6 +388,10 @@ class GameTwo2 extends Component {
         creatureKey4: Math.random(),
         creatureTween4: tweenMove(creatureEnd,creatureStart)});
     }
+    // if 6 trials have been completed, move on to game 2, phase 3
+    if (this.state.numTrials >= 6) {
+      this.buttonPress()
+    } else {
     diceRoll = Math.random();
     // this part ensures the same creature is not selected twice in a row
     switch(this.state.currentCreature) {
@@ -496,122 +481,234 @@ class GameTwo2 extends Component {
         break;
     }
   }
-
-  // helper functions that allow showFood variables to be switched using
-  // setTimeout calls (setState cannot be called directly within a setTimeout)
-  removeFood1 = () => {
-    this.setState({showFood1: false});
   }
 
-  removeFood2 = () => {
-    this.setState({showFood2: false});
+  // helper function that allows showFood variables to be switched off
+  removeFood(num) {
+    switch(num) {
+      case 1:
+        this.setState({showFood1: false});
+        break;
+      case 2:
+        this.setState({showFood2: false});
+        break;
+    }
   }
-
-  // removeFood3 = () => {
-  //   this.setState({showFood3: false});
-  // }
 
   // Handles the events that need to occur when any food item is pressed
   onFoodPress = (spriteKey) => {
+    readyToEat = true;
+    // open current creature's mouth
+    switch(this.state.currentCreature) {
+      case 1:
+        this.setState({creatureKey1: Math.random(),animation: "openMouth"})
+        break;
+      case 2:
+        this.setState({creatureKey2: Math.random(),animation: "openMouth"})
+        break;
+      case 3:
+        this.setState({creatureKey3: Math.random(), animation: "openMouth"})
+        break;
+      case 4:
+        this.setState({creatureKey4: Math.random(), animation: "openMouth"})
+        break;
+    }
+
     xvalue = 0;
     switch(spriteKey) {
       case 1: // (leftmost food sprite in phase 1)
          x = startLeft;
          this.setState({foodKey1: Math.random(),
                         foodTween11: tweenFall(x),
-                        foodPressed: true});
+                        foodFalling: true,
+                        phase1Pressed: "left"});
             clearTimeout(this.timeout1);
             clearTimeout(this.timeout2);
-            setTimeout(this.toggleCreature,2000);
-            this.setState({signKey1: Math.random(),
-                           signKey2: Math.random(),
-                           //signKey3: Math.random(),
-                           foodKey1: Math.random(),
-                           foodKey2: Math.random(),
-                           //foodKey3: Math.random(),
-                           signTween2: tweenTimeout(signEndTop,startTop),
-                           //foodTween13: tweenTimeout(foodEndTop,startTop),
-                           foodTween12: tweenTimeout(foodEndTop,startTop),
-                           foodPressed: false,
+            this.setState({foodFalling: false,
                            timeoutHuh: false,
-                           phase1AnsweredCorrectly: 0,
                            numTrials: this.state.numTrials+1});
-
-          if (this.state.numTrials >= 5) {
-            this.setState({timeoutHuh: true});
-            setTimeout(this.buttonPress,2000);
-          }
          break;
       case 2: // (right food sprite in phase 1)
          x = startLeft+spacing;
          this.setState({foodKey2: Math.random(),
                         foodTween12: tweenFall(x),
-                        foodPressed: true});
+                        foodFalling: true,
+                        phase1Pressed: "right"});
              clearTimeout(this.timeout1);
              clearTimeout(this.timeout2);
-             setTimeout(this.toggleCreature,2000);
-             this.setState({signKey1: Math.random(),
-                            signKey2: Math.random(),
-                            //signKey3: Math.random(),
-                            foodKey1: Math.random(),
-                            foodKey2: Math.random(),
-                            //foodKey3: Math.random(),
-                            signTween2: tweenTimeout(signEndTop,startTop),
-                            //foodTween13: tweenTimeout(foodEndTop,startTop),
-                            foodTween11: tweenTimeout(foodEndTop,startTop),
-                            timeoutHuh: false,
-                            foodPressed: false,
-                            phase1AnsweredCorrectly: 0,
+             this.setState({timeoutHuh: false,
+                            //foodFalling: false,
                             numTrials: this.state.numTrials+1});
-           if (this.state.numTrials >= 8) {
-             this.setState({timeoutHuh: true});
-             setTimeout(this.buttonPress,2000);
-         }
          break;
-      // case 3:  // (rightmost food sprite in phase 1)
-      //    x = startLeft+spacing*2;
-      //    this.setState({foodKey3: Math.random(),
-      //                   foodTween13: tweenFall(x),
-      //                   foodPressed: true});
-      //    setTimeout(this.removeFood3,750);
-      //    if (this.state.phase1Correct[2] === "correct") {
-      //      this.setState({phase1AnsweredCorrectly: this.state.phase1AnsweredCorrectly+1});
-      //      if (this.state.phase1AnsweredCorrectly >= 1) {
-      //        clearTimeout(this.timeout1);
-      //        clearTimeout(this.timeout2);
-      //        setTimeout(this.toggleCreature,2000);
-      //        this.setState({signKey1: Math.random(),
-      //                       signKey2: Math.random(),
-      //                       signKey3: Math.random(),
-      //                       foodKey1: Math.random(),
-      //                       foodKey2: Math.random(),
-      //                       foodKey3: Math.random(),
-      //                       signTween2: tweenTimeout(signEndTop,startTop),
-      //                       foodTween11: tweenTimeout(foodEndTop,startTop),
-      //                       foodTween12: tweenTimeout(foodEndTop,startTop),
-      //                       foodPressed: false,
-      //                       timeoutHuh: false,
-      //                       phase1AnsweredCorrectly: 0,
-      //                       numTrials: this.state.numTrials+1});
-      //       if (this.state.phase1Correct[0] === "correct") {
-      //         this.removeFood1();
-      //       }
-      //       if (this.state.phase1Correct[1] === "correct") {
-      //         this.removeFood2();
-      //       }
-      //      }
-      //      if (this.state.numTrials >= 8) {
-      //        this.setState({timeoutHuh: true});
-      //        setTimeout(this.buttonPress,2000);
-      //      }
-      //
-      //    }
-      //    break;
+    }
+  }
+
+  // called after the creature character finishes any tween.  Ensures that
+  // the creature stays put during trials
+  onTweenEndCreature = () => {
+    switch(this.state.currentCreature) {
+      case 1:
+        this.setState({creatureTween1: tweenStatic(creatureEnd)})
+        break;
+      case 2:
+        this.setState({creatureTween2: tweenStatic(creatureEnd)})
+        break;
+      case 3:
+        this.setState({creatureTween3: tweenStatic(creatureEnd)})
+        break;
+      case 4:
+        this.setState({creatureTween4: tweenStatic(creatureEnd)})
+        break;
+    }
+  }
+
+  // onTweenEndFood only does anything when the food has finished its descent toward the creature's
+  // mouth (thanks to the readyToEat boolean).  Starts the chew/eat animation in the
+  // current creature character
+  onTweenEndFood = () => {
+    switch(this.state.currentCreature) {
+      case 1:
+        if (readyToEat) {
+          this.setState({animation: "chew", creatureKey1: Math.random()})
+        }
+        break;
+      case 2:
+        if (readyToEat) {
+          this.setState({animation: "chew", creatureKey2: Math.random()})
+        }
+        break;
+      case 3:
+        if (readyToEat) {
+          this.setState({animation: "chew", creatureKey3: Math.random()})
+        }
+        break;
+      case 4:
+      if (readyToEat) {
+        this.setState({animation: "chew", creatureKey4: Math.random()})
+      }
+    }
+    readyToEat = false;
+  }
+
+    // dictates what needs to happen after each different creature animation
+  onAnimationFinish(animationKey) {
+    switch(animationKey) {
+      case "walk":
+        this.setState({animation: "default"})
+        break;
+      case "celebrate":
+      // if the creature is celebrating it means that the subtrial has been
+      // completed successfully and the game can move on to the next creature
+      this.setState({foodFalling: false})
+      this.setState({animation: "walk"})
+      this.setState({signKey1: Math.random(),
+                     signKey2: Math.random(),
+                     foodKey1: Math.random(),
+                     foodKey2: Math.random(),
+                     signTween2: tweenTimeout(signEndTop,startTop),
+                     foodTween12: tweenTimeout(foodEndTop,startTop),
+                     foodTween11: tweenTimeout(foodEndTop,startTop)}),
+         setTimeout(this.toggleCreature.bind(this),500);
+        break;
+      case "disgust":
+        // disgust means that an incorrect choice has been made - the creature should stay on screen
+        this.setState({foodFalling: false,
+                       animation: "default"})
+        break;
+      case "chew":
+      // the boolean logic below determines whether a correct choice has been
+      // made by comparing the location of the pressed food item to the locations
+      // of the correct food items, which are stored in state at the start of each new trials
+      // If a correct choice has been made, celebrate is called next.  Otherwise, disgust
+      // is called
+      if (this.state.phase1Pressed === "left") {
+        if (this.state.phase1Correct[0] === "correct") {
+          this.setState({animation: "celebrate"})
+        } else {
+          this.setState({animation: "disgust"})
+        }
+        this.removeFood(1)
+      } else if (this.state.phase1Pressed === "right"){
+        if (this.state.phase1Correct[1] === "correct") {
+          this.setState({animation: "celebrate"})
+        } else {
+          this.setState({animation: "disgust"})
+        }
+        this.removeFood(2)
+      }
+      // reassign keys so animation will display
+    switch(this.state.currentCreature) {
+      case 1:
+        this.setState({creatureKey1: Math.random()})
+        break;
+      case 2:
+        this.setState({creatureKey2: Math.random()})
+        break;
+      case 3:
+        this.setState({creatureKey3: Math.random()})
+        break;
+      case 4:
+        this.setState({creatureKey4: Math.random()})
+       }
+        break;
+      case "openMouth":
+      // once creature opens its mouth, it should hold it open until the food
+      // has fallen in
+        this.setState({animation: "readyToEat"})
+        switch(this.state.currentCreature) {
+          case 1:
+            this.setState({creatureKey1: Math.random()})
+            break;
+          case 2:
+            this.setState({creatureKey2: Math.random()})
+            break;
+          case 3:
+            this.setState({creatureKey3: Math.random()})
+            break;
+          case 4:
+            this.setState({creatureKey4: Math.random()})
+            break;
+        }
+        break;
+        case "eat":
+        //works the same as chew
+        if (this.state.phase1Pressed === "left") {
+          if (this.state.phase1Correct[0] === "correct") {
+            this.setState({animation: "celebrate"})
+          } else {
+            this.setState({animation: "disgust"})
+          }
+          this.removeFood(1)
+        } else {
+          if (this.state.phase1Correct[0] === "correct") {
+            this.setState({animation: "disgust"})
+          } else {
+            this.setState({animation: "celebrate"})
+          }
+          this.removeFood(2)
+        }
+        // reassign keys so animation will display
+      switch(this.state.currentCreature) {
+        case 1:
+          this.setState({creatureKey1: Math.random()})
+          break;
+        case 2:
+          this.setState({creatureKey2: Math.random()})
+          break;
+        case 3:
+          this.setState({creatureKey3: Math.random()})
+          break;
+        case 4:
+          this.setState({creatureKey4: Math.random()})
+          break;
+       }
+          break;
+
     }
   }
 
   render() {
-
+    // simple bounce tween to let player know when they have pressed the lever
     const tweenOptsLever = {
       tweenType: "hop",
       startY: 80,
@@ -626,43 +723,59 @@ class GameTwo2 extends Component {
                 <Text> numtrials: {this.state.numTrials} </Text>
                 </TouchableOpacity>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween1}
                     key={this.state.creatureKey1}
-                    spriteAnimationKey={"green"}
+                    spriteAnimationKey={"default"}
                     loopAnimation={true}
-                    character={omnivoreCharacter}/>
+                    character={OmnivoreGreen}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    onTweenFinish={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween2}
                     key={this.state.creatureKey2}
-                    spriteAnimationKey={"blue"}
+                    spriteAnimationKey={"default"}
                     loopAnimation={true}
-                    character={omnivoreCharacter}/>
+                    character={OmnivoreBlue}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    onTweenFinish={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 50, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween3}
                     key={this.state.creatureKey3}
-                    spriteAnimationKey={"red"}
+                    spriteAnimationKey={"default"}
                     loopAnimation={true}
-                    character={omnivoreCharacter}/>
+                    character={OmnivoreRed}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    onTweenFinish={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
                 <AnimatedSprite coordinates={{top: Window.height - 190, left: Window.width - 120}}
-                    size={{width: 215, height: 160}}
+                    size={{width: Window.width/5, height: Window.width/5}}
                     draggable={false}
                     tweenStart={"auto"}
                     tween={this.state.creatureTween4}
                     key={this.state.creatureKey4}
-                    spriteAnimationKey={"yellow"}
+                    spriteAnimationKey={"default"}
                     loopAnimation={true}
-                    character={omnivoreCharacter}/>
-                <AnimatedSprite coordinates={{top:80,left:0}}
-                    size={{width:143,height:125}}
+                    character={OmnivoreYellow}
+                    spriteAnimationKey={this.state.animation}
+                    loopAnimation={false}
+                    onTweenFinish={this.onTweenEndCreature}
+                    onAnimationFinish={(spriteAnimationKey) => {this.onAnimationFinish(spriteAnimationKey)}}/>
+                <AnimatedSprite coordinates={{top:100,left:-5}}
+                    size={{width:Window.width/6,height:(Window.width/6)*0.878}}
                     draggable={false}
                     character={leverCharacter}
                     tweenStart="touch"
@@ -670,14 +783,14 @@ class GameTwo2 extends Component {
                     onPress={this.onLeverTouch}/>
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft-30}}
                     key={this.state.signKey1}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
                 {this.state.showFood1 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.phase1Left}
                     key={this.state.foodKey1}
@@ -686,18 +799,19 @@ class GameTwo2 extends Component {
                     onPress={this.onFoodPress}
                     spriteKey={1}
                     spriteAnimationKey={this.state.spriteAnimationKey1}
-                    loopAnimation={true}/>
+                    loopAnimation={true}
+                    onTweenFinish={this.onTweenEndFood}/>
                 : null}
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing-30}}
                     key={this.state.signKey2}
-                    size={{width: 110, height: 170}}
+                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
                     draggable={false}
                     character={signCharacter}
                     tweenStart="auto"
                     tween={this.state.signTween2}/>
                 {this.state.showFood2 ?
                 <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing}}
-                    size={{width: 60, height: 60}}
+                    size={{width: Window.width/11, height: Window.width/11}}
                     draggable={false}
                     character={this.state.phase1Right}
                     key={this.state.foodKey2}
@@ -706,7 +820,8 @@ class GameTwo2 extends Component {
                     onPress={this.onFoodPress}
                     spriteKey={2}
                     spriteAnimationKey={this.state.spriteAnimationKey2}
-                    loopAnimation={true}/>
+                    loopAnimation={true}
+                    onTweenFinish={this.onTweenEndFood}/>
                 : null}
         </Image>
       </View>
@@ -729,23 +844,3 @@ const styles = StyleSheet.create({
 })
 
 export default GameTwo2
-
-
-// <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2-30}}
-//     key={this.state.signKey3}
-//     size={{width: 110, height: 170}}
-//     draggable={false}
-//     character={signCharacter}
-//     tweenStart="auto"
-//     tween={this.state.signTween2}/>
-// {this.state.showFood3 ?
-// <AnimatedSprite coordinates={{top: startTop, left: startLeft+spacing*2}}
-//     size={{width: 60, height: 60}}
-//     draggable={false}
-//     character={this.state.phase1Right}
-//     key={this.state.foodKey3}
-//     tweenStart="auto"
-//     tween={this.state.foodTween13}
-//     onPress={this.onFoodPress}
-//     spriteKey={3}/>
-// : null}

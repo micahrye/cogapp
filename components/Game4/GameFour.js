@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Animated,
-  AppRegistry,
-  Easing,
   StyleSheet,
   Text,
   View,
@@ -14,148 +11,298 @@ import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
 
-const SCREEN_WIDTH = require('Dimensions').get('window').width;
-const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-let fixedBoxes = [];
+const NUM_TRIALS = 4;
 
 class GameFour extends React.Component {
 
-  constructor(props){
+  constructor (props) {
     super(props);
+    this.boxTween = [{
+      tweenType: 'wiggle',
+      loop: false,
+    },{
+      tweenType: 'wiggle',
+      loop: false,
+    },{
+      tweenType: 'wiggle',
+      loop: false,
+    }];
+    this.left = [];
+    this.boxKeys = [0, 1, 2];
+    this.showBoxes = [true, true, true];
+    this.fixedKeys = [];
+    this.boxChosen = false;
+    this.fixedSpriteAnimationKeys = [];
+    this.correctChoice = undefined;
+    this.wrongChoices = [];
+    this.fixedBoxes = [];
+    this.trialNumber = 1;
+    this.stopWiggling = false;
+
     this.state = {
       moveableBoxes: [],
-      mammalKey: 0,
+      mammalKey: 3,
+      foodKey: 4,
+      boxKeys: this.boxKeys,
       mammalSpriteAnimationKey: 'default',
       showFood: false,
       loopAnimation: false,
-    }
-    this.boxSpriteAnimationKey = 'default';
-
+      showBoxes: this.showBoxes,
+    };
   }
 
-  componentDidMount() {
-    this.createBoxes();
+  componentWillMount () {
+    if (this.props.route.trialNumber != undefined) {
+      this.trialNumber = this.props.route.trialNumber + 1;
+    }
+    this.createSequence();
+    this.createFixedBoxes();
+    this.setUpChoices();
   }
 
-  createBoxes() {
-    // create fixed boxes
-    for(let i=0; i < 9; i++){
-      if(i < 8){ // put text in first 8 boxes
-        fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}><Text style={styles.text}>{i}</Text></View>);
-      }
-      else if(i === 8){
-        fixedBoxes.push(<View key={i} style={this.getBoxStyles(i)}></View>);
-      }
+  // create sequence of shapes in matrix
+  // NOTE: temporary, until real assets come in
+  createSequence () {
+    let sequence = [];
+    switch (this.trialNumber) {
+      case 1:
+        sequence = [
+          'green', 'green', 'green', 'red', 'red', 'red', 'green', 'green',
+        ];
+        this.correctChoice = 'green';
+        this.wrongChoices.push('red', 'blue');
+        break;
+      case 2:
+        sequence = [
+          'green', 'blue', 'red', 'green', 'blue', 'red', 'green', 'blue',
+        ];
+        this.correctChoice = 'red';
+        this.wrongChoices.push('green', 'blue');
+        break;
+      case 3:
+        sequence = [
+          'green', 'green', 'green', 'red', 'red', 'red', 'blue', 'blue',
+        ];
+        this.correctChoice = 'blue';
+        this.wrongChoices.push('red', 'green');
+        break;
+      case 4:
+        sequence = [
+          'blue', 'red', 'blue', 'blue', 'red', 'blue', 'blue', 'red',
+        ];
+        this.correctChoice = 'blue';
+        this.wrongChoices.push('green', 'red');
+        break;
     }
+    this.fixedSpriteAnimationKeys.push(sequence);
+  }
 
-    // create moveable boxes at bottom of matrix
-    let correctChoice = Math.floor(Math.random() * 3); // either 0, 1, or 2
-    let boxes = [];
-    for(let i=0; i < 3; i++){
-      //if(i === correctChoice){
-        this.boxSpriteAnimationKey = 'green';
-      // }
-      // else{
-      //   this.boxSpriteAnimationKey = 'red';
-      // }
-      boxes.push(
-        <AnimatedSprite
-          key={i}
-          spriteKey={i}
-          coordinates={{top: 300, left: (i*90) + 15}}
-          size={{width: 60, height: 60}}
-          draggable={true}
-          draggedTo={this.checkLocation.bind(null, i)}
-          character={squareCharacter}
-          spriteAnimationKey={this.boxSpriteAnimationKey}
-          loopAnimation={true}/>
-      );
+  createFixedBoxes () {
+    let top = 25;
+    for (let i=0; i < 9; i++) {
+      if (i > 2 && i < 6) { // second row of boxes
+        top = 110;
+      }
+      else if ( i >= 6) { // third row of boxes
+        top = 195;
+      }
+      if (i < 8) {
+        this.fixedBoxes.push(
+          <AnimatedSprite
+            key={Math.random()}
+            coordinates={{top: top, left: ((i%3)*90) + 15}}
+            size={{width: 60, height: 60}}
+            character={squareCharacter}
+            spriteAnimationKey={this.fixedSpriteAnimationKeys[0][i]}
+            loopAnimation={true}
+          />
+        );
+      }
+      else if (i === 8) { // last box is empty
+        this.fixedBoxes.push(<View key={Math.random()} style={styles.emptyBox} />);
+      }
     }
-    this.setState({moveableBoxes: boxes});
+  }
+
+  // random location of correct choice box
+  setUpChoices () {
+    let correctLocation = Math.floor(Math.random() * 3); // either 0, 1, or 2
+    if (correctLocation === 0) {
+      this.left = [15, 195, 105];
+    }
+    else if (correctLocation === 1) {
+      this.left = [105, 15, 195];
+    }
+    else {
+      this.left = [195, 15, 105];
+    }
   }
 
   // check if a moveable box has been dragged to dashed box and if true remove it
-  checkLocation = (numBox, newX, newY) => {
-    if((newX > 185 && newX < 205) && (newY > 190 && newY < 210)){
-      let boxes = [];
-      this.state.moveableBoxes.forEach((item)=>{
-        if(numBox !== item.props.spriteKey){
-          boxes.push(item)
+  checkLocation = (newX, newY, numBox) => {
+    if ((newX > 170 && newX < 225) && (newY > 170 && newY < 215) && !this.boxChosen) {
+      if (numBox === 1) { // correct box chosen
+        this.foodFall();
+        this.showBoxes[0] = false;
+      }
+      else {
+        this.disgust();
+        if (numBox === 2) {
+          this.showBoxes[1] = false;
         }
-        else{
-          if(item.props.spriteAnimationKey === 'green'){ // if correct box chosen
-            this.foodFall();
-          }
-          else{
-            this.disgust();
-          }
+        else {
+          this.showBoxes[2] = false;
         }
+      }
+      this.setState({showBoxes: this.showBoxes});
+      this.boxChosen = true; // so they can't drag another box while animal reaction happens
+    }
+
+    else {
+      this.boxKeys[numBox - 1] = Math.random();
+      this.setState({
+        boxKeys: this.boxKeys,
       });
-      this.setState({moveableBoxes: boxes});
     }
   }
 
-  foodFall() {
+  foodFall () {
     this.setState({
       showFood: true,
-      mammalKey: Math.random(), 
+      mammalKey: Math.random(),
       mammalSpriteAnimationKey: 'openMouth',
     });
   }
 
-  disgust() {
-    this.setState({mammalKey: Math.random(), mammalSpriteAnimationKey: 'disgust'});
+  disgust () {
+    this.setState({
+      mammalKey: Math.random(),
+      mammalSpriteAnimationKey: 'disgust',
+    });
   }
 
-  onTweenFinish(){
-    // this.setState({
-    //   mammalKey: Math.random(), 
-    //   mammalSpriteAnimationKey: 'chew',
-    //   //showFood: false,
-    //   //loopAnimation: false,
-    // })
-  }
-
-  onAnimationFinish(animation) {
-    if(animation === 'eat'){
+  onTweenFinish (spriteKey, stopped) {
+    if (spriteKey === 5) { // mammal
       this.setState({
-        mammalKey: Math.random(), 
+        mammalKey: Math.random(),
+        mammalSpriteAnimationKey: 'chew',
+        showFood: false,
+        loopAnimation: false,
+      });
+    }
+    if (!stopped && !this.stopWiggling) { // do not repeat wiggle if boxes have already been pressed
+      if (spriteKey === 1 || spriteKey === 2 || spriteKey === 3) { // boxes
+        this.boxTween[spriteKey - 1] = {
+          tweenType: 'wiggle',
+          loop: false,
+        };
+        this.boxKeys[spriteKey - 1] = Math.random();
+        this.setState({boxKeys: this.boxKeys});
+      }
+    }
+    if (stopped) {
+      this.stopWiggling = true;
+    }
+  }
+
+  onAnimationFinish (animation) {
+    if (animation === 'chew') {
+      this.setState({
+        mammalKey: Math.random(),
         mammalSpriteAnimationKey: 'celebrate',
       });
     }
-    else if(animation === 'openMouth'){
+    else if (animation === 'openMouth') {
       this.setState({
-        mammalKey: Math.random(), 
+        mammalKey: Math.random(),
         mammalSpriteAnimationKey: 'readyToEat',
         loopAnimation: true,
       });
     }
-  }
-
-  getBoxStyles(boxNum) {
-    if(boxNum === 8){ // last fixed box is dashed
-      borderStyle = 'dashed';
+    else if (animation === 'disgust') {
+      this.boxChosen = false; // after animal reacts, player can drag boxes again
     }
-    else{
-      borderStyle = 'solid';
-    }
-    return {
-      borderWidth: 2,
-      borderStyle: borderStyle,
-      width: 60,
-      height: 60,
-      margin: 15,
-      alignItems: 'center',
+    else if (animation === 'celebrate') {
+      this.goToNextTrial();
     }
   }
 
-  render(){
-    return(
+  goToNextTrial () {
+    if (this.trialNumber === NUM_TRIALS) {
+      this.props.navigator.replace({
+        id: 'Main',
+      });
+      return;
+    }
+    this.props.navigator.replace({
+      id: 'NextTrial',
+      getId: this.getCurrId,
+      trialNumber: this.trialNumber,
+    });
+  }
+
+  getCurrId () {
+    return 'GameFour';
+  }
+
+  render () {
+    return (
       <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
         <View style={styles.container}>
           <View style={styles.boxContainer}>
-            {fixedBoxes}
-            {this.state.moveableBoxes}
+            {this.fixedBoxes}
+            <View style={styles.separatingLine}><Text>{'ehllo'}</Text></View>
+            {this.state.showBoxes[0] ?
+              <AnimatedSprite
+                key={this.state.boxKeys[0]}
+                spriteKey={1}
+                coordinates={{top: 420, left: this.left[0]}}
+                size={{width: 60, height: 60}}
+                draggable={true}
+                draggedTo={(endX, endY) => this.checkLocation(endX, endY, 1)}
+                character={squareCharacter}
+                spriteAnimationKey={this.correctChoice}
+                loopAnimation={true}
+                tween={this.boxTween[0]}
+                tweenStart='auto'
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
+              />
+            : null}
+            {this.state.showBoxes[1] ?
+              <AnimatedSprite
+                key={this.state.boxKeys[1]}
+                spriteKey={2}
+                coordinates={{top: 420, left: this.left[1]}}
+                size={{width: 60, height: 60}}
+                draggable={true}
+                draggedTo={(endX, endY) => this.checkLocation(endX, endY, 2)}
+                character={squareCharacter}
+                spriteAnimationKey={this.wrongChoices[0]}
+                loopAnimation={true}
+                tween={this.boxTween[1]}
+                tweenStart='auto'
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
+              />
+            : null}
+            {this.state.showBoxes[2] ?
+              <AnimatedSprite
+                key={this.state.boxKeys[2]}
+                spriteKey={3}
+                coordinates={{top: 420, left: this.left[2]}}
+                size={{width: 60, height: 60}}
+                draggable={true}
+                draggedTo={(endX, endY) => this.checkLocation(endX, endY, 3)}
+                character={squareCharacter}
+                spriteAnimationKey={this.wrongChoices[1]}
+                loopAnimation={true}
+                tween={this.boxTween[2]}
+                tweenStart='auto'
+                onTweenFinish={(spriteKey, stopped) => this.onTweenFinish(spriteKey, stopped)}
+                stopTweenOnPressIn={() => {}}
+              />
+            : null}
           </View>
           <AnimatedSprite
             key={this.state.mammalKey}
@@ -165,24 +312,27 @@ class GameFour extends React.Component {
             character={mammalCharacter}
             spriteAnimationKey={this.state.mammalSpriteAnimationKey}
             onAnimationFinish={(animation) => this.onAnimationFinish(animation)}
-            loopAnimation={this.state.loopAnimation}/>
-        </View>
+            loopAnimation={this.state.loopAnimation}
+          />
         {this.state.showFood ?
-          <AnimatedSprite 
-            key={Math.random()}
+          <AnimatedSprite
+            key={this.state.foodKey}
+            spriteKey={5}
             coordinates={{top: 200, left: 770}}
-            size={{width: 100, height: 100}}
+            size={{width: 70, height: 70}}
             tween={{
               tweenType: 'curve-spin',
               startXY: [570, 200],
-              endXY: [800, 300], 
-              duration: 4000,
+              endXY: [850, 350],
+              duration: 2000,
               loop: false,
             }}
             tweenStart='auto'
-            onTweenFinish={(ended) => this.onTweenFinish()}
-            character={grassCharacter}/>
+            onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
+            character={grassCharacter}
+          />
           : null}
+        </View>
       </Image>
     );
   }
@@ -205,14 +355,33 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     width: 280,
-    height: 400,
+    height: 520,
     borderWidth: 3,
     left: 372,
     marginTop: 20,
   },
-  text: {
-    fontSize: 45,
+  emptyBox: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    width: 60,
+    height: 60,
+    top: 195,
+    left: 195,
+    position: 'absolute',
+  },
+  separatingLine: {
+    height: 0,
+    width: 230,
+    top: 400,
+    left: 20,
+    borderWidth: 1,
+    position: 'absolute',
   },
 });
+
+GameFour.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
 
 export default GameFour;

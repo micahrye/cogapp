@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -14,8 +13,6 @@ import TimerMixin from 'react-timer-mixin';
 // import characters for animatedSprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
-import Background from '../../backgrounds/Game_1_Background_1280.png';
-
 import AnimatedSprite from "../animatedSprite";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -36,7 +33,7 @@ class BugZap extends React.Component {
       bugSpriteAnimationKey: 'default',
       frogSpriteAnimationKey: 'default',
       loopAnimation: true,
-    }
+    };
     this.tweenIdle = {};
     this.tweenAway = {};
     this.timeoutBugAppear = undefined;
@@ -60,14 +57,14 @@ class BugZap extends React.Component {
         if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
           this.bugIdle();
         }
-        else{
+        else {
           this.bugFlyAway('default'); // if bug is zapped too early, it just flies away, no idling
         }
       }, this.flyInDuration);
     }, 500);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearTimeout(this.timeoutBugAppear);
     clearTimeout(this.timeoutBugIdle);
     clearTimeout(this.timeoutFlyAway);
@@ -75,17 +72,17 @@ class BugZap extends React.Component {
   }
 
   // 2 different ways bug can reach landing spot
-  setUpTweens() {
+  setUpTweens () {
     let sequenceChoice = Math.random();
-    xLand = 580 //SCREEN_WIDTH - 330; // 350 in emulator
-    yLand = 120 //SCREEN_HEIGHT - 350; // 70 in emulator
+    let xLand = 580; //SCREEN_WIDTH - 330; // 350 in emulator
+    let yLand = 120; //SCREEN_HEIGHT - 350; // 70 in emulator
     let flySequenceX = [680, 730, xLand]; //[SCREEN_WIDTH - 230, SCREEN_WIDTH - 180, xLand]; //  [450, 500, xLand] in emulator
     let flySequenceY = [];
 
-    if(sequenceChoice < .5){
+    if (sequenceChoice < .5) {
       flySequenceY = [50, yLand, 50, yLand]; //[SCREEN_HEIGHT - 420, yLand, SCREEN_HEIGHT - 420, yLand];
     }
-    else{
+    else {
       flySequenceY = [250, 150, 100, yLand]; //[SCREEN_HEIGHT - 220, SCREEN_HEIGHT - 320, SCREEN_HEIGHT - 370, yLand]; // 200, 100, 50, yLand in emulator
     }
 
@@ -123,7 +120,7 @@ class BugZap extends React.Component {
   }
 
   // switch to idle bug character and pause tweening
-  bugIdle() {
+  bugIdle () {
     this.setState({
       bugKey: Math.random(),
       tweenSettings: this.tweenIdle,
@@ -136,7 +133,7 @@ class BugZap extends React.Component {
   }
 
   // switch to flying bug character and start next tween
-  bugFlyAway(animation) {
+  bugFlyAway (animation) {
     this.setState({
       bugKey: Math.random(),
       tweenSettings: this.tweenAway,
@@ -149,43 +146,43 @@ class BugZap extends React.Component {
   }
 
   frogTap = () => {
-    if(this.state.showBug){
-      if(this.state.bugSpriteAnimationKey === 'idle'){ // bug has landed
+    if (this.state.showBug) {
+      if (this.state.bugSpriteAnimationKey === 'idle') { // bug has landed
         this.catchBug();
       }
-      else if(this.state.tweenSettings != this.tweenAway){ // bug has not landed yet
+      else if (this.state.tweenSettings != this.tweenAway) { // bug has not landed yet
         this.frogDisgust();
         this.setState({zappedTooEarly: true}); // now bug doesn't land, just keeps flying offscreen
       }
     }
   }
 
-  catchBug(){
+  catchBug () {
     this.frogEat();
     clearTimeout(this.timeoutFlyAway); // so that "bugFlyAway" function doesn't run after bug is "caught"
   }
 
   // triggered when an animation finishes
-  onAnimationFinish(animationKey) {
-    if(animationKey === 'splat'){
+  onAnimationFinish (animationKey) {
+    if (animationKey === 'splat') {
       this.setState({showBug: false}); // once bug has splatted
     }
-    else if(animationKey === 'eat'){
+    else if (animationKey === 'eat') {
       this.frogCelebrate(); // celebrate after eating the bug
     }
-    else if(animationKey === 'celebrate'){
+    else if (animationKey === 'celebrate') {
       this.goToNextTrial(); // once bug is done celebrating
     }
   }
 
   // indicates which frame the animation is currently on
-  getFrameIndex(animationKey, frameIndex) {
-    if(animationKey === 'eat' && frameIndex === 5){
+  getFrameIndex (animationKey, frameIndex) {
+    if (animationKey === 'eat' && frameIndex === 5) {
       this.bugSplat(); // when tongue has reached bug
     }
   }
 
-  bugSplat(){
+  bugSplat () {
     this.setState({
       bugKey: Math.random(),
       bugSpriteAnimationKey: 'splat',
@@ -193,15 +190,15 @@ class BugZap extends React.Component {
     });
   }
 
-  frogEat(){
+  frogEat () {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'eat'});
   }
 
-  frogCelebrate() {
+  frogCelebrate () {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
   }
 
-  frogDisgust() {
+  frogDisgust () {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
   }
 
@@ -213,10 +210,10 @@ class BugZap extends React.Component {
   }
 
   // trial count goes up, go to next trial, or next level if max trials reached
-  goToNextTrial() {
-    if(this.props.route.trialNumber != undefined){
+  goToNextTrial () {
+    if (this.props.route.trialNumber != undefined) {
       this.trialNumber = this.props.route.trialNumber + 1;
-      if(this.trialNumber === NUM_TRIALS){
+      if (this.trialNumber === NUM_TRIALS) {
         this.goToNextLevel();
         return;
       }
@@ -228,22 +225,22 @@ class BugZap extends React.Component {
     });
   }
 
-  getCurrId() {
+  getCurrId () {
     return 'BugZap';
   }
 
-  goToNextLevel() {
+  goToNextLevel () {
     this.props.navigator.replace({
       id: 'BugZap1',
     });
   }
 
-  render(){
+  render () {
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-              <Text>Go to Level 1</Text>
+              <Text>{'Go to Level 1'}</Text>
             </TouchableOpacity>
 
             {this.state.showBug ?
@@ -254,12 +251,13 @@ class BugZap extends React.Component {
                 size={{width: 128, height: 128}}
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
-                tweenStart="auto"
+                tweenStart='auto'
                 tweenStop={this.state.stopTween}
                 stopTweenOnTouch={(values) => console.warn(values)}
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loopAnimation}
-                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}/>
+                onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+              />
             : null}
 
             <AnimatedSprite
@@ -271,8 +269,9 @@ class BugZap extends React.Component {
               onPress={this.frogTap}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
-              getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex)}}/>
+              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+              getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex);}}
+            />
         </Image>
       </View>
     );
@@ -303,4 +302,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+BugZap.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
+
 export default BugZap;

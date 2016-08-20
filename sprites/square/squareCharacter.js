@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const squareCharacter = {
   name:"square",
@@ -8,11 +8,15 @@ const squareCharacter = {
   ],
 
   green: [
-  	require("./green_square.png"),
+    require("./green_square.png"),
   ],
 
   red: [
-  	require("./red_square.png"),
+    require("./red_square.png"),
+  ],
+
+  blue: [
+    require("./blue_square.png"),
   ],
 
 };
