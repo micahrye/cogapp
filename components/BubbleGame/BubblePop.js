@@ -24,7 +24,7 @@ const BUBBLE_SIZE = 60;
 const OFFSET = 80;
 
 class BubblePop extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
 
     this.targetLocation = SCREEN_WIDTH/2 - 100;
@@ -349,7 +349,7 @@ class BubblePop extends React.Component {
 }
 
 BubblePop.propTypes = {
-  navigator: React.PropTypes.object.isRequired,
+navigator: React.PropTypes.object.isRequired,
 }
 reactMixin.onClass(BubblePop, TimerMixin);
 

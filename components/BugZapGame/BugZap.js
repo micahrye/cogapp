@@ -6,8 +6,10 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Navigator,
 } from 'react-native';
+
+import reactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
 
 // import characters for animatedSprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
@@ -23,7 +25,7 @@ const NUM_TRIALS = 3;
 const IDLE_DURATION = 750; // how long bug is catchable
 
 class BugZap extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
     this.state = {
       showBug: false,
@@ -45,15 +47,16 @@ class BugZap extends React.Component {
     this.trialNumber = 1;
   }
 
-  componentDidMount() {
+
+  componentDidMount () {
     this.flyInDuration = Math.random() *  (4000 - 1500) + 1500;
     this.setUpTweens();
 
     // render bug after the rest of the scene
-    this.timeoutBugAppear = setTimeout( () => {
+    this.timeoutBugAppear = this.setTimeout( () => {
       this.setState({showBug: true});
 
-      this.timeoutBugIdle = setTimeout(()=>{
+      this.timeoutBugIdle = this.setTimeout(()=>{
         if(!this.state.zappedTooEarly){ // after first tween is completed, bug idles
           this.bugIdle();
         }
@@ -96,8 +99,8 @@ class BugZap extends React.Component {
       loop: false,
     };
 
-    // tween offscreen  
-    this.tweenAway = { 
+    // tween offscreen
+    this.tweenAway = {
       tweenType: "sine-wave",
       startXY: [xLand, yLand],
       xTo: [-150],
@@ -184,7 +187,7 @@ class BugZap extends React.Component {
 
   bugSplat(){
     this.setState({
-      bugKey: Math.random(), 
+      bugKey: Math.random(),
       bugSpriteAnimationKey: 'splat',
       loopAnimation: false, // does not loop splat animation
     });
@@ -275,6 +278,9 @@ class BugZap extends React.Component {
     );
   }
 }
+
+BugZap.propTypes = { };
+reactMixin.onClass(BugZap, TimerMixin);
 
 const styles = StyleSheet.create({
   container: {
