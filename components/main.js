@@ -16,12 +16,18 @@ import {
 var reactMixin = require('react-mixin');
 import TimerMixin from 'react-timer-mixin';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
 class Main extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
   }
 
-  componentDidMount() {
+  componentWillMount () {
+
+  }
+  componentDidMount () {
 
   }
 
@@ -29,9 +35,9 @@ class Main extends React.Component {
     this.props.navigator.replace({id: 'BubblePopLoading'});
   }
 
-  goToDragon = () => {
-    this.props.navigator.replace({id: 'DragDragon'});
-  }
+  // goToDragon = () => {
+  //   this.props.navigator.replace({id: 'DragDragon'});
+  // }
 
   goToBugZap = () => {
       this.props.navigator.replace({id: 'BugZapLoading'});
@@ -57,61 +63,64 @@ class Main extends React.Component {
     this.props.navigator.replace({id:'GameSixLoading'})
   }
 
-  render() {
+  render () {
+    // console.warn(SCREEN_HEIGHT);
+    // console.warn(SCREEN_WIDTH);
     return (
+      <ScrollView
+        style={styles.scrollView} >
 
-        <ScrollView style={{height:Dimensions.get('window').height,
-                            width:Dimensions.get('window').width}}
-        >
-        <View style={styles.container}>
-          <View style={styles.column}>
-            <TouchableOpacity onPress={this.goToBubblePop}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To BubblePop</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToDragon}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Dragon</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToBugZap}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To BugZap</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameTwo}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Two</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.container}>
 
-          <View style={styles.column}>
-            <TouchableOpacity onPress={this.goToGameThree}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Three</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameFour}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Four</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameFive}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Five</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameSix}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Six</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          </View>
-        </ScrollView>
+        <View style={styles.column}>
+          <TouchableOpacity onPress={this.goToBubblePop}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To BubblePop</Text>
+            </View>
+          </TouchableOpacity>
+          { // <TouchableOpacity onPress={this.goToDragon}>
+          //   <View style={styles.button}>
+          //     <Text style={styles.text}>Go To Dragon</Text>
+          //   </View>
+          // </TouchableOpacity>
+          }
+          <TouchableOpacity onPress={this.goToBugZap}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To BugZap</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.goToGameTwo}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Two</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
+        <View style={styles.column}>
+          <TouchableOpacity onPress={this.goToGameThree}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Three</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.goToGameFour}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Four</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.goToGameFive}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Five</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.goToGameSix}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Six</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+      </ScrollView>
     );
   }
 }
@@ -133,12 +142,18 @@ let style = {
 */
 
 const styles = StyleSheet.create({
+  scrollView: {
+    height:SCREEN_HEIGHT,
+    width:SCREEN_WIDTH,
+  },
   container: {
     flex: 1,
-    //flexDirection: 'row',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cce6ff',
+    height:SCREEN_HEIGHT,
+    width:SCREEN_WIDTH,
+    //backgroundColor: '#fff',
   },
   column: {
     flex: 2,
@@ -165,3 +180,63 @@ const styles = StyleSheet.create({
 });
 
 export default Main;
+
+/*
+<ScrollView
+  style={{height:SCREEN_HEIGHT, width:SCREEN_WIDTH}}
+  horizontal={false}>
+
+<View style={styles.container}>
+
+  <View style={styles.column}>
+    <TouchableOpacity onPress={this.goToBubblePop}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To BubblePop</Text>
+      </View>
+    </TouchableOpacity>
+    {
+    // <TouchableOpacity onPress={this.goToDragon}>
+    //   <View style={styles.button}>
+    //     <Text style={styles.text}>Go To Dragon</Text>
+    //   </View>
+    // </TouchableOpacity>
+    }
+    <TouchableOpacity onPress={this.goToBugZap}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To BugZap</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={this.goToGameTwo}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To Game Two</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+
+  <View style={styles.column}>
+    <TouchableOpacity onPress={this.goToGameThree}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To Game Three</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={this.goToGameFour}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To Game Four</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={this.goToGameFive}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To Game Five</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={this.goToGameSix}>
+      <View style={styles.button}>
+        <Text style={styles.text}>Go To Game Six</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+
+</View>
+</ScrollView>
+
+*/

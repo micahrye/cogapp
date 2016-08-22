@@ -14,6 +14,7 @@ import TimerMixin from 'react-timer-mixin';
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import AnimatedSprite from "../animatedSprite";
+import Scene from '../Scene';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -34,6 +35,7 @@ class BugZap extends React.Component {
       frogSpriteAnimationKey: 'default',
       loopAnimation: true,
     };
+    debugger;
     this.tweenIdle = {};
     this.tweenAway = {};
     this.timeoutBugAppear = undefined;
@@ -42,8 +44,15 @@ class BugZap extends React.Component {
     this.timeoutNextTrial = undefined;
     this.flyInDuration = undefined;
     this.trialNumber = 1;
+
   }
 
+  componentWillMount () {
+    styles.container.height = styles.container.height * this.props.scale.height;
+    styles.container.width = styles.container.width * this.props.scale.width;
+    styles.backgroundImage.width = styles.backgroundImage.width * this.props.scale.width;
+    styles.backgroundImage.width = styles.backgroundImage.width * this.props.scale.width;
+  }
 
   componentDidMount () {
     this.flyInDuration = Math.random() *  (4000 - 1500) + 1500;
@@ -74,9 +83,10 @@ class BugZap extends React.Component {
   // 2 different ways bug can reach landing spot
   setUpTweens () {
     let sequenceChoice = Math.random();
-    let xLand = 580; //SCREEN_WIDTH - 330; // 350 in emulator
-    let yLand = 120; //SCREEN_HEIGHT - 350; // 70 in emulator
-    let flySequenceX = [680, 730, xLand]; //[SCREEN_WIDTH - 230, SCREEN_WIDTH - 180, xLand]; //  [450, 500, xLand] in emulator
+    let xLand = 580 * this.props.scale.width; //SCREEN_WIDTH - 330; // 350 in emulator
+    let yLand = 120 * this.props.scale.height; //SCREEN_HEIGHT - 350; // 70 in emulator
+    let flySequenceX = [680 * this.props.scale.width,
+      730 * this.props.scale.width, xLand]; //[SCREEN_WIDTH - 230, SCREEN_WIDTH - 180, xLand]; //  [450, 500, xLand] in emulator
     let flySequenceY = [];
 
     if (sequenceChoice < .5) {
@@ -236,9 +246,13 @@ class BugZap extends React.Component {
   }
 
   render () {
+    // console.warn('widht: ' + this.props.scale.width);
+    debugger;
     return (
-      <View style={styles.container}>
-        <Image source={require('../../backgrounds/Game_1_Background_1280.png')} style={styles.backgroundImage}>
+      <View>
+        <Image
+          source={require('../../backgrounds/Game_1_Background_1280.png')}
+          style={styles.backgroundImage} >
           <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
               <Text>{'Go to Level 1'}</Text>
             </TouchableOpacity>
@@ -248,7 +262,10 @@ class BugZap extends React.Component {
                 key={this.state.bugKey}
                 spriteKey={0}
                 coordinates={{top: 0, left: 0}}
-                size={{width: 128, height: 128}}
+                size={{
+                  width: 128 * this.props.scale.width,
+                  height: 128 * this.props.scale.height,
+                }}
                 character={bugCharacter}
                 tween={this.state.tweenSettings}
                 tweenStart='auto'
@@ -263,8 +280,12 @@ class BugZap extends React.Component {
             <AnimatedSprite
               key={this.state.frogKey}
               spriteKey={1}
-              coordinates={{top: 200, left: 500}}
-              size={{width: 750, height: 375}}
+              coordinates={{top: 260 * this.props.scale.height,
+                left: 700 * this.props.scale.width}}
+              size={{
+                  width: 750 * this.props.scale.width,
+                  height: 375 * this.props.scale.height,
+              }}
               character={frogCharacter}
               onPress={this.frogTap}
               hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
@@ -278,20 +299,24 @@ class BugZap extends React.Component {
   }
 }
 
-BugZap.propTypes = { };
+BugZap.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
+};
 reactMixin.onClass(BugZap, TimerMixin);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 600,
-    width: 1024,
+    height: 300,
+    width: 640,
     flexDirection: 'row',
   },
   backgroundImage: {
     flex: 1,
-    width: 1024,
-    height: 600,
+    width: 640,
+    height: 300,
   },
   button: {
     backgroundColor: '#4d94ff',
@@ -302,10 +327,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-BugZap.propTypes = {
-  route: React.PropTypes.object,
-  navigator: React.PropTypes.object,
-};
 
 export default BugZap;

@@ -46,6 +46,7 @@ import GameFive from './components/Game5/GameFive';
 import GameSix from './components/Game6/GameSix';
 import GameSixLoading from './components/Game6/GameSixLoading';
 import NextTrial from './components/NextTrial';
+import Scene from './components/Scene';
 
 
 class CogApp extends React.Component {
@@ -86,7 +87,7 @@ class CogApp extends React.Component {
     } else if(route.id === 'BugZapLoading'){
       return <BugZapLoading navigator={navigator} route={route} />
     } else if (route.id === 'BugZap'){
-      return <BugZap navigator={navigator} route={route} />
+      return <Scene><BugZap navigator={navigator} route={route} /></Scene>
     } else if (route.id === 'BugZap1'){
       return <BugZapLevel1 navigator={navigator} route={route}/>
     } else if (route.id === 'BugZap2'){
