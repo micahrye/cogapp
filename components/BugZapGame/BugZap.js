@@ -270,7 +270,6 @@ class BugZap extends React.Component {
                 tween={this.state.tweenSettings}
                 tweenStart='auto'
                 tweenStop={this.state.stopTween}
-                stopTweenOnTouch={(values) => console.warn(values)}
                 spriteAnimationKey={this.state.bugSpriteAnimationKey}
                 loopAnimation={this.state.loopAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
