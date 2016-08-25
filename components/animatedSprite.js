@@ -183,18 +183,21 @@ class AnimatedSprite extends React.Component{
 
     this.otherAnimationInterval = setInterval(()=>{
       this.frameIndex++;
-      if(this.props.getFrameIndex){ // send up frameIndex to parent
+      // send up frameIndex to parent
+      if(this.props.getFrameIndex){
         this.props.getFrameIndex(this.props.spriteAnimationKey, this.frameIndex);
       }
       if(this.frameIndex > this.numFrames){
-        if(this.props.loopAnimation){ // continue looping animation
+        // continue looping animation
+        if(this.props.loopAnimation){
             this.frameIndex = 0;
         }
         else{ // run once and go back to idle
           clearInterval(this.otherAnimationInterval);
           this.startDefaultAnimation();
           if(this.props.onAnimationFinish){
-            this.props.onAnimationFinish(this.props.spriteAnimationKey) // notify parent animation has ended
+            // notify parent animation has ended
+            this.props.onAnimationFinish(this.props.spriteAnimationKey)
           }
           return;
         }

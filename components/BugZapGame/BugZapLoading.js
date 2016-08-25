@@ -110,49 +110,49 @@ class BugZapLoading extends Component {
         </View>
         <View>
           <View>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'celebrate'}
               fps={40}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'disgust'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={frogCharacter}
               spriteAnimationKey={'eat'}
               fps={40}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'splat'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'idle'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'startFly'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
               spriteAnimationKey={'prettyIdle'}
               fps={10}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bugCharacter}
@@ -186,4 +186,3 @@ const styles = StyleSheet.create({
 });
 
 export default BugZapLoading;
-

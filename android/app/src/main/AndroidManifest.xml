@@ -3,6 +3,7 @@
     android:versionCode="1"
     android:versionName="1.0"
     android:debuggable="false"
+    android:largeHeap="true"
     >
 
     <uses-permission android:name="android.permission.INTERNET" />

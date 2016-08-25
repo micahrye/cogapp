@@ -1,15 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   Image,
-  Easing,
-  Navigator,
   StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Text,
   View,
-  Animated,
   Dimensions,
 } from 'react-native';
 
@@ -41,7 +34,7 @@ const endTopCan = Window.height*0.2;
 const creatureStart = [Window.width+500,Window.height*0.5];
 const creatureEnd = [Window.width*0.65,Window.height*0.5];
 
-class GameTwo extends Component {
+class GameTwo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -187,20 +180,20 @@ class GameTwo extends Component {
     switch(this.state.onboarding) {
       case 2:
         this.setState({
-                        creatureKey1: Math.random(),
-                        creatureKey2: Math.random(),
-                        creatureTween1: tweenMove(creatureEnd,creatureStart),
-                        creatureTween2: tweenMove(creatureStart,creatureEnd),
-                       })
+          creatureKey1: Math.random(),
+          creatureKey2: Math.random(),
+          creatureTween1: tweenMove(creatureEnd,creatureStart),
+          creatureTween2: tweenMove(creatureStart,creatureEnd),
+         })
         break;
       case 3:
-      this.setState({
-                      creatureKey2: Math.random(),
-                      creatureKey3: Math.random(),
-                      creatureTween2: tweenMove(creatureEnd,creatureStart),
-                      creatureTween3: tweenMove([Window.width+500,Window.height*0.4],
-                                                [Window.width*0.65,Window.height*0.4]),
-                     })
+        this.setState({
+          creatureKey2: Math.random(),
+          creatureKey3: Math.random(),
+          creatureTween2: tweenMove(creatureEnd,creatureStart),
+          creatureTween3: tweenMove([Window.width+500,Window.height*0.4],
+                                    [Window.width*0.65,Window.height*0.4]),
+        })
         break;
     }
   }
@@ -346,7 +339,7 @@ class GameTwo extends Component {
   }
 
 
-  render() {
+  render () {
     // simple bounce tween to let player know when they have pressed the lever
     const tweenOptsLever = {
       tweenType: "bounce",
@@ -357,66 +350,85 @@ class GameTwo extends Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../../backgrounds/Game_2_Background_1280.png')} style={styles.backgroundImage}>
-                <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: Window.width/4, height: Window.width/4}}
-                    draggable={false}
-                    character={mammalCharacter}
-                    tweenStart={"auto"}
-                    tween={this.state.creatureTween1}
-                    key={this.state.creatureKey1}
-                    spriteAnimationKey={this.state.animation}
-                    rotate={[{rotateY: "0deg"}]}
-                    loopAnimation={false}
-                    onTweenFinish={this.onTweenEndCreature}
-                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
-                <AnimatedSprite coordinates={{top: Window.height -190, left: Window.width - 120}}
-                    size={{width: Window.width/4, height: Window.width/4}}
-                    draggable={false}
-                    character={goatCharacter}
-                    tweenStart={"auto"}
-                    tween={this.state.creatureTween2}
-                    key={this.state.creatureKey2}
-                    rotate={[{rotateY:"180deg"}]}
-                    spriteAnimationKey={this.state.animation}
-                    loopAnimation={false}
-                    onTweenFinish={this.onTweenEndCreature}
-                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
-                <AnimatedSprite coordinates={{top: Window.height -50, left: Window.width - 120}}
-                    size={{width: Window.height/2, height: Window.height/2}}
-                    draggable={false}
-                    character={frogCharacter}
-                    tweenStart={"auto"}
-                    tween={this.state.creatureTween3}
-                    key={this.state.creatureKey3}
-                    spriteAnimationKey={this.state.animation}
-                    rotate={[{rotateY:"0deg"}]}
-                    loopAnimation={false}
-                    onTweenFinish={this.onTweenEndCreature}
-                    onAnimationFinish={(spriteAnimationKey, key) => {this.onAnimationFinish(spriteAnimationKey, key)}}/>
-                <AnimatedSprite coordinates={{top:100,left:-5}}
-                    size={{width:Window.width/6,height:(Window.width/6)*0.878}}
-                    draggable={false}
-                    character={leverCharacter}
-                    tweenStart="touch"
-                    tween={tweenOptsLever}
-                    onPress={this.onLeverTouch}/>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft}}
-                    key={this.state.signKey}
-                    size={{width: Window.width/7, height: (Window.width/7)*1.596}}
-                    draggable={false}
-                    character={signCharacter}
-                    tweenStart="auto"
-                    tween={this.state.signTween}/>
-                <AnimatedSprite coordinates={{top: startTop, left: startLeft+32}}
-                    key={this.state.foodKey}
-                    size={{width: Window.width/11, height: Window.width/11}}
-                    draggable={false}
-                    character={this.state.foodCharacter}
-                    tweenStart="auto"
-                    tween={this.state.foodTween}
-                    onPress={this.onFoodPress}
-                    onTweenFinish={this.onTweenEndFood}/>
+        <Image source={require('../../backgrounds/Game_2_Background_1280.png')}
+          style={styles.backgroundImage}>
+        <AnimatedSprite
+          character={mammalCharacter}
+          coordinates={{top: Window.height -190, left: Window.width - 120}}
+          size={{width: Window.width/4, height: Window.width/4}}
+          draggable={false}
+          tweenStart={"auto"}
+          tween={this.state.creatureTween1}
+          key={this.state.creatureKey1}
+          spriteAnimationKey={this.state.animation}
+          rotate={[{rotateY: "0deg"}]}
+          loopAnimation={false}
+          onTweenFinish={this.onTweenEndCreature}
+          onAnimationFinish={(spriteAnimationKey, key) => {
+            this.onAnimationFinish(spriteAnimationKey, key);
+          }}
+        />
+        <AnimatedSprite
+          character={mammalCharacter}
+          coordinates={{top: Window.height -190, left: Window.width - 120}}
+          size={{width: Window.width/4, height: Window.width/4}}
+          draggable={false}
+          tweenStart={"auto"}
+          tween={this.state.creatureTween2}
+          key={this.state.creatureKey2}
+          rotate={[{rotateY:"180deg"}]}
+          spriteAnimationKey={this.state.animation}
+          loopAnimation={false}
+          onTweenFinish={this.onTweenEndCreature}
+          onAnimationFinish={(spriteAnimationKey, key) => {
+            this.onAnimationFinish(spriteAnimationKey, key);
+          }}
+        />
+        <AnimatedSprite
+          character={frogCharacter}
+          coordinates={{top: Window.height -50, left: Window.width - 120}}
+          size={{width: Window.height/2, height: Window.height/2}}
+          draggable={false}
+          tweenStart={"auto"}
+          tween={this.state.creatureTween3}
+          key={this.state.creatureKey3}
+          spriteAnimationKey={this.state.animation}
+          rotate={[{rotateY:"0deg"}]}
+          loopAnimation={false}
+          onTweenFinish={this.onTweenEndCreature}
+          onAnimationFinish={(spriteAnimationKey, key) => {
+            this.onAnimationFinish(spriteAnimationKey, key);
+          }}
+        />
+        <AnimatedSprite
+          character={leverCharacter}
+          coordinates={{top:100,left:-5}}
+          size={{width:Window.width/6,height:(Window.width/6)*0.878}}
+          draggable={false}
+          tweenStart='auto'
+          tween={tweenOptsLever}
+          onPress={this.onLeverTouch}
+        />
+        <AnimatedSprite
+          character={signCharacter}
+          coordinates={{top: startTop, left: startLeft}}
+          key={this.state.signKey}
+          size={{width: Window.width/7, height: (Window.width/7)*1.596}}
+          draggable={false}
+          tweenStart='auto'
+          tween={this.state.signTween}
+        />
+        <AnimatedSprite
+          character={this.state.foodCharacter}
+          coordinates={{top: startTop, left: startLeft+32}}
+          key={this.state.foodKey}
+          size={{width: Window.width/11, height: Window.width/11}}
+          draggable={false}
+          tweenStart='auto'
+          tween={this.state.foodTween}
+          onPress={this.onFoodPress}
+          onTweenFinish={this.onTweenEndFood}
+        />
         </Image>
       </View>
     );

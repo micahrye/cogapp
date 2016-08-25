@@ -16,6 +16,8 @@ import signCharacter from "../../sprites/sign/signCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
 import thoughtBubbleCharacter from "../../sprites/thoughtBubble/thoughtBubbleCharacter";
 
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class GameSix extends React.Component {
   constructor (props) {
@@ -288,22 +290,29 @@ class GameSix extends React.Component {
 
   render () {
     return (
-      <Image source={require('../../backgrounds/Game_6_Background_1280.png')} style={styles.backgroundImage}>
+      <Image source={require('../../backgrounds/Game_6_Background_1280.png')}
+        style={styles.backgroundImage} >
         <View style={styles.container}>
           <AnimatedSprite
-            key={this.state.omnivoreKey}
-            coordinates={{top: 320, left: 650}}
-            size={{width: 275, height: 275}}
             character={omnivoreCharacter}
+            key={this.state.omnivoreKey}
+            coordinates={{
+              top: 420 * this.props.scale.height,
+              left: 750 * this.props.scale.width,
+            }}
+            size={{width: 275, height: 275}}
             spriteAnimationKey={this.omnivoreSpriteAnimationKey}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
           />
 
           <AnimatedSprite
-            key={this.state.thoughtBubbleKey}
-            coordinates={{top: 230, left: 700}}
-            size={{width: 330, height: 200}}
             character={thoughtBubbleCharacter}
+            key={this.state.thoughtBubbleKey}
+            coordinates={{
+              top: 320 * this.props.scale.height,
+              left: 800 * this.props.scale.width
+            }}
+            size={{width: 330, height: 200}}
             spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
           />
@@ -324,10 +333,10 @@ class GameSix extends React.Component {
 
           <View style={styles.itemContainer}>
             <AnimatedSprite
+              character={signCharacter}
               coordinates={{top: -10, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
-              character={signCharacter}
               spriteAnimationKey='gameSix1'
               loopAnimation={true}
             />
@@ -335,10 +344,10 @@ class GameSix extends React.Component {
 
           <View style={styles.itemContainer}>
             <AnimatedSprite
+              character={signCharacter}
               coordinates={{top: -10, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
-              character={signCharacter}
               spriteAnimationKey='gameSix2'
               loopAnimation={true}
             />
@@ -346,10 +355,10 @@ class GameSix extends React.Component {
 
           <View style={styles.itemContainer}>
             <AnimatedSprite
+              character={signCharacter}
               coordinates={{top: -10, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
-              character={signCharacter}
               spriteAnimationKey='gameSix3'
               loopAnimation={true}
             />
@@ -357,10 +366,10 @@ class GameSix extends React.Component {
 
           <View style={styles.itemContainer}>
             <AnimatedSprite
+              character={signCharacter}
               coordinates={{top: -10, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
-              character={signCharacter}
               spriteAnimationKey='gameSix4'
               loopAnimation={true}
             />
@@ -375,17 +384,22 @@ class GameSix extends React.Component {
   }
 }
 
+GameSix.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 600,
-    width: 1024,
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
     flexDirection: 'row',
   },
   backgroundImage: {
-    width: 1024,
-    height: 600,
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
   },
   itemContainer:{
     top: 0,
@@ -415,9 +429,5 @@ const styles = StyleSheet.create({
 
   },
 });
-
-GameSix.propTypes = {
-  navigator: React.PropTypes.object,
-};
 
 export default GameSix;
