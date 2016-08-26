@@ -60,7 +60,7 @@ class CogApp extends React.Component {
     } else if (route.id === 'BubblePopLoading') {
       return <BubblePopLoading navigator={navigator} route={route}/>
     } else if (route.id === 'BubblePop') {
-      return <BubblePop navigator={navigator} route={route}/>;
+      return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {

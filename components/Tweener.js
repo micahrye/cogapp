@@ -12,41 +12,59 @@ class Tweener extends React.Component{
   componentDidMount() {
     let tweenType = this.props.type;
     switch(tweenType){
-      case 'sine-wave': this.sineWave(this.props.options, this.props.state);
+      case 'sine-wave':
+        this.sineWave(this.props.options, this.props.state);
         break;
-      case 'bounce': this.bounce(this.props.options, this.props.state);
+      case 'bounce':
+        this.bounce(this.props.options, this.props.state);
         break;
-      case 'slip-slide': this.slipSlide(this.props.options, this.props.state);
+      case 'slip-slide':
+        this.slipSlide(this.props.options, this.props.state);
         break;
-      case 'pulse': this.pulse(this.props.options, this.props.state);
+      case 'pulse':
+        this.pulse(this.props.options, this.props.state);
         break;
-      case 'wiggle': this.wiggle(this.props.options, this.props.state);
+      case 'wiggle':
+        this.wiggle(this.props.options, this.props.state);
         break;
-      case 'bounce-drop': this.bounceDrop(this.props.options, this.props.state);
+      case 'bounce-drop':
+        this.bounceDrop(this.props.options, this.props.state);
         break;
-      case 'zoom': this.zoom(this.props.options, this.props.state);
+      case 'zoom':
+        this.zoom(this.props.options, this.props.state);
         break;
-      case 'hop': this.hop(this.props.options, this.props.state);
+      case 'hop':
+        this.hop(this.props.options, this.props.state);
         break;
-      case 'tumble-off': this.tumbleOff(this.props.options, this.props.state);
+      case 'tumble-off':
+        this.tumbleOff(this.props.options, this.props.state);
         break;
-      case 'spin': this.spin(this.props.options, this.props.state);
+      case 'spin':
+        this.spin(this.props.options, this.props.state);
         break;
-      case 'hop-forward': this.hopForward(this.props.options, this.props.state);
+      case 'hop-forward':
+        this.hopForward(this.props.options, this.props.state);
         break;
-      case 'sendOffScreen': this.sendOffScreen(this.props.options, this.props.state);
+      case 'sendOffScreen':
+        this.sendOffScreen(this.props.options, this.props.state);
         break;
-      case 'basic-back': this.basicBack(this.props.options, this.props.state);
+      case 'basic-back':
+        this.basicBack(this.props.options, this.props.state);
         break;
-      case 'curve-spin': this.curveSpin(this.props.options, this.props.state);
+      case 'curve-spin':
+        this.curveSpin(this.props.options, this.props.state);
         break;
-      case 'move': this.move(this.props.options, this.props.state);
+      case 'move':
+        this.move(this.props.options, this.props.state);
         break;
-      case 'curve-fall': this.curveFall(this.props.options, this.props.state);
+      case 'curve-fall':
+        this.curveFall(this.props.options, this.props.state);
         break;
-      case 'curve-spin2': this.curveSpin2(this.props.options, this.props.state);
+      case 'curve-spin2':
+        this.curveSpin2(this.props.options, this.props.state);
         break;
-      case 'curve-spin3': this.curveSpin3(this.props.options, this.props.state);
+      case 'curve-spin3':
+        this.curveSpin3(this.props.options, this.props.state);
         break;
     }
   }

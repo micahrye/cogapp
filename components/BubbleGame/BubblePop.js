@@ -291,6 +291,12 @@ class BubblePop extends React.Component {
     return 'BubblePop';
   }
 
+  homeBtn = () => {
+    this.props.navigator.replace({
+      id: 'Main',
+    });
+  }
+
   render () {
     return (
       <Image source={require('../../backgrounds/Game_7_Background_1280.png')} style={styles.backgroundImage}>
@@ -336,14 +342,26 @@ class BubblePop extends React.Component {
             : null}
             <AnimatedSprite
               key={this.state.omnivoreKey}
-              coordinates={{top: SCREEN_HEIGHT - 280 , left: SCREEN_WIDTH - 250}}
-              size={{width: 256, height: 256}}
+              coordinates={{
+                top: SCREEN_HEIGHT - 350,
+                left: SCREEN_WIDTH - 320,
+              }}
+              size={{
+                height: 332 * this.props.scale.height,
+                width: 332 * this.props.scale.width,
+              }}
               character={omnivoreCharacter}
               spriteAnimationKey={this.omnivoreSpriteAnimationKey}
               loopAnimation={this.loopOmnivoreAnimation}
               onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
               fps={20}
             />
+            <View style={styles.row}>
+              <TouchableOpacity style={styles.button} onPress={this.homeBtn}>
+                  <Text>{'Home'}</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
       </Image>
     );
@@ -351,7 +369,9 @@ class BubblePop extends React.Component {
 }
 
 BubblePop.propTypes = {
-  navigator: React.PropTypes.object.isRequired,
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
 };
 
 reactMixin.onClass(BubblePop, TimerMixin);
@@ -377,6 +397,21 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT - 700,
     borderStyle: 'solid',
     borderWidth: 2,
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 10,
+    borderStyle: 'solid',
+    borderColor: '#ff00ff',
+  },
+  button: {
+    backgroundColor: '#4d94ff',
+    borderRadius: 10,
+    width: 100,
+    height: 50,
+    justifyContent: 'center',
   },
 });
 

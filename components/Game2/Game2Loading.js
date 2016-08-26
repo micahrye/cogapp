@@ -107,6 +107,7 @@ class GameTwoLoading extends Component {
           <Animated.View style ={{...loadingbar}}>
           </Animated.View>
         </View>
+        {/*
         <View>
           <View>
             <AnimatedSprite
@@ -132,6 +133,7 @@ class GameTwoLoading extends Component {
         <View>
           <Image style={styles.image} source={require('../../backgrounds/Game_1_Background_1280.png')}/>
         </View>
+        */}
       </View>
     );
   }
@@ -152,6 +154,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: 1,
   },
+  
 });
 
 export default GameTwoLoading;

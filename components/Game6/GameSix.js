@@ -5,6 +5,7 @@ import {
   View,
   Image,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 
 import AnimatedSprite from "../animatedSprite";
@@ -66,11 +67,13 @@ class GameSix extends React.Component {
   }
 
   componentDidMount () {
-    this.gameTimeout = setTimeout(() => { // after game timeout return to homescreen
+    const gameTimeOut = 120000;
+    this.gameTimeout = setTimeout(() => {
+      // after game timeout return to homescreen
       this.props.navigator.replace({
         id: 'Main',
       });
-    }, 120000);
+    }, gameTimeOut);
 
     for (let i = 0; i < 4; i++) { // set up 4 foods on tags
       this.setUpFood(i+1);
@@ -86,8 +89,8 @@ class GameSix extends React.Component {
     return ({
       tweenType: "curve-spin",
       startXY: [startX, startY], // start on their tags
-      endXY: [650, 360], // end at character
-      duration: 1000,
+      endXY: [830 * this.props.scale.width, 460 * this.props.scale.height], // end at character
+      duration: 1000 * this.props.scale.width,
       loop: false,
     });
   }
@@ -253,14 +256,14 @@ class GameSix extends React.Component {
   getTextHolderStyle () {
     let left = undefined;
     if (this.trialNum < 4) {
-      left = 940;
+      left = 1150;
     }
     else {
-      left = 890;
+      left = 1140;
     }
     return (
       {
-        top: 266,
+        top: 380,
         left: left,
         position: 'absolute',
         flexDirection: 'row',
@@ -287,45 +290,69 @@ class GameSix extends React.Component {
     );
   }
 
+  homeBtn = () => {
+    this.props.navigator.replace({
+      id: 'Main',
+    });
+  }
 
   render () {
     return (
       <Image source={require('../../backgrounds/Game_6_Background_1280.png')}
         style={styles.backgroundImage} >
+
         <View style={styles.container}>
+
+
           <AnimatedSprite
             character={omnivoreCharacter}
             key={this.state.omnivoreKey}
             coordinates={{
               top: 420 * this.props.scale.height,
-              left: 750 * this.props.scale.width,
+              left: 800 * this.props.scale.width,
             }}
-            size={{width: 275, height: 275}}
+            size={{
+              height: 350 * this.props.scale.height,
+              width: 350 * this.props.scale.width,
+            }}
             spriteAnimationKey={this.omnivoreSpriteAnimationKey}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+            onAnimationFinish={(animationKey) => {
+              this.onAnimationFinish(animationKey);
+            }}
           />
 
           <AnimatedSprite
             character={thoughtBubbleCharacter}
             key={this.state.thoughtBubbleKey}
             coordinates={{
-              top: 320 * this.props.scale.height,
-              left: 800 * this.props.scale.width
+              top: 360 * this.props.scale.height,
+              left: 960 * this.props.scale.width,
             }}
-            size={{width: 330, height: 200}}
+            size={{
+              height: 220 * this.props.scale.height,
+              width: 320* this.props.scale.width,
+            }}
             spriteAnimationKey={this.thoughtBubbleSpriteAnimationKey}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+            onAnimationFinish={(animationKey) => {
+              this.onAnimationFinish(animationKey);
+            }}
           />
 
           {this.state.showTargetNumber ?
             <View style={this.getTextHolderStyle()}>
               <Animated.View style={this.getFadeStyle()}>
-                <Text style={styles.targetNumber}>{this.state.targetNumber}</Text>
+                <Text style={styles.targetNumber}>
+                  {this.state.targetNumber}
+                </Text>
               </Animated.View>
               {this.state.showOtherNumbers ?
                 <View style={{position: 'absolute'}}>
-                  <Text style={styles.secondNumber}>{this.state.secondNumber}</Text>
-                  <Text style={styles.thirdNumber}>{this.state.thirdNumber}</Text>
+                  <Text style={styles.secondNumber}>
+                    {this.state.secondNumber}
+                  </Text>
+                  <Text style={styles.thirdNumber}>
+                    {this.state.thirdNumber}
+                  </Text>
                 </View>
               : null}
             </View>
@@ -334,7 +361,7 @@ class GameSix extends React.Component {
           <View style={styles.itemContainer}>
             <AnimatedSprite
               character={signCharacter}
-              coordinates={{top: -10, left: 0}}
+              coordinates={{top: -10* this.props.scale.height, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
               spriteAnimationKey='gameSix1'
@@ -345,7 +372,7 @@ class GameSix extends React.Component {
           <View style={styles.itemContainer}>
             <AnimatedSprite
               character={signCharacter}
-              coordinates={{top: -10, left: 0}}
+              coordinates={{top: -10* this.props.scale.height, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
               spriteAnimationKey='gameSix2'
@@ -356,7 +383,7 @@ class GameSix extends React.Component {
           <View style={styles.itemContainer}>
             <AnimatedSprite
               character={signCharacter}
-              coordinates={{top: -10, left: 0}}
+              coordinates={{top: -10* this.props.scale.height, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
               spriteAnimationKey='gameSix3'
@@ -367,7 +394,7 @@ class GameSix extends React.Component {
           <View style={styles.itemContainer}>
             <AnimatedSprite
               character={signCharacter}
-              coordinates={{top: -10, left: 0}}
+              coordinates={{top: -10 * this.props.scale.height, left: 0}}
               size={{width: 140, height: 220}}
               draggable={false}
               spriteAnimationKey='gameSix4'
@@ -378,6 +405,12 @@ class GameSix extends React.Component {
           {this.state.cans}
           {this.state.bugs}
           {this.state.grass}
+
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.button} onPress={this.homeBtn}>
+                <Text>{'Home'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Image>
     );
@@ -427,6 +460,21 @@ const styles = StyleSheet.create({
     color: '#ff8000',
     borderWidth: 2,
 
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 10,
+    borderStyle: 'solid',
+    borderColor: '#ff00ff',
+  },
+  button: {
+    backgroundColor: '#4d94ff',
+    borderRadius: 10,
+    width: 100,
+    height: 50,
+    justifyContent: 'center',
   },
 });
 

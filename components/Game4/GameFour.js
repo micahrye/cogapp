@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 import AnimatedSprite from "../animatedSprite";
@@ -245,10 +246,21 @@ class GameFour extends React.Component {
     return 'GameFour';
   }
 
+  homeBtn = () => {
+    this.props.navigator.replace({
+      id: 'Main',
+    });
+  }
   render () {
     return (
       <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
+
         <View style={styles.container}>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.button} onPress={this.homeBtn}>
+                <Text>{'Home'}</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.boxContainer}>
             {this.fixedBoxes}
             <View style={styles.separatingLine}><Text>{'ehllo'}</Text></View>
@@ -333,6 +345,7 @@ class GameFour extends React.Component {
           />
           : null}
         </View>
+
       </Image>
     );
   }
@@ -377,11 +390,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     position: 'absolute',
   },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 10,
+    borderStyle: 'solid',
+    borderColor: '#ff00ff',
+  },
+  button: {
+    backgroundColor: '#4d94ff',
+    borderRadius: 10,
+    width: 100,
+    height: 50,
+    justifyContent: 'center',
+  },
 });
 
 GameFour.propTypes = {
   route: React.PropTypes.object,
   navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
 };
+
 
 export default GameFour;

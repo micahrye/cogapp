@@ -97,21 +97,25 @@ class Main extends React.Component {
         </View>
 
         <View style={styles.column}>
+        {/*
           <TouchableOpacity onPress={this.goToGameThree}>
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Three</Text>
             </View>
           </TouchableOpacity>
+        */}
           <TouchableOpacity onPress={this.goToGameFour}>
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Four</Text>
             </View>
           </TouchableOpacity>
+        {/*
           <TouchableOpacity onPress={this.goToGameFive}>
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Five</Text>
             </View>
           </TouchableOpacity>
+        */}
           <TouchableOpacity onPress={this.goToGameSix}>
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Six</Text>
@@ -130,16 +134,6 @@ Main.propTypes = {
 }
 
 reactMixin.onClass(Main, TimerMixin);
-
-/*
-let style = {
-  position: 'absolute',
-  top: Number((val.x * 2.5).toFixed(2)),
-  left: Number((val.x * 3).toFixed(2)),
-  backgroundColor: '#0000ff',
-  color: '#fff'
-};
-*/
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -180,63 +174,3 @@ const styles = StyleSheet.create({
 });
 
 export default Main;
-
-/*
-<ScrollView
-  style={{height:SCREEN_HEIGHT, width:SCREEN_WIDTH}}
-  horizontal={false}>
-
-<View style={styles.container}>
-
-  <View style={styles.column}>
-    <TouchableOpacity onPress={this.goToBubblePop}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To BubblePop</Text>
-      </View>
-    </TouchableOpacity>
-    {
-    // <TouchableOpacity onPress={this.goToDragon}>
-    //   <View style={styles.button}>
-    //     <Text style={styles.text}>Go To Dragon</Text>
-    //   </View>
-    // </TouchableOpacity>
-    }
-    <TouchableOpacity onPress={this.goToBugZap}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To BugZap</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={this.goToGameTwo}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To Game Two</Text>
-      </View>
-    </TouchableOpacity>
-  </View>
-
-  <View style={styles.column}>
-    <TouchableOpacity onPress={this.goToGameThree}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To Game Three</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={this.goToGameFour}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To Game Four</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={this.goToGameFive}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To Game Five</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={this.goToGameSix}>
-      <View style={styles.button}>
-        <Text style={styles.text}>Go To Game Six</Text>
-      </View>
-    </TouchableOpacity>
-  </View>
-
-</View>
-</ScrollView>
-
-*/

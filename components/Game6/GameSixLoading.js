@@ -107,21 +107,22 @@ class GameSixLoading extends Component {
           <Animated.View style ={{...loadingbar}}>
           </Animated.View>
         </View>
+        {/* NOTE: GameSixLoading would crash, since comment out has not crashed.
         <View>
           <View>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'eat'}
               fps={20}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'disgust'}
               fps={20}/>
-            <AnimatedSprite 
+            <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={thoughtBubbleCharacter}
@@ -132,6 +133,7 @@ class GameSixLoading extends Component {
         <View>
           <Image style={styles.image} source={require('../../backgrounds/Game_6_Background_1280.png')}/>
         </View>
+        */}
       </View>
     );
   }
@@ -155,4 +157,3 @@ const styles = StyleSheet.create({
 });
 
 export default GameSixLoading;
-
