@@ -18,7 +18,7 @@ const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const NUM_TRIALS = 3;
-const BUG_IDLE_CATCH_DURATION = 1000; // how long bug is catchable
+const BUG_IDLE_CATCH_DURATION = 1500; // how long bug is catchable
 
 
 class BugZap3 extends React.Component {
@@ -390,7 +390,10 @@ class BugZap3 extends React.Component {
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey}
             onPress={() => {this.frogTap(0);}}
-            hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
+            hitSlop={{top: -175 *this.props.scale.height,
+              left: -55 * this.props.scale.width,
+              bottom: -10 * this.props.scale.height,
+              right: -65 * this.props.scale.width}}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 0);}}
             getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex);}}
           />
@@ -409,7 +412,10 @@ class BugZap3 extends React.Component {
             character={frogCharacter}
             spriteAnimationKey={this.state.frogSpriteAnimationKey}
             onPress={() => {this.frogTap(1);}}
-            hitSlop={{top: -175, left: -65, bottom: -10, right: -55}}
+            hitSlop={{top: -175 *this.props.scale.height,
+              left: -55 * this.props.scale.width,
+              bottom: -10 * this.props.scale.height,
+              right: -65 * this.props.scale.width}}
             onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 1);}}
             getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex);}}
           />

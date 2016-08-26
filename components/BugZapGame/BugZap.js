@@ -20,7 +20,7 @@ const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const NUM_TRIALS = 3;
 // how long bug is catchable
-const BUG_IDLE_CATCH_DURATION = 750;
+const BUG_IDLE_CATCH_DURATION = 1500;
 
 class BugZap extends React.Component {
   constructor (props) {
@@ -316,7 +316,10 @@ class BugZap extends React.Component {
               }}
               character={frogCharacter}
               onPress={this.frogTap}
-              hitSlop={{top: -175, left: -55, bottom: -10, right: -65}}
+              hitSlop={{top: -175 *this.props.scale.height,
+                left: -55 * this.props.scale.width,
+                bottom: -10 * this.props.scale.height,
+                right: -65 * this.props.scale.width}}
               spriteAnimationKey={this.state.frogSpriteAnimationKey}
               onAnimationFinish={(animationKey) => {
                 this.onAnimationFinish(animationKey);

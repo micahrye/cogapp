@@ -1,1 +1,1 @@
-CogApp and such.
+**Building a Signed Android App**
