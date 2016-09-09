@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -12,6 +11,7 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import lightbulbCharacter from '../../sprites/lightbulb/lightbulbCharacter';
 
+import styles from "./BugZapStyles";
 import AnimatedSprite from "../animatedSprite";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
@@ -149,7 +149,7 @@ class BugZap3 extends React.Component {
     let spotLight = [];
     // average is 1 second
     let timeToRemoveBlackout = Math.random() * 2000;
-    spotLight.push(<View key={0} style={this.getSpotLightStyle()}></View>);
+    spotLight.push(<View key={0} style={this.getSpotLightStyle()} />);
     this.setState({spotLightFlash: spotLight});
     this.timeoutRemoveSpotlight = setTimeout ( () => {
       this.setState({spotLightFlash: []});
@@ -292,13 +292,11 @@ class BugZap3 extends React.Component {
         return;
       }
     }
-    // NOTE: should we be using push?
-    this.props.navigator.push({
+    this.props.navigator.replace({
       id: 'NextTrial',
       getId: this.getCurrId,
       trialNumber: this.trialNumber,
     });
-
   }
 
   getCurrId () {
@@ -328,7 +326,7 @@ class BugZap3 extends React.Component {
         height: 150,
         width: 150,
         left: posX,
-        top: 120,
+        top: -550 * this.props.scale.height,
         position: 'absolute',
         borderRadius: 100,
       }
@@ -340,6 +338,7 @@ class BugZap3 extends React.Component {
       <View>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')}
           style={styles.backgroundImage}>
+
 
           <View style={styles.row}>
             <View style={{width: 120, height: 120}}>
@@ -426,6 +425,7 @@ class BugZap3 extends React.Component {
           <View>
             {this.state.spotLightFlash}
           </View>
+
         </Image>
       </View>
     );
@@ -437,40 +437,5 @@ BugZap3.propTypes = {
   navigator: React.PropTypes.object,
   scale: React.PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    position: 'absolute',
-    justifyContent: 'center',
-  },
-  blackout: {
-    flex: 1,
-    backgroundColor: 'black',
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-    position: 'absolute',
-    top:-128,
-    left:0,
-  },
-  spotLight: {
-    flex: 1,
-    backgroundColor: 'white',
-    height: 150,
-    width: 150,
-    left: 450,
-    top: 100,
-    position: 'absolute',
-    borderRadius: 100,
-  },
-});
 
 export default BugZap3;

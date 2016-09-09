@@ -1,17 +1,17 @@
 "use strict";
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Animated,
   Easing,
 } from 'react-native';
 
 
-class Tweener extends React.Component{
+class Tweener extends React.Component {
 
-  componentDidMount() {
+  componentDidMount () {
     let tweenType = this.props.type;
-    switch(tweenType){
+    switch (tweenType) {
       case 'sine-wave': this.sineWave(this.props.options, this.props.state);
         break;
       case 'bounce': this.bounce(this.props.options, this.props.state);
@@ -51,14 +51,14 @@ class Tweener extends React.Component{
     }
   }
 
-  sineWave(options, state){
-    if(this.props.stop){
+  sineWave (options, state) {
+    if (this.props.stop) {
       let stopValues = [];
       state.left.stopAnimation((value) => stopValues.push(value));
       state.top.stopAnimation((value) => stopValues.push(value));
       this.props.stopValues(stopValues);
     }
-    else{
+    else {
       state.top.setValue(options.startXY[1]);
       state.left.setValue(options.startXY[0]);
       Animated.sequence([
@@ -68,11 +68,11 @@ class Tweener extends React.Component{
             Animated.sequence(this._getSequenceX(options, state)),
             Animated.sequence(this._getSequenceY(options, state)),
           ]
-        )
+        ),
       ]).start(() => {
         if (options.loop === false) {
           this.props.onTweenFinish(true);
-        }else{
+        } else {
           this.sineWave(options, state);
         }
 
@@ -80,7 +80,7 @@ class Tweener extends React.Component{
     }
   }
 
-  _getSequenceX(options, state) {
+  _getSequenceX (options, state) {
     const duration = options.duration;
     const numTrasitions = options.xTo.length;
     return options.xTo.map((x, index, array)=>{
@@ -88,11 +88,11 @@ class Tweener extends React.Component{
           duration: duration / numTrasitions,
           toValue: x,
           easing: Easing.sin,
-      })
+      });
     });
   }
 
-  _getSequenceY(options, state) {
+  _getSequenceY (options, state) {
     const duration = options.duration;
     const numTrasitions = options.yTo.length;
     return options.yTo.map((y, index, array)=>{
@@ -100,7 +100,7 @@ class Tweener extends React.Component{
         duration: duration / numTrasitions,
         toValue: y,
         easing: Easing.sin,
-      })
+      });
     });
   }
 
@@ -121,7 +121,7 @@ class Tweener extends React.Component{
       bounce(options, state);
     });
 
-  };
+  }
 
   move  (options, state) {
 
@@ -155,15 +155,15 @@ class Tweener extends React.Component{
       }
       move(options, state);
     });
-  };
+  }
 
- pulse(options, state) {
-   if(this.props.stop){
+ pulse (options, state) {
+   if (this.props.stop) {
      let stopValues = [];
      state.scale.stopAnimation((value) => stopValues.push(value));
      this.props.stopValues(stopValues);
    }
-   else{
+   else {
      state.scale.setValue(1);
      Animated.sequence([
        Animated.timing(
@@ -185,15 +185,15 @@ class Tweener extends React.Component{
      ]).start(() => {
        if (options.loop === false) {
         this.props.onTweenFinish(true);
-       }else{
+       } else {
          this.pulse(options, state);
        }
      });
    }
  }
 
- wiggle(options, state) {
-   if(this.props.stop){
+ wiggle (options, state) {
+   if (this.props.stop) {
      let stopValues = [];
      state.rotateZ.stopAnimation((value) => stopValues.push(value));
      this.props.stopValues(stopValues);
@@ -228,16 +228,17 @@ class Tweener extends React.Component{
      ]).start(() => {
        if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-       }else{
+        return;
+       }
+       else {
          this.wiggle(options, state);
        }
      });
    }
  }
 
- bounceDrop(options, state) {
-   if(this.props.stop){
+ bounceDrop (options, state) {
+   if (this.props.stop) {
      let stopValues = [];
      state.left.stopAnimation((value) => stopValues.push(value));
      state.top.stopAnimation((value) => stopValues.push(value));
@@ -264,15 +265,16 @@ class Tweener extends React.Component{
      ).start(() => {
        if (options.loop === false) {
         this.props.onTweenFinish(true);
-         return
-       }else{
+         return;
+       }
+       else {
          bounceDrop(options, state);
        }
      });
    }
  }
 
- zoom(options, state) {
+ zoom (options, state) {
    state.left.setValue(options.startXY[0]);
    Animated.timing(
      state.left,
@@ -299,7 +301,7 @@ class Tweener extends React.Component{
    });
  }
 
-  hop(options, state) {
+  hop (options, state) {
     state.top.setValue(options.startY);
     Animated.sequence([
       Animated.timing(
@@ -321,18 +323,19 @@ class Tweener extends React.Component{
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else{
+        return;
+      }
+      else {
         hop(options, state);
       }
     });
   }
 
-  tumbleOff(options, state) {
+  tumbleOff (options, state) {
 
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
-    state.rotation.setValue(0)
+    state.rotation.setValue(0);
     Animated.parallel([
       Animated.timing(
         state.left,
@@ -357,18 +360,19 @@ class Tweener extends React.Component{
           easing: Easing.back(3),
           duration: options.duration,
         }
-      )
+      ),
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else{
+        return;
+      }
+      else {
         tumbleOff(options, state);
       }
     });
   }
 
-  spin(options, state) {
+  spin (options, state) {
 
     state.rotation.setValue(0);
     Animated.timing(
@@ -381,14 +385,15 @@ class Tweener extends React.Component{
     ).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else{
+        return;
+      }
+      else {
         spin(options, state);
       }
     });
   }
 
-  hopForward(options, state) {
+  hopForward (options, state) {
 
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
@@ -450,18 +455,19 @@ class Tweener extends React.Component{
     ]).start(() => {
         if (options.loop === false) {
           this.props.onTweenFinish(true);
-          return
-        }else{
+          return;
+        }
+        else {
           hopForward(options, state);
         }
       });
   }
 
-  sendOffScreen(options, state) {
+  sendOffScreen (options, state) {
     state.top.setValue(-500);
   }
 
-  basicBack(options, state) {
+  basicBack (options, state) {
     state.top.setValue(options.startY);
     Animated.timing(
       state.top,
@@ -473,14 +479,15 @@ class Tweener extends React.Component{
     ).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else {
+        return;
+      }
+      else {
         basicBack(options, state);
       }
     });
   }
 
-  curveSpin(options, state) {
+  curveSpin (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -516,7 +523,7 @@ class Tweener extends React.Component{
             easing: Easing.linear,
             duration: options.duration,
           }
-        )
+        ),
       ]),
       Animated.timing(
         state.top,
@@ -528,14 +535,15 @@ class Tweener extends React.Component{
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else {
+        return;
+      }
+      else {
         curveSpin(options, state);
       }
     });
   }
 
-  curveSpin2(options, state) {
+  curveSpin2 (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -568,14 +576,15 @@ class Tweener extends React.Component{
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else {
+        return;
+      }
+      else {
         curveSpin2(options, state);
       }
     });
   }
 
-  curveSpin3(options, state) {
+  curveSpin3 (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -611,20 +620,21 @@ class Tweener extends React.Component{
             easing: Easing.linear,
             duration: options.duration,
           }
-        )
+        ),
       ]),
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
-        return
-      }else {
+        return;
+      }
+      else {
         curveSpin3(options, state);
       }
     });
   }
 
 
-  curveFall(options, state) {
+  curveFall (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -650,7 +660,8 @@ class Tweener extends React.Component{
       if (options.loop === false) {
         this.props.onTweenFinish(true);
         return;
-      }else {
+      }
+      else {
         curveSpin(options, state);
       }
     });
@@ -658,7 +669,7 @@ class Tweener extends React.Component{
 
 
 
-  render() {
+  render () {
     return (null);
   }
 }

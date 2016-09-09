@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -13,6 +11,7 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from "../../sprites/bug/bugCharacter";
 
 import AnimatedSprite from "../animatedSprite";
+import styles from "./BugZapStyles";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -34,7 +33,7 @@ class BugZap2 extends React.Component {
       zappedTooEarly: false,
       frogSpriteAnimationKey: 'default',
       bugSpriteAnimationKey: 'default',
-    }
+    };
     this.bugSide = undefined;
     this.tweenIdle = {};
     this.tweenAway = {};
@@ -238,7 +237,7 @@ class BugZap2 extends React.Component {
     if (frog === 0) {
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'eat'});
     }
-    else{
+    else {
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'eat'});
     }
     this.noMoreFrogTap = true;
@@ -247,8 +246,7 @@ class BugZap2 extends React.Component {
   frogCelebrate (frog) {
     if (frog === 0) {
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-    }
-    else{
+    } else {
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'celebrate'});
     }
   }
@@ -256,8 +254,7 @@ class BugZap2 extends React.Component {
   frogDisgust (frog) {
     if (frog === 0) {
       this.setState({frogKey0: Math.random(), frogSpriteAnimationKey: 'disgust'});
-    }
-    else{
+    } else {
       this.setState({frogKey1: Math.random(), frogSpriteAnimationKey: 'disgust'});
     }
   }
@@ -289,11 +286,11 @@ class BugZap2 extends React.Component {
     });
   }
 
-  getCurrId() {
+  getCurrId () {
     return 'BugZap2';
   }
 
-  goToNextLevel() {
+  goToNextLevel () {
     /*
     this.props.navigator.replace({
       id: 'BugZap3',
@@ -301,7 +298,7 @@ class BugZap2 extends React.Component {
     */
   }
 
-  render() {
+  render () {
     return (
       <View>
         <Image source={require('../../backgrounds/Game_1_Background_1280.png')}
@@ -340,7 +337,6 @@ class BugZap2 extends React.Component {
             <AnimatedSprite
               key={this.state.frogKey0}
               spriteKey={0}
-
               coordinates={{top: 320 * this.props.scale.height,
                 left: 700 * this.props.scale.width}}
               size={{
@@ -354,9 +350,12 @@ class BugZap2 extends React.Component {
                 left: -55 * this.props.scale.width,
                 bottom: -10 * this.props.scale.height,
                 right: -65 * this.props.scale.width}}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 0);}}
+              onAnimationFinish={(animationKey) => {
+                this.onAnimationFinish(animationKey, 0);
+              }}
               getFrameIndex={(animationKey, frameIndex) => {
-                this.getFrameIndex(animationKey, frameIndex);}}
+                this.getFrameIndex(animationKey, frameIndex);
+              }}
             />
 
             <AnimatedSprite
@@ -391,31 +390,5 @@ BugZap2.propTypes = {
   navigator: React.PropTypes.object,
   scale: React.PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-    flexDirection: 'row',
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  backgroundImage: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    position: 'absolute',
-    justifyContent: 'center',
-  },
-});
 
 export default BugZap2;

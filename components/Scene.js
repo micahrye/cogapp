@@ -28,7 +28,7 @@ class Scene extends React.Component {
       <View style={styles.container}>
         {React.cloneElement(this.props.children, { scale: this.state.scale })}
       </View>
-    )
+    );
   }
 
 }
