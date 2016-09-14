@@ -16,8 +16,6 @@ import Main from "./components/main";
 import DragDragon from "./components/DragDragon/DragDragon";
 import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
-import GameOverPage from './components/BubbleGame/GameOverPage';
-import NextGamePage from './components/BubbleGame/NextGamePage';
 import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
