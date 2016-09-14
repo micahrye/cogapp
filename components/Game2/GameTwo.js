@@ -31,7 +31,7 @@ const startTop = -250;
 const endTopSign = -15;
 const endTopCan = Window.height*0.2;
 // these coordinates give two points - one onscreen, one off - that the creatures travel between
-const creatureStart = [Window.width+500,Window.height*0.5];
+const creatureStart = [Window.width+50,Window.height*0.5];
 const creatureEnd = [Window.width*0.65,Window.height*0.5];
 
 class GameTwo extends React.Component {

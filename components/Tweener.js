@@ -124,11 +124,40 @@ class Tweener extends React.Component {
   }
 
   move  (options, state) {
-
-
-
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
+    let numTransitions = (Math.abs(options.endXY[0] - options.startXY[0]))/100;
+    let sequence = [];
+    for (let i = 0; i < numTransitions - 1; i++) {
+      sequence.push(
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: -10,
+            easing: Easing.linear,
+            duration: (options.duration/numTransitions)/2,
+          }
+        ),
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: 10,
+            easing: Easing.linear,
+            duration: (options.duration/numTransitions)/2,
+          }
+        ),
+      );
+    }
+    sequence.push(
+      Animated.timing(
+        state.rotateZ,
+        {
+          toValue: 0,
+          easing: Easing.linear,
+          duration: (options.duration/numTransitions)/2,
+        }
+      ),
+    );
 
     Animated.parallel([
       Animated.timing(          // Uses easing functions
@@ -148,6 +177,7 @@ class Tweener extends React.Component {
           duration: options.duration,
         }            // Configuration
       ),
+      Animated.sequence(sequence),
     ]).start(() => {
       if (options.loop === false) {
         this.props.onTweenFinish(true);
