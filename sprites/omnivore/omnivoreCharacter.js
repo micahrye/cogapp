@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const omnivoreCharacter = {
   name:"omnivore",
@@ -8,16 +8,16 @@ const omnivoreCharacter = {
   ],
 
   celebrate:[
-    require("./monster_celebrate01.png"),
-    require("./monster_celebrate02.png"),
-    require("./monster_celebrate03.png"),
-    require("./monster_celebrate04.png"),
-    require("./monster_celebrate05.png"),
+    // require("./monster_celebrate01.png"),
+    // require("./monster_celebrate02.png"),
+    // require("./monster_celebrate03.png"),
+    // require("./monster_celebrate04.png"),
+    // require("./monster_celebrate05.png"),
     require("./monster_celebrate06.png"),
-    require("./monster_celebrate07.png"),
-    require("./monster_celebrate08.png"),
-    require("./monster_celebrate09.png"),
-    require("./monster_celebrate10.png"),
+    // require("./monster_celebrate07.png"),
+    // require("./monster_celebrate08.png"),
+    // require("./monster_celebrate09.png"),
+    // require("./monster_celebrate10.png"),
   ],
 
   walk:[

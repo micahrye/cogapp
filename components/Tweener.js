@@ -42,11 +42,17 @@ class Tweener extends React.Component {
         break;
       case 'move': this.move(this.props.options, this.props.state);
         break;
+      case 'static': this.static(this.props.options, this.props.state);
+        break;
       case 'curve-fall': this.curveFall(this.props.options, this.props.state);
         break;
       case 'curve-spin2': this.curveSpin2(this.props.options, this.props.state);
         break;
       case 'curve-spin3': this.curveSpin3(this.props.options, this.props.state);
+        break;
+      case 'goatCelebrate': this.goatCelebrate(this.props.options, this.props.state);
+        break;
+      case 'jumpCelebrate': this.jumpCelebrate(this.props.options, this.props.state);
         break;
     }
   }
@@ -123,41 +129,14 @@ class Tweener extends React.Component {
 
   }
 
+  static (options, state) {
+    state.left.setValue(options.startXY[0]);
+    state.top.setValue(options.startXY[1]);
+  }
+
   move  (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
-    let numTransitions = (Math.abs(options.endXY[0] - options.startXY[0]))/100;
-    let sequence = [];
-    for (let i = 0; i < numTransitions - 1; i++) {
-      sequence.push(
-        Animated.timing(
-          state.rotateZ,
-          {
-            toValue: -10,
-            easing: Easing.linear,
-            duration: (options.duration/numTransitions)/2,
-          }
-        ),
-        Animated.timing(
-          state.rotateZ,
-          {
-            toValue: 10,
-            easing: Easing.linear,
-            duration: (options.duration/numTransitions)/2,
-          }
-        ),
-      );
-    }
-    sequence.push(
-      Animated.timing(
-        state.rotateZ,
-        {
-          toValue: 0,
-          easing: Easing.linear,
-          duration: (options.duration/numTransitions)/2,
-        }
-      ),
-    );
 
     Animated.parallel([
       Animated.timing(          // Uses easing functions
@@ -177,15 +156,96 @@ class Tweener extends React.Component {
           duration: options.duration,
         }            // Configuration
       ),
-      Animated.sequence(sequence),
+      Animated.sequence(this.getMoveSequence(options, state)),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish(true, "move");
         return;
       }
       move(options, state);
     });
-  }
+ }
+
+ getMoveSequence (options, state){
+   let numTransitions = (Math.abs(options.endXY[0] - options.startXY[0]))/100;
+   let sequence = [];
+   for (let i = 0; i < numTransitions - 1; i++) {
+     sequence.push(
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: -10,
+           easing: Easing.linear,
+           duration: (options.duration/numTransitions)/2,
+         }
+       ),
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 10,
+           easing: Easing.linear,
+           duration: (options.duration/numTransitions)/2,
+         }
+       ),
+     );
+   }
+   sequence.push(
+     Animated.timing(
+       state.rotateZ,
+       {
+         toValue: 0,
+         easing: Easing.linear,
+         duration: (options.duration/numTransitions)/2,
+       }
+     ),
+   );
+   return sequence;
+ }
+
+ goatCelebrate (options, state) {
+   state.left.setValue(options.startXY[0]);
+   state.top.setValue(options.startXY[1]);
+   Animated.timing(
+     state.rotateZ,
+     {
+       toValue: 200,
+       duration: 500,
+     }
+   ).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true, "celebrate");
+        return;
+       }
+    });
+ }
+
+ jumpCelebrate (options, state) {
+   state.left.setValue(options.startXY[0]);
+   state.top.setValue(options.startXY[1]);
+   Animated.sequence([
+     Animated.timing(
+       state.top,
+       {
+         toValue: options.endY,
+         duration: options.duration/2,
+       }
+     ),
+     Animated.timing(
+       state.top,
+       {
+         toValue: options.startXY[1],
+         duration: options.duration/2,
+       }
+     ),
+   ]).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true, "celebrate");
+        return;
+       }
+     }
+   );
+ }
+
 
  pulse (options, state) {
    if (this.props.stop) {

@@ -197,7 +197,7 @@ class AnimatedSprite extends React.Component{
           this.startDefaultAnimation();
           if(this.props.onAnimationFinish){
             // notify parent animation has ended
-            this.props.onAnimationFinish(this.props.spriteAnimationKey)
+            this.props.onAnimationFinish(this.props.spriteAnimationKey, this.props.spriteKey)
           }
           return;
         }
@@ -318,7 +318,7 @@ class AnimatedSprite extends React.Component{
         options={tweenOptions}
         state={tweenState}
         stop={stopTween}
-        onTweenFinish={(ended) => this.tweenHasEnded(ended, this.stopTween)} // whether it just ended, or was stopped
+        onTweenFinish={(ended, tweenType) => this.tweenHasEnded(ended, this.stopTween, tweenType)} // whether it just ended, or was stopped
         stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
     );
 
@@ -339,9 +339,9 @@ class AnimatedSprite extends React.Component{
   }
 
   // notify parent that tween has ended
-  tweenHasEnded (ended, stopTween) {
+  tweenHasEnded (ended, stopTween, tweenType) {
     if(this.props.onTweenFinish){
-      this.props.onTweenFinish(this.props.spriteKey, stopTween);
+      this.props.onTweenFinish(this.props.spriteKey, stopTween, tweenType);
     }
   }
 
