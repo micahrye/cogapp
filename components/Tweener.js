@@ -28,13 +28,13 @@ class Tweener extends React.Component {
         break;
       case 'basic-back': this.basicBack(this.props.options, this.props.state);
         break;
-      case 'curve-spin': this.curveSpin(this.props.options, this.props.state);
+      case 'curve-spin-disappear': this.curveSpinDisappear(this.props.options, this.props.state);
         break;
       case 'move': this.move(this.props.options, this.props.state);
         break;
-      case 'curve-spin2': this.curveSpin2(this.props.options, this.props.state);
+      case 'curve-spin-up': this.curveSpinUp(this.props.options, this.props.state);
         break;
-      case 'curve-spin3': this.curveSpin3(this.props.options, this.props.state);
+      case 'curve-spin': this.curveSpin(this.props.options, this.props.state);
         break;
     }
   }
@@ -409,7 +409,7 @@ class Tweener extends React.Component {
     });
   }
 
-  curveSpin (options, state) {
+  curveSpinDisappear (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -460,12 +460,12 @@ class Tweener extends React.Component {
         return;
       }
       else {
-        curveSpin(options, state);
+        curveSpinDisappear(options, state);
       }
     });
   }
 
-  curveSpin2 (options, state) {
+  curveSpinUp (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -501,12 +501,12 @@ class Tweener extends React.Component {
         return;
       }
       else {
-        curveSpin2(options, state);
+        curveSpinUp(options, state);
       }
     });
   }
 
-  curveSpin3 (options, state) {
+  curveSpin (options, state) {
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
     Animated.sequence([
@@ -550,7 +550,7 @@ class Tweener extends React.Component {
         return;
       }
       else {
-        curveSpin3(options, state);
+        curveSpin(options, state);
       }
     });
   }

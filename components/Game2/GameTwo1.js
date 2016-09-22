@@ -89,7 +89,7 @@ class GameTwo1 extends Component {
     tweenFall = function (leftValue){
       return(
         {
-          tweenType: "curve-spin",
+          tweenType: "curve-spin-disappear",
           startXY: [leftValue,foodEndTop],
           endXY: endCoordinates,
           duration: 750,

@@ -74,7 +74,7 @@ class GameTwo extends React.Component {
     tweenFall = function(dest){
       return (
         {
-         tweenType: "curve-spin",
+         tweenType: "curve-spin-disappear",
          startXY: [startLeft+32,endTopCan],
          endXY: dest,
          duration: 750,
