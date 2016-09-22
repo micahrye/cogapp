@@ -9,6 +9,8 @@ import {
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
+import Util from './BugZapUtil';
+
 // import characters for animatedSprite to use
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
@@ -43,6 +45,10 @@ class BugZap extends React.Component {
     this.timeoutNextTrial = undefined;
     this.flyInDuration = undefined;
     this.trialNumber = 1;
+    this.xLand = 750 * this.props.scale.width;
+    this.yLand = 220 * this.props.scale.height;
+
+
 
   }
 
@@ -138,7 +144,7 @@ class BugZap extends React.Component {
     // switch to idle bug character and pause tweening
     this.setState({
       bugKey: Math.random(),
-      bugTweenSettings: this.bugTweenIdle,
+      bugTweenSettings: Util(this),
       bugSpriteAnimationKey: 'idle',
     });
     this.timeoutFlyAway = setTimeout(()=>{
