@@ -13,7 +13,7 @@ import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 import Main from "./components/main";
-import DragDragon from "./components/DragDragon/DragDragon";
+import AnimateTest from "./components/Animate/AnimateTest";
 import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
 import GameOverPage from './components/BubbleGame/GameOverPage';
@@ -52,11 +52,13 @@ class CogApp extends React.Component {
 
   }
 
+AnimatedTest
+
   renderScene (route, navigator) {
     if (route.id === 'Main') {
       return <Main navigator={navigator} />;
-    } else if (route.id === 'DragDragon') {
-      return <DragDragon />;
+    } else if (route.id === 'AnimatedTest') {
+      return <AnimateTest />;
     } else if (route.id === 'BubblePopLoading') {
       return <BubblePopLoading navigator={navigator} route={route}/>
     } else if (route.id === 'BubblePop') {
@@ -98,7 +100,7 @@ class CogApp extends React.Component {
     } else if (route.id === 'GameFourLoading') {
       return <GameFourLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'GameFour') {
-      return <GameFour navigator={navigator} route={route}/>;
+      return <Scene><GameFour navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'GameFive') {
       return <GameFive navigator={navigator} route={route}/>;
     } else if (route.id === 'GameSixLoading') {

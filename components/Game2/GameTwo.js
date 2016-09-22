@@ -376,7 +376,7 @@ class GameTwo extends React.Component {
           }}
         />
         <AnimatedSprite
-          character={mammalCharacter}
+          character={goatCharacter}
           coordinates={{top: Window.height -190, left: Window.width - 120}}
           size={{width: Window.width/4, height: Window.width/4}}
           draggable={false}

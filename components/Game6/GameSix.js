@@ -256,14 +256,14 @@ class GameSix extends React.Component {
   getTextHolderStyle () {
     let left = undefined;
     if (this.trialNum < 4) {
-      left = 1150;
+      left = 1140 * this.props.scale.width;
     }
     else {
-      left = 1140;
+      left = 1120 * this.props.scale.width;
     }
     return (
       {
-        top: 380,
+        top: 400 * this.props.scale.height,
         left: left,
         position: 'absolute',
         flexDirection: 'row',

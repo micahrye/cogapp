@@ -335,6 +335,12 @@ class BugZap3 extends React.Component {
     );
   }
 
+  homeBtn = () => {
+    this.props.navigator.replace({
+      id: 'Main',
+    });
+  }
+
   render () {
     return (
       <View>
@@ -374,7 +380,8 @@ class BugZap3 extends React.Component {
               tweenStart='auto'
               spriteAnimationKey={this.state.bugSpriteAnimationKey}
               loopAnimation={this.loopAnimation}
-              onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
+              onAnimationFinish={(animationKey) => {
+                this.onAnimationFinish(animationKey);}}
             />
           : null}
 
@@ -394,8 +401,10 @@ class BugZap3 extends React.Component {
               left: -55 * this.props.scale.width,
               bottom: -10 * this.props.scale.height,
               right: -65 * this.props.scale.width}}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey, 0);}}
-            getFrameIndex={(animationKey, frameIndex) => {this.getFrameIndex(animationKey, frameIndex);}}
+            onAnimationFinish={(animationKey) => {
+              this.onAnimationFinish(animationKey, 0);}}
+            getFrameIndex={(animationKey, frameIndex) => {
+              this.getFrameIndex(animationKey, frameIndex);}}
           />
 
 

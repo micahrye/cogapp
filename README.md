@@ -5,10 +5,20 @@
 
 
 ***Steps***
-
 1. Review above documentation.
+
 2. Follow React Native documentation and all should work.
+
 3. Test on emulator by running the following cmd:
 ```
 $ react-native run-android --variant=release
 ```
+
+
+**How to Do**
+If you want to count the number of lines of code you can run the following
+command from the cloned repo.
+```
+$ git ls-files | grep -e ".*js" | xargs wc -l
+```
+This will list all javascript files and count the number of lines of code.

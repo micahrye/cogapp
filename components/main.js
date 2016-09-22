@@ -24,46 +24,41 @@ class Main extends React.Component {
     super(props);
   }
 
-  componentWillMount () {
+  componentWillMount () {}
 
-  }
-  componentDidMount () {
+  componentDidMount () {}
 
-  }
-
-  goToBubblePop = () => {
-    this.props.navigator.replace({id: 'BubblePopLoading'});
+  goToGame = (gameId) => {
+    //console.warn('goToGame : ', gameId);
+    this.props.navigator.replace({id: gameId});
   }
 
-  // goToDragon = () => {
-  //   this.props.navigator.replace({id: 'DragDragon'});
+  // goToBugZap = () => {
+  //     this.props.navigator.replace({id: 'BugZapLoading'});
+  // }
+  //
+  // goToGameTwo = () => {
+  //   this.props.navigator.replace({id: 'GameTwoLoading'});
+  // }
+  //
+  // goToGameThree = () => {
+  //   this.props.navigator.replace({id: 'GameThree'})
+  // }
+  //
+  // goToGameFour = () => {
+  //   this.props.navigator.replace({id: 'GameFourLoading'})
+  // }
+  //
+  // goToGameFive = () => {
+  //   this.props.navigator.replace({id: 'GameFive'})
+  // }
+  //
+  // goToGameSix = () => {
+  //   this.props.navigator.replace({id:'GameSixLoading'})
   // }
 
-  goToBugZap = () => {
-      this.props.navigator.replace({id: 'BugZapLoading'});
-  }
-
-  goToGameTwo = () => {
-    this.props.navigator.replace({id: 'GameTwoLoading'});
-  }
-
-  goToGameThree = () => {
-    this.props.navigator.replace({id: 'GameThree'})
-  }
-
-  goToGameFour = () => {
-    this.props.navigator.replace({id: 'GameFourLoading'})
-  }
-
-  goToGameFive = () => {
-    this.props.navigator.replace({id: 'GameFive'})
-  }
-
-  goToGameSix = () => {
-    this.props.navigator.replace({id:'GameSixLoading'})
-  }
-
   render () {
+    //console.warn('HEY HEY HEY');
     // console.warn(SCREEN_HEIGHT);
     // console.warn(SCREEN_WIDTH);
     return (
@@ -73,23 +68,23 @@ class Main extends React.Component {
       <View style={styles.container}>
 
         <View style={styles.column}>
-          <TouchableOpacity onPress={this.goToBubblePop}>
+          <TouchableOpacity onPress={ () => { this.goToGame('AnimatedTest')} }>
+            <View style={styles.button}>
+              <Text style={styles.text}>Animate Test</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To BubblePop</Text>
             </View>
           </TouchableOpacity>
-          { // <TouchableOpacity onPress={this.goToDragon}>
-          //   <View style={styles.button}>
-          //     <Text style={styles.text}>Go To Dragon</Text>
-          //   </View>
-          // </TouchableOpacity>
-          }
-          <TouchableOpacity onPress={this.goToBugZap}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To BugZap</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.goToGameTwo}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Two</Text>
             </View>
@@ -98,25 +93,25 @@ class Main extends React.Component {
 
         <View style={styles.column}>
         {/*
-          <TouchableOpacity onPress={this.goToGameThree}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Three</Text>
             </View>
           </TouchableOpacity>
         */}
-          <TouchableOpacity onPress={this.goToGameFour}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Four</Text>
             </View>
           </TouchableOpacity>
         {/*
-          <TouchableOpacity onPress={this.goToGameFive}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Five</Text>
             </View>
           </TouchableOpacity>
         */}
-          <TouchableOpacity onPress={this.goToGameSix}>
+          <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>Go To Game Six</Text>
             </View>

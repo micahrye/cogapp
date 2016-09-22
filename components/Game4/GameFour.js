@@ -11,7 +11,11 @@ import AnimatedSprite from "../animatedSprite";
 import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 import squareCharacter from "../../sprites/square/squareCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
+import getGameStyles from './stylesheet';
 
+const SCREEN_WIDTH = require('Dimensions').get('window').width;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const styles = getGameStyles(SCREEN_HEIGHT, SCREEN_WIDTH);
 const NUM_TRIALS = 4;
 
 class GameFour extends React.Component {
@@ -255,7 +259,7 @@ class GameFour extends React.Component {
     return (
       <Image source={require('../../backgrounds/Game_4_Background_1280.png')} style={styles.backgroundImage}>
 
-        <View style={styles.container}>
+        <View>
           <View style={styles.row}>
             <TouchableOpacity style={styles.button} onPress={this.homeBtn}>
                 <Text>{'Home'}</Text>
@@ -336,7 +340,7 @@ class GameFour extends React.Component {
               tweenType: 'curve-spin',
               startXY: [570, 200],
               endXY: [850, 350],
-              duration: 2000,
+              duration: 1250,
               loop: false,
             }}
             tweenStart='auto'
@@ -350,62 +354,6 @@ class GameFour extends React.Component {
     );
   }
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 600,
-    width: 1024,
-    flexDirection: 'row',
-  },
-  backgroundImage: {
-    width: 1024,
-    height: 600,
-  },
-  boxContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    width: 280,
-    height: 520,
-    borderWidth: 3,
-    left: 372,
-    marginTop: 20,
-  },
-  emptyBox: {
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    width: 60,
-    height: 60,
-    top: 195,
-    left: 195,
-    position: 'absolute',
-  },
-  separatingLine: {
-    height: 0,
-    width: 230,
-    top: 400,
-    left: 20,
-    borderWidth: 1,
-    position: 'absolute',
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 10,
-    borderStyle: 'solid',
-    borderColor: '#ff00ff',
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-  },
-});
 
 GameFour.propTypes = {
   route: React.PropTypes.object,
