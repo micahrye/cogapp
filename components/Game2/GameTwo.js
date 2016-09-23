@@ -304,11 +304,11 @@ class GameTwo extends React.Component {
         break;
     }
 
-    console.warn(tweenType);
+    //console.warn(tweenType);
 
     switch (tweenType) {
       case ('celebrate'):
-      console.warn('here');
+      //console.warn('here');
         // if the creature is celebrating it means that the subtrial has been
         // completed successfully and the game can move on to the next creature
         this.setState({onboarding: this.state.onboarding+1})
