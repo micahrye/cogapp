@@ -8,7 +8,6 @@ import {
 
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
-
 import Util from './BugZapUtil';
 
 // import characters for animatedSprite to use
@@ -17,39 +16,31 @@ import bugCharacter from '../../sprites/bug/bugCharacter';
 import AnimatedSprite from "../animatedSprite";
 import styles from "./BugZapStyles";
 
-const SCREEN_WIDTH = require('Dimensions').get('window').width;
-const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-
 const NUM_TRIALS = 3;
-// how long bug is catchable
-const BUG_IDLE_CATCH_DURATION = 1500;
+const BUG_IDLE_CATCH_DURATION = 1500; // how long bug is catchable
 
 class BugZap extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      showBug: false,
-      bugKey: 0,
-      frogKey: 1,
-      bugTweenSettings: {},
-      bugSpriteAnimationKey: 'default',
-      frogSpriteAnimationKey: 'default',
-      loopAnimation: true,
-    };
+    this.Util = Util();
     this.zappedTooEarly = false;
-    this.bugTweenIdle = {};
-    this.bugTweenAway = {};
     this.timeoutBugAppear = undefined;
     this.timeoutBugIdle = undefined;
     this.timeoutFlyAway = undefined;
     this.timeoutNextTrial = undefined;
-    this.flyInDuration = undefined;
+    this.flyInDuration = Math.random() *  (2000) + 2500;
     this.trialNumber = 1;
     this.xLand = 750 * this.props.scale.width;
     this.yLand = 220 * this.props.scale.height;
-
-
-
+    this.state = {
+      showBug: false,
+      bugKey: 0,
+      frogKey: 1,
+      bugTweenSettings: this.Util['initialTween'](this),
+      bugSpriteAnimationKey: 'default',
+      frogSpriteAnimationKey: 'default',
+      loopAnimation: true,
+    };
   }
 
   componentWillMount () {
@@ -60,9 +51,6 @@ class BugZap extends React.Component {
   }
 
   componentDidMount () {
-    this.flyInDuration = Math.random() *  (2000) + 2500;
-    this.configureTweens();
-
     const waitToRenderBug = 500;
     // render bug after the rest of the scene
     this.timeoutBugAppear = this.setTimeout( () => {
@@ -75,7 +63,7 @@ class BugZap extends React.Component {
         }
         else {
           // if bug is zapped too early, it just flies away, no idling
-          this.bugFlyAway('default');
+          this.setState(this.Util['bugFlyAway'](this, 'default'));
         }
       }, this.flyInDuration);
     }, waitToRenderBug);
@@ -88,102 +76,17 @@ class BugZap extends React.Component {
     clearTimeout(this.timeoutNextTrial);
   }
 
-  // 2 different ways bug can reach landing spot
-  configureTweens () {
-    //SCREEN_WIDTH - 330; // 350 in emulator
-    let xLand = 750 * this.props.scale.width;
-    //SCREEN_HEIGHT - 350; // 70 in emulator
-    let yLand = 220 * this.props.scale.height;
-
-    // this are the X/Y coords that are peak/summit of sine wave tween
-    let sequenceX = [680 * this.props.scale.width, xLand - 50, xLand];
-    let sequenceY = [];
-    const sequenceChoice = Math.random();
-    if (sequenceChoice < .5) {
-      sequenceY = [50, yLand, 50, yLand];
-    }
-    else {
-      sequenceY = [250, 150, 100, yLand];
-    }
-
-    // when landed
-    this.bugTweenIdle = {
-      tweenType: "sine-wave",
-      startXY: [xLand, yLand],
-      xTo: [xLand],
-      yTo: [yLand],
-      duration: 0,
-      loop: false,
-    };
-
-    // tween offscreen
-    this.bugTweenAway = {
-      tweenType: "sine-wave",
-      startXY: [xLand, yLand],
-      xTo: [-150 * this.props.scale.width],
-      yTo: [0, yLand, 0],
-      duration: 1500 * this.props.scale.width,
-      loop: false,
-    };
-
-    const distanceFromBottom = 375 * this.props.scale.height;
-    this.setState({
-      bugTweenSettings: // initial tween onto screen
-      {
-        tweenType: "sine-wave",
-        startXY: [SCREEN_WIDTH, SCREEN_HEIGHT - distanceFromBottom],
-        xTo: sequenceX,
-        yTo: sequenceY,
-        duration: this.flyInDuration,
-        loop: false,
-      },
-    });
-  }
-
   setBugIdle () {
     // switch to idle bug character and pause tweening
     this.setState({
       bugKey: Math.random(),
-      bugTweenSettings: Util(this),
+      bugTweenSettings: this.Util['bugIdleSettings'](this),
       bugSpriteAnimationKey: 'idle',
     });
     this.timeoutFlyAway = setTimeout(()=>{
-      this.bugFlyAway('startFly');
-      this.frogDisgust();
+      this.setState(this.Util['bugFlyAway'](this, 'startFly'));
+      this.setState(this.Util['frogDisgust'](this));
     }, BUG_IDLE_CATCH_DURATION);
-  }
-
-  bugFlyAway (animation) {
-    // "startFly" after landed, or "default" if zapped too early
-    this.setState({
-      bugKey: Math.random(),
-      bugTweenSettings: this.bugTweenAway,
-      bugSpriteAnimationKey: animation,
-      loopAnimation: false,
-    });
-    this.timeoutNextTrial = setTimeout(() => {
-      this.goToNextTrial();
-    }, 2500);
-  }
-
-  frogTap = () => {
-    if (this.state.showBug) {
-      // bug has landed
-      if (this.state.bugSpriteAnimationKey === 'idle') {
-        this.catchBug();
-      } else if (this.state.bugTweenSettings != this.bugTweenAway) {
-        // bug has not landed yet
-        this.frogDisgust();
-        // now bug doesn't land, just keeps flying offscreen
-        this.zappedTooEarly = true;
-      }
-    }
-  }
-
-  catchBug () {
-    this.frogEat();
-    // so that "bugFlyAway" function doesn't run after bug is "caught"
-    clearTimeout(this.timeoutFlyAway);
   }
 
   // triggered when an animation finishes
@@ -220,16 +123,8 @@ class BugZap extends React.Component {
     });
   }
 
-  frogEat () {
-    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'eat'});
-  }
-
   frogCelebrate () {
     this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
-  }
-
-  frogDisgust () {
-    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'disgust'});
   }
 
   // go to next level
@@ -269,6 +164,10 @@ class BugZap extends React.Component {
     this.props.navigator.replace({
       id: 'BugZap1',
     });
+  }
+
+  handlePress = () => {
+    this.setState(this.Util['frogTap'](this));
   }
 
   render () {
@@ -321,7 +220,7 @@ class BugZap extends React.Component {
                   height: 375 * this.props.scale.height,
               }}
               character={frogCharacter}
-              onPress={this.frogTap}
+              onPress={this.handlePress}
               hitSlop={{top: -175 *this.props.scale.height,
                 left: -55 * this.props.scale.width,
                 bottom: -10 * this.props.scale.height,
