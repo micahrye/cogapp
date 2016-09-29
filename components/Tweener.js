@@ -205,13 +205,108 @@ class Tweener extends React.Component {
  goatCelebrate (options, state) {
    state.left.setValue(options.startXY[0]);
    state.top.setValue(options.startXY[1]);
-   Animated.timing(
-     state.rotateZ,
-     {
-       toValue: 200,
-       duration: 500,
-     }
-   ).start(() => {
+   Animated.sequence([
+     Animated.parallel([
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 50,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.left,
+         {
+           toValue: 750,
+           easing: Easing.linear,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.top,
+         {
+           toValue: 350,
+           easing: Easing.exp,
+           duration: 250,
+         }
+       ),
+     ]),
+     Animated.parallel([
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 100,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.left,
+         {
+           toValue: options.startXY[0],
+           easing: Easing.exp,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.top,
+         {
+           toValue: 250,
+           easing: Easing.linear,
+           duration: 250,
+         }
+       ),
+     ]),
+     Animated.parallel([
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 150,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.left,
+         {
+           toValue: 650,
+           easing: Easing.linear,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.top,
+         {
+           toValue: 350,
+           easing: Easing.exp,
+           duration: 250,
+         }
+       ),
+     ]),
+     Animated.parallel([
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 200,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.left,
+         {
+           toValue: options.startXY[0],
+           easing: Easing.exp,
+           duration: 250,
+         }
+       ),
+       Animated.timing(
+         state.top,
+         {
+           toValue: options.startXY[1],
+           easing: Easing.linear,
+           duration: 250,
+         }
+       ),
+     ]),
+   ]).start(() => {
        if (options.loop === false) {
         this.props.onTweenFinish(true, "celebrate");
         return;
