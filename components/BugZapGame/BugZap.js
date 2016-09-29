@@ -97,7 +97,7 @@ class BugZap extends React.Component {
     }
     else if (animationKey === 'eat') {
       // celebrate after eating the bug
-      this.frogCelebrate();
+      this.setState(this.Util['frogCelebrate'](this));
     }
     else if (animationKey === 'celebrate') {
       // once bug is done celebrating
@@ -111,20 +111,8 @@ class BugZap extends React.Component {
   getFrameIndex (animationKey, frameIndex) {
     if (animationKey === 'eat' && frameIndex === 5) {
       // when tongue has reached bug
-      this.bugSplat();
+      this.setState(this.Util['bugSplat'](this));
     }
-  }
-
-  bugSplat () {
-    this.setState({
-      bugKey: Math.random(),
-      bugSpriteAnimationKey: 'splat',
-      loopAnimation: false, // does not loop splat animation
-    });
-  }
-
-  frogCelebrate () {
-    this.setState({frogKey: Math.random(), frogSpriteAnimationKey: 'celebrate'});
   }
 
   // go to next level
@@ -145,7 +133,8 @@ class BugZap extends React.Component {
     if (this.props.route.trialNumber != undefined) {
       this.trialNumber = this.props.route.trialNumber + 1;
       if (this.trialNumber === NUM_TRIALS) {
-        this.goToNextLevel();
+        //this.goToNextBugGame();
+        this.Util['goToNextBugGame'](this, 'BugZap1');
         return;
       }
     }
@@ -160,11 +149,11 @@ class BugZap extends React.Component {
     return 'BugZap';
   }
 
-  goToNextLevel () {
-    this.props.navigator.replace({
-      id: 'BugZap1',
-    });
-  }
+  // goToNextBugGame () {
+  //   this.props.navigator.replace({
+  //     id: 'BugZap1',
+  //   });
+  // }
 
   handlePress = () => {
     this.setState(this.Util['frogTap'](this));

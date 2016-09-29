@@ -92,7 +92,27 @@ const Util = function () {
       frogKey: Math.random(),
       frogSpriteAnimationKey: 'disgust',
     };
+  };
 
+  const frogCelebrate  = function () {
+    return {
+      frogKey: Math.random(),
+      frogSpriteAnimationKey: 'celebrate',
+    };
+  };
+
+  const bugSplat = function () {
+    return {
+      bugKey: Math.random(),
+      bugSpriteAnimationKey: 'splat',
+      loopAnimation: false, // does not loop splat animation
+    };
+  };
+
+  const goToNextBugGame = function (scene, nextGame) {
+    scene.props.navigator.replace({
+      id: nextGame,
+    });
   };
 
 
@@ -105,6 +125,9 @@ const Util = function () {
       'frogTap' : frogTap,
       'frogEat' : frogEat,
       'frogDisgust' : frogDisgust,
+      'frogCelebrate' : frogCelebrate,
+      'bugSplat' : bugSplat,
+      'goToNextBugGame' : goToNextBugGame,
     }
   );
 };
