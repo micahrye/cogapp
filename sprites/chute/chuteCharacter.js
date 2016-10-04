@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 
 const chuteCharacter = {
   name:"chute",
 
-  default:[
+  all:[
     require("./chute.png"),
   ],
 

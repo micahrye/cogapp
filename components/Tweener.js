@@ -7,11 +7,11 @@ import {
 } from 'react-native';
 
 
-class Tweener extends React.Component{
+class Tweener extends React.Component {
 
-  componentDidMount() {
+  componentDidMount () {
     let tweenType = this.props.type;
-    switch(tweenType){
+    switch (tweenType) {
       case 'sine-wave':
         this.sineWave(this.props.options, this.props.state);
         break;
@@ -69,14 +69,14 @@ class Tweener extends React.Component{
     }
   }
 
-  sineWave(options, state){
-    if(this.props.stop){
+  sineWave(options, state) {
+    if (this.props.stop) {
       let stopValues = [];
       state.left.stopAnimation((value) => stopValues.push(value));
       state.top.stopAnimation((value) => stopValues.push(value));
       this.props.stopValues(stopValues);
     }
-    else{
+    else {
       state.top.setValue(options.startXY[1]);
       state.left.setValue(options.startXY[0]);
       Animated.sequence([
@@ -89,8 +89,8 @@ class Tweener extends React.Component{
         )
       ]).start(() => {
         if (options.loop === false) {
-          this.props.onTweenFinish(true);
-        }else{
+          this.props.onTweenFinish (true);
+        } else{
           this.sineWave(options, state);
         }
 
@@ -133,7 +133,7 @@ class Tweener extends React.Component{
       }
     ).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return;
       }
       bounce(options, state);
@@ -168,7 +168,7 @@ class Tweener extends React.Component{
       ),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return;
       }
       move(options, state);
@@ -176,7 +176,7 @@ class Tweener extends React.Component{
   };
 
  pulse(options, state) {
-   if(this.props.stop){
+   if (this.props.stop) {
      let stopValues = [];
      state.scale.stopAnimation((value) => stopValues.push(value));
      this.props.stopValues(stopValues);
@@ -202,8 +202,8 @@ class Tweener extends React.Component{
        ),
      ]).start(() => {
        if (options.loop === false) {
-        this.props.onTweenFinish(true);
-       }else{
+        this.props.onTweenFinish (true);
+      } else{
          this.pulse(options, state);
        }
      });
@@ -211,7 +211,7 @@ class Tweener extends React.Component{
  }
 
  wiggle(options, state) {
-   if(this.props.stop){
+   if (this.props.stop) {
      let stopValues = [];
      state.rotateZ.stopAnimation((value) => stopValues.push(value));
      this.props.stopValues(stopValues);
@@ -245,17 +245,17 @@ class Tweener extends React.Component{
        ),
      ]).start(() => {
        if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-       }else{
+      } else{
          this.wiggle(options, state);
        }
      });
    }
  }
 
- bounceDrop(options, state) {
-   if(this.props.stop){
+ bounceDrop (options, state) {
+   if (this.props.stop) {
      let stopValues = [];
      state.left.stopAnimation((value) => stopValues.push(value));
      state.top.stopAnimation((value) => stopValues.push(value));
@@ -281,16 +281,16 @@ class Tweener extends React.Component{
        }
      ).start(() => {
        if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
          return
-       }else{
+       } else{
          bounceDrop(options, state);
        }
      });
    }
  }
 
- zoom(options, state) {
+ zoom (options, state) {
    state.left.setValue(options.startXY[0]);
    Animated.timing(
      state.left,
@@ -310,7 +310,7 @@ class Tweener extends React.Component{
      }
    ).start(() => {
      if (options.loop === false) {
-      this.props.onTweenFinish(true);
+      this.props.onTweenFinish (true);
        return;
      }
      zoom(options, state);
@@ -338,9 +338,9 @@ class Tweener extends React.Component{
       ),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else{
+      } else{
         hop(options, state);
       }
     });
@@ -378,9 +378,9 @@ class Tweener extends React.Component{
       )
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else{
+      } else{
         tumbleOff(options, state);
       }
     });
@@ -398,9 +398,9 @@ class Tweener extends React.Component{
       }
     ).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else{
+      } else{
         spin(options, state);
       }
     });
@@ -467,9 +467,9 @@ class Tweener extends React.Component{
       ]),
     ]).start(() => {
         if (options.loop === false) {
-          this.props.onTweenFinish(true);
+          this.props.onTweenFinish (true);
           return
-        }else{
+        } else{
           hopForward(options, state);
         }
       });
@@ -490,9 +490,9 @@ class Tweener extends React.Component{
       }
     ).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else {
+      } else {
         basicBack(options, state);
       }
     });
@@ -545,9 +545,9 @@ class Tweener extends React.Component{
       ),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else {
+      } else {
         curveSpin(options, state);
       }
     });
@@ -585,9 +585,9 @@ class Tweener extends React.Component{
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else {
+      } else {
         curveSpin2(options, state);
       }
     });
@@ -633,9 +633,9 @@ class Tweener extends React.Component{
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return
-      }else {
+      } else {
         curveSpin3(options, state);
       }
     });
@@ -666,15 +666,13 @@ class Tweener extends React.Component{
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        this.props.onTweenFinish(true);
+        this.props.onTweenFinish (true);
         return;
-      }else {
+      } else {
         curveSpin(options, state);
       }
     });
   }
-
-
 
   render() {
     return (null);

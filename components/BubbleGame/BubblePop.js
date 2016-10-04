@@ -176,13 +176,16 @@ class BubblePop extends React.Component {
   popBubble = (stopValues) => {
     this.stopValuesX = stopValues[0];
     this.stopValuesY = stopValues[1];
-    if (this.targetSpriteAnimationKey === 'pop') { // so you can't pop bubble while it is already popping
+    if (this.targetSpriteAnimationKey === 'pop') {
+      // so you can't pop bubble while it is already popping
       this.setState({sound: false});
       return;
     }
-    clearTimeout(this.timeoutGameOver); // so game timeout screen doesn't load
+    clearTimeout(this.timeoutGameOver);
+    // so game timeout screen doesn't load
     this.targetSpriteAnimationKey = 'pop';
-    this.loopBubbleAnimation = false; // so popped bubble doesn't repeat
+    this.loopBubbleAnimation = false;
+    // so popped bubble doesn't repeat
     this.setState({
       popTime: this.popTime - .5,
       targetTween: { // so bubble stays in place

@@ -22,3 +22,9 @@ command from the cloned repo.
 $ git ls-files | grep -e ".*js" | xargs wc -l
 ```
 This will list all javascript files and count the number of lines of code.
+
+
+#Learning
+All require statements are processed on load for a sprite definition.
+This may be impacting memory related to images. Best practices is to not
+have lots of animation images.

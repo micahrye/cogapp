@@ -3,7 +3,7 @@
 const leverCharacter = {
   name:"lever",
 
-  default:[
+  all:[
     require("./lever.png"),
   ],
 

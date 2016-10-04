@@ -129,16 +129,16 @@ class AnimatedSprite extends React.Component{
     }
 
     // default to idle animation if no spriteAnimationKey prop provided
-    if(this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
+    if (this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
       this.startDefaultAnimation();
     }
-    else{
+    else {
       this.startOtherAnimation(this.props.spriteAnimationKey);
     }
     // if this character setNativeProps
     this.character && this.character.setNativeProps(this._characterStyles)
 
-    if(this.props.tweenStart == "auto" && this.props.tween != null){
+    if (this.props.tweenStart == "auto" && this.props.tween != null) {
       this.configureTween();
     }
 
@@ -293,9 +293,9 @@ class AnimatedSprite extends React.Component{
     }
   }
 
-  configureTween() {
+  configureTween () {
     let stopTween = false;
-    if(this.stopTween){
+    if (this.stopTween) {
       stopTween = true;
     }
     const tweenType = this.props.tween.tweenType;
@@ -319,7 +319,8 @@ class AnimatedSprite extends React.Component{
         state={tweenState}
         stop={stopTween}
         onTweenFinish={(ended) => this.tweenHasEnded(ended, this.stopTween)} // whether it just ended, or was stopped
-        stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
+        stopValues={(stopValues) => this.sendStopValues(stopValues)}
+      />
     );
 
     this.setState({

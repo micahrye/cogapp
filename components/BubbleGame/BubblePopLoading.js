@@ -34,9 +34,11 @@ class BubblePopLoading extends Component {
     }
   }
 
-  componentWillMount () { 
+  componentWillMount () {
+
   }
-  componentDidMount() {
+
+  componentDidMount () {
     setTimeout(() => {
       this.props.navigator.replace({
         id: 'BubblePop',
