@@ -9,7 +9,7 @@
 const greenDragonCharacter = {
   name:"greenDragon",
 
-  idel:[
+  default:[
     require("./green_dragon01.png"),
     require("./green_dragon02.png"),
     require("./green_dragon03.png"),

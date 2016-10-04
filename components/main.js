@@ -3,146 +3,146 @@
 * https://github.com/facebook/react-native
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Alert,
-  Animated,
-  AppRegistry,
-  Navigator,
-  Image,
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
+  StyleSheet,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 var reactMixin = require('react-mixin');
 import TimerMixin from 'react-timer-mixin';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Main extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
   }
 
-  componentDidMount() {
+  componentWillMount () {}
 
+  componentDidMount () {}
+
+  goToGame = (gameId) => {
+    //console.warn('goToGame : ', gameId);
+    this.props.navigator.replace({id: gameId});
   }
 
-  goToBubblePop = () => {
-    this.props.navigator.push({id: 3});
-  }
+  // goToBugZap = () => {
+  //     this.props.navigator.replace({id: 'BugZapLoading'});
+  // }
+  //
+  // goToGameTwo = () => {
+  //   this.props.navigator.replace({id: 'GameTwoLoading'});
+  // }
+  //
+  // goToGameThree = () => {
+  //   this.props.navigator.replace({id: 'GameThree'})
+  // }
+  //
+  // goToGameFour = () => {
+  //   this.props.navigator.replace({id: 'GameFourLoading'})
+  // }
+  //
+  // goToGameFive = () => {
+  //   this.props.navigator.replace({id: 'GameFive'})
+  // }
+  //
+  // goToGameSix = () => {
+  //   this.props.navigator.replace({id:'GameSixLoading'})
+  // }
 
-  goToDragon = () => {
-    this.props.navigator.push({id: 2});
-  }
-
-  goToBugZap = () => {
-    this.props.navigator.push({id: 6});
-  }
-
-  goToGameTwo = () => {
-    this.props.navigator.push({id: 10});
-  }
-
-  goToGameThree = () => {
-    this.props.navigator.push({id: 14})
-  }
-
-  goToGameFour = () => {
-    this.props.navigator.push({id: 19})
-  }
-
-  goToGameFive = () => {
-    this.props.navigator.push({id:20})
-  }
-
-  goToGameSix = () => {
-    this.props.navigator.push({id:21})
-  }
-
-  render() {
+  render () {
+    //console.warn('HEY HEY HEY');
+    // console.warn(SCREEN_HEIGHT);
+    // console.warn(SCREEN_WIDTH);
     return (
+      <ScrollView
+        style={styles.scrollView} >
 
-        <ScrollView style={{height:Dimensions.get('window').height,
-                            width:Dimensions.get('window').width}}
-        >
-        <View style={styles.container}>
-          <View style={styles.column}>
-            <TouchableOpacity onPress={this.goToBubblePop}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To BubblePop</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToDragon}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Dragon</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToBugZap}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To BugZap</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameTwo}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Two</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.container}>
 
-          <View style={styles.column}>
-            <TouchableOpacity onPress={this.goToGameThree}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Three</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameFour}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Four</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameFive}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Five</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.goToGameSix}>
-              <View style={styles.button}>
-                <Text style={styles.text}>Go To Game Six</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          </View>
-        </ScrollView>
+        <View style={styles.column}>
+          <TouchableOpacity onPress={ () => { this.goToGame('AnimatedTest')} }>
+            <View style={styles.button}>
+              <Text style={styles.text}>Animate Test</Text>
+            </View>
+          </TouchableOpacity>
 
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To BubblePop</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To BugZap</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Two</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.column}>
+        {/*
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Three</Text>
+            </View>
+          </TouchableOpacity>
+        */}
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Four</Text>
+            </View>
+          </TouchableOpacity>
+        {/*
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Five</Text>
+            </View>
+          </TouchableOpacity>
+        */}
+          <TouchableOpacity >
+            <View style={styles.button}>
+              <Text style={styles.text}>Go To Game Six</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+      </ScrollView>
     );
   }
 }
 
+Main.propTypes = {
+  navigator: React.PropTypes.object.isRequired,
+}
+
 reactMixin.onClass(Main, TimerMixin);
 
-/*
-let style = {
-  position: 'absolute',
-  top: Number((val.x * 2.5).toFixed(2)),
-  left: Number((val.x * 3).toFixed(2)),
-  backgroundColor: '#0000ff',
-  color: '#fff'
-};
-*/
-
 const styles = StyleSheet.create({
+  scrollView: {
+    height:SCREEN_HEIGHT,
+    width:SCREEN_WIDTH,
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cce6ff',
+    height:SCREEN_HEIGHT,
+    width:SCREEN_WIDTH,
+    //backgroundColor: '#fff',
   },
   column: {
     flex: 2,

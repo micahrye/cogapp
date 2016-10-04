@@ -3,114 +3,124 @@
 * https://github.com/facebook/react-native
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Alert,
-  Animated,
   AppRegistry,
   Navigator,
-  Image,
-  StyleSheet,
-  Text,
-  View,
-
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 import Main from "./components/main";
-import DragDragon from "./components/DragDragon";
+import AnimateTest from "./components/Animate/AnimateTest";
+import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
-import BubblePopWinPage from './components/BubbleGame/BubblePopWinPage';
-import NextGamePage from './components/NextGamePage';
+import GameOverPage from './components/BubbleGame/GameOverPage';
+import NextGamePage from './components/BubbleGame/NextGamePage';
+import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
 import BugZapLevel2 from './components/BugZapGame/BugZap2';
 import BugZapLevel3 from './components/BugZapGame/BugZap3';
-import GameTwo from './components/GameTwo/GameTwo';
-import GameTwoLevel1 from './components/GameTwo/GameTwo1';
-import GameTwoLevel2 from './components/GameTwo/GameTwo2';
-import GameTwoLevel3 from './components/GameTwo/GameTwo3';
-import GameThree from './components/GameThree/GameThree';
-import GameThree1 from './components/GameThree/GameThree1';
-import GameThreeLevel2 from './components/GameThree/GameThree2';
-import GameThreeLevel3 from './components/GameThree/GameThree3';
-import GameThreeLevel4 from './components/GameThree/GameThree4';
-import GameFour from './components/GameFour';
-import GameFive from './components/GameFive';
-import GameSix from './components/GameSix';
-
-
-
+import GameTwo from './components/Game2/GameTwo';
+import GameTwoLoading from './components/Game2/Game2Loading';
+import GameTwoLevel1 from './components/Game2/GameTwo1';
+import GameTwoLevel2 from './components/Game2/GameTwo2';
+import GameTwoLevel3 from './components/Game2/GameTwo3';
+import GameThree from './components/Game3/GameThree';
+import GameThree1 from './components/Game3/GameThree1';
+import GameThreeLevel2 from './components/Game3/GameThree2';
+import GameThreeLevel3 from './components/Game3/GameThree3';
+import GameThreeLevel4 from './components/Game3/GameThree4';
+import GameFourLoading from './components/Game4/GameFourLoading';
+import GameFour from './components/Game4/GameFour';
+import GameFive from './components/Game5/GameFive';
+import GameSix from './components/Game6/GameSix';
+import GameSixLoading from './components/Game6/GameSixLoading';
+import NextTrial from './components/NextTrial';
+import Scene from './components/Scene';
 
 
 class CogApp extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props);
 
   }
 
-  componentDidMount() {
+  componentDidMount () {
 
   }
 
-  render() {
+AnimatedTest
+
+  renderScene (route, navigator) {
+    if (route.id === 'Main') {
+      return <Main navigator={navigator} />;
+    } else if (route.id === 'AnimatedTest') {
+      return <AnimateTest />;
+    } else if (route.id === 'BubblePopLoading') {
+      return <BubblePopLoading navigator={navigator} route={route}/>
+    } else if (route.id === 'BubblePop') {
+      return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'GameOverPage') {
+      return <GameOverPage navigator={navigator} route={route}/>;
+    } else if (route.id === 'NextGamePage') {
+      return <NextGamePage navigator={navigator} route={route}/>;
+    } else if (route.id === 'BugZapLoading') {
+      return <Scene><BugZapLoading navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'BugZap') {
+      return <Scene><BugZap navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'BugZap1') {
+      return <Scene><BugZapLevel1 navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'BugZap2') {
+      return <Scene><BugZapLevel2 navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'BugZap3') {
+      return <Scene><BugZapLevel3 navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'GameTwoLoading') {
+      return <GameTwoLoading navigator={navigator} route={route} />;
+    } else if (route.id === 'GameTwo') {
+      return <GameTwo navigator={navigator} route={route} />;
+    } else if (route.id === 'GameTwo1') {
+      return <GameTwoLevel1 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameTwo2') {
+      return <GameTwoLevel2 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameTwo3') {
+      return <GameTwoLevel3 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameThree') {
+      return <GameThree navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameThree1') {
+      return <GameThree1 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameThree2') {
+      return <GameThreeLevel2 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameThree3') {
+      return <GameThreeLevel3 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameThree4') {
+      return <GameThreeLevel4 navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameFourLoading') {
+      return <GameFourLoading navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameFour') {
+      return <Scene><GameFour navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'GameFive') {
+      return <GameFive navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameSixLoading') {
+      return <GameSixLoading navigator={navigator} route={route}/>;
+    } else if (route.id === 'GameSix') {
+      return <Scene><GameSix navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'NextTrial') {
+      return <NextTrial navigator={navigator} route={route}/>;
+    }
+  }
+
+  render () {
     return (
       <Navigator
-  initialRoute={{name: 'My First Scene', id: 0}}
-  renderScene={(route, navigator) => {
-      return this.renderScene(route, navigator);
-    }
-  }
-/>
+        initialRoute={{name: 'My First Scene', id: 'Main'}}
+          renderScene={(route, navigator) => {
+            return this.renderScene(route, navigator);
+        }}
+      />
     );
-  }
-
-  renderScene(route, navigator){
-    if(route.id === 0){
-      return <Main navigator={navigator} />
-    }else if(route.id === 2){
-      return <DragDragon />
-    }if (route.id === 3) {
-      return <BubblePop navigator={navigator} />
-    } else if (route.id === 4){
-      return <BubblePopWinPage navigator={navigator} route={route}/>
-    } else if (route.id === 5){
-      return <NextGamePage navigator={navigator} route={route}/>
-    } else if (route.id === 6){
-      return <BugZap navigator={navigator} />
-    } else if (route.id === 7){
-      return <BugZapLevel1 navigator={navigator} />
-    } else if (route.id === 8){
-      return <BugZapLevel2 navigator={navigator} />
-    } else if (route.id === 9){
-      return <BugZapLevel3 navigator={navigator} />
-    } else if (route.id === 10){
-      return <GameTwo navigator={navigator} />
-    } else if (route.id === 11){
-      return <GameTwoLevel1 navigator={navigator} />
-    } else if (route.id === 12){
-      return <GameTwoLevel2 navigator={navigator} />
-    } else if (route.id === 13){
-      return <GameTwoLevel3 navigator={navigator} />
-    } else if (route.id === 14){
-      return <GameThree navigator={navigator} />
-    } else if (route.id === 15){
-      return <GameThree1 navigator={navigator} />
-    } else if (route.id === 16){
-      return <GameThreeLevel2 navigator={navigator} />
-    } else if (route.id === 17){
-      return <GameThreeLevel3 navigator={navigator} />
-    } else if (route.id === 18){
-      return <GameThreeLevel4 navigator={navigator} />
-    } else if (route.id === 19){
-      return <GameFour navigator={navigator} />
-    } else if (route.id === 20){
-      return <GameFive navigator={navigator} />
-    } else if (route.id === 21){
-      return <GameSix navigator={navigator} />
-    }
   }
 }
 

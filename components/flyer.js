@@ -4,31 +4,23 @@
 * https://github.com/facebook/react-native
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Alert,
   Animated,
-  PanResponder,
-  Navigator,
   Easing,
   Image,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  TouchableHighlight,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
-
-import SAT from 'sat';
 
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 import AnimatedSprite from "./animatedSprite";
 import greenDragonCharacter from "./frames/greenDragonCharacter";
-import Animator from "./Animator";
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 

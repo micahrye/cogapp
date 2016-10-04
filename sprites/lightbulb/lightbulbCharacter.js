@@ -1,16 +1,16 @@
 "use strict"
 
 const lightbulbCharacter = {
-    name:"lightbulb",
+  name:"lightbulb",
 
-    idel: {
-      default: [
-          require("./lightbulb.png"),
-      ],
-    },
-    touch: {
-      default: [],
-    },
+  default:[
+    require("./lightbulb_on.png"),
+  ],
+
+  off: [
+  	require("./lightbulb_off.png"),
+  ]
+
 };
 
 export default lightbulbCharacter;

@@ -3,7 +3,7 @@
 const platformCharacter = {
   name:"platform",
 
-  idel:[
+  default:[
     require("./platform.png"),
   ],
 

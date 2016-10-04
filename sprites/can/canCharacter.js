@@ -1,11 +1,27 @@
 "use strict";
 
 const canCharacter = {
-    name:"can",
+  name:"can",
 
-    idel:[
-        require("./can.png"),
-    ],
+  default:[
+    require("./can.png"),
+  ],
+
+  green:[
+    require("./can_green.png"),
+  ],
+
+  blue:[
+    require("./can_blue.png"),
+  ],
+
+  red:[
+    require("./can_red.png"),
+  ],
+
+  yellow:[
+    require("./can_yellow.png"),
+  ],
 
 
 };
