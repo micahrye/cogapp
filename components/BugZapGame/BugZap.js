@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import TimerMixin from 'react-timer-mixin';
 import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import AnimatedSprite from "../animatedSprite";
+import styles from "./BugZapStyles";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -340,31 +340,5 @@ BugZap.propTypes = {
   scale: React.PropTypes.object,
 };
 reactMixin.onClass(BugZap, TimerMixin);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-    flexDirection: 'row',
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  backgroundImage: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    position: 'absolute',
-    justifyContent: 'center',
-  },
-});
 
 export default BugZap;

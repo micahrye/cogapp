@@ -69,7 +69,7 @@ class Tweener extends React.Component {
     }
   }
 
-  sineWave(options, state) {
+  sineWave (options, state) {
     if (this.props.stop) {
       let stopValues = [];
       state.left.stopAnimation((value) => stopValues.push(value));
@@ -93,7 +93,6 @@ class Tweener extends React.Component {
         } else{
           this.sineWave(options, state);
         }
-
       });
     }
   }

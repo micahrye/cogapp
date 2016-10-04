@@ -76,17 +76,17 @@ class Main extends React.Component {
 
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To BubblePop</Text>
+              <Text style={styles.text}>{'Go To BubblePop'}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To BugZap</Text>
+              <Text style={styles.text}>{'Go To BugZap'}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To Game Two</Text>
+              <Text style={styles.text}>{'Go To Game Two'}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -95,25 +95,25 @@ class Main extends React.Component {
         {/*
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To Game Three</Text>
+              <Text style={styles.text}>{'Go To Game Three'}</Text>
             </View>
           </TouchableOpacity>
         */}
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To Game Four</Text>
+              <Text style={styles.text}>{'Go To Game Four'}</Text>
             </View>
           </TouchableOpacity>
         {/*
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To Game Five</Text>
+              <Text style={styles.text}>{'Go To Game Five'}</Text>
             </View>
           </TouchableOpacity>
         */}
           <TouchableOpacity >
             <View style={styles.button}>
-              <Text style={styles.text}>Go To Game Six</Text>
+              <Text style={styles.text}>{'Go To Game Six'}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -126,7 +126,7 @@ class Main extends React.Component {
 
 Main.propTypes = {
   navigator: React.PropTypes.object.isRequired,
-}
+};
 
 reactMixin.onClass(Main, TimerMixin);
 
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: 100,
-    height: 100
-  }
+    height: 100,
+  },
 });
 
 export default Main;

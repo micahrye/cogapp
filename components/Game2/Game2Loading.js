@@ -1,11 +1,9 @@
-"use strict"
+"use strict";
 
 import React, { Component } from 'react';
 import {
   Animated,
-  AppRegistry,
   Image,
-  Navigator,
   StyleSheet,
   Text,
   View,
@@ -17,6 +15,7 @@ import AnimatedSprite from "../animatedSprite";
 
 // sprites
 import frogCharacter from "../../sprites/frog/frogCharacter";
+import mammalCharacter from "../../sprites/mammal/mammalCharacter";
 
 const Window = Dimensions.get('window');
 
@@ -24,16 +23,16 @@ const LoadingTime = 1500;
 
 class GameTwoLoading extends Component {
 
-    constructor(props) {
+    constructor (props) {
     super(props);
 
     this.state = {
       bar: new Animated.Value(0),
       textOpacity: new Animated.Value(1.0),
-    }
+    };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     setTimeout(() => {
       this.props.navigator.replace({
         id: 'GameTwo',
@@ -43,7 +42,7 @@ class GameTwoLoading extends Component {
     this.toggleOpacity();
   }
 
-  barLoad() {
+  barLoad () {
     Animated.timing(
       this.state.bar,
       {
@@ -54,7 +53,7 @@ class GameTwoLoading extends Component {
     ).start();
   }
 
-  toggleOpacity() {
+  toggleOpacity () {
     Animated.sequence([
       Animated.timing(
         this.state.textOpacity,
@@ -77,14 +76,14 @@ class GameTwoLoading extends Component {
         {
           toValue: 0.2,
           easing: Easing.linear,
-          duration: LoadingTime/3
+          duration: LoadingTime/3,
         }
-      )
+      ),
     ]).start();
   }
 
 
-  render() {
+  render () {
 
     const loadingbar = {
       backgroundColor: 'deepskyblue',
@@ -102,7 +101,7 @@ class GameTwoLoading extends Component {
       <View>
         <View style={styles.background}>
           <Animated.View style={{opacity:this.state.textOpacity}}>
-            <Text style={{...text}}>LOADING</Text>
+            <Text style={{...text}}>{'LOADING'}</Text>
           </Animated.View>
           <Animated.View style ={{...loadingbar}}>
           </Animated.View>
@@ -113,21 +112,24 @@ class GameTwoLoading extends Component {
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={frogCharacter}
+              character={mammalCharacter}
               spriteAnimationKey={'celebrate'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={frogCharacter}
+              character={mammalCharacter}
               spriteAnimationKey={'disgust'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
-              character={frogCharacter}
+              character={mammalCharacter}
               spriteAnimationKey={'eat'}
-              fps={10}/>
+              fps={10}
+            />
           </View>
         </View>
         <View>
@@ -156,5 +158,9 @@ const styles = StyleSheet.create({
   },
   
 });
+
+GameTwoLoading.propTypes = {
+  navigator: React.PropTypes.object,
+};
 
 export default GameTwoLoading;
