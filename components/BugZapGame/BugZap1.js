@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -13,6 +12,7 @@ import frogCharacter from "../../sprites/frog/frogCharacter";
 import bugCharacter from "../../sprites/bug/bugCharacter";
 import signCharacter from "../../sprites/sign/signCharacter";
 import AnimatedSprite from "../animatedSprite";
+import styles from "./BugZapStyles";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -118,7 +118,6 @@ class BugZap1 extends React.Component {
 
   // load bug tags with already caught pretty bugs
   createBugTags (numBugTags) {
-    console.log('createBugTags');
     let spacing = 90;
     if (numBugTags > 7) {
       spacing = SCREEN_WIDTH/numBugTags - 20;
@@ -195,7 +194,7 @@ class BugZap1 extends React.Component {
   }
 
   // switch to idle bug character and pause tweening
-  bugIdle() {
+  bugIdle () {
     this.bugSpriteAnimationKey = 'idle';
     this.bugTween = this.tweenIdle;
     this.setState({bugKey: Math.random()}); // so that component re-render is triggered
@@ -222,7 +221,7 @@ class BugZap1 extends React.Component {
   }
 
   // switch to flying bug character and start next tween
-  bugFlyAway(animation) {
+  bugFlyAway (animation) {
     this.bugSpriteAnimationKey = animation;
     this.bugTween = this.tweenAway;
 
@@ -294,7 +293,7 @@ class BugZap1 extends React.Component {
   }
 
   // indicates which frame the animation is currently on
-  getFrameIndex(animationKey, frameIndex) {
+  getFrameIndex (animationKey, frameIndex) {
     if (animationKey === 'eat' && frameIndex === 5 && this.bugSpriteAnimationKey != 'prettyIdle') {
       this.bugSplat(); // when tongue has reached bug
     }
@@ -309,7 +308,7 @@ class BugZap1 extends React.Component {
       if (this.bugSpriteAnimationKey != 'prettyIdle') {
        this.frogCelebrate();
       }
-      else{ // if it's a prettybug
+      else { // if it's a prettybug
         this.bugFlyAway('prettyFly');
         this.frogDisgust();
       }
@@ -321,8 +320,8 @@ class BugZap1 extends React.Component {
     }
   }
 
-  bugSplat() {
-    this.loop = false // so splat animation doesn't loop
+  bugSplat () {
+    this.loop = false; // so splat animation doesn't loop
     this.bugSpriteAnimationKey = 'splat';
     this.setState({bugKey: Math.random()}); // so component re-render is triggered
   }
@@ -385,7 +384,7 @@ class BugZap1 extends React.Component {
       }
     }
 
-    this.props.navigator.push({
+    this.props.navigator.replace({
       id: 'NextTrial',
       getId: this.getCurrId,
       bugTags: this.state.bugTags.length,
@@ -458,14 +457,14 @@ class BugZap1 extends React.Component {
             }}
             character={frogCharacter}
             spriteAnimationKey={this.frogSpriteAnimationKey}
-            onPress={(frog) => {this.frogTap(frog)}}
+            onPress={(frog) => {this.frogTap(frog);}}
             hitSlop={{top: -175 *this.props.scale.height,
               left: -55 * this.props.scale.width,
               bottom: -10 * this.props.scale.height,
               right: -65 * this.props.scale.width}}
-            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey)}}
+            onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
             getFrameIndex={(animationKey, frameIndex) => {
-              this.getFrameIndex(animationKey, frameIndex)
+              this.getFrameIndex(animationKey, frameIndex);
             }}
           />
         </Image>
@@ -479,30 +478,5 @@ BugZap1.propTypes = {
   navigator: React.PropTypes.object,
   scale: React.PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-    flexDirection: 'row',
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  backgroundImage: {
-    flex: 1,
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-  },
-});
 
 export default BugZap1;

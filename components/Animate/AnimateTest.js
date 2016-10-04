@@ -57,7 +57,7 @@ class AnimateTest extends React.Component {
       xTo: [700],
       yTo: [10],
       duration: 2000,
-      loop: true,
+      loop: false,
     };
   }
 

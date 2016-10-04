@@ -128,7 +128,7 @@ class AnimatedSprite extends React.Component {
     }
 
     // default to idle animation if no spriteAnimationKey prop provided
-    if (this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
+    if(this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
       this.startDefaultAnimation();
     }
     else {

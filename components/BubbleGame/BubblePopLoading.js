@@ -1,11 +1,9 @@
-"use strict"
+"use strict";
 
 import React, { Component } from 'react';
 import {
   Animated,
-  AppRegistry,
   Image,
-  Navigator,
   StyleSheet,
   Text,
   View,
@@ -25,17 +23,16 @@ const LoadingTime = 1500;
 
 class BubblePopLoading extends Component {
 
-    constructor(props) {
+    constructor (props) {
     super(props);
 
     this.state = {
       bar: new Animated.Value(0),
       textOpacity: new Animated.Value(1.0),
-    }
+    };
   }
 
   componentWillMount () {
-
   }
 
   componentDidMount () {
@@ -48,7 +45,7 @@ class BubblePopLoading extends Component {
     this.toggleOpacity();
   }
 
-  barLoad() {
+  barLoad () {
     Animated.timing(
       this.state.bar,
       {
@@ -59,7 +56,7 @@ class BubblePopLoading extends Component {
     ).start();
   }
 
-  toggleOpacity() {
+  toggleOpacity () {
     Animated.sequence([
       Animated.timing(
         this.state.textOpacity,
@@ -82,14 +79,14 @@ class BubblePopLoading extends Component {
         {
           toValue: 0.2,
           easing: Easing.linear,
-          duration: LoadingTime/3
+          duration: LoadingTime/3,
         }
-      )
+      ),
     ]).start();
   }
 
 
-  render() {
+  render () {
 
     const loadingbar = {
       backgroundColor: 'deepskyblue',
@@ -107,7 +104,7 @@ class BubblePopLoading extends Component {
       <View>
         <View style={styles.background}>
           <Animated.View style={{opacity:this.state.textOpacity}}>
-            <Text style={{...text}}>LOADING</Text>
+            <Text style={{...text}}>{'LOADING'}</Text>
           </Animated.View>
           <Animated.View style ={{...loadingbar}}>
           </Animated.View>
@@ -119,43 +116,50 @@ class BubblePopLoading extends Component {
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'default'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'pop'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'canBubble'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'appleBubble'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'grassBubble'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={bubbleCharacter}
               spriteAnimationKey={'bugBubble'}
-              fps={10}/>
+              fps={10}
+            />
             <AnimatedSprite
               coordinates={{top:250,left:550}}
               size={{width:100,height:100}}
               character={omnivoreCharacter}
               spriteAnimationKey={'eat'}
-              fps={10}/>
+              fps={10}
+            />
           </View>
         </View>
         <View>
@@ -182,5 +186,9 @@ const styles = StyleSheet.create({
     width: 1,
   },
 });
+
+BubblePopLoading.propTypes = {
+  navigator: React.PropTypes.object,
+};
 
 export default BubblePopLoading;

@@ -154,7 +154,7 @@ class AnimatedSprite extends React.Component {
 
   // notify parent that tween has ended
   tweenHasEnded (ended, stopTween) {
-    console.warn('tweenHasEnded HAPPY GO LUCKY');
+    // console.warn('tweenHasEnded HAPPY GO LUCKY');
     // if (this.props.onTweenFinish) {
     //   this.props.onTweenFinish(this.props.spriteKey, stopTween);
     // }
@@ -162,7 +162,7 @@ class AnimatedSprite extends React.Component {
 
   // pass up the coordinates of character when stopped
   sendStopValues (stopValues) {
-    console.warn('sendStopValues HAPPY GO LUCKY');
+    // console.warn('sendStopValues HAPPY GO LUCKY');
     // if (this.props.stopTweenOnTouch) {
     //   this.props.stopTweenOnTouch(stopValues);
     // }
