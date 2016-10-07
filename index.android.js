@@ -61,10 +61,6 @@ AnimatedTest
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
-    } else if (route.id === 'GameOverPage') {
-      return <GameOverPage navigator={navigator} route={route}/>;
-    } else if (route.id === 'NextGamePage') {
-      return <NextGamePage navigator={navigator} route={route}/>;
     } else if (route.id === 'BugZapLoading') {
       return <Scene><BugZapLoading navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap') {
@@ -86,7 +82,7 @@ AnimatedTest
     } else if (route.id === 'GameTwo3') {
       return <GameTwoLevel3 navigator={navigator} route={route}/>;
     } else if (route.id === 'GameThree') {
-      return <GameThree navigator={navigator} route={route}/>;
+      return <Scene><GameThree navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'GameThree1') {
       return <GameThree1 navigator={navigator} route={route}/>;
     } else if (route.id === 'GameThree2') {

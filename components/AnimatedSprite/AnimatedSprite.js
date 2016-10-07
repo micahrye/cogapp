@@ -31,7 +31,7 @@ class AnimatedSprite extends React.Component {
     this.panResponder = {};
     this.charactertyles =  {};
     this.animationKey = this.props.spriteAnimationKey;
-    this.numFrames = this.character[this.animationKey].length-1;
+    // this.numFrames = this.character[this.animationKey].length-1;
     this.frameIndex = 0;
     this.defaultAnimationInterval = undefined;
     this.animationKeyInterval = undefined;
@@ -136,9 +136,10 @@ class AnimatedSprite extends React.Component {
   }
 
   startAnimation () {
+    console.warn(this.props.animationFrameIndex);
     // NOTE: maybe make separate case for when idle animation is only one frame
     //this.animationKey = 'default';
-    this.numFrames = this.character[this.animationKey].length-1;
+    // this.numFrames = this.character[this.animationKey].length-1;
     this.frameIndex = -1;
     clearInterval(this.defaultAnimationInterval);
     this.defaultAnimationInterval = setInterval(()=>{

@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import {
   Animated,
   Easing,
+  Dimensions,
 } from 'react-native';
 
+
+const Window = Dimensions.get('window');
 
 class Tweener extends React.Component {
 
@@ -172,9 +175,122 @@ class Tweener extends React.Component {
       }
       move(options, state);
     });
-  };
+ }
 
- pulse(options, state) {
+ getMoveSequence (options, state){
+   let numTransitions = (Math.abs(options.endXY[0] - options.startXY[0]))/100;
+   let sequence = [];
+   for (let i = 0; i < numTransitions - 1; i++) {
+     sequence.push(
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: -10,
+           easing: Easing.linear,
+           duration: (options.duration/numTransitions)/2,
+         }
+       ),
+       Animated.timing(
+         state.rotateZ,
+         {
+           toValue: 10,
+           easing: Easing.linear,
+           duration: (options.duration/numTransitions)/2,
+         }
+       ),
+     );
+   }
+   sequence.push(
+     Animated.timing(
+       state.rotateZ,
+       {
+         toValue: 0,
+         easing: Easing.linear,
+         duration: (options.duration/numTransitions)/2,
+       }
+     ),
+   );
+   return sequence;
+ }
+
+ goatCelebrate (options, state) {
+   state.left.setValue(options.startXY[0]);
+   state.top.setValue(options.startXY[1]);
+   Animated.sequence(this.getCelebrateSequence(options, state)).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true, "celebrate");
+        return;
+       }
+    });
+ }
+
+getCelebrateSequence (options, state) {
+  let sequence = [];
+  let toValuesZ = [50, 100, 150, 200];
+  let toValuesLeft = [Window.width - 250, options.startXY[0], Window.width - 425, options.startXY[0]];
+  let toValuesTop = [350, 250, 350, options.startXY[1]];
+
+  for (let i = 0; i < 4; i++) {
+    sequence.push(
+      Animated.parallel([
+        Animated.timing(
+          state.rotateZ,
+          {
+            toValue: toValuesZ[i],
+            duration: 200,
+          }
+        ),
+        Animated.timing(
+          state.left,
+          {
+            toValue: toValuesLeft[i],
+            easing: Easing.linear,
+            duration: 200,
+          }
+        ),
+        Animated.timing(
+          state.top,
+          {
+            toValue: toValuesTop[i],
+            easing: Easing.exp,
+            duration: 200,
+          }
+        ),
+      ]),
+    );
+  }
+  return sequence;
+}
+
+ jumpCelebrate (options, state) {
+   state.left.setValue(options.startXY[0]);
+   state.top.setValue(options.startXY[1]);
+   Animated.sequence([
+     Animated.timing(
+       state.top,
+       {
+         toValue: options.endY,
+         duration: options.duration/2,
+       }
+     ),
+     Animated.timing(
+       state.top,
+       {
+         toValue: options.startXY[1],
+         duration: options.duration/2,
+       }
+     ),
+   ]).start(() => {
+       if (options.loop === false) {
+        this.props.onTweenFinish(true, "celebrate");
+        return;
+       }
+     }
+   );
+ }
+
+
+ pulse (options, state) {
    if (this.props.stop) {
      let stopValues = [];
      state.scale.stopAnimation((value) => stopValues.push(value));
@@ -414,7 +530,7 @@ class Tweener extends React.Component {
         Animated.timing(
           state.left,
           {
-            toValue: options.endXY[0]/2,
+            toValue: options.middleX[0],
             easing: Easing.sin,
             duration: options.duration/2,
           }

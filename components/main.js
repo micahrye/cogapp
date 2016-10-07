@@ -74,12 +74,12 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity >
+          <TouchableOpacity onPress={ () => { this.goToGame('BubblePop')} }>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BubblePop'}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity >
+          <TouchableOpacity onPress={ () => { this.goToGame('BugZap')} }>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BugZap'}</Text>
             </View>

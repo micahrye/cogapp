@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-    Animated,
-    AppRegistry,
-    Easing,
     StyleSheet,
     Text,
     View,
@@ -13,7 +10,6 @@ import {
 import AnimatedSprite from "../animatedSprite";
 import Tile from "./Tile";
 import monkeyCharacter from "../../sprites/monkey/monkeyCharacter";
-import platformCharacter from "../../sprites/platform/platformCharacter";
 import birdCharacter from "../../sprites/bird/birdCharacter";
 
 
@@ -23,13 +19,22 @@ let SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 class GameThree extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
-    }
+      tweenStart: 'touch',
+      tileKey: Math.random(),
+    };
   }
 
-  componentDidMount() {
+  componentWillMount () {
+    styles.container.height = styles.container.height * this.props.scale.height;
+    styles.container.width = styles.container.width * this.props.scale.width;
+    styles.backgroundImage.width = styles.backgroundImage.width * this.props.scale.width;
+    styles.backgroundImage.width = styles.backgroundImage.width * this.props.scale.width;
+  }
+
+  componentDidMount () {
   }
 
   buttonPress = () => {
@@ -38,38 +43,56 @@ class GameThree extends React.Component {
       });
   }
 
+  onTweenFinish = () => {
+    this.setState({
+      tileKey: Math.random(),
+      tweenStart: 'auto',
+    });
+  }
 
 
-    render(){
+
+    render () {
         const tweenSettings = {
             tweenType: "hop-forward",
-                startXY: [10, 150],
-                endXY:[450],
-                yTo: [-100],
+                startXY: [150, 300],
+                middleX: [573 * this.props.scale.width],
+                endXY:[850],
+                yTo:[50],
                 duration: 3000,
                 loop: false,
-        }
-        return(
+        };
+        return (
           <View style={styles.container}>
             <Image source={require('../../backgrounds/Game_3_Background_1280.png')} style={styles.backgroundImage}>
               <TouchableOpacity style={styles.button} onPress={this.buttonPress}>
-                  <Text>Go to Level 2</Text>
+                <Text>{'Go to Level 2'}</Text>
               </TouchableOpacity>
-              <AnimatedSprite coordinates={{top: 150, left: 10}}
-                  size={{width: 100, height: 120}}
-                  draggable={false}
-                  character={monkeyCharacter}
-                  tween={tweenSettings}
-                  tweenStart="auto"/>
+              <Tile
+                key={this.state.tileKey}
+                top={475 * this.props.scale.height}
+                left={575 * this.props.scale.width}
+                width={110 * this.props.scale.width}
+                height={25 * this.props.scale.height}
+                tweenStart={this.state.tweenStart}
+              />
+              <AnimatedSprite
+                coordinates={{top: 150, left: 10}}
+                size={{width: 100, height: 120}}
+                draggable={false}
+                character={monkeyCharacter}
+                tween={tweenSettings}
+                tweenStart='auto'
+                onTweenFinish={this.onTweenFinish}
+              />
               <AnimatedSprite coordinates={{top:180, left: 40}}
-                  size={{width: 120,height: 80}}
-                  draggable={false}
-                  character={birdCharacter}/>
-              <Tile top={200} left={250} width={220} height={50} />
+                size={{width: 120,height: 80}}
+                draggable={false}
+                character={birdCharacter}
+              />
             </Image>
           </View>
         );
-
     }
 }
 
@@ -84,13 +107,6 @@ const styles = StyleSheet.create({
         width: null,
         height: null,
     },
-    tile: {
-        height: 100,
-        width: 200,
-        borderWidth: 2,
-        top: (SCREEN_HEIGHT/2) - 50,
-        transform: [{rotateX: '10deg'}],
-    },
     button: {
         backgroundColor: '#4d94ff',
         borderRadius: 10,
@@ -102,4 +118,22 @@ const styles = StyleSheet.create({
     },
 });
 
+GameThree.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
+};
+
 export default GameThree;
+
+// <Tile top={300 * this.props.scale.height}
+//   left={350 * this.props.scale.width}
+//   width={110 * this.props.scale.width}
+//   height={25 * this.props.scale.height}
+// />
+
+// <Tile top={400 * this.props.scale.height}
+//   left={775 * this.props.scale.width}
+//   width={110 * this.props.scale.width}
+//   height={25 * this.props.scale.height}
+// />

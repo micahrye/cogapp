@@ -112,6 +112,7 @@ class AnimateTest extends React.Component {
     switch (key) {
       case 'goat': {
         const animationSeq = randomGoatAnimationSequece();
+        // console.warn(animationSeq);
         this.setState({goatAnimationIndex: animationSeq});
         break;
       }
