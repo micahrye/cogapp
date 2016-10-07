@@ -141,9 +141,6 @@ class Tweener extends React.Component {
   };
 
   move  (options, state) {
-
-
-
     state.left.setValue(options.startXY[0]);
     state.top.setValue(options.startXY[1]);
 
