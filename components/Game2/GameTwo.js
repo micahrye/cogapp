@@ -4,8 +4,6 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  Text,
-  TouchableOpacity,
 } from 'react-native';
 
 // imports
@@ -76,7 +74,7 @@ class GameTwo extends React.Component {
     tweenFall = function(dest){
       return (
         {
-         tweenType: "curve-spin-disappear",
+         tweenType: "curve-spin",
          startXY: [startLeft+32,endTopCan],
          endXY: dest,
          duration: 750,
@@ -340,11 +338,6 @@ class GameTwo extends React.Component {
 
   }
 
-  homeBtn = () => {
-    this.props.navigator.replace({
-      id: 'Main',
-    });
-  }
 
   render () {
     // simple bounce tween to let player know when they have pressed the lever
@@ -436,22 +429,11 @@ class GameTwo extends React.Component {
           onPress={this.onFoodPress}
           onTweenFinish={this.onTweenEndFood}
         />
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.button} onPress={this.homeBtn}>
-              <Text>{'Home'}</Text>
-          </TouchableOpacity>
-        </View>
         </Image>
       </View>
     );
   }
 }
-
-GameTwo.propTypes = {
-  route: React.PropTypes.object,
-  navigator: React.PropTypes.object,
-  scale: React.PropTypes.object,
-};
 
 const styles = StyleSheet.create({
   // styles for background png image/basic black backgroundColor
@@ -464,21 +446,6 @@ const styles = StyleSheet.create({
       flex: 1,
       width: null,
       height: null,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 10,
-    borderStyle: 'solid',
-    borderColor: '#ff00ff',
-  },
-  button: {
-    backgroundColor: '#4d94ff',
-    borderRadius: 10,
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
   },
 })
 

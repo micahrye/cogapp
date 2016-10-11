@@ -38,16 +38,12 @@ class AnimateTest extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      spriteAnimationKey: 'all',
-      spriteAnimationKeyIndex: 0,
-      characterKey: 0,
       goatAnimationIndex: [0],
       omnivoreAnimationIndex: [0],
       mammalAnimationIndex: [0],
       frogAnimationIndex: [0],
     };
     this.characterUIDs = {};
-    this.numberAnimatedCharacters = 4;
     this.animations = ['default', 'walk', 'eat', 'disgust'];
     this.setDefaultAnimationState = null;
 
@@ -168,11 +164,9 @@ class AnimateTest extends React.Component {
           onPressIn={() => this.handelPressIn()}
           onPressOut={() => this.handelPressOut()}
           animationFrameIndex={this.state.goatAnimationIndex}
-          spriteKey={5}
           loopAnimation={true}
           coordinates={{top: 300, left: 80 }}
           size={{ width: 300,height: 252 }}
-          spriteAnimationKey={this.state.spriteAnimationKey}
           onAnimationFinish={(animationKey) => {
             this.onAnimationFinish(animationKey);
           }}
@@ -186,11 +180,9 @@ class AnimateTest extends React.Component {
           characterUID={this.characterUIDs.omnivore}
           onPress={(uid) => this.handelOnPress(uid)}
           animationFrameIndex={this.state.omnivoreAnimationIndex}
-          spriteKey={5}
           loopAnimation={true}
           coordinates={{top: 300, left: 400 }}
           size={{ width: 300,height: 285 }}
-          spriteAnimationKey={this.state.spriteAnimationKey}
           onAnimationFinish={(animationKey) => {
             this.onAnimationFinish(animationKey);
           }}
@@ -204,14 +196,12 @@ class AnimateTest extends React.Component {
         characterUID={this.characterUIDs.dog}
         onPress={(uid) => this.handelOnPress(uid)}
         animationFrameIndex={this.state.mammalAnimationIndex}
-        spriteKey={5}
         loopAnimation={true}
         tweenOptions={this.tweenOptions}
         tweenStart={'auto'}
         stopAutoTweenOnPressIn={true}
         coordinates={{top: 300, left: 700 }}
         size={{ width: 174,height: 285 }}
-        spriteAnimationKey={this.state.spriteAnimationKey}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -224,11 +214,9 @@ class AnimateTest extends React.Component {
         character={lever}
         characterUID={randomstring({ length: 7 })}
         animationFrameIndex={[0]}
-        spriteKey={5}
         loopAnimation={true}
         coordinates={{top: 20, left: 0 }}
         size={{ width: 213,height: 189 }}
-        spriteAnimationKey={'all'}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -241,11 +229,9 @@ class AnimateTest extends React.Component {
         character={chute}
         characterUID={randomstring({ length: 7 })}
         animationFrameIndex={[0]}
-        spriteKey={5}
         loopAnimation={true}
         coordinates={{top: 120, left: 920 }}
         size={{ width: 344,height: 400 }}
-        spriteAnimationKey={'all'}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -259,11 +245,9 @@ class AnimateTest extends React.Component {
         characterUID={this.characterUIDs.frog}
         onPress={(uid) => this.handelOnPress(uid)}
         animationFrameIndex={this.state.frogAnimationIndex}
-        spriteKey={5}
         loopAnimation={true}
         coordinates={{top: 350, left: 900 }}
         size={{ width: 271,height: 300 }}
-        spriteAnimationKey={'all'}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}

@@ -53,9 +53,8 @@ const sineWave = {
         ]
       )]
     ).start(() => {
-      // callback called when animation finished
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
       } else {
         startTween(options, componentValues);
       }
@@ -82,7 +81,7 @@ const bounce = {
       }
     ).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       }
       startTween(options, componentValues);
@@ -121,7 +120,7 @@ const linearMove = {
       ),
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       }
       startTween(options, componentValues);
@@ -158,7 +157,7 @@ const pulse = {
       ),
     ]).start(() => {
       if (options.loop === false) {
-       onTweenFinish(true);
+       onTweenFinish();
      } else {
         startTween(options, componentValues);
       }
@@ -201,7 +200,7 @@ const wiggle = {
       ),
     ]).start(() => {
       if (options.loop === false) {
-       onTweenFinish(true);
+       onTweenFinish();
        return;
      } else {
         startTween(options, componentValues);
@@ -228,7 +227,7 @@ const bounceDrop = {
       }
     ).start(() => {
       if (options.loop === false) {
-       onTweenFinish(true);
+       onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -265,7 +264,7 @@ const zoom = {
       }
     ).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       }
       startTween(options, componentValues);
@@ -304,7 +303,7 @@ const hop = {
       ),
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -351,7 +350,7 @@ const tumbleOff = {
       )
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return
       } else {
         startTween(options, componentValues);
@@ -379,7 +378,7 @@ const spin = {
       }
     ).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -455,7 +454,7 @@ const hopForward = {
       ]),
     ]).start(() => {
         if (options.loop === false) {
-          onTweenFinish(true);
+          onTweenFinish();
           return;
         } else {
           startTween(options, componentValues);
@@ -492,7 +491,7 @@ const basicBack = {
       }
     ).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -557,7 +556,7 @@ const curveSpin = {
       ),
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -606,7 +605,7 @@ const curveSpin2 = {
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return;
       } else {
         startTween(options, componentValues);
@@ -663,7 +662,7 @@ const curveSpin3= {
       ]),
     ]).start(() => {
       if (options.loop === false) {
-        onTweenFinish(true);
+        onTweenFinish();
         return
       } else {
         startTween(options, componentValues);
@@ -681,7 +680,6 @@ const curveSpin3= {
 const curveFall = {
   name: 'curve-fall',
   start: function startTween (options, componentValues, onTweenFinish) {
-    curveFall(options, componentValues) {
       componentValues.left.setValue(options.startXY[0]);
       componentValues.top.setValue(options.startXY[1]);
       Animated.sequence([
@@ -705,7 +703,7 @@ const curveFall = {
         ]),
       ]).start(() => {
         if (options.loop === false) {
-          onTweenFinish(true);
+          onTweenFinish();
           return;
         } else {
           startTween(options, componentValues);

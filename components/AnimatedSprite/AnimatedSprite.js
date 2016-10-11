@@ -22,6 +22,7 @@ class AnimatedSprite extends React.Component {
       left: new Animated.Value(props.coordinates.left),
       width: props.size.width,
       height: props.size.height,
+      rotate: props.rotate,
       frameIndex: 0,
       tweener: [],
     };
@@ -30,7 +31,7 @@ class AnimatedSprite extends React.Component {
     this.characterStyles =  {};
     this.panResponder = {};
     this.charactertyles =  {};
-    this.animationKey = this.props.spriteAnimationKey;
+    this.animationKey = 'all';
     this.numFrames = this.character[this.animationKey].length-1;
     this.frameIndex = 0;
     this.defaultAnimationInterval = undefined;
@@ -136,8 +137,6 @@ class AnimatedSprite extends React.Component {
   }
 
   startAnimation () {
-    // NOTE: maybe make separate case for when idle animation is only one frame
-    //this.animationKey = 'default';
     this.numFrames = this.character[this.animationKey].length-1;
     this.frameIndex = -1;
     clearInterval(this.defaultAnimationInterval);
@@ -153,8 +152,11 @@ class AnimatedSprite extends React.Component {
   }
 
   // notify parent that tween has ended
-  tweenHasEnded (ended, stopTween) {
-    // console.warn('tweenHasEnded HAPPY GO LUCKY');
+  tweenHasEnded (characterUID) {
+    // console.warn(`tweenHasEnded HAPPY GO LUCKY ${characterUID}`);
+    if (this.props.onTweenFinish) {
+      this.props.onTweenFinish(characterUID);
+    }
     // if (this.props.onTweenFinish) {
     //   this.props.onTweenFinish(this.props.spriteKey, stopTween);
     // }
@@ -162,7 +164,7 @@ class AnimatedSprite extends React.Component {
 
   // pass up the coordinates of character when stopped
   sendStopValues (stopValues) {
-    // console.warn('sendStopValues HAPPY GO LUCKY');
+    // console.warn('SEND STOP VALUES')
     // if (this.props.stopTweenOnTouch) {
     //   this.props.stopTweenOnTouch(stopValues);
     // }
@@ -176,7 +178,7 @@ class AnimatedSprite extends React.Component {
     const tweenType = this.props.tweenOptions.tweenType;
     Tweens[tweenType].start(tweenOptions,
       this.tweenablValues,
-      (stopValues) => this.sendStopValues(stopValues),
+      () => this.tweenHasEnded(this.props.characterUID),
     );
   }
 
@@ -275,7 +277,7 @@ class AnimatedSprite extends React.Component {
             style={{
               width: this.state.width,
               height: this.state.height,
-              transform: this.state.rotateY,
+              transform: this.state.rotate,
             }}
           />
         </TouchableOpacity>
@@ -290,8 +292,8 @@ AnimatedSprite.propTypes = {
   coordinates: React.PropTypes.object.isRequired,
   size: React.PropTypes.object.isRequired,
   character: React.PropTypes.object.isRequired,
-  spriteAnimationKey: React.PropTypes.string.isRequired,
   animationFrameIndex: React.PropTypes.array.isRequired,
+  rotate: React.PropTypes.array,
   characterUID: React.PropTypes.string,
   draggable: React.PropTypes.bool,
   onPress: React.PropTypes.func,
@@ -312,6 +314,7 @@ AnimatedSprite.propTypes = {
 AnimatedSprite.defaultProps = {
   draggable: false,
   characterUID: randomstring({ length: 7 }),
+  rotate: [{rotateY: '0deg'}],
 };
 
 
