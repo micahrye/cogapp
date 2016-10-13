@@ -91,9 +91,14 @@ class AnimatedSprite extends React.Component {
       this.startTween();
     }
   }
+  componentWillReceiveProps (nextProps) {
+    if (this.props.animationFrameIndex !== nextProps.animationFrameIndex) {
+      this.startAnimation();
+    }
+  }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return (shallowCompare(this, nextProps, nextState));
+    return shallowCompare(this, nextProps, nextState);
   }
 
   componentWillUnmount () {
@@ -145,6 +150,12 @@ class AnimatedSprite extends React.Component {
       const animationLength = this.props.animationFrameIndex.length-1;
       if (this.frameIndex > animationLength) {
         this.frameIndex = 0;
+        if (this.props.loopAnimation) {
+            this.frameIndex = 0;
+        } else {
+          clearInterval(this.defaultAnimationInterval);
+          this.frameIndex = 0;
+        }
       }
       const index = this.props.animationFrameIndex[this.frameIndex];
       this.setState({ frameIndex: index });
@@ -157,20 +168,6 @@ class AnimatedSprite extends React.Component {
     if (this.props.onTweenFinish) {
       this.props.onTweenFinish(characterUID);
     }
-    // if (this.props.onTweenFinish) {
-    //   this.props.onTweenFinish(this.props.spriteKey, stopTween);
-    // }
-  }
-
-  // pass up the coordinates of character when stopped
-  sendStopValues (stopValues) {
-    // console.warn('SEND STOP VALUES')
-    // if (this.props.stopTweenOnTouch) {
-    //   this.props.stopTweenOnTouch(stopValues);
-    // }
-    // else if (this.props.stopTweenOnPressIn) {
-    //   this.props.stopTweenOnPressIn(stopValues);
-    // }
   }
 
   startTween () {
@@ -188,7 +185,7 @@ class AnimatedSprite extends React.Component {
       this.props.onPress(this.props.characterUID);
     }
     if (this.props.tweenStart === "touch") {
-      this.startTween2();
+      this.startTween();
     }
 
     // if (this.props.onPress) {
@@ -217,6 +214,10 @@ class AnimatedSprite extends React.Component {
     // }
   }
 
+  stoppedTween (stopValues) {
+    this.props.onTweenStopped(stopValues);
+  }
+
   handlePressIn (evt) {
     evt.preventDefault();
     if (this.props.onPressIn) {
@@ -226,18 +227,8 @@ class AnimatedSprite extends React.Component {
     if (this.props.stopAutoTweenOnPressIn) {
       const tweenType = this.props.tweenOptions.tweenType;
       Tweens[tweenType].stop(this.tweenablValues,
-        (ended) => this.tweenHasEnded(ended, this.stopTween),
-      );
+        (stopValues) => this.stoppedTween(stopValues));
     }
-
-    // if (this.props.onPressIn) {
-    //   this.props.onPressIn(this.props.spriteKey);
-    // }
-
-    // if (this.props.stopTweenOnPressIn) {
-    //   this.stopTween = true;
-    //   this.configureTween();
-    // }
   }
 
   handlePressOut (evt) {
@@ -250,10 +241,14 @@ class AnimatedSprite extends React.Component {
   getStyle () {
 
     return (
+      // TODO: this.props.style.opacity part of hack to what may be a
+      // RN bug associated with premiture stopping of Tween and removing
+      // The related component
       {
         top: this.state.top,
         left: this.state.left,
         position: 'absolute',
+        opacity: this.props.style ? this.props.style.opacity : 1,
       }
     );
 
@@ -299,7 +294,6 @@ AnimatedSprite.propTypes = {
   onPress: React.PropTypes.func,
   onPressIn: React.PropTypes.func,
   onPressOut: React.PropTypes.func,
-  animationKey: React.PropTypes.string,
   loopAnimation: React.PropTypes.bool,
   timeSinceMounted: React.PropTypes.func,
   currentLocation: React.PropTypes.func,
@@ -309,6 +303,8 @@ AnimatedSprite.propTypes = {
   tweenOptions: React.PropTypes.object,
   // note that stopTweenOnPressIn
   stopAutoTweenOnPressIn: React.PropTypes.bool,
+  onTweenStopped: React.PropTypes.func,
+  onTweenFinish: React.PropTypes.func,
 };
 
 AnimatedSprite.defaultProps = {

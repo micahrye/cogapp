@@ -54,6 +54,7 @@ const sineWave = {
       )]
     ).start(() => {
       if (options.loop === false) {
+        // TODO: should pass end coordinates to onTweenFinish
         onTweenFinish();
       } else {
         startTween(options, componentValues);
@@ -61,9 +62,18 @@ const sineWave = {
     });
   },
   stop: function stop (componentValues, sendStopValues) {
-    const stopValues = [];
-    componentValues.left.stopAnimation((value) => stopValues.push(value));
-    componentValues.top.stopAnimation((value) => stopValues.push(value));
+    // TODO: change stopVlaues from [] to {width: X, height: Y}
+    let stopValues = [];
+    // BUG: if stopping tween prior to actual finish and then removing
+    // component RN wil not recognize first press event. WTF
+    // try {
+    //   componentValues.left.stopAnimation((value) => stopValues.push(value));
+    //   componentValues.top.stopAnimation((value) => stopValues.push(value));
+    // } catch (err) {
+    //   console.warn('FUCK YOU');
+    // }
+    stopValues.push(componentValues.left._value);
+    stopValues.push(componentValues.top._value);
     sendStopValues(stopValues);
   },
 };
