@@ -142,14 +142,7 @@ class AnimatedSprite extends React.Component {
   }
 
   startAnimation () {
-<<<<<<< HEAD
-    console.warn(this.props.animationFrameIndex);
-    // NOTE: maybe make separate case for when idle animation is only one frame
-    //this.animationKey = 'default';
-    // this.numFrames = this.character[this.animationKey].length-1;
-=======
     this.numFrames = this.character[this.animationKey].length-1;
->>>>>>> master
     this.frameIndex = -1;
     clearInterval(this.defaultAnimationInterval);
     this.defaultAnimationInterval = setInterval(()=>{

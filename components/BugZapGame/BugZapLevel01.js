@@ -24,7 +24,63 @@ const NUM_TRIALS = 3;
 const BUG_IDLE_CATCH_DURATION = 1500;
 
 class BugZapLevel01 extends React.Component {
-};
+  constructor (props) {
+    super(props);
+    this.state = {
+      frogKey: 0,
+    };
+  }
+
+  componentDidMount () {
+    let frogDirection = Math.floor(Math.random() * 2);
+    console.warn(frogDirection);
+    // if (frogDirection === 0) {
+    //
+    // }
+
+    this.AFUNCTION;
+
+  }
+
+  AFUNCTION () {
+    this.setState({
+      frogKey: Math.random(),
+    });
+  }
+
+  getFrogStyle () {
+
+    console.warn('here');
+    return (
+      {
+        transform: [{perspective: 850}, {translateY: 100}],
+        opacity: .5,
+      }
+    );
+  }
+
+  render () {
+    return (
+      <Image
+        source={require('../../backgrounds/Game_1_Background_1280.png')}
+        style={styles.backgroundImage} >
+      <AnimatedSprite
+        style={this.getFrogStyle()}
+        key={this.state.frogKey}
+        coordinates={{top: 100 * this.props.scale.height,
+          left: 250 * this.props.scale.width}}
+        size={{
+            width: 542 * this.props.scale.width,
+            height: 600 * this.props.scale.height,
+        }}
+        character={frogCharacter}
+        animationFrameIndex={[0]}
+      />
+  </Image>
+
+  );
+  }
+}
 
 BugZapLevel01.propTypes = {
   route: React.PropTypes.object,

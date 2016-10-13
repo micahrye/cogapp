@@ -71,6 +71,12 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => { this.goToGame('BugZapLevel01'); }}>
+            <View style={styles.button}>
+              <Text style={styles.text}>{'Go To BugZap Level 01'}</Text>
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Two'}</Text>

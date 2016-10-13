@@ -39,6 +39,7 @@ import GameSix from './components/Game6/GameSix';
 import GameSixLoading from './components/Game6/GameSixLoading';
 import NextTrial from './components/NextTrial';
 import Scene from './components/Scene';
+import BugZapLevel01 from './components/BugZapGame/BugZapLevel01';
 
 
 class CogApp extends React.Component {
@@ -70,6 +71,8 @@ AnimatedTest
       return <NextGamePage navigator={navigator} route={route}/>;
     } else if (route.id === 'BugZapLoading') {
       return <Scene><BugZapLoading navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'BugZapLevel01') {
+      return <Scene><BugZapLevel01 navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap') {
       return <Scene><BugZap navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap1') {
