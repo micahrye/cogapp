@@ -220,8 +220,7 @@ class BubblePop extends React.Component {
         loop: false,
       };
       this.foodTween = this.initialTween;
-    }
-    else {
+    } else {
       this.fullTween = {
         tweenType: 'curve-spin',
         startXY: [this.stopValuesX + 50, this.stopValuesY + 50],

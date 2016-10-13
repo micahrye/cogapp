@@ -16,6 +16,7 @@ import Main from "./components/main";
 import AnimateTest from "./components/Animate/AnimateTest";
 import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
+import BubblePopLevel01 from './components/BubbleGame/BubblePopLevel01';
 import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
@@ -61,6 +62,8 @@ AnimatedTest
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'BubblePopLevel01') {
+      return <Scene><BubblePopLevel01 navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {
