@@ -6,7 +6,9 @@ const leverCharacter = {
   all:[
     require("./lever.png"),
   ],
-
+  default:[
+    require("./lever.png"),
+  ],
 };
 
 export default leverCharacter;

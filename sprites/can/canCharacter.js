@@ -2,7 +2,9 @@
 
 const canCharacter = {
   name:"can",
-
+  all: [
+    require("./can_blue.png"),
+  ],
   default:[
     require("./can.png"),
   ],

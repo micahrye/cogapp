@@ -1,7 +1,11 @@
-import React from 'react';
+"use strict";
+
+import React, { Component } from 'react';
 import {
+  Alert,
   Animated,
   PanResponder,
+  StyleSheet,
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -17,7 +21,6 @@ import Soundhandler from './Soundhandler';
   character: object, at least one array of images with key 'default'
   coordinates: object, top and left coordinates
   size: object, width and height measurments
-
 /*Optional:
 draggable: bool, whether object is draggable
 spriteAnimationKey: string, takes name of the key you want to use in character file
@@ -32,7 +35,6 @@ soundOnTouch: bool, play sound?
 rotate: array, takes a style transform value
 fps: object, how many frames per second to run the animations at
   if not included: defaults to 10
-
 /*Functions:
 onPress: passes up spriteKey
 onPressIn: triggered when user presses down, but before release, passes up a spriteKey
@@ -48,8 +50,8 @@ onAnimationFinish: is triggered when 'other' animation has finished,
 getFrameIndex: passes up spriteAnimationKey and current frame of animation
 */
 
-class AnimatedSprite extends React.Component {
-  constructor (props) {
+class AnimatedSprite extends React.Component{
+  constructor(props){
     super(props);
 
     this.state = {
@@ -92,32 +94,29 @@ class AnimatedSprite extends React.Component {
     if(this.props.draggable){
       // note that with PanResponder we setNativeProps for performance reasons,
       // as stated by FB.
-      this.panResponder = PanResponder.create({
+      this._panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant: (e, gestureState) => {
-          this.handlePanResponderGrant(e, gestureState);
-        },
+        onPanResponderGrant:(e, gestureState) => {
+          this._handlePanResponderGrant(e, gestureState)},
         onPanResponderMove: (e, gestureState) => {
-          this.handlePanResponderMove(e, gestureState);
-        },
+          this._handlePanResponderMove(e, gestureState)},
         onPanResponderRelease: (e, gestureState) => {
-          this.handlePanResponderEnd(e, gestureState);
-        },
-        onPanResponderTerminate: (e, gestureState) => {
-          this.handlePanResponderEnd(e, gestureState);
-        },
-      });
+          this._handlePanResponderEnd(e, gestureState)},
+        onPanResponderTerminate:
+          (e, gestureState) => {
+          this._handlePanResponderEnd(e, gestureState)},
+        });
     }
 
-    this.previousLeft = this.initialLeft;
-    this.previousTop = this.initialLeftop;
-    this.characterStyles = {
+    this._previousLeft =  this._initialLeft;
+    this._previousTop = this._initialLefTop;
+    this._characterStyles = {
       style: {
-        left: this.previousLeft,
-        top: this.previousTop,
-        width: this.state.width,
-        height: this.state.height,
+        left: this._previousLeft,
+        top: this._previousTop,
+        width: this.state._width,
+        height: this.state._height,
       },
     };
   }
@@ -131,13 +130,13 @@ class AnimatedSprite extends React.Component {
     if(this.props.spriteAnimationKey === 'default' || this.props.spriteAnimationKey === undefined){
       this.startDefaultAnimation();
     }
-    else {
+    else{
       this.startOtherAnimation(this.props.spriteAnimationKey);
     }
     // if this character setNativeProps
-    this.character && this.character.setNativeProps(this.characterStyles)
+    this.character && this.character.setNativeProps(this._characterStyles)
 
-    if (this.props.tweenStart == "auto" && this.props.tween != null) {
+    if(this.props.tweenStart == "auto" && this.props.tween != null){
       this.configureTween();
     }
 
@@ -209,34 +208,34 @@ class AnimatedSprite extends React.Component {
     this.character && this.character.setNativeProps(this._characterStyles);
   }
 
-  handleStartShouldSetPanResponder () {
+  _handleStartShouldSetPanResponder(e, gestureState) {
     // Should we become active when the user presses down on the circle?
     return true;
   }
 
-  handleMoveShouldSetPanResponder () {
+  _handleMoveShouldSetPanResponder(e, gestureState) {
     return true;
   }
 
-  // handlePanResponderGrant (e, gestureState) {
+  _handlePanResponderGrant(e, gestureState) {
     // do something on grant
-  // }
-
-  handlePanResponderMove (e, gestureState) {
-    this.characterStyles.style.left = this.previousLeft + gestureState.dx;
-    this.characterStyles.style.top = this.previousTop + gestureState.dy;
-    this.updateNativeStyles();
   }
 
-  handlePanResponderEnd (e, gestureState) {
-    // do anything you want onPanResponderRelease
-    this.previousLeft += gestureState.dx;
-    this.previousTop += gestureState.dy;
-    this.state.top = this.characterStyles.style.top;
-    this.state.left = this.characterStyles.style.left;
+  _handlePanResponderMove(e, gestureState) {
+    this._characterStyles.style.left = this._previousLeft + gestureState.dx;
+    this._characterStyles.style.top = this._previousTop + gestureState.dy;
+    this._updateNativeStyles();
+  }
 
-    if (this.props.draggedTo) {
-      this.props.draggedTo(this.characterStyles.style.left, this.characterStyles.style.top);
+  _handlePanResponderEnd(e, gestureState) {
+    // do anything you want onPanResponderRelease
+    this._previousLeft += gestureState.dx;
+    this._previousTop += gestureState.dy;
+    this.state._top = this._characterStyles.style.top;
+    this.state._left = this._characterStyles.style.left;
+
+    if(this.props.draggedTo){
+      this.props.draggedTo(this._characterStyles.style.left, this._characterStyles.style.top);
     }
   }
 
@@ -246,10 +245,11 @@ class AnimatedSprite extends React.Component {
       inputRange: [0,100],
       outputRange: ['0deg','180deg'],
     });
+
     return (
       {
-        top: this.state.top,
-        left: this.state.left,
+        top: this.state._top,
+        left: this.state._left,
         position: 'absolute',
         // borderWidth: 2,
         // borderColor: '#ff00ff',
@@ -258,31 +258,13 @@ class AnimatedSprite extends React.Component {
                     {scale: this.state._scale}],
       }
     );
-  }
 
-  startIdelAnimation () {
-    // NOTE: making assumption there is an idel animation. Maybe change if only
-    // one frame fro idel don't run interval.
-    this.animationKey = 'idel';
-    this.curType = 'default';
-    this.numFrames = this.animation[this.animationKey][this.curType].length-1;
-    this.frameIndex = -1;
-    clearInterval(this.idelAnimationInterval);
-    this.idelAnimationInterval = setInterval(() => {
-      this.frameIndex++;
-      if (this.frameIndex > this.numFrames) {
-        this.frameIndex = 0;
-      }
-      this.setState({ animate: true });
-    }, 100);
   }
 
   handlePress(evt){
     if(this.props.onPress){
       this.props.onPress(this.props.spriteKey);
     }
-    this.curType = this.props.changeTouchType(this.lastType);
-    this.lastType = this.curType;
 
     if(this.props.tweenStart === "touch"){
       this.configureTween();
@@ -297,9 +279,11 @@ class AnimatedSprite extends React.Component {
       this._Sound['playSound'](this.props.soundFile);
     }
 
-    if (this.props.timeSinceMounted) {
-      this.props.timeSinceMounted(this.props.spriteKey,
-        (Date.now() - this.renderTime) / 1000);
+    if(this.props.timeSinceMounted){
+      this.props.timeSinceMounted(
+        this.props.spriteKey,
+        (Date.now() - this.renderTime ) / 1000
+      );
     }
 
     if(this.props.draggable){
@@ -307,9 +291,9 @@ class AnimatedSprite extends React.Component {
     }
   }
 
-  configureTween () {
+  configureTween() {
     let stopTween = false;
-    if (this.stopTween) {
+    if(this.stopTween){
       stopTween = true;
     }
     const tweenType = this.props.tween.tweenType;
@@ -333,8 +317,7 @@ class AnimatedSprite extends React.Component {
         state={tweenState}
         stop={stopTween}
         onTweenFinish={(ended) => this.tweenHasEnded(ended, this.stopTween)} // whether it just ended, or was stopped
-        stopValues={(stopValues) => this.sendStopValues(stopValues)}
-      />
+        stopValues={(stopValues) => this.sendStopValues(stopValues)}/>
     );
 
     this.setState({

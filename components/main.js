@@ -33,30 +33,6 @@ class Main extends React.Component {
     this.props.navigator.replace({id: gameId});
   }
 
-  // goToBugZap = () => {
-  //     this.props.navigator.replace({id: 'BugZapLoading'});
-  // }
-  //
-  // goToGameTwo = () => {
-  //   this.props.navigator.replace({id: 'GameTwoLoading'});
-  // }
-  //
-  // goToGameThree = () => {
-  //   this.props.navigator.replace({id: 'GameThree'})
-  // }
-  //
-  // goToGameFour = () => {
-  //   this.props.navigator.replace({id: 'GameFourLoading'})
-  // }
-  //
-  // goToGameFive = () => {
-  //   this.props.navigator.replace({id: 'GameFive'})
-  // }
-  //
-  // goToGameSix = () => {
-  //   this.props.navigator.replace({id:'GameSixLoading'})
-  // }
-
   render () {
     //console.warn('HEY HEY HEY');
     // console.warn(SCREEN_HEIGHT);
@@ -68,23 +44,34 @@ class Main extends React.Component {
       <View style={styles.container}>
 
         <View style={styles.column}>
-          <TouchableOpacity onPress={ () => { this.goToGame('AnimatedTest')} }>
+
+          <TouchableOpacity onPress={() => { this.goToGame('AnimatedTest'); }}>
             <View style={styles.button}>
-              <Text style={styles.text}>Animate Test</Text>
+              <Text style={styles.text}>{'Animate Test'}</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={ () => { this.goToGame('BubblePop')} }>
+
+          <TouchableOpacity onPress={() => { this.goToGame('BubblePop'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BubblePop'}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={ () => { this.goToGame('BugZap')} }>
+
+
+          <TouchableOpacity onPress={() => { this.goToGame('BubblePopLevel01'); }}>
+            <View style={styles.button}>
+              <Text style={styles.text}>{'Go To BubblePop Level01'}</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => { this.goToGame('BugZap'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BugZap'}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity >
+
+          <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Two'}</Text>
             </View>
