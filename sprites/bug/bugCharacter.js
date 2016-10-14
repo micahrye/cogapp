@@ -3,6 +3,10 @@
 const bugCharacter = {
   name:"bug",
 
+  all: [
+    require("./bug_idle01.png"),
+  ],
+
   default:[
     require("./bug_fly03.png"),
     require("./bug_fly04.png"),

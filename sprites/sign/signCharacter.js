@@ -3,7 +3,7 @@
 const signCharacter = {
   name:"sign",
 
-  default:[
+  all:[
     require("./sign.png"),
   ],
 
