@@ -60,16 +60,19 @@ class AnimateTest extends React.Component {
   componentWillMount () {
     // Cycle through all frames of each character so that they
     // are in memory and we do not get flashing behavior.
-    this.setState({goatAnimationIndex: [0,1,2,3,4,5,6,7]});
-    this.setState({omnivoreAnimationIndex: [0,1,2,3,4,5,6,7]});
-    this.setState({mammalAnimationIndex: [0,1,2,3,4,5,6]});
-    this.setState({frogAnimationIndex: [0,1,2,3,4,5]});
-    // reset characters to default state
+    this.setState({
+      omnivoreAnimationIndex: [0,1,2,3,4,5,6,7],
+      goatAnimationIndex: [0,1,2,3,4,5,6,7],
+      mammalAnimationIndex: [0,1,2,3,4,5,6],
+      frogAnimationIndex: [0,1,2,3,4,5],
+    });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
-      this.setState({goatAnimationIndex: [0]});
-      this.setState({omnivoreAnimationIndex: [0]});
-      this.setState({mammalAnimationIndex: [0]});
-      this.setState({frogAnimationIndex: [0]});
+      this.setState({
+        omnivoreAnimationIndex: [0],
+        goatAnimationIndex: [0],
+        mammalAnimationIndex: [0],
+        frogAnimationIndex: [0],
+      });
     }, 1500);
 
     this.characterUIDs = {
