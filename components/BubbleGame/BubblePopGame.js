@@ -44,7 +44,7 @@ class BubblePopGame extends React.Component {
     this.animations = ['eat', 'bubble', 'bubbleCan', 'bubbleBug', 'bubbleGrass'];
     this.setDefaultAnimationState;
     this.bubbleFountainInterval;
-    this.targetBubble = {active: false, uid: '', name: ''};
+    this.targetBubble = {active: false, uid: '', name: '', stopTweenOnPress: true};
     this.food = {active: false, uid: '', name: ''};
     FOUTAIN_LOCATION.top = SCREEN_HEIGHT - (FOUTAIN_SIZE.height + OFFSET);
     FOUTAIN_LOCATION.left = (SCREEN_WIDTH/2) - (FOUTAIN_SIZE.width/2);
@@ -207,6 +207,7 @@ class BubblePopGame extends React.Component {
     this.food.size = {width: 109, height: 116};
     this.setState({showFood: true});
 
+    clearInterval(this.eatInterval)
     this.eatInterval = setInterval(() => {
       this.setState({
         omnivoreAnimationIndex: [0,4,0,5],
@@ -222,6 +223,12 @@ class BubblePopGame extends React.Component {
   }
 
   popBubble (stopValues) {
+    // NOTE: b/c of bug and use of opacity it is possible to pop the transparent
+    // bubbble, since this should not happen we check if targetBubble.opacity == 0
+    // and ignore.
+    if (!this.targetBubble.opacity) {
+      return;
+    }
     const stopValueX = stopValues[0];
     const stopValueY = stopValues[1];
     // TODO: opacity part of hack to what may be a
@@ -315,7 +322,7 @@ class BubblePopGame extends React.Component {
                 onTweenFinish={(characterUID) => this.targetBubbleTweenFinish(characterUID)}
                 coordinates={this.targetBubble.coordinates}
                 size={this.targetBubble.size}
-                stopAutoTweenOnPressIn={true}
+                stopAutoTweenOnPressIn={this.targetBubble.stopTweenOnPress}
                 onTweenStopped={(stopValues) => this.popBubble(stopValues)}
               />
             : null}
