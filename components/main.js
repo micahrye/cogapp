@@ -57,7 +57,7 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => { this.goToGame('BubblePopLevel01'); }}>
+          <TouchableOpacity onPress={() => { this.goToGame('BubblePopGame'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BubblePop Level01'}</Text>
             </View>
@@ -84,6 +84,12 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
         */}
+        <TouchableOpacity onPress={() => { this.goToGame('MatchByColorGameLevel01'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'Match By Color'}</Text>
+          </View>
+        </TouchableOpacity>
+
           <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Four'}</Text>

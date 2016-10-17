@@ -16,7 +16,7 @@ import Main from "./components/main";
 import AnimateTest from "./components/Animate/AnimateTest";
 import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
-import BubblePopLevel01 from './components/BubbleGame/BubblePopLevel01';
+import BubblePopGame from './components/BubbleGame/BubblePopGame';
 import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
@@ -27,6 +27,7 @@ import GameTwoLoading from './components/Game2/Game2Loading';
 import GameTwoLevel1 from './components/Game2/GameTwo1';
 import GameTwoLevel2 from './components/Game2/GameTwo2';
 import GameTwoLevel3 from './components/Game2/GameTwo3';
+import MatchByColorGameLevel01 from './components/Game2/MatchByColorGameLevel01';
 import GameThree from './components/Game3/GameThree';
 import GameThree1 from './components/Game3/GameThree1';
 import GameThreeLevel2 from './components/Game3/GameThree2';
@@ -62,8 +63,8 @@ AnimatedTest
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
-    } else if (route.id === 'BubblePopLevel01') {
-      return <Scene><BubblePopLevel01 navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'BubblePopGame') {
+      return <Scene><BubblePopGame navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {
@@ -88,7 +89,10 @@ AnimatedTest
       return <GameTwoLevel2 navigator={navigator} route={route}/>;
     } else if (route.id === 'GameTwo3') {
       return <GameTwoLevel3 navigator={navigator} route={route}/>;
-    } else if (route.id === 'GameThree') {
+    } else if (route.id === 'MatchByColorGameLevel01') {
+      return <MatchByColorGameLevel01 navigator={navigator} route={route}/>;
+    }
+     else if (route.id === 'GameThree') {
       return <GameThree navigator={navigator} route={route}/>;
     } else if (route.id === 'GameThree1') {
       return <GameThree1 navigator={navigator} route={route}/>;

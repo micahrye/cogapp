@@ -28,7 +28,7 @@ const MAX_NUMBER_BUBBLES = 15;
 const FOUTAIN_LOCATION = {top: 0, left: 0};
 const FOUTAIN_SIZE = { width: 270, height: 258 };
 
-class BubblePopLevel01 extends React.Component {
+class BubblePopGame extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -51,6 +51,12 @@ class BubblePopLevel01 extends React.Component {
   }
 
   componentWillMount () {
+    this.characterUIDs = {
+      bubble: randomstring({ length: 7 }),
+      omnivore: randomstring({ length: 7 }),
+      lever: randomstring({ length: 7 }),
+      fountain: randomstring({ length: 7 }),
+    };
     this.setState({
       bubbleAnimationIndex: [0,1,2,3,4,5,6,7,8,9],
       omnivoreAnimationIndex: [0,1,2,3,4,5,6,7],
@@ -64,13 +70,6 @@ class BubblePopLevel01 extends React.Component {
       });
       this.setState({});
     }, 1500);
-
-    this.characterUIDs = {
-      bubble: randomstring({ length: 7 }),
-      omnivore: randomstring({ length: 7 }),
-      lever: randomstring({ length: 7 }),
-      fountain: randomstring({ length: 7 }),
-    };
   }
 
   componentDidMount () {
@@ -356,13 +355,13 @@ class BubblePopLevel01 extends React.Component {
   }
 }
 
-BubblePopLevel01.propTypes = {
+BubblePopGame.propTypes = {
   route: React.PropTypes.object,
   navigator: React.PropTypes.object,
   scale: React.PropTypes.object,
 };
 
-reactMixin.onClass(BubblePopLevel01, TimerMixin);
+reactMixin.onClass(BubblePopGame, TimerMixin);
 
 const styles = StyleSheet.create({
   topLevel :{
@@ -403,9 +402,9 @@ const styles = StyleSheet.create({
   },
 });
 
-BubblePopLevel01.propTypes = {
+BubblePopGame.propTypes = {
   route: React.PropTypes.object,
   navigator: React.PropTypes.object,
 };
 
-export default BubblePopLevel01;
+export default BubblePopGame;
