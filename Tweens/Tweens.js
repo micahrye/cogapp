@@ -57,7 +57,7 @@ const sineWave = {
         // TODO: should pass end coordinates to onTweenFinish
         onTweenFinish();
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -81,7 +81,8 @@ const sineWave = {
 const bounce = {
   name: 'bounce',
   start: function startTween (options, componentValues, onTweenFinish) {
-    componentValues.scale.setValue(0.9);
+    componentValues.scale.setValue(0.29);
+    console.warn('start BOUNCE');
     Animated.spring(
     componentValues.scale,
       {
@@ -94,7 +95,7 @@ const bounce = {
         onTweenFinish();
         return;
       }
-      startTween(options, componentValues);
+      startTween(options, componentValues, onTweenFinish);
     });
   },
   stop: function stop (componentValues, sendStopValues) {
@@ -133,7 +134,7 @@ const linearMove = {
         onTweenFinish();
         return;
       }
-      startTween(options, componentValues);
+      startTween(options, componentValues, onTweenFinish);
     });
   },
   stop: function stop (componentValues, sendStopValues) {
@@ -169,7 +170,7 @@ const pulse = {
       if (options.loop === false) {
        onTweenFinish();
      } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -213,7 +214,7 @@ const wiggle = {
        onTweenFinish();
        return;
      } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -240,7 +241,7 @@ const bounceDrop = {
        onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -277,7 +278,7 @@ const zoom = {
         onTweenFinish();
         return;
       }
-      startTween(options, componentValues);
+      startTween(options, componentValues, onTweenFinish);
     });
   },
   stop: function stop (componentValues, sendStopValues) {
@@ -316,7 +317,7 @@ const hop = {
         onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -363,7 +364,7 @@ const tumbleOff = {
         onTweenFinish();
         return
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -391,7 +392,7 @@ const spin = {
         onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -467,7 +468,7 @@ const hopForward = {
           onTweenFinish();
           return;
         } else {
-          startTween(options, componentValues);
+          startTween(options, componentValues, onTweenFinish);
         }
       });
   },
@@ -504,7 +505,7 @@ const basicBack = {
         onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -569,7 +570,7 @@ const curveSpin = {
         onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -618,7 +619,7 @@ const curveSpin2 = {
         onTweenFinish();
         return;
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -675,7 +676,7 @@ const curveSpin3= {
         onTweenFinish();
         return
       } else {
-        startTween(options, componentValues);
+        startTween(options, componentValues, onTweenFinish);
       }
     });
   },
@@ -716,7 +717,7 @@ const curveFall = {
           onTweenFinish();
           return;
         } else {
-          startTween(options, componentValues);
+          startTween(options, componentValues, onTweenFinish);
         }
       });
     },
