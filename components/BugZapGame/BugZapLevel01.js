@@ -40,6 +40,7 @@ class BugZapLevel01 extends React.Component {
     };
     this.frog = {style: {opacity: 0}};
     this.loadingContent = false;
+    this.bugPressed = false;
   }
 
   componentWillMount () {
@@ -116,17 +117,21 @@ class BugZapLevel01 extends React.Component {
   }
 
   onBugPress (characterUID) {
-    if (this.loadingContent) {
+    if (this.loadingContent || this.bugPressed) {
       return true;
     }
 
+    this.bugPressed = true;
+
     let index = [0,2,0];
+    let delay = (700 * this.props.scale.width);
     if (this.state.frogDirection == "right") {
-      index = [0,1,1,0];
+      index = [0,1,1,1,0];
       this.interval = setInterval(() => {
         clearInterval(this.interval);
         this.goToNextTrial();
       }, 1000);
+      delay = 100;
     } else {
       this.refs.bugRef.startTween();
     }
@@ -137,7 +142,7 @@ class BugZapLevel01 extends React.Component {
         frogAnimationIndex: index,
       });
       clearInterval(this.eatInterval);
-    }, (700 * this.props.scale.width));
+    }, delay);
 
   }
   // onAnimationFinish (animationKey) {
