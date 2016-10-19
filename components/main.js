@@ -51,6 +51,7 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
 
+
           <TouchableOpacity onPress={() => { this.goToGame('BubblePop'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BubblePop'}</Text>
@@ -66,6 +67,12 @@ class Main extends React.Component {
           <TouchableOpacity onPress={() => { this.goToGame('BugZap'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BugZap'}</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => { this.goToGame('BugZapLevel01'); }}>
+            <View style={styles.button}>
+              <Text style={styles.text}>{'Go To BugZap Level 01'}</Text>
             </View>
           </TouchableOpacity>
 
@@ -102,7 +109,7 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
         */}
-          <TouchableOpacity >
+          <TouchableOpacity onPress={() => { this.goToGame('GameSix'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Six'}</Text>
             </View>

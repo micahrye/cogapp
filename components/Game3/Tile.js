@@ -9,9 +9,9 @@ class Tile extends Component {
   render() {
 
     const tweenOpts01 = {
-      tweenType: "bounce",
+      tweenType: "pulse",
       repeatable: true,
-      loop: false,
+      loop: true,
     };
 
     return (
@@ -21,7 +21,7 @@ class Tile extends Component {
               character={platformCharacter}
               soundOnTouch={true}
               soundFile="tile"
-              tweenStart="touch"
+              tweenStart={this.props.tweenStart}
               tween={tweenOpts01}/>
     );
   }

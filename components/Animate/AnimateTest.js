@@ -18,7 +18,7 @@ const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 import AnimatedSprite from "../AnimatedSprite/AnimatedSprite";
 // import frogCharacter from "../../sprites/frog/frogCharacter";
-import goatLiteCharacter from '../../sprites/goatLite/goatLiteCharacter';
+import goatLiteCharacter from '../../sprites/goatLite/goatLiteCharacter'
 import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
 import mammalLiteCharacter from '../../sprites/mammalLite/mammalLiteCharacter';
 import frogLiteCharacter from '../../sprites/frogLite/frogLiteCharacter';
@@ -111,6 +111,7 @@ class AnimateTest extends React.Component {
     switch (key) {
       case 'goat': {
         const animationSeq = randomGoatAnimationSequece();
+        // console.warn(animationSeq);
         this.setState({goatAnimationIndex: animationSeq});
         break;
       }
