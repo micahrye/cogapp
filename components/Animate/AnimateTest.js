@@ -147,6 +147,7 @@ class AnimateTest extends React.Component {
   checkLocation (x, y) {
     // console.warn(`x = ${x}, y = ${y}`);
   }
+  tweenStopped () {}
 
   render () {
     // console.warn('render');
@@ -204,6 +205,7 @@ class AnimateTest extends React.Component {
         tweenOptions={this.tweenOptions}
         tweenStart={'auto'}
         stopAutoTweenOnPressIn={true}
+        onTweenStopped={() => this.tweenStopped()}
         coordinates={{top: 300, left: 700 }}
         size={{ width: 174,height: 285 }}
         onAnimationFinish={(animationKey) => {

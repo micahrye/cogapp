@@ -47,7 +47,7 @@ class Main extends React.Component {
 
           <TouchableOpacity onPress={() => { this.goToGame('AnimatedTest'); }}>
             <View style={styles.button}>
-              <Text style={styles.text}>{'Animate Test'}</Text>
+              <Text style={styles.text}>{'Example Animate Test'}</Text>
             </View>
           </TouchableOpacity>
 
@@ -60,7 +60,7 @@ class Main extends React.Component {
 
           <TouchableOpacity onPress={() => { this.goToGame('BubblePopGame'); }}>
             <View style={styles.button}>
-              <Text style={styles.text}>{'Go To BubblePop Level01'}</Text>
+              <Text style={styles.text}>{'NEW BubblePop'}</Text>
             </View>
           </TouchableOpacity>
 
@@ -72,15 +72,10 @@ class Main extends React.Component {
 
           <TouchableOpacity onPress={() => { this.goToGame('BugZapLevel01'); }}>
             <View style={styles.button}>
-              <Text style={styles.text}>{'Go To BugZap Level 01'}</Text>
+              <Text style={styles.text}>{'NEW BugZap'}</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Two'}</Text>
-            </View>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.column}>
@@ -91,9 +86,15 @@ class Main extends React.Component {
             </View>
           </TouchableOpacity>
         */}
+        <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'Go To Game Two'}</Text>
+          </View>
+        </TouchableOpacity>
+        
         <TouchableOpacity onPress={() => { this.goToGame('MatchByColorGameLevel01'); }}>
           <View style={styles.button}>
-            <Text style={styles.text}>{'Match By Color'}</Text>
+            <Text style={styles.text}>{'NEW Game Two'}</Text>
           </View>
         </TouchableOpacity>
 
