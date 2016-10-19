@@ -5,6 +5,8 @@ import {
   View,
 } from 'react-native';
 
+import _ from 'lodash';
+
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 import randomstring from 'random-string';
@@ -26,6 +28,10 @@ import { omnivoreUtils } from './omnivoreUtils';
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
+const LEFT = 0;
+const MIDDLE = 1;
+const RIGHT = 2;
+
 class MatchByColorGameLevel01 extends React.Component {
 
   constructor (props) {
@@ -37,13 +43,13 @@ class MatchByColorGameLevel01 extends React.Component {
       mammalAnimationIndex: [0],
       tweenOmnivore: false,
       loadContent: false,
-      lowerSigns: false,
       dropFood: false,
+      signsVisable: false,
     };
 
-    this.omnivore = {};
-    this.goat = {};
-    this.mammal = {};
+    this.omnivore = {tweenOptions: {}};
+    this.goat = {tweenOptions: {}};
+    this.mammal = {tweenOptions: {}};
     this.leftSign = {tweenOptions: {}};
     this.middleSign = {tweenOptions: {}};
     this.rightSign = {tweenOptions: {}};
@@ -53,6 +59,10 @@ class MatchByColorGameLevel01 extends React.Component {
     this.baseFoodLocation = [150, 400];
     this.foodLeftShift = 200;
     this.foodTargetLocation = [300, 550];
+    this.foods = [appleCharacter, grassCharacter, canCharacter];
+    this.eatInterval;
+    this.signInterval;
+    this.targetFoodPosition;
   }
 
   componentWillMount () {
@@ -94,47 +104,76 @@ class MatchByColorGameLevel01 extends React.Component {
     );
   }
 
-  omnivorePress () {
-    this.omnivore.tweenOptions = this.makeMoveTween([-300, 400], [200, 400]);
-    this.setState({omnivoreAnimationIndex: omnivoreUtils.walkIndx});
-    this.refs.omnivoreRef.startTween();
-    // console.warn("START");
-  }
-
-  onTweenFinish () {
-    this.setState({omnivoreAnimationIndex: omnivoreUtils.normalIndx});
-    // console.warn("TWEEN FINISHED");
+  onTweenFinish (characterUID) {
+    switch (characterUID) {
+      case this.characterUIDs.omnivore:
+        this.setState({omnivoreAnimationIndex: omnivoreUtils.normalIndx});
+        break;
+    }
   }
 
   leverPressIn () {
     // console.warn('leverPressIn');
   }
 
-  leverPress () {
-    if (this.state.loadContent) {
-      return;
-    }
+  foodBaseLocations () {
+    return {
+      top: this.baseFoodLocation[0],
+      leftLeft: this.baseFoodLocation[1],
+      middleLeft: this.baseFoodLocation[1] + this.foodLeftShift,
+      rightLeft: this.baseFoodLocation[1] + 2 * this.foodLeftShift,
+    };
+  }
+
+  initializeMoveDownTweensForSignsAndFoods () {
     this.leftSign.tweenOptions = this.makeMoveTween([350, -300], [350, 0], 800);
     this.middleSign.tweenOptions = this.makeMoveTween([550, -300], [550, 0], 900);
     this.rightSign.tweenOptions = this.makeMoveTween([750, -300], [750, 0], 1000);
 
-    const top = this.baseFoodLocation[0];
-    const l0 = this.baseFoodLocation[1];
-    const l1 = this.baseFoodLocation[1] + this.foodLeftShift;
-    const l2 = this.baseFoodLocation[1] + 2 * this.foodLeftShift;
-    this.leftFood.tweenOptions = this.makeMoveTween([l0, -130], [l0, top], 800);
-    this.middleFood.tweenOptions = this.makeMoveTween([l1, -130], [l1, top], 900);
-    this.rightFood.tweenOptions = this.makeMoveTween([l2, -130], [l2, top], 1000);
+    const coords = this.foodBaseLocations();
+    this.leftFood.tweenOptions = this.makeMoveTween([coords.leftLeft, -130], [coords.leftLeft, coords.top], 800);
+    this.middleFood.tweenOptions = this.makeMoveTween([coords.middleLeft, -130], [coords.middleLeft, coords.top], 900);
+    this.rightFood.tweenOptions = this.makeMoveTween([coords.rightLeft, -130], [coords.rightLeft, coords.top], 1000);
+  }
 
-    this.leftFood.character = appleCharacter;
-    this.middleFood.character = grassCharacter;
-    this.rightFood.character = canCharacter;
+  initializeMoveUpTweensForSignsAndFoods () {
+    this.leftSign.tweenOptions = this.makeMoveTween([350, 0], [350, -300], 800);
+    this.middleSign.tweenOptions = this.makeMoveTween([550, 0], [550, -300], 800);
+    this.rightSign.tweenOptions = this.makeMoveTween([750, 0], [750, -300], 800);
+
+    const coords = this.foodBaseLocations();
+    this.leftFood.tweenOptions = this.makeMoveTween([coords.leftLeft, coords.top], [coords.leftLeft, -130], 800);
+    this.middleFood.tweenOptions = this.makeMoveTween([coords.middleLeft, coords.top], [coords.middleLeft, -130], 800);
+    this.rightFood.tweenOptions = this.makeMoveTween([coords.rightLeft, coords.top], [coords.rightLeft, -130], 800);
+  }
+
+  leverPress () {
+    if (this.state.loadContent || this.state.signsVisable) {
+      return;
+    }
+    // creature enter from left
     this.omnivore.tweenOptions = this.makeMoveTween([-300, 400], [150, 400]);
+    // this.goat.tweenOptions = this.makeMoveTween([-300, 400], [150, 400]);
+
+    this.initializeMoveDownTweensForSignsAndFoods();
+
+    this.targetFoodPosition = Math.floor(Math.random() * 3);
+    // random order of food in signs.
+    const order = _.shuffle([0, 1, 2]);
+    this.leftFood.character = this.foods[order[0]];
+    this.middleFood.character = this.foods[order[1]];
+    this.rightFood.character = this.foods[order[2]];
+    this.leftFood.key = randomstring({length: 7});
+    this.middleFood.key = randomstring({length: 7});
+    this.rightFood.key = randomstring({length: 7});
+
     this.omnivore.loopAnimation = true;
+    // this.goat.loopAnimation = true;
+
     this.setState({
       omnivoreAnimationIndex: [6, 7],
       tweenOmnivore: true,
-      lowerSigns: true},
+      signsVisable: true},
       () => {
         this.refs.leftSign.startTween();
         this.refs.middleSign.startTween();
@@ -144,6 +183,7 @@ class MatchByColorGameLevel01 extends React.Component {
         this.refs.rightFood.startTween();
 
         this.refs.omnivoreRef.startTween();
+        // this.refs.goatRef.startTween();
       });
   }
 
@@ -151,24 +191,74 @@ class MatchByColorGameLevel01 extends React.Component {
     // console.warn('leverPressOut');
   }
 
-  foodPressed () {
-    if (this.state.dropFood) {
+  foodDrop (food, starXY, endXY, duration) {
+    this[food].tweenOptions = this.makeMoveTween(
+      starXY, endXY, duration);
+    this.setState({dropFood: true}, () => {
+      this['refs'][food].startTween();
+    });
+  }
+
+  foodPressed (foodId) {
+    if (this.state.dropFood || !(foodId === this.targetFoodPosition)) {
       return;
     }
-    this.leftFood.tweenOptions = this.makeMoveTween([400, 150], [300, 520], 800);
-    this.setState({dropFood: true}, () => {
-      this.refs.leftFood.startTween();
-    });
+
+    const coords = this.foodBaseLocations();
+    switch (this.targetFoodPosition) {
+      case LEFT:
+        this.foodDrop('leftFood', [coords.leftLeft, 150], [300, 520], 800);
+        break;
+      case MIDDLE:
+        this.foodDrop('middleFood', [coords.middleLeft, 150], [300, 520], 800);
+        break;
+      case RIGHT:
+        this.foodDrop('rightFood', [coords.rightLeft, 150], [300, 520], 800);
+        break;
+    }
 
     clearInterval(this.eatInterval);
     this.eatInterval = setInterval(() => {
       this.omnivore.loopAnimation = false;
+      // this.goat.loopAnimation = false;
       this.setState({
         dropFood: false,
         omnivoreAnimationIndex: omnivoreUtils.eatIndx,
+      }, () => {
+        this.liftSigns();
       });
       clearInterval(this.eatInterval);
     }, 300);
+
+  }
+
+  liftSigns () {
+    this.initializeMoveUpTweensForSignsAndFoods();
+
+    this.omnivore.tweenOptions = this.makeMoveTween([150, 400], [1280, 400], 2000);
+    this.omnivore.loopAnimation = true;
+
+    // this.goat.tweenOptions = this.makeMoveTween([150, 400], [1280, 400], 2000);
+    // this.goat.loopAnimation = true;
+
+    clearInterval(this.signInterval);
+    this.signInterval = setInterval(() => {
+      this.setState({
+        omnivoreAnimationIndex: [6, 7],
+        tweenOmnivore: true,
+        signsVisable: false,
+      }, () => {
+        this.refs.leftSign.startTween();
+        this.refs.middleSign.startTween();
+        this.refs.rightSign.startTween();
+        this.refs.leftFood.startTween();
+        this.refs.middleFood.startTween();
+        this.refs.rightFood.startTween();
+        this.refs.omnivoreRef.startTween();
+        // this.refs.goatRef.startTween();
+      });
+      clearInterval(this.signInterval);
+    }, 1500);
   }
 
   render () {
@@ -188,12 +278,7 @@ class MatchByColorGameLevel01 extends React.Component {
             onPress={() => this.leverPress()}
             onPressIn={() => this.leverPressIn()}
             onPressOut={() => this.leverPressOut()}
-            tweenOptions={{
-              tweenType: 'pulse',
-              loop: true,
-              duration: 500,
-            }}
-            tweenStart={'auto'}
+
           />
 
           <AnimatedSprite
@@ -233,6 +318,7 @@ class MatchByColorGameLevel01 extends React.Component {
             <AnimatedSprite
               character={this.leftFood.character}
               ref={'leftFood'}
+              key={this.leftFood.key}
               animationFrameIndex={[0]}
               coordinates={{
                 top: this.baseFoodLocation[0],
@@ -241,7 +327,7 @@ class MatchByColorGameLevel01 extends React.Component {
               draggable={false}
               tweenOptions={this.leftFood.tweenOptions}
               tweenStart={'fromCode'}
-              onPress={() => this.foodPressed()}
+              onPress={() => this.foodPressed(LEFT)}
             />
           : null}
 
@@ -249,6 +335,7 @@ class MatchByColorGameLevel01 extends React.Component {
             <AnimatedSprite
               character={this.middleFood.character}
               ref={'middleFood'}
+              key={this.middleFood.key}
               animationFrameIndex={[0]}
               coordinates={{
                 top: this.baseFoodLocation[0],
@@ -257,6 +344,7 @@ class MatchByColorGameLevel01 extends React.Component {
               draggable={false}
               tweenOptions={this.middleFood.tweenOptions}
               tweenStart={'fromCode'}
+              onPress={() => this.foodPressed(MIDDLE)}
             />
           : null}
 
@@ -264,6 +352,7 @@ class MatchByColorGameLevel01 extends React.Component {
             <AnimatedSprite
               character={this.rightFood.character}
               ref={'rightFood'}
+              key={this.rightFood.key}
               animationFrameIndex={[0]}
               coordinates={{
                 top: this.baseFoodLocation[0],
@@ -272,6 +361,7 @@ class MatchByColorGameLevel01 extends React.Component {
               draggable={false}
               tweenOptions={this.rightFood.tweenOptions}
               tweenStart={'fromCode'}
+              onPress={() => this.foodPressed(RIGHT)}
             />
           : null}
 
@@ -288,20 +378,21 @@ class MatchByColorGameLevel01 extends React.Component {
             tweenOptions={this.omnivore.tweenOptions}
             tweenStart={'fromCode'}
             onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
-            onPress={() => this.omnivorePress()}
           />
-        {/*
+
           <AnimatedSprite
             ref={'goatRef'}
             character={goatLiteCharacter}
-            characterUID={this.characterUIDs.omnivore}
+            characterUID={this.characterUIDs.goat}
             style={{opacity: 1}}
             animationFrameIndex={this.state.goatAnimationIndex}
-            loopAnimation={true}
-            coordinates={{top: 400, left: 100 }}
+            loopAnimation={this.goat.loopAnimation}
+            coordinates={{top: 420, left: -300 }}
             size={{ width: 300,height: 252 }}
+            tweenOptions={this.goat.tweenOptions}
+            tweenStart={'fromCode'}
+            onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           />
-        */}
 
         </Image>
       </View>
@@ -322,6 +413,12 @@ const styles = StyleSheet.create({
       height: null,
   },
 });
+
+MatchByColorGameLevel01.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+  scale: React.PropTypes.object,
+};
 
 reactMixin.onClass(MatchByColorGameLevel01, TimerMixin);
 

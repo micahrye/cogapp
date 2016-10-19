@@ -7,6 +7,7 @@ import React from 'react';
 import {
   AppRegistry,
   Navigator,
+  Dimensions,
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
@@ -41,6 +42,13 @@ import GameSixLoading from './components/Game6/GameSixLoading';
 import NextTrial from './components/NextTrial';
 import Scene from './components/Scene';
 
+
+const baseHeight = 800;
+const baseWidth = 1280;
+const SCALE = {
+  width: Dimensions.get('window').width / baseWidth,
+  height: Dimensions.get('window').height / baseHeight
+};
 
 class CogApp extends React.Component {
   constructor (props) {
@@ -90,7 +98,7 @@ AnimatedTest
     } else if (route.id === 'GameTwo3') {
       return <GameTwoLevel3 navigator={navigator} route={route}/>;
     } else if (route.id === 'MatchByColorGameLevel01') {
-      return <MatchByColorGameLevel01 navigator={navigator} route={route}/>;
+      return <MatchByColorGameLevel01 navigator={navigator} route={route} scale={SCALE} />;
     }
      else if (route.id === 'GameThree') {
       return <GameThree navigator={navigator} route={route}/>;
