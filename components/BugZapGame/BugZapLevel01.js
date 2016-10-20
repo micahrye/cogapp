@@ -51,7 +51,7 @@ class BugZapLevel01 extends React.Component {
     this.loadingContent = true;
     this.character.style = {opacity: 0};
     this.setState({
-      characterAnimationIndex: [0,1,2,3,4,5],
+      characterAnimationIndex: [1,2,3,4,5,6,0],
     });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
       this.character.style = {opacity: 1};
@@ -89,7 +89,7 @@ class BugZapLevel01 extends React.Component {
         // start on their tags
         startXY: [this.state.bugStartX, 95 * this.props.scale.height],
         // end at character
-        endXY: [400 * this.props.scale.width, 460 * this.props.scale.height],
+        endXY: [500 * this.props.scale.width, 460 * this.props.scale.height],
         duration: 1000 * this.props.scale.width,
         loop: false,
       },
@@ -134,7 +134,7 @@ class BugZapLevel01 extends React.Component {
     this.bugPressed = true;
 
     let index = [0,4,5,0];
-    let delay = (700 * this.props.scale.width);
+    let delay = (500 * this.props.scale.width);
     if (this.state.characterDirection == "right") {
       index = [3,3,3,0];
       this.interval = setInterval(() => {
@@ -173,7 +173,7 @@ class BugZapLevel01 extends React.Component {
         coordinates={{top: 400 * this.props.scale.height,
           left: this.state.characterPos}}
         size={{
-            width: 270 * this.props.scale.width,
+            width: 300 * this.props.scale.width,
             height: 300 * this.props.scale.height,
         }}
         animationFrameIndex={this.state.characterAnimationIndex}
@@ -195,7 +195,7 @@ class BugZapLevel01 extends React.Component {
         <AnimatedSprite
           character={bugCharacter}
           ref={'bugRef'}
-          coordinates={{top: 95 * this.props.scale.height, left: SCREEN_WIDTH/2 - (360 * this.props.scale.width)}}
+          coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 - (365 * this.props.scale.width)}}
           size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
           tweenOptions={this.state.tweenOptions}
           tweenStart={'fromCode'}

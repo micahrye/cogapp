@@ -250,6 +250,8 @@ class AnimatedSprite extends React.Component {
         position: 'absolute',
         opacity: this.props.style ? this.props.style.opacity : 1,
         transform: [{scale: this.state.scale}],
+        // borderColor: "#000000",
+        // borderWidth: 1,
       }
     );
   }
