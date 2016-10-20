@@ -16,7 +16,6 @@ After that run "react-native run-android" again and it should be much
 more performant.
 
 
-
 https://facebook.github.io/react-native/docs/signed-apk-android.html
 $ react-native start
 $ adb reverse tcp:8081 tcp:8081

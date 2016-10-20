@@ -20,6 +20,7 @@ class AnimatedSprite extends React.Component {
     this.state = {
       top: new Animated.Value(props.coordinates.top),
       left: new Animated.Value(props.coordinates.left),
+      scale: new Animated.Value(1),
       width: props.size.width,
       height: props.size.height,
       rotate: props.rotate,
@@ -249,9 +250,9 @@ class AnimatedSprite extends React.Component {
         left: this.state.left,
         position: 'absolute',
         opacity: this.props.style ? this.props.style.opacity : 1,
+        transform: [{scale: this.state.scale}],
       }
     );
-
   }
 
   render () {
@@ -305,12 +306,14 @@ AnimatedSprite.propTypes = {
   stopAutoTweenOnPressIn: React.PropTypes.bool,
   onTweenStopped: React.PropTypes.func,
   onTweenFinish: React.PropTypes.func,
+  scale: React.PropTypes.number,
 };
 
 AnimatedSprite.defaultProps = {
   draggable: false,
   characterUID: randomstring({ length: 7 }),
   rotate: [{rotateY: '0deg'}],
+  scale: 1,
 };
 
 

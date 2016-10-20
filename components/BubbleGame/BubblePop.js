@@ -10,7 +10,8 @@ import {
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
-import AnimatedSprite from '../animatedSprite';
+// import AnimatedSprite from '../animatedSprite';
+import AnimatedSprite from '../AnimatedSprite/AnimatedSprite';
 import bubbleCharacter from '../../sprites/bubble/bubbleCharacterLarge';
 import canCharacter from '../../sprites/can/canCharacter';
 import appleCharacter from '../../sprites/apple/appleCharacter';
@@ -108,22 +109,27 @@ class BubblePop extends React.Component {
 
   // alternate food in bubble each new trial
   chooseFood () {
-    let choice = Math.random();
-    if (choice < .25) {
-      this.foodCharacter = canCharacter;
-      this.targetSpriteAnimationKey = 'canBubble';
-    } else if (choice > .25 && choice < .5) {
-      this.foodCharacter = appleCharacter;
-      this.targetSpriteAnimationKey = 'appleBubble';
-    } else if (choice > .5 && choice < .75) {
-      this.foodCharacter = grassCharacter;
-      this.targetSpriteAnimationKey = 'grassBubble';
-    } else {
-      this.foodCharacter = bugCharacter;
-      this.foodSpriteAnimationKey = 'stillIdle';
-      this.targetSpriteAnimationKey = 'bugBubble';
-      this.setState({foodKey: Math.random()});
-    }
+    let choice = Math.floor(Math.random() * 4);
+    // switch (choice) {
+    //   case 0:
+        this.foodCharacter = canCharacter;
+        this.bubbleAnimationIndex = [1, 2, 3, 4];
+        // break;
+    // }
+    //   this.foodCharacter = canCharacter;
+    //   this.targetSpriteAnimationKey = 'canBubble';
+    // } else if (choice > .25 && choice < .5) {
+    //   this.foodCharacter = appleCharacter;
+    //   this.targetSpriteAnimationKey = 'appleBubble';
+    // } else if (choice > .5 && choice < .75) {
+    //   this.foodCharacter = grassCharacter;
+    //   this.targetSpriteAnimationKey = 'grassBubble';
+    // } else {
+    //   this.foodCharacter = bugCharacter;
+    //   this.foodSpriteAnimationKey = 'stillIdle';
+    //   this.targetSpriteAnimationKey = 'bugBubble';
+    //   this.setState({foodKey: Math.random()});
+    // }
     this.setState({targetBubbleKey: Math.random()});
   }
 
@@ -324,6 +330,7 @@ class BubblePop extends React.Component {
                 soundFile='bubblePop'
                 timeSinceMounted={(spriteKey, duration)=> this.popTime = duration}
                 spriteAnimationKey={this.targetSpriteAnimationKey}
+                animationFrameIndex={[this.bubbleAnimationIndex]}
                 loopAnimation={this.loopBubbleAnimation}
                 onAnimationFinish={(animationKey) => {this.onAnimationFinish(animationKey);}}
               />

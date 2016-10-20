@@ -34,9 +34,6 @@ class Main extends React.Component {
   }
 
   render () {
-    //console.warn('HEY HEY HEY');
-    // console.warn(SCREEN_HEIGHT);
-    // console.warn(SCREEN_WIDTH);
     return (
       <ScrollView
         style={styles.scrollView} >
@@ -47,60 +44,75 @@ class Main extends React.Component {
 
           <TouchableOpacity onPress={() => { this.goToGame('AnimatedTest'); }}>
             <View style={styles.button}>
-              <Text style={styles.text}>{'Animate Test'}</Text>
+              <Text style={styles.text}>{'Example Animate Test'}</Text>
             </View>
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => { this.goToGame('BubblePopGame'); }}>
+            <View style={styles.button}>
+              <Text style={styles.text}>{'NEW BubblePop'}</Text>
+            </View>
+          </TouchableOpacity>
+
+
+
+        </View>
+
+        <View style={styles.column}>
+        {/*
           <TouchableOpacity onPress={() => { this.goToGame('BubblePop'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To BubblePop'}</Text>
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { this.goToGame('BubblePopLevel01'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To BubblePop Level01'}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { this.goToGame('BugZap'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To BugZap'}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Two'}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.column}>
-        {/*
           <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Three'}</Text>
             </View>
           </TouchableOpacity>
         */}
+        <TouchableOpacity onPress={() => { this.goToGame('BugZap'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'Go To BugZap'}</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => { this.goToGame('BugZapLevel01'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'NEW BugZap'}</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'Go To Game Two'}</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => { this.goToGame('MatchByColorGameLevel01'); }}>
+          <View style={styles.button}>
+            <Text style={styles.text}>{'NEW Game Two'}</Text>
+          </View>
+        </TouchableOpacity>
+        {/*
           <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Four'}</Text>
             </View>
           </TouchableOpacity>
-        {/*
+
           <TouchableOpacity >
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Five'}</Text>
             </View>
           </TouchableOpacity>
-        */}
-          <TouchableOpacity >
+
+          <TouchableOpacity onPress={() => { this.goToGame('GameSix'); }}>
             <View style={styles.button}>
               <Text style={styles.text}>{'Go To Game Six'}</Text>
             </View>
           </TouchableOpacity>
+          */}
         </View>
 
       </View>

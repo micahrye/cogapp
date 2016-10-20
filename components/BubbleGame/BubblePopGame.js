@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
@@ -20,15 +21,18 @@ import canCharacter from '../../sprites/can/canCharacter';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-const BUBBLE_SIZE = 60;
+const SCALE = {
+  width: Dimensions.get('window').width / 1280,
+  height: Dimensions.get('window').height / 800,
+};
 // TODO: do we need offset?
 const OFFSET = 80;
 const GAME_TIME_OUT = 115000;
 const MAX_NUMBER_BUBBLES = 15;
 const FOUTAIN_LOCATION = {top: 0, left: 0};
-const FOUTAIN_SIZE = { width: 270, height: 258 };
+const FOUTAIN_SIZE = { width: 270 * SCALE.width, height: 258 * SCALE.height};
 
-class BubblePopLevel01 extends React.Component {
+class BubblePopGame extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -44,13 +48,20 @@ class BubblePopLevel01 extends React.Component {
     this.animations = ['eat', 'bubble', 'bubbleCan', 'bubbleBug', 'bubbleGrass'];
     this.setDefaultAnimationState;
     this.bubbleFountainInterval;
-    this.targetBubble = {active: false, uid: '', name: ''};
+    this.targetBubble = {active: false, uid: '', name: '', stopTweenOnPress: true};
     this.food = {active: false, uid: '', name: ''};
     FOUTAIN_LOCATION.top = SCREEN_HEIGHT - (FOUTAIN_SIZE.height + OFFSET);
     FOUTAIN_LOCATION.left = (SCREEN_WIDTH/2) - (FOUTAIN_SIZE.width/2);
+    this.scale = this.props.scale;
   }
 
   componentWillMount () {
+    this.characterUIDs = {
+      bubble: randomstring({ length: 7 }),
+      omnivore: randomstring({ length: 7 }),
+      lever: randomstring({ length: 7 }),
+      fountain: randomstring({ length: 7 }),
+    };
     this.setState({
       bubbleAnimationIndex: [0,1,2,3,4,5,6,7,8,9],
       omnivoreAnimationIndex: [0,1,2,3,4,5,6,7],
@@ -64,13 +75,6 @@ class BubblePopLevel01 extends React.Component {
       });
       this.setState({});
     }, 1500);
-
-    this.characterUIDs = {
-      bubble: randomstring({ length: 7 }),
-      omnivore: randomstring({ length: 7 }),
-      lever: randomstring({ length: 7 }),
-      fountain: randomstring({ length: 7 }),
-    };
   }
 
   componentDidMount () {
@@ -88,7 +92,7 @@ class BubblePopLevel01 extends React.Component {
 
   // random time for background bubbles to be on screen, between 2 and 6 seconds
   getRandomDuration () {
-    return Math.floor(Math.random() *  (4000)) + 2000;
+    return (Math.floor(Math.random() *  (4000)) + 2000) * this.scale.width;
   }
 
   onTweenFinish (characterUID) {
@@ -120,7 +124,10 @@ class BubblePopLevel01 extends React.Component {
     const startLeft = fountainCenter - bubbleDeminsions/2;
     const startTop = FOUTAIN_LOCATION.top - (bubbleDeminsions * 0.7);
 
-    bubbleSize = {width: bubbleDeminsions, height: bubbleDeminsions};
+    bubbleSize = {
+      width: bubbleDeminsions * this.scale.width,
+      height: bubbleDeminsions * this.scale.width,
+    };
     const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     const minusOrPlus = plusOrMinus > 0 ? -1 : 1;
     locSequence = [
@@ -138,7 +145,7 @@ class BubblePopLevel01 extends React.Component {
       startXY: [startLeft, startTop],
       xTo: locSequence,
       yTo: [-bubbleDeminsions],
-      duration: createTargetBubble ? 4000 : this.getRandomDuration(),
+      duration: createTargetBubble ? 4000 * this.scale.width : this.getRandomDuration(),
       loop: false,
     };
 
@@ -165,7 +172,10 @@ class BubblePopLevel01 extends React.Component {
       this.targetBubble.opacity = 1;
       this.targetBubble.uid = uid;
       this.targetBubble.tweenOptions = backgroundBubbleTween;
-      this.targetBubble.coordinates = {top: startTop, left: startLeft};
+      this.targetBubble.coordinates = {
+        top: startTop * this.scale.height,
+        left: startLeft * this.scale.width,
+      };
       this.targetBubble.size = bubbleSize;
       this.setState({targetBubbleActive: true});
     } else if (bubbles.length < MAX_NUMBER_BUBBLES) {
@@ -179,7 +189,9 @@ class BubblePopLevel01 extends React.Component {
           tweenStart={'auto'}
           onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           loopAnimation={true}
-          coordinates={{top: startTop, left: startLeft}}
+          coordinates={{
+            top: startTop * this.scale.height,
+            left: startLeft * this.scale.width}}
           size={bubbleSize}
         />
       );
@@ -194,9 +206,9 @@ class BubblePopLevel01 extends React.Component {
     this.food.tweenOptions = {
       tweenType: 'sine-wave',
       startXY: [startX, startY],
-      xTo: [150],
-      yTo: [500],
-      duration: 1000,
+      xTo: [150 * this.scale.width],
+      yTo: [500 * this.scale.height],
+      duration: 1000 * this.scale.width,
       loop: false,
     };
 
@@ -204,10 +216,11 @@ class BubblePopLevel01 extends React.Component {
     this.food.uid = randomstring({length: 7});
     this.food.name = 'can';
     this.food.character = canCharacter;
-    this.food.location = {top: startY, left:startX};
-    this.food.size = {width: 109, height: 116};
+    this.food.location = {top: startY * this.scale.height, left:startX * this.scale.width};
+    this.food.size = {width: 109 * this.scale.width, height: 116 * this.scale.height};
     this.setState({showFood: true});
 
+    clearInterval(this.eatInterval)
     this.eatInterval = setInterval(() => {
       this.setState({
         omnivoreAnimationIndex: [0,4,0,5],
@@ -223,6 +236,12 @@ class BubblePopLevel01 extends React.Component {
   }
 
   popBubble (stopValues) {
+    // NOTE: b/c of bug and use of opacity it is possible to pop the transparent
+    // bubbble, since this should not happen we check if targetBubble.opacity == 0
+    // and ignore.
+    if (!this.targetBubble.opacity) {
+      return;
+    }
     const stopValueX = stopValues[0];
     const stopValueY = stopValues[1];
     // TODO: opacity part of hack to what may be a
@@ -273,8 +292,12 @@ class BubblePopLevel01 extends React.Component {
               characterUID={this.characterUIDs.lever}
               animationFrameIndex={[0]}
               loopAnimation={true}
-              coordinates={{top: 100, left: 1067 }}
-              size={{ width: 213,height: 189 }}
+              coordinates={{
+                top: 100 * this.scale.height,
+                left: 1077 * this.scale.width}}
+              size={{
+                width: 230 * this.scale.width,
+                height: 210 * this.scale.height}}
               rotate={[{rotateY:'180deg'}]}
               onPress={() => this.leverPress()}
               onPressIn={() => this.leverPressIn()}
@@ -287,8 +310,10 @@ class BubblePopLevel01 extends React.Component {
                 characterUID={randomstring({length: 7})}
                 animationFrameIndex={this.state.bubbleAnimationIndex}
                 loopAnimation={true}
-                coordinates={{top: 400, left: 40 }}
-                size={{ width: 300,height: 285 }}
+                coordinates={{top: 400 * this.scale.height,
+                  left: 40 * this.scale.width}}
+                size={{ width: 300 * this.scale.width,
+                  height: 285 * this.scale.height}}
               />
             : null}
 
@@ -297,8 +322,10 @@ class BubblePopLevel01 extends React.Component {
               characterUID={this.characterUIDs.omnivore}
               animationFrameIndex={this.state.omnivoreAnimationIndex}
               loopAnimation={false}
-              coordinates={{top: 400, left: 40 }}
-              size={{ width: 300,height: 285 }}
+              coordinates={{top: (400-80) * this.scale.height,
+                left: 40 * this.scale.width}}
+              size={{ width: 300 * this.scale.width,
+                height: 285 * this.scale.height}}
               rotate={[{rotateY:'180deg'}]}
             />
 
@@ -316,7 +343,7 @@ class BubblePopLevel01 extends React.Component {
                 onTweenFinish={(characterUID) => this.targetBubbleTweenFinish(characterUID)}
                 coordinates={this.targetBubble.coordinates}
                 size={this.targetBubble.size}
-                stopAutoTweenOnPressIn={true}
+                stopAutoTweenOnPressIn={this.targetBubble.stopTweenOnPress}
                 onTweenStopped={(stopValues) => this.popBubble(stopValues)}
               />
             : null}
@@ -340,8 +367,10 @@ class BubblePopLevel01 extends React.Component {
               characterUID={this.characterUIDs.fountain}
               animationFrameIndex={[0]}
               loopAnimation={true}
-              coordinates={{top: FOUTAIN_LOCATION.top, left: FOUTAIN_LOCATION.left }}
-              size={{ width: FOUTAIN_SIZE.width,height: FOUTAIN_SIZE.height}}
+              coordinates={{top: FOUTAIN_LOCATION.top,
+                left: FOUTAIN_LOCATION.left}}
+              size={{ width: FOUTAIN_SIZE.width,
+                height: FOUTAIN_SIZE.height}}
             />
 
             <View style={styles.row}>
@@ -356,13 +385,13 @@ class BubblePopLevel01 extends React.Component {
   }
 }
 
-BubblePopLevel01.propTypes = {
+BubblePopGame.propTypes = {
   route: React.PropTypes.object,
   navigator: React.PropTypes.object,
   scale: React.PropTypes.object,
 };
 
-reactMixin.onClass(BubblePopLevel01, TimerMixin);
+reactMixin.onClass(BubblePopGame, TimerMixin);
 
 const styles = StyleSheet.create({
   topLevel :{
@@ -403,9 +432,9 @@ const styles = StyleSheet.create({
   },
 });
 
-BubblePopLevel01.propTypes = {
+BubblePopGame.propTypes = {
   route: React.PropTypes.object,
   navigator: React.PropTypes.object,
 };
 
-export default BubblePopLevel01;
+export default BubblePopGame;

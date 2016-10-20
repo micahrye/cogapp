@@ -13,12 +13,11 @@ var {
 
 import _ from 'lodash';
 
-const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 import AnimatedSprite from "../AnimatedSprite/AnimatedSprite";
 // import frogCharacter from "../../sprites/frog/frogCharacter";
-import goatLiteCharacter from '../../sprites/goatLite/goatLiteCharacter';
+import goatLiteCharacter from '../../sprites/goatLite/goatLiteCharacter'
 import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
 import mammalLiteCharacter from '../../sprites/mammalLite/mammalLiteCharacter';
 import frogLiteCharacter from '../../sprites/frogLite/frogLiteCharacter';
@@ -46,11 +45,12 @@ class AnimateTest extends React.Component {
     this.characterUIDs = {};
     this.animations = ['default', 'walk', 'eat', 'disgust'];
     this.setDefaultAnimationState = null;
+    this.scale = this.props.scale;
 
     this.tweenOptions = {
       tweenType: "sine-wave",
-      startXY: [700, SCREEN_HEIGHT - 69],
-      xTo: [700],
+      startXY: [700 * this.scale.width, SCREEN_HEIGHT - 69],
+      xTo: [700 * this.scale.width],
       yTo: [10],
       duration: 2000,
       loop: false,
@@ -60,16 +60,19 @@ class AnimateTest extends React.Component {
   componentWillMount () {
     // Cycle through all frames of each character so that they
     // are in memory and we do not get flashing behavior.
-    this.setState({goatAnimationIndex: [0,1,2,3,4,5,6,7]});
-    this.setState({omnivoreAnimationIndex: [0,1,2,3,4,5,6,7]});
-    this.setState({mammalAnimationIndex: [0,1,2,3,4,5,6]});
-    this.setState({frogAnimationIndex: [0,1,2,3,4,5]});
-    // reset characters to default state
+    this.setState({
+      omnivoreAnimationIndex: [0,1,2,3,4,5,6,7],
+      goatAnimationIndex: [0,1,2,3,4,5,6,7],
+      mammalAnimationIndex: [0,1,2,3,4,5,6],
+      frogAnimationIndex: [0,1,2,3,4,5],
+    });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
-      this.setState({goatAnimationIndex: [0]});
-      this.setState({omnivoreAnimationIndex: [0]});
-      this.setState({mammalAnimationIndex: [0]});
-      this.setState({frogAnimationIndex: [0]});
+      this.setState({
+        omnivoreAnimationIndex: [0],
+        goatAnimationIndex: [0],
+        mammalAnimationIndex: [0],
+        frogAnimationIndex: [0],
+      });
     }, 1500);
 
     this.characterUIDs = {
@@ -108,6 +111,7 @@ class AnimateTest extends React.Component {
     switch (key) {
       case 'goat': {
         const animationSeq = randomGoatAnimationSequece();
+        // console.warn(animationSeq);
         this.setState({goatAnimationIndex: animationSeq});
         break;
       }
@@ -143,6 +147,7 @@ class AnimateTest extends React.Component {
   checkLocation (x, y) {
     // console.warn(`x = ${x}, y = ${y}`);
   }
+  tweenStopped () {}
 
   render () {
     // console.warn('render');
@@ -165,8 +170,8 @@ class AnimateTest extends React.Component {
           onPressOut={() => this.handelPressOut()}
           animationFrameIndex={this.state.goatAnimationIndex}
           loopAnimation={true}
-          coordinates={{top: 300, left: 80 }}
-          size={{ width: 300,height: 252 }}
+          coordinates={{top: 300 * this.scale.height, left: 80 * this.scale.width}}
+          size={{ width: 300 * this.scale.width,height: 252 * this.scale.height}}
           onAnimationFinish={(animationKey) => {
             this.onAnimationFinish(animationKey);
           }}
@@ -181,8 +186,8 @@ class AnimateTest extends React.Component {
           onPress={(uid) => this.handelOnPress(uid)}
           animationFrameIndex={this.state.omnivoreAnimationIndex}
           loopAnimation={true}
-          coordinates={{top: 300, left: 400 }}
-          size={{ width: 300,height: 285 }}
+          coordinates={{top: 300* this.scale.height, left: 400 * this.scale.width}}
+          size={{ width: 300* this.scale.width,height: 285 * this.scale.height}}
           onAnimationFinish={(animationKey) => {
             this.onAnimationFinish(animationKey);
           }}
@@ -200,8 +205,9 @@ class AnimateTest extends React.Component {
         tweenOptions={this.tweenOptions}
         tweenStart={'auto'}
         stopAutoTweenOnPressIn={true}
-        coordinates={{top: 300, left: 700 }}
-        size={{ width: 174,height: 285 }}
+        onTweenStopped={() => this.tweenStopped()}
+        coordinates={{top: 300 * this.scale.height, left: 700 * this.scale.width}}
+        size={{ width: 174* this.scale.width,height: 285 * this.scale.height}}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -215,8 +221,8 @@ class AnimateTest extends React.Component {
         characterUID={randomstring({ length: 7 })}
         animationFrameIndex={[0]}
         loopAnimation={true}
-        coordinates={{top: 20, left: 0 }}
-        size={{ width: 213,height: 189 }}
+        coordinates={{top: 20* this.scale.height, left: 0 }}
+        size={{ width: 213* this.scale.width,height: 189* this.scale.height }}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -230,8 +236,8 @@ class AnimateTest extends React.Component {
         characterUID={randomstring({ length: 7 })}
         animationFrameIndex={[0]}
         loopAnimation={true}
-        coordinates={{top: 120, left: 920 }}
-        size={{ width: 344,height: 400 }}
+        coordinates={{top: 120* this.scale.height, left: 920 * this.scale.width}}
+        size={{ width: 344 * this.scale.width,height: 400 * this.scale.height}}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -246,8 +252,8 @@ class AnimateTest extends React.Component {
         onPress={(uid) => this.handelOnPress(uid)}
         animationFrameIndex={this.state.frogAnimationIndex}
         loopAnimation={true}
-        coordinates={{top: 350, left: 900 }}
-        size={{ width: 271,height: 300 }}
+        coordinates={{top: 350* this.scale.height, left: 900 * this.scale.width}}
+        size={{ width: 271* this.scale.width,height: 300 * this.scale.height}}
         onAnimationFinish={(animationKey) => {
           this.onAnimationFinish(animationKey);
         }}
@@ -275,5 +281,10 @@ var styles = StyleSheet.create({
     width: 1280,
   },
 });
+
+AnimateTest.propTypes = {
+  route: React.PropTypes.object,
+  navigator: React.PropTypes.object,
+};
 
 export default AnimateTest;

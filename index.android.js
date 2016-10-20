@@ -7,6 +7,7 @@ import React from 'react';
 import {
   AppRegistry,
   Navigator,
+  Dimensions,
 } from 'react-native';
 
 import reactMixin from 'react-mixin';
@@ -16,7 +17,7 @@ import Main from "./components/main";
 import AnimateTest from "./components/Animate/AnimateTest";
 import BubblePopLoading from './components/BubbleGame/BubblePopLoading';
 import BubblePop from './components/BubbleGame/BubblePop';
-import BubblePopLevel01 from './components/BubbleGame/BubblePopLevel01';
+import BubblePopGame from './components/BubbleGame/BubblePopGame';
 import BugZapLoading from './components/BugZapGame/BugZapLoading';
 import BugZap from './components/BugZapGame/BugZap';
 import BugZapLevel1 from './components/BugZapGame/BugZap1';
@@ -27,6 +28,7 @@ import GameTwoLoading from './components/Game2/Game2Loading';
 import GameTwoLevel1 from './components/Game2/GameTwo1';
 import GameTwoLevel2 from './components/Game2/GameTwo2';
 import GameTwoLevel3 from './components/Game2/GameTwo3';
+import MatchByColorGameLevel01 from './components/Game2/MatchByColorGameLevel01';
 import GameThree from './components/Game3/GameThree';
 import GameThree1 from './components/Game3/GameThree1';
 import GameThreeLevel2 from './components/Game3/GameThree2';
@@ -39,7 +41,15 @@ import GameSix from './components/Game6/GameSix';
 import GameSixLoading from './components/Game6/GameSixLoading';
 import NextTrial from './components/NextTrial';
 import Scene from './components/Scene';
+import BugZapLevel01 from './components/BugZapGame/BugZapLevel01';
 
+
+const baseHeight = 800;
+const baseWidth = 1280;
+const SCALE = {
+  width: Dimensions.get('window').width / baseWidth,
+  height: Dimensions.get('window').height / baseHeight
+};
 
 class CogApp extends React.Component {
   constructor (props) {
@@ -57,19 +67,27 @@ AnimatedTest
     if (route.id === 'Main') {
       return <Main navigator={navigator} />;
     } else if (route.id === 'AnimatedTest') {
-      return <AnimateTest />;
+      return <AnimateTest navigator={navigator} route={route} scale={SCALE}/>;
     } else if (route.id === 'BubblePopLoading') {
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
-    } else if (route.id === 'BubblePopLevel01') {
-      return <Scene><BubblePopLevel01 navigator={navigator} route={route}/></Scene>;
+    } else if (route.id === 'BubblePopGame') {
+      return <Scene>
+        <BubblePopGame
+          navigator={navigator}
+          route={route}
+          scale={SCALE}
+        />
+      </Scene>;
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {
       return <NextGamePage navigator={navigator} route={route}/>;
     } else if (route.id === 'BugZapLoading') {
       return <Scene><BugZapLoading navigator={navigator} route={route} /></Scene>;
+    } else if (route.id === 'BugZapLevel01') {
+      return <Scene><BugZapLevel01 navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap') {
       return <Scene><BugZap navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap1') {
@@ -88,7 +106,10 @@ AnimatedTest
       return <GameTwoLevel2 navigator={navigator} route={route}/>;
     } else if (route.id === 'GameTwo3') {
       return <GameTwoLevel3 navigator={navigator} route={route}/>;
-    } else if (route.id === 'GameThree') {
+    } else if (route.id === 'MatchByColorGameLevel01') {
+      return <MatchByColorGameLevel01 navigator={navigator} route={route} scale={SCALE} />;
+    }
+     else if (route.id === 'GameThree') {
       return <GameThree navigator={navigator} route={route}/>;
     } else if (route.id === 'GameThree1') {
       return <GameThree1 navigator={navigator} route={route}/>;

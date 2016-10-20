@@ -2,6 +2,9 @@
 
 const grassCharacter = {
   name:"grass",
+  all:[
+    require("./grass.png"),
+  ],
 
   default:[
     require("./grass.png"),
