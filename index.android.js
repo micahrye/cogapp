@@ -67,13 +67,19 @@ AnimatedTest
     if (route.id === 'Main') {
       return <Main navigator={navigator} />;
     } else if (route.id === 'AnimatedTest') {
-      return <AnimateTest />;
+      return <AnimateTest navigator={navigator} route={route} scale={SCALE}/>;
     } else if (route.id === 'BubblePopLoading') {
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'BubblePopGame') {
-      return <Scene><BubblePopGame navigator={navigator} route={route}/></Scene>;
+      return <Scene>
+        <BubblePopGame
+          navigator={navigator}
+          route={route}
+          scale={SCALE}
+        />
+      </Scene>;
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {

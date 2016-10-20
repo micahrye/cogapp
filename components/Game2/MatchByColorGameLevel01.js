@@ -56,6 +56,7 @@ class MatchByColorGameLevel01 extends React.Component {
     this.leftFood = {tweenOptions: {}};
     this.middleFood = {tweenOptions: {}};
     this.rightFood = {tweenOptions: {}};
+    this.scale = this.props.scale;
     this.baseFoodLocation = [150, 400];
     this.foodLeftShift = 200;
     this.foodTargetLocation = [300, 550];
@@ -96,8 +97,8 @@ class MatchByColorGameLevel01 extends React.Component {
     return (
       {
         tweenType: "linear-move",
-        startXY: startXY,
-        endXY: endXY,
+        startXY: [startXY[0] * this.scale.width, startXY[1] * this.scale.height],
+        endXY: [endXY[0] * this.scale.width, endXY[1] * this.scale.height],
         duration: duration,
         loop: false,
       }
@@ -272,21 +273,25 @@ class MatchByColorGameLevel01 extends React.Component {
             characterUID={this.characterUIDs.lever}
             animationFrameIndex={[0]}
             loopAnimation={true}
-            coordinates={{top: 240, left: 1067 }}
-            size={{ width: 213,height: 189 }}
+            coordinates={{
+              top: 240 * this.scale.height,
+              left: 1080 * this.scale.width }}
+            size={{ width: 210 * this.scale.width,
+              height: 189 * this.scale.height}}
             rotate={[{rotateY:'180deg'}]}
             onPress={() => this.leverPress()}
             onPressIn={() => this.leverPressIn()}
             onPressOut={() => this.leverPressOut()}
-
           />
 
           <AnimatedSprite
             character={signCharacter}
             ref={'leftSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300, left: 350}}
-            size={{width: 188, height: 300}}
+            coordinates={{top: -300 * this.scale.height,
+              left: 350 * this.scale.width}}
+            size={{width: 188 * this.scale.width,
+              height: 300 * this.scale.height}}
             draggable={false}
             tweenOptions={this.leftSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -296,8 +301,10 @@ class MatchByColorGameLevel01 extends React.Component {
             character={signCharacter}
             ref={'middleSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300, left: 550}}
-            size={{width: 188, height: 300}}
+            coordinates={{top: -300 * this.scale.height,
+              left: 550 * this.scale.width}}
+            size={{width: 188 * this.scale.width,
+              height: 300 * this.scale.height}}
             draggable={false}
             tweenOptions={this.middleSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -307,8 +314,10 @@ class MatchByColorGameLevel01 extends React.Component {
             character={signCharacter}
             ref={'rightSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300, left: 750}}
-            size={{width: 188, height: 300}}
+            coordinates={{top: -300 * this.scale.height,
+              left: 750 * this.scale.width}}
+            size={{width: 188 * this.scale.width,
+              height: 300 * this.scale.height}}
             draggable={false}
             tweenOptions={this.rightSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -323,7 +332,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.baseFoodLocation[0],
                 left: this.baseFoodLocation[1]}}
-              size={{width: 100, height: 108}}
+              size={{width: 100 * this.scale.width,
+                height: 108 * this.scale.height}}
               draggable={false}
               tweenOptions={this.leftFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -340,7 +350,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.baseFoodLocation[0],
                 left: this.baseFoodLocation[1] + this.foodLeftShift}}
-              size={{width: 120, height: 120}}
+              size={{width: 120 * this.scale.width,
+                height: 120 * this.scale.height}}
               draggable={false}
               tweenOptions={this.middleFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -357,7 +368,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.baseFoodLocation[0],
                 left: this.baseFoodLocation[1] + 2 * this.foodLeftShift}}
-              size={{width: 120, height: 124}}
+                size={{width: 120 * this.scale.width,
+                  height: 120 * this.scale.height}}
               draggable={false}
               tweenOptions={this.rightFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -372,8 +384,9 @@ class MatchByColorGameLevel01 extends React.Component {
             style={{opacity: 1}}
             animationFrameIndex={this.state.omnivoreAnimationIndex}
             loopAnimation={this.omnivore.loopAnimation}
-            coordinates={{top: 400, left: -300 }}
-            size={{ width: 300, height: 285 }}
+            coordinates={{top: 420 * this.scale.height,
+              left: -300 * this.scale.width}}
+            size={{ width: 300 * this.scale.width, height: 285 * this.scale.height}}
             rotate={[{rotateY:'180deg'}]}
             tweenOptions={this.omnivore.tweenOptions}
             tweenStart={'fromCode'}

@@ -126,7 +126,7 @@ class BugZapLevel01 extends React.Component {
     let index = [0,2,0];
     let delay = (700 * this.props.scale.width);
     if (this.state.frogDirection == "right") {
-      index = [0,1,1,1,0];
+      index = [0,1,1,1,1,0];
       this.interval = setInterval(() => {
         clearInterval(this.interval);
         this.goToNextTrial();
@@ -177,7 +177,7 @@ class BugZapLevel01 extends React.Component {
           <AnimatedSprite
             character={signCharacter}
             coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 - (360 * this.props.scale.width)}}
-            size={{width: 140, height: 220}}
+            size={{width: 140 * this.props.scale.width, height: 220 * this.props.scale.height}}
             animationFrameIndex={[0]}
           />
       </View>
@@ -201,7 +201,7 @@ class BugZapLevel01 extends React.Component {
               <AnimatedSprite
                 character={signCharacter}
                 coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
-                size={{width: 140, height: 220}}
+                size={{width: 140 * this.props.scale.width, height: 220* this.props.scale.height}}
                 animationFrameIndex={[0]}
               />
           </View>
