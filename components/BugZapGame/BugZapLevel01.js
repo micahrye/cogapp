@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-  Text,
   View,
-  TouchableOpacity,
   Image,
 } from 'react-native';
 
@@ -10,11 +8,11 @@ import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 // import characters for AnimatedSprite to use
-import frogCharacter from '../../sprites/frogLite/frogLiteCharacter';
+// import frogCharacter from '../../sprites/frogLite/frogLiteCharacter';
 import bugCharacter from '../../sprites/bug/bugCharacter';
 import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
 import AnimatedSprite from "../AnimatedSprite/AnimatedSprite";
-import signCharacter from "../../sprites/sign/signCharacter"
+import signCharacter from "../../sprites/sign/signCharacter";
 
 import styles from "./BugZapStyles";
 
@@ -27,69 +25,81 @@ class BugZapLevel01 extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      frogKey: 0,
       rotate: undefined,
-      frogPos: 250 * this.props.scale.width,
+      characterPos: 500 * this.props.scale.width,
       showOtherBug: false,
-      frogDirection: 'left',
+      characterDirection: 'left',
       level: 1,
       tweenOptions: null,
-      startX: SCREEN_WIDTH/2 - (360 * this.props.scale.width),
+      bugStartX: SCREEN_WIDTH/2 - (360 * this.props.scale.width),
       showBug1: true,
-      frogAnimationIndex: [0],
+      characterAnimationIndex: [0],
     };
-    this.frog = {style: {opacity: 0}};
+    this.character = {style: {opacity: 0}};
     this.loadingContent = false;
     this.bugPressed = false;
   }
 
   componentWillMount () {
+    this.setCharacterAnimations();
+    this.setFrogDirection();
+    this.setBugTween();
+  }
+
+
+  setCharacterAnimations () {
     this.loadingContent = true;
-    this.frog.style = {opacity: 0};
+    this.character.style = {opacity: 0};
     this.setState({
-      frogAnimationIndex: [0,1,2,3,4,5],
+      characterAnimationIndex: [0,1,2,3,4,5],
     });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
-      this.frog.style = {opacity: 1};
+      this.character.style = {opacity: 1};
       this.loadingContent = false;
       this.setState({
-        frogAnimationIndex: [0],
+        characterAnimationIndex: [0],
       });
     }, 1000);
   }
 
-  componentDidMount () {
+  setFrogDirection () {
     let direction = Math.floor(Math.random() * 2);
-    let frogDirection = 'left';
+    let characterDirection = 'left';
 
     if (direction === 0) {
-      frogDirection = 'right';
-      this.setState({
+      characterDirection = 'right';
+      this.setState ({
         rotate: [{rotateY: '180deg'}],
-        frogPos: 500 * this.props.scale.width,
-        frogKey: Math.random(),
-        startX: SCREEN_WIDTH/2 + (210 * this.props.scale.width)
-      })
+        // these are here for when we use the frog character, will be different
+        // numbers depending on which direction frog is pointing
+        characterPos: 500 * this.props.scale.width,
+        bugStartX: SCREEN_WIDTH/2 + (210 * this.props.scale.width),
+      });
     }
 
-    this.setState({
-      frogDirection: frogDirection,
-    });
-
-    this.setState({
-      tweenOptions: {
-        tweenType: "curve-fall",
-        startXY: [this.state.startX, 95 * this.props.scale.height], // start on their tags
-        endXY: [400 * this.props.scale.width, 460 * this.props.scale.height], // end at character
-        duration: 1000 * this.props.scale.width,
-        loop: false,
-      }
+    this.setState ({
+      characterDirection: characterDirection,
     });
   }
 
+  setBugTween () {
+    this.setState({
+      tweenOptions: {
+        tweenType: "curve-fall",
+        // start on their tags
+        startXY: [this.state.bugStartX, 95 * this.props.scale.height],
+        // end at character
+        endXY: [400 * this.props.scale.width, 460 * this.props.scale.height],
+        duration: 1000 * this.props.scale.width,
+        loop: false,
+      },
+    });
+  }
+
+
   onTweenFinish (spriteKey) {
     // let index = [0,2,0];
-    // if (this.state.frogDirection == "right") {
+    // if (this.state.characterDirection == "right") {
     //   index = [1]
     // }
     //
@@ -123,10 +133,10 @@ class BugZapLevel01 extends React.Component {
 
     this.bugPressed = true;
 
-    let index = [0,2,0];
+    let index = [0,4,5,0];
     let delay = (700 * this.props.scale.width);
-    if (this.state.frogDirection == "right") {
-      index = [0,1,1,1,1,0];
+    if (this.state.characterDirection == "right") {
+      index = [3,3,3,0];
       this.interval = setInterval(() => {
         clearInterval(this.interval);
         this.goToNextTrial();
@@ -139,7 +149,7 @@ class BugZapLevel01 extends React.Component {
     clearInterval(this.eatInterval);
     this.eatInterval = setInterval(() => {
       this.setState({
-        frogAnimationIndex: index,
+        characterAnimationIndex: index,
       });
       clearInterval(this.eatInterval);
     }, delay);
@@ -159,18 +169,17 @@ class BugZapLevel01 extends React.Component {
         style={styles.backgroundImage} >
 
       <AnimatedSprite
-        character={frogCharacter}
-        key={this.state.frogKey}
-        coordinates={{top: 100 * this.props.scale.height,
-          left: this.state.frogPos}}
+        character={omnivoreLite}
+        coordinates={{top: 400 * this.props.scale.height,
+          left: this.state.characterPos}}
         size={{
-            width: 542 * this.props.scale.width,
-            height: 600 * this.props.scale.height,
+            width: 270 * this.props.scale.width,
+            height: 300 * this.props.scale.height,
         }}
-        animationFrameIndex={this.state.frogAnimationIndex}
+        animationFrameIndex={this.state.characterAnimationIndex}
         rotate={this.state.rotate}
-        style={this.frog.style}
-        />
+        style={this.character.style}
+      />
 
 
        <View style={styles.itemContainer}>
@@ -192,7 +201,8 @@ class BugZapLevel01 extends React.Component {
           tweenStart={'fromCode'}
           onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
           onPress={(characterUID) => this.onBugPress(characterUID)}
-          animationFrameIndex={[0]}/>
+          animationFrameIndex={[0]}
+        />
       : null}
 
       {this.state.showOtherBug ?
@@ -206,12 +216,13 @@ class BugZapLevel01 extends React.Component {
               />
           </View>
           <AnimatedSprite
-              key={Math.random()}
-              coordinates={{top: 95 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
-              size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
-              character={bugCharacter}
-              onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
-              animationFrameIndex={[0]}/>
+            key={Math.random()}
+            coordinates={{top: 95 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
+            size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
+            character={bugCharacter}
+            onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
+            animationFrameIndex={[0]}
+          />
           </View>
       : null}
 
