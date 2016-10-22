@@ -9,7 +9,7 @@ import TimerMixin from 'react-timer-mixin';
 
 // import characters for AnimatedSprite to use
 // import frogCharacter from '../../sprites/frogLite/frogLiteCharacter';
-import bugCharacter from '../../sprites/bug/bugCharacter';
+import bugCharacter from '../../sprites/bugLite/bugLiteCharacter';
 import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
 import AnimatedSprite from "../AnimatedSprite/AnimatedSprite";
 import signCharacter from "../../sprites/sign/signCharacter";
@@ -17,32 +17,50 @@ import signCharacter from "../../sprites/sign/signCharacter";
 import styles from "./BugZapStyles";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
-const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+// const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
-// const NUM_TRIALS = 3;
+const LEVEL1A_NUM_TRIALS = 2;
+const LEVEL1B_NUM_TRIALS = 2;
 
 class BugZapLevel01 extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      rotate: undefined,
-      characterPos: 500 * this.props.scale.width,
-      showOtherBug: false,
-      characterDirection: 'left',
-      level: 1,
-      tweenOptions: null,
-      bugStartX: SCREEN_WIDTH/2 - (360 * this.props.scale.width),
-      showBug1: true,
-      characterAnimationIndex: [0],
-    };
-    this.character = {style: {opacity: 0}};
+    this.character = {style: {opacity: 1}};
     this.loadingContent = false;
     this.bugPressed = false;
+    this.characterPos = 500 * this.props.scale.width;
+    this.bugStartX = SCREEN_WIDTH/2 - (360 * this.props.scale.width);
+    this.rotate = undefined;
+    this.characterDirection = 'left';
+    this.trialNumber = 1;
+    this.directionMaySwitch = false;
+    this.fps = 8;
+    this.showOtherBugSign = false;
+    this.blue = [9];
+    this.red = [10];
+    this.state = {
+      // level: 1,
+      tweenOptions: null,
+      showBugLeft: true,
+      showBugRight: true,
+      characterAnimationIndex: this.blue,
+    };
   }
 
   componentWillMount () {
-    this.setCharacterAnimations();
-    this.setFrogDirection();
+    if (this.props.route.trialNumber != undefined) {
+      this.trialNumber = this.props.route.trialNumber + 1;
+      if (this.trialNumber > LEVEL1A_NUM_TRIALS) {
+        this.directionMaySwitch = true;
+      }
+    }
+    else {
+      this.setCharacterAnimations();
+    }
+    if (this.directionMaySwitch) {
+      this.showOtherBugSign = true;
+    }
+    this.setCharacterDirection();
     this.setBugTween();
   }
 
@@ -50,46 +68,53 @@ class BugZapLevel01 extends React.Component {
   setCharacterAnimations () {
     this.loadingContent = true;
     this.character.style = {opacity: 0};
+    this.fps = 8; // TODO figure out how to make this work w/ different number
     this.setState({
-      characterAnimationIndex: [1,2,3,4,5,6,0],
+      characterAnimationIndex: [1,2,3,4,5,6,9],
     });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
+      this.fps = 8;
       this.character.style = {opacity: 1};
       this.loadingContent = false;
       this.setState({
-        characterAnimationIndex: [0],
+        characterAnimationIndex: this.blue,
       });
-    }, 1000);
+    }, 1100);
   }
 
-  setFrogDirection () {
-    let direction = Math.floor(Math.random() * 2);
-    let characterDirection = 'left';
+  setCharacterDirection () {
+    if (this.directionMaySwitch) {
+      let direction = Math.floor(Math.random() * 2);
+      this.characterDirection = 'left';
 
-    if (direction === 0) {
-      characterDirection = 'right';
-      this.setState ({
-        rotate: [{rotateY: '180deg'}],
+      if (direction === 0) {
+        this.characterDirection = 'right';
+        this.setState({
+          characterAnimationIndex: this.red,
+        });
         // these are here for when we use the frog character, will be different
         // numbers depending on which direction frog is pointing
-        characterPos: 500 * this.props.scale.width,
-        bugStartX: SCREEN_WIDTH/2 + (210 * this.props.scale.width),
-      });
+        this.characterPos = 500 * this.props.scale.width;
+        this.bugStartX = SCREEN_WIDTH/2 + (210 * this.props.scale.width);
+        this.rotate = [{rotateY: '180deg'}];
+      }
     }
-
-    this.setState ({
-      characterDirection: characterDirection,
-    });
   }
 
   setBugTween () {
+    let endX = 520;
+
+    if (this.characterDirection === 'right') {
+      endX = 600;
+    }
+
     this.setState({
       tweenOptions: {
         tweenType: "curve-fall",
         // start on their tags
-        startXY: [this.state.bugStartX, 95 * this.props.scale.height],
+        startXY: [this.bugStartX, 95 * this.props.scale.height],
         // end at character
-        endXY: [500 * this.props.scale.width, 460 * this.props.scale.height],
+        endXY: [endX * this.props.scale.width, 460 * this.props.scale.height],
         duration: 1000 * this.props.scale.width,
         loop: false,
       },
@@ -97,19 +122,17 @@ class BugZapLevel01 extends React.Component {
   }
 
 
-  onTweenFinish (spriteKey) {
-    // let index = [0,2,0];
-    // if (this.state.characterDirection == "right") {
-    //   index = [1]
-    // }
-    //
-    // this.setState({
-    //   showBug1: false,
-    //   frogAnimationIndex: index,
-    // });
-    this.setState({
-      showBug1: false,
-    });
+  onTweenFinish (characterUID) {
+    if (characterUID === 'bugLeft') {
+      this.setState({
+        showBugLeft: false,
+      });
+    }
+    else {
+      this.setState({
+        showBugRight: false,
+      });
+    }
     this.goToNextTrial();
   }
 
@@ -118,6 +141,7 @@ class BugZapLevel01 extends React.Component {
       this.props.navigator.replace({
         id: 'NextTrial',
         getId: this.getCurrId,
+        trialNumber: this.trialNumber,
       });
     }, 1500);
   }
@@ -126,24 +150,31 @@ class BugZapLevel01 extends React.Component {
     return 'BugZapLevel01';
   }
 
-  onBugPress (characterUID) {
+  onBugPress (whichBug) {
     if (this.loadingContent || this.bugPressed) {
       return true;
     }
-
     this.bugPressed = true;
 
-    let index = [0,4,5,0];
+    if ((whichBug === 'bugLeft' && this.characterDirection === 'left') ||
+        (whichBug === 'bugRight' && this.characterDirection === 'right')) {
+
+      this.correctBugTapped(whichBug);
+    }
+    else {
+      this.wrongBugTapped();
+    }
+  }
+
+  correctBugTapped (whichBug) {
+    let index = [0,4,4,5,0];
     let delay = (500 * this.props.scale.width);
-    if (this.state.characterDirection == "right") {
-      index = [3,3,3,0];
-      this.interval = setInterval(() => {
-        clearInterval(this.interval);
-        this.goToNextTrial();
-      }, 1000);
-      delay = 100;
-    } else {
-      this.refs.bugRef.startTween();
+
+    if (whichBug === 'bugLeft') {
+      this.refs.bugLeftRef.startTween();
+    }
+    else {
+      this.refs.bugRightRef.startTween();
     }
 
     clearInterval(this.eatInterval);
@@ -153,14 +184,24 @@ class BugZapLevel01 extends React.Component {
       });
       clearInterval(this.eatInterval);
     }, delay);
-
   }
-  // onAnimationFinish (animationKey) {
-  //   console.warn('here');
-  //   this.setState({
-  //     frogAnimationIndex: [0],
-  //   })
-  // }
+
+  wrongBugTapped () {
+    let index = [3,3,3,0];
+    let delay = 100;
+
+    this.disgustInterval = setInterval(() => {
+      clearInterval(this.disgustInterval);
+      this.setState({
+        characterAnimationIndex: index,
+      });
+    }, delay);
+
+    this.interval = setInterval(() => {
+      clearInterval(this.interval);
+      this.goToNextTrial();
+    }, 1000);
+  }
 
   render () {
     return (
@@ -171,14 +212,15 @@ class BugZapLevel01 extends React.Component {
       <AnimatedSprite
         character={omnivoreLite}
         coordinates={{top: 400 * this.props.scale.height,
-          left: this.state.characterPos}}
+          left: this.characterPos}}
         size={{
             width: 300 * this.props.scale.width,
             height: 300 * this.props.scale.height,
         }}
         animationFrameIndex={this.state.characterAnimationIndex}
-        rotate={this.state.rotate}
+        rotate={this.rotate}
         style={this.character.style}
+        fps={this.fps}
       />
 
 
@@ -186,43 +228,50 @@ class BugZapLevel01 extends React.Component {
           <AnimatedSprite
             character={signCharacter}
             coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 - (360 * this.props.scale.width)}}
-            size={{width: 140 * this.props.scale.width, height: 220 * this.props.scale.height}}
+            size={{width: 140 * this.props.scale.width, height: 230 * this.props.scale.height}}
             animationFrameIndex={[0]}
           />
       </View>
 
-      {this.state.showBug1 ?
+      {this.state.showBugLeft ?
         <AnimatedSprite
           character={bugCharacter}
-          ref={'bugRef'}
-          coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 - (365 * this.props.scale.width)}}
+          ref={'bugLeftRef'}
+          characterUID={'bugLeft'}
+          coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 - (370 * this.props.scale.width)}}
           size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
           tweenOptions={this.state.tweenOptions}
           tweenStart={'fromCode'}
-          onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
+          onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           onPress={(characterUID) => this.onBugPress(characterUID)}
-          animationFrameIndex={[0]}
+          animationFrameIndex={[1]}
         />
       : null}
 
-      {this.state.showOtherBug ?
+      {this.showOtherBugSign ?
         <View>
           <View style={styles.itemContainer}>
               <AnimatedSprite
                 character={signCharacter}
                 coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
-                size={{width: 140 * this.props.scale.width, height: 220* this.props.scale.height}}
+                size={{width: 140 * this.props.scale.width, height: 230* this.props.scale.height}}
                 animationFrameIndex={[0]}
               />
           </View>
-          <AnimatedSprite
-            key={Math.random()}
-            coordinates={{top: 95 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
-            size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
-            character={bugCharacter}
-            onTweenFinish={(spriteKey) => this.onTweenFinish(spriteKey)}
-            animationFrameIndex={[0]}
-          />
+          {this.state.showBugRight ?
+            <AnimatedSprite
+              ref={'bugRightRef'}
+              characterUID={'bugRight'}
+              coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 + (200 * this.props.scale.width)}}
+              size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
+              character={bugCharacter}
+              tweenOptions={this.state.tweenOptions}
+              tweenStart={'fromCode'}
+              onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
+              onPress={(characterUID) => this.onBugPress(characterUID)}
+              animationFrameIndex={[2]}
+            />
+          : null}
           </View>
       : null}
 

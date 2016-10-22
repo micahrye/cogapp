@@ -24,7 +24,7 @@ class AnimatedSprite extends React.Component {
       width: props.size.width,
       height: props.size.height,
       rotate: props.rotate,
-      frameIndex: 0,
+      frameIndex: this.props.animationFrameIndex,
       tweener: [],
     };
 
@@ -90,6 +90,9 @@ class AnimatedSprite extends React.Component {
     this.renderTime = Date.now();
     if (this.props.tweenStart == "auto" && this.props.tweenOptions != null) {
       this.startTween();
+    }
+    if(this.props.fps){
+      this.fps = this.props.fps;
     }
   }
   componentWillReceiveProps (nextProps) {
@@ -308,6 +311,7 @@ AnimatedSprite.propTypes = {
   onTweenStopped: React.PropTypes.func,
   onTweenFinish: React.PropTypes.func,
   scale: React.PropTypes.number,
+  fps: React.PropTypes.number,
 };
 
 AnimatedSprite.defaultProps = {

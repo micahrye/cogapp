@@ -12,6 +12,9 @@ const omnivoreLite = {
     require("./monster_eat05.png"),
     require("./monster_walk03.png"),
     require("./monster_walk04.png"),
+    require("./omnivore_blue.png"),
+    require("./omnivore_red.png"),
+
   ],
 };
 
