@@ -53,6 +53,9 @@ class BugZapLevel01 extends React.Component {
       if (this.trialNumber > LEVEL1A_NUM_TRIALS) {
         this.directionMaySwitch = true;
       }
+      if (this.trialNumber > LEVEL1B_NUM_TRIALS) {
+        this.bugTapTimeout();
+      }
     }
     else {
       this.setCharacterAnimations();
@@ -121,6 +124,14 @@ class BugZapLevel01 extends React.Component {
     });
   }
 
+  bugTapTimeout () {
+    // this will change once we have the jumping on/off the lily pad going
+    this.characterDissapear = setTimeout (() => {
+      this.goToNextTrial();
+      clearTimeout(this.characterDissapear);
+    }, 2000);
+  }
+
 
   onTweenFinish (characterUID) {
     if (characterUID === 'bugLeft') {
@@ -155,6 +166,7 @@ class BugZapLevel01 extends React.Component {
       return true;
     }
     this.bugPressed = true;
+    clearTimeout(this.characterDissapear);
 
     if ((whichBug === 'bugLeft' && this.characterDirection === 'left') ||
         (whichBug === 'bugRight' && this.characterDirection === 'right')) {
