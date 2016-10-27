@@ -44,6 +44,7 @@ class BugZapLevel01 extends React.Component {
       showBugRight: true,
       characterAnimationIndex: this.blue,
       characterTweenOptions: null,
+      signTweenOptions: null,
     };
   }
 
@@ -52,12 +53,17 @@ class BugZapLevel01 extends React.Component {
       this.trialNumber = this.props.route.trialNumber + 1;
       if (this.trialNumber > LEVEL1A_NUM_TRIALS) {
         this.directionMaySwitch = true;
+        this.signBounceDown();
       }
       if (this.trialNumber > LEVEL1B_NUM_TRIALS) {
         this.bugTapTimeout();
       }
+      this.setCharacterHopOn();
     }
     else {
+      // first trial, run through all animations once
+      // and sign bounces down
+      this.signBounceDown();
       this.setCharacterAnimations();
     }
     if (this.directionMaySwitch) {
@@ -67,6 +73,19 @@ class BugZapLevel01 extends React.Component {
     this.setBugTween();
   }
 
+  signBounceDown () {
+    this.setState({
+      signKey: Math.random(),
+      signTweenOptions: {
+        tweenType: "bounce-drop",
+        startY: -300,
+        endY: -10 * this.props.scale.height,
+        duration: 2000,
+        repeatable: false,
+        loop: false,
+      },
+    });
+  }
 
   setCharacterAnimations () {
     this.loadingContent = true;
@@ -83,7 +102,7 @@ class BugZapLevel01 extends React.Component {
         characterAnimationIndex: this.blue,
       });
       this.setCharacterHopOn();
-    }, 500);
+    }, 1500);
   }
 
   setCharacterDirection () {
@@ -126,7 +145,6 @@ class BugZapLevel01 extends React.Component {
   }
 
   setCharacterHopOn () {
-    console.warn('here');
     this.setState({
       characterKey: Math.random(),
       characterTweenOptions: {
@@ -257,10 +275,13 @@ class BugZapLevel01 extends React.Component {
 
        <View style={styles.itemContainer}>
           <AnimatedSprite
+            key={this.state.signKey}
             character={signCharacter}
             coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 - (360 * this.props.scale.width)}}
             size={{width: 140 * this.props.scale.width, height: 230 * this.props.scale.height}}
             animationFrameIndex={[0]}
+            tweenOptions={this.state.signTweenOptions}
+            tweenStart={'auto'}
           />
       </View>
 
@@ -287,6 +308,8 @@ class BugZapLevel01 extends React.Component {
                 coordinates={{top: -10 * this.props.scale.height, left: SCREEN_WIDTH/2 + (210 * this.props.scale.width)}}
                 size={{width: 140 * this.props.scale.width, height: 230* this.props.scale.height}}
                 animationFrameIndex={[0]}
+                tweenOptions={this.state.signTweenOptions}
+                tweenStart={'auto'}
               />
           </View>
           {this.state.showBugRight ?

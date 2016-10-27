@@ -147,7 +147,6 @@ class AnimatedSprite extends React.Component {
 
   startAnimation () {
     if (this.props.fps) {
-      console.warn(this.props.fps);
       this.fps = this.props.fps;
     }
     this.numFrames = this.character[this.animationKey].length-1;
