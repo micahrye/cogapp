@@ -292,6 +292,7 @@ const zoom = {
 const hop = {
   // TODO: this can be modified to include left then you can do more with it,
   // not just hop in place
+      // see hopForward for this
   name: 'hop',
   start: function startTween (options, componentValues, onTweenFinish) {
     componentValues.top.setValue(options.startY);
@@ -299,17 +300,17 @@ const hop = {
       Animated.timing(
         componentValues.top,
         {
-          toValue: (options.startY - 75),
+          toValue: options.yTo,
           easing: Easing.linear,
-          duration: 300,
+          duration: options.duration/2,
         }
       ),
       Animated.timing(
         componentValues.top,
         {
-          toValue: options.startY,
+          toValue: options.endY,
           easing: Easing.bounce,
-          duration: 700,
+          duration: options.duration/2,
         }
       ),
     ]).start(() => {

@@ -17,7 +17,7 @@ import signCharacter from "../../sprites/sign/signCharacter";
 import styles from "./BugZapStyles";
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
-// const SCREEN_HEIGHT = require('Dimensions').get('window').height;
+const SCREEN_HEIGHT = require('Dimensions').get('window').height;
 
 const LEVEL1A_NUM_TRIALS = 2;
 const LEVEL1B_NUM_TRIALS = 2;
@@ -39,11 +39,11 @@ class BugZapLevel01 extends React.Component {
     this.blue = [9];
     this.red = [10];
     this.state = {
-      // level: 1,
-      tweenOptions: null,
+      bugTweenOptions: null,
       showBugLeft: true,
       showBugRight: true,
       characterAnimationIndex: this.blue,
+      characterTweenOptions: null,
     };
   }
 
@@ -71,7 +71,7 @@ class BugZapLevel01 extends React.Component {
   setCharacterAnimations () {
     this.loadingContent = true;
     this.character.style = {opacity: 0};
-    this.fps = 8; // TODO figure out how to make this work w/ different number
+    this.fps = 20;
     this.setState({
       characterAnimationIndex: [1,2,3,4,5,6,9],
     });    // reset characters to default state
@@ -82,7 +82,8 @@ class BugZapLevel01 extends React.Component {
       this.setState({
         characterAnimationIndex: this.blue,
       });
-    }, 1100);
+      this.setCharacterHopOn();
+    }, 500);
   }
 
   setCharacterDirection () {
@@ -112,13 +113,28 @@ class BugZapLevel01 extends React.Component {
     }
 
     this.setState({
-      tweenOptions: {
+      bugTweenOptions: {
         tweenType: "curve-fall",
         // start on their tags
         startXY: [this.bugStartX, 95 * this.props.scale.height],
         // end at character
         endXY: [endX * this.props.scale.width, 460 * this.props.scale.height],
         duration: 1000 * this.props.scale.width,
+        loop: false,
+      },
+    });
+  }
+
+  setCharacterHopOn () {
+    console.warn('here');
+    this.setState({
+      characterKey: Math.random(),
+      characterTweenOptions: {
+        tweenType: "hop",
+        startY: SCREEN_HEIGHT,
+        yTo: 100 * this.props.scale.height,
+        endY: 400 * this.props.scale.height,
+        duration: 1000 * this.props.scale.height,
         loop: false,
       },
     });
@@ -222,6 +238,7 @@ class BugZapLevel01 extends React.Component {
         style={styles.backgroundImage} >
 
       <AnimatedSprite
+        key={this.state.characterKey}
         character={omnivoreLite}
         coordinates={{top: 400 * this.props.scale.height,
           left: this.characterPos}}
@@ -233,6 +250,8 @@ class BugZapLevel01 extends React.Component {
         rotate={this.rotate}
         style={this.character.style}
         fps={this.fps}
+        tweenOptions={this.state.characterTweenOptions}
+        tweenStart={'auto'}
       />
 
 
@@ -252,7 +271,7 @@ class BugZapLevel01 extends React.Component {
           characterUID={'bugLeft'}
           coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 - (370 * this.props.scale.width)}}
           size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
-          tweenOptions={this.state.tweenOptions}
+          tweenOptions={this.state.bugTweenOptions}
           tweenStart={'fromCode'}
           onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           onPress={(characterUID) => this.onBugPress(characterUID)}
@@ -277,7 +296,7 @@ class BugZapLevel01 extends React.Component {
               coordinates={{top: 75 * this.props.scale.height, left: SCREEN_WIDTH/2 + (200 * this.props.scale.width)}}
               size={{width: 150 * this.props.scale.width, height: 150 * this.props.scale.height}}
               character={bugCharacter}
-              tweenOptions={this.state.tweenOptions}
+              tweenOptions={this.state.bugTweenOptions}
               tweenStart={'fromCode'}
               onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
               onPress={(characterUID) => this.onBugPress(characterUID)}

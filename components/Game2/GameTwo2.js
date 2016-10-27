@@ -81,6 +81,9 @@ class GameTwo2 extends Component {
         {
           tweenType: "hop",
           startY: startTop,
+          endY: startTop,
+          yTo: startTop - 70,
+          duration: 1000,
           loop: false,
         }
       );
@@ -116,6 +119,9 @@ class GameTwo2 extends Component {
     tweenInitial = {
        tweenType: "hop",
        startY: startTop,
+       endY: startTop,
+       yTo: startTop - 70,
+       duration: 1000,
        loop: false,
     };
     // keeps creature onscreen during trials when character animations are playing
@@ -712,6 +718,9 @@ class GameTwo2 extends Component {
     const tweenOptsLever = {
       tweenType: "hop",
       startY: 80,
+      endY: startTop,
+      yTo: startTop - 70,
+      duration: 1000,
       repeatable: true,
       loop: false,
     };
