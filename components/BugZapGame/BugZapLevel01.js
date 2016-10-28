@@ -231,7 +231,7 @@ class BugZapLevel01 extends React.Component {
         getId: this.getCurrId,
         trialNumber: this.trialNumber,
       });
-    }, 1500);
+    }, 2500);
   }
 
   getCurrId () {
