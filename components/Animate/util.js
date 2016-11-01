@@ -17,14 +17,14 @@ export const randomGoatAnimationSequece =  function switchGoatAnimation () {
     case 3:
       return disgust;
     default:
-      conole.error('Unsupported goat sequence sequence');
+      console.error('Unsupported goat sequence sequence');
   }
 };
 
 export const randomOmnivoreAnimationSequence = function switchOmnivoreAnimation () {
   const normal = [0];
-  const walk = [6,7];
-  const eat = [0,4,0,5];
+  const walk = [6, 7];
+  const eat = [0,4,5,4,0];
   const disgust = [0,3,3,3,3,3];
   const celebrate = [0,1,2,1];
 
