@@ -6,7 +6,7 @@ import platformCharacter from "../../sprites/platform/platformCharacter";
 // create a class for individual tiles so GameThree2's render will
 // be neater and easier to read
 class Tile extends Component {
-  render() {
+  render () {
 
     const tweenOpts01 = {
       tweenType: "pulse",
