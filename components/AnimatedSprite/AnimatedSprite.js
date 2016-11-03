@@ -29,6 +29,7 @@ class AnimatedSprite extends React.Component {
     };
 
     this.character = this.props.character;
+    // used for panResponder
     this.characterStyles =  {};
     this.panResponder = {};
     this.charactertyles =  {};
@@ -254,10 +255,14 @@ class AnimatedSprite extends React.Component {
         top: this.state.top,
         left: this.state.left,
         position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: this.state.width,
+        height: this.state.height,
         opacity: this.props.style ? this.props.style.opacity : 1,
         transform: [{scale: this.state.scale}],
         // borderColor: "#000000",
-        // borderWidth: 1,
+        // borderWidth: 2,
       }
     );
   }
@@ -281,6 +286,7 @@ class AnimatedSprite extends React.Component {
               width: this.state.width,
               height: this.state.height,
               transform: this.state.rotate,
+
             }}
           />
         </TouchableOpacity>

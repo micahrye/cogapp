@@ -43,7 +43,7 @@ class MatchByColorGameLevel01 extends React.Component {
       monsterAnimationIndex: [0],
       goatAnimationIndex: [0],
       mammalAnimationIndex: [0],
-      tweenMonster: false,
+      tweenCharacter: false,
       loadContent: false,
       dropFood: false,
       signsVisable: false,
@@ -166,7 +166,7 @@ class MatchByColorGameLevel01 extends React.Component {
 
     this.setState({
       monsterAnimationIndex: monsterUtils.walkIndx,
-      tweenMonster: true,
+      tweenCharacter: true,
       signsVisable: true},
       () => {
         this.refs.leftSign.startTween();
@@ -266,7 +266,7 @@ class MatchByColorGameLevel01 extends React.Component {
     this.signInterval = setInterval(() => {
       this.setState({
         monsterAnimationIndex: monsterUtils.walkIndx,
-        tweenMonster: true,
+        tweenCharacter: true,
         signsVisable: false,
         foodDisplayed: false,
       }, () => {
@@ -293,7 +293,7 @@ class MatchByColorGameLevel01 extends React.Component {
             coordinates={{
               top: 240 * this.scale.height,
               left: 1080 * this.scale.width }}
-            size={{ width: 210 * this.scale.width,
+            size={{ width: 213 * this.scale.width,
               height: 189 * this.scale.height}}
             rotate={[{rotateY:'180deg'}]}
             onPress={() => this.leverPress()}
@@ -402,8 +402,9 @@ class MatchByColorGameLevel01 extends React.Component {
             animationFrameIndex={this.state.monsterAnimationIndex}
             loopAnimation={this.monster.loopAnimation}
             coordinates={{top: 400 * this.scale.height,
-              left: -300 * this.scale.width}}
-            size={{ width: 330 * this.scale.width, height: 330 * this.scale.height}}
+              left: -330 * this.scale.width}}
+            size={{ width: 330 * this.scale.width,
+              height: 330 * this.scale.height}}
             rotate={[{rotateY:'180deg'}]}
             tweenOptions={this.monster.tweenOptions}
             tweenStart={'fromCode'}
