@@ -5,13 +5,14 @@
 
 import React from 'react';
 import {
-  Text,
   View,
+  Image,
   StyleSheet,
-  ScrollView,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+
+import _ from 'lodash';
 
 var reactMixin = require('react-mixin');
 import TimerMixin from 'react-timer-mixin';
@@ -22,6 +23,43 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 class Main extends React.Component {
   constructor (props) {
     super(props);
+    this.iconList = [
+      {
+        name: 'BUBBLE',
+        imgSrc: require('../media/icons/game7_icon_color.png'),
+        location: {top: 130, left: 60},
+      },
+      {
+        name: 'BUG',
+        imgSrc: require('../media/icons/game1_icon_color.png'),
+        location: {top: 380, left: 180},
+      },
+      {
+        name: 'MATCH',
+        imgSrc: require('../media/icons/game2_icon_color.png'),
+        location: {top: 200, left: 400},
+      },
+      {
+        name: 'JUMP',
+        imgSrc: require('../media/icons/game3_icon_bw.png'),
+        location: {top: 400, left: 600},
+      },
+      {
+        name: 'MATRIX',
+        imgSrc: require('../media/icons/game4_icon_bw.png'),
+        location: {top: 40, left: 640},
+      },
+      {
+        name: 'FOOD',
+        imgSrc: require('../media/icons/game5_icon_bw.png'),
+        location: {top: 160, left: 900},
+      },
+      {
+        name: 'COLOR',
+        imgSrc: require('../media/icons/game6_icon_bw.png'),
+        location: {top: 420, left: 940},
+      },
+    ];
   }
 
   componentWillMount () {}
@@ -33,90 +71,48 @@ class Main extends React.Component {
     this.props.navigator.replace({id: gameId});
   }
 
+  launchGame (game) {
+    switch (game) {
+      case 'BUBBLE':
+        this.goToGame('BubblePopGame');
+        break;
+      case 'BUG':
+        this.goToGame('BugZapLevel01');
+        break;
+      case 'MATCH':
+        this.goToGame('MatchByColorGameLevel01');
+        break;
+      default:
+        // console.warn('touched me');
+        break;
+    }
+  }
+
   render () {
+
+    const icons = _.map(this.iconList, (icon, index) => {
+      return (
+        <TouchableOpacity
+          key={index}
+          activeOpacity={1.0}
+          style={{width: styles.icon.width,
+            height: styles.icon.height,
+            top:icon.location.top, left: icon.location.left,
+            position: 'absolute',
+          }}
+          onPress={() => this.launchGame(icon.name)}>
+          <Image
+            source={icon.imgSrc}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      );
+    });
+
     return (
-      <ScrollView
-        style={styles.scrollView} >
-
-      <View style={styles.container}>
-
-        <View style={styles.column}>
-
-          <TouchableOpacity onPress={() => { this.goToGame('AnimatedTest'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Example Animate Test'}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { this.goToGame('BubblePopGame'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'NEW BubblePop'}</Text>
-            </View>
-          </TouchableOpacity>
-
-
-
-        </View>
-
-        <View style={styles.column}>
-        {/*
-          <TouchableOpacity onPress={() => { this.goToGame('BubblePop'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To BubblePop'}</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity >
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Three'}</Text>
-            </View>
-          </TouchableOpacity>
-        */}
-        <TouchableOpacity onPress={() => { this.goToGame('BugZap'); }}>
-          <View style={styles.button}>
-            <Text style={styles.text}>{'Go To BugZap'}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => { this.goToGame('BugZapLevel01'); }}>
-          <View style={styles.button}>
-            <Text style={styles.text}>{'NEW BugZap'}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => { this.goToGame('GameTwo'); }}>
-          <View style={styles.button}>
-            <Text style={styles.text}>{'Go To Game Two'}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => { this.goToGame('MatchByColorGameLevel01'); }}>
-          <View style={styles.button}>
-            <Text style={styles.text}>{'NEW Game Two'}</Text>
-          </View>
-        </TouchableOpacity>
-        {/*
-          <TouchableOpacity >
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Four'}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity >
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Five'}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { this.goToGame('GameSix'); }}>
-            <View style={styles.button}>
-              <Text style={styles.text}>{'Go To Game Six'}</Text>
-            </View>
-          </TouchableOpacity>
-          */}
-        </View>
-
+      <View style={{backgroundColor: '#738599', flex: 1}} >
+        {icons}
       </View>
-      </ScrollView>
     );
   }
 }
@@ -128,6 +124,10 @@ Main.propTypes = {
 reactMixin.onClass(Main, TimerMixin);
 
 const styles = StyleSheet.create({
+  icon: {
+    width: 240,
+    height: 240,
+  },
   scrollView: {
     height:SCREEN_HEIGHT,
     width:SCREEN_WIDTH,
