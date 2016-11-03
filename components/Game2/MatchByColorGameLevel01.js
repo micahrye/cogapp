@@ -109,8 +109,8 @@ class MatchByColorGameLevel01 extends React.Component {
     return (
       {
         tweenType: "linear-move",
-        startXY: [startXY[0] * this.scale.width, startXY[1] * this.scale.height],
-        endXY: [endXY[0] * this.scale.width, endXY[1] * this.scale.height],
+        startXY: [startXY[0] * this.scale.screenWidth, startXY[1] * this.scale.screenHeight],
+        endXY: [endXY[0] * this.scale.screenWidth, endXY[1] * this.scale.screenHeight],
         duration: duration,
         loop: false,
       }
@@ -280,6 +280,8 @@ class MatchByColorGameLevel01 extends React.Component {
   }
 
   render () {
+    // console.warn('width = ', this.scale.screenWidth);
+    // console.warn('height = ', this.scale.screenHeight);
     return (
       <View style={styles.container}>
         <Image source={require('../../backgrounds/Game_2_Background_1280.png')}
@@ -291,10 +293,10 @@ class MatchByColorGameLevel01 extends React.Component {
             animationFrameIndex={[0]}
             loopAnimation={true}
             coordinates={{
-              top: 240 * this.scale.height,
-              left: 1080 * this.scale.width }}
-            size={{ width: 213 * this.scale.width,
-              height: 189 * this.scale.height}}
+              top: 240 * this.scale.screenHeight,
+              left: 1080 * this.scale.screenWidth }}
+            size={{ width: Math.floor(213 * this.scale.image),
+              height: Math.floor(189 * this.scale.image)}}
             rotate={[{rotateY:'180deg'}]}
             onPress={() => this.leverPress()}
             onPressIn={() => this.leverPressIn()}
@@ -305,10 +307,10 @@ class MatchByColorGameLevel01 extends React.Component {
             character={signCharacter}
             ref={'leftSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300 * this.scale.height,
-              left: 350 * this.scale.width}}
-            size={{width: 188 * this.scale.width,
-              height: 300 * this.scale.height}}
+            coordinates={{top: -300 * this.scale.screenHeight,
+              left: 350 * this.scale.screenWidth}}
+            size={{width: 188 * this.scale.image,
+              height: 300 * this.scale.image}}
             draggable={false}
             tweenOptions={this.leftSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -318,10 +320,10 @@ class MatchByColorGameLevel01 extends React.Component {
             character={signCharacter}
             ref={'middleSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300 * this.scale.height,
-              left: 550 * this.scale.width}}
-            size={{width: 188 * this.scale.width,
-              height: 300 * this.scale.height}}
+            coordinates={{top: -300 * this.scale.screenHeight,
+              left: 550 * this.scale.screenWidth}}
+            size={{width: 188 * this.scale.image,
+              height: 300 * this.scale.image}}
             draggable={false}
             tweenOptions={this.middleSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -331,10 +333,10 @@ class MatchByColorGameLevel01 extends React.Component {
             character={signCharacter}
             ref={'rightSign'}
             animationFrameIndex={[0]}
-            coordinates={{top: -300 * this.scale.height,
-              left: 750 * this.scale.width}}
-            size={{width: 188 * this.scale.width,
-              height: 300 * this.scale.height}}
+            coordinates={{top: -300 * this.scale.screenHeight,
+              left: 750 * this.scale.screenWidth}}
+            size={{width: 188 * this.scale.image,
+              height: 300 * this.scale.image}}
             draggable={false}
             tweenOptions={this.rightSign.tweenOptions}
             tweenStart={'fromCode'}
@@ -349,8 +351,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.leftFood.coords[0],
                 left: this.leftFood.coords[1]}}
-              size={{width: 100 * this.scale.width,
-                height: 108 * this.scale.height}}
+              size={{width: 100 * this.scale.image,
+                height: 108 * this.scale.image}}
               draggable={false}
               tweenOptions={this.leftFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -367,8 +369,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.middleFood.coords[0],
                 left: this.middleFood.coords[1]}}
-              size={{width: 120 * this.scale.width,
-                height: 120 * this.scale.height}}
+              size={{width: 120 * this.scale.image,
+                height: 120 * this.scale.image}}
               draggable={false}
               tweenOptions={this.middleFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -385,8 +387,8 @@ class MatchByColorGameLevel01 extends React.Component {
               coordinates={{
                 top: this.rightFood.coords[0],
                 left: this.rightFood.coords[1]}}
-                size={{width: 120 * this.scale.width,
-                  height: 120 * this.scale.height}}
+                size={{width: 120 * this.scale.image,
+                  height: 120 * this.scale.image}}
               draggable={false}
               tweenOptions={this.rightFood.tweenOptions}
               tweenStart={'fromCode'}
@@ -401,10 +403,10 @@ class MatchByColorGameLevel01 extends React.Component {
             style={{opacity: 1}}
             animationFrameIndex={this.state.monsterAnimationIndex}
             loopAnimation={this.monster.loopAnimation}
-            coordinates={{top: 400 * this.scale.height,
-              left: -330 * this.scale.width}}
-            size={{ width: 330 * this.scale.width,
-              height: 330 * this.scale.height}}
+            coordinates={{top: 400 * this.scale.screenHeight,
+              left: -330 * this.scale.screenWidth}}
+            size={{ width: 330 * this.scale.image,
+              height: 330 * this.scale.image}}
             rotate={[{rotateY:'180deg'}]}
             tweenOptions={this.monster.tweenOptions}
             tweenStart={'fromCode'}

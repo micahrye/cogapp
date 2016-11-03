@@ -46,15 +46,19 @@ import BugZapLevel01 from './components/BugZapGame/BugZapLevel01';
 
 const baseHeight = 800;
 const baseWidth = 1280;
-const SCALE = {
-  width: Dimensions.get('window').width / baseWidth,
-  height: Dimensions.get('window').height / baseHeight
-};
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 class CogApp extends React.Component {
   constructor (props) {
     super(props);
-
+    const scaleWidth = screenWidth / baseWidth;
+    const scaleHeight = screenHeight / baseHeight;
+    this.scale = {
+      screenWidth: scaleWidth,
+      screenHeight: scaleHeight,
+      image: scaleHeight > scaleWidth ? scaleWidth : scaleHeight,
+    };
   }
 
   componentDidMount () {
@@ -67,7 +71,7 @@ AnimatedTest
     if (route.id === 'Main') {
       return <Main navigator={navigator} />;
     } else if (route.id === 'AnimatedTest') {
-      return <AnimateTest navigator={navigator} route={route} scale={SCALE}/>;
+      return <AnimateTest navigator={navigator} route={route} scale={this.scale}/>;
     } else if (route.id === 'BubblePopLoading') {
       return <BubblePopLoading navigator={navigator} route={route}/>;
     } else if (route.id === 'BubblePop') {
@@ -77,7 +81,7 @@ AnimatedTest
         <BubblePopGame
           navigator={navigator}
           route={route}
-          scale={SCALE}
+          scale={this.scale}
         />
       </Scene>;
     } else if (route.id === 'GameOverPage') {
@@ -107,7 +111,7 @@ AnimatedTest
     } else if (route.id === 'GameTwo3') {
       return <GameTwoLevel3 navigator={navigator} route={route}/>;
     } else if (route.id === 'MatchByColorGameLevel01') {
-      return <MatchByColorGameLevel01 navigator={navigator} route={route} scale={SCALE} />;
+      return <MatchByColorGameLevel01 navigator={navigator} route={route} scale={this.scale} />;
     }
      else if (route.id === 'GameThree') {
       return <GameThree navigator={navigator} route={route}/>;
