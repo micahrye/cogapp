@@ -68,7 +68,10 @@ class GameTwo extends React.Component {
    tweenInitial = {
                   tweenType: "hop",
                   startY: startTop,
+                  yTo: startTop - 70,
+                  endY: startTop,
                   loop: false,
+                  duration: 1000,
                   };
     // used when food items are pressed
     tweenFall = function(dest){

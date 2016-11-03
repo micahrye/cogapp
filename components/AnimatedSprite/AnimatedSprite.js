@@ -24,7 +24,7 @@ class AnimatedSprite extends React.Component {
       width: props.size.width,
       height: props.size.height,
       rotate: props.rotate,
-      frameIndex: 0,
+      frameIndex: this.props.animationFrameIndex,
       tweener: [],
     };
 
@@ -91,6 +91,9 @@ class AnimatedSprite extends React.Component {
     if (this.props.tweenStart == "auto" && this.props.tweenOptions != null) {
       this.startTween();
     }
+    if(this.props.fps){
+      this.fps = this.props.fps;
+    }
   }
   componentWillReceiveProps (nextProps) {
     if (this.props.animationFrameIndex !== nextProps.animationFrameIndex) {
@@ -143,6 +146,9 @@ class AnimatedSprite extends React.Component {
   }
 
   startAnimation () {
+    if (this.props.fps) {
+      this.fps = this.props.fps;
+    }
     this.numFrames = this.character[this.animationKey].length-1;
     this.frameIndex = -1;
     clearInterval(this.defaultAnimationInterval);
@@ -150,12 +156,11 @@ class AnimatedSprite extends React.Component {
       this.frameIndex++;
       const animationLength = this.props.animationFrameIndex.length-1;
       if (this.frameIndex > animationLength) {
-        this.frameIndex = 0;
+        this.frameIndex = this.frameIndex - 1;
         if (this.props.loopAnimation) {
             this.frameIndex = 0;
         } else {
           clearInterval(this.defaultAnimationInterval);
-          this.frameIndex = 0;
         }
       }
       const index = this.props.animationFrameIndex[this.frameIndex];
@@ -251,6 +256,8 @@ class AnimatedSprite extends React.Component {
         position: 'absolute',
         opacity: this.props.style ? this.props.style.opacity : 1,
         transform: [{scale: this.state.scale}],
+        // borderColor: "#000000",
+        // borderWidth: 1,
       }
     );
   }
@@ -307,6 +314,7 @@ AnimatedSprite.propTypes = {
   onTweenStopped: React.PropTypes.func,
   onTweenFinish: React.PropTypes.func,
   scale: React.PropTypes.number,
+  fps: React.PropTypes.number,
 };
 
 AnimatedSprite.defaultProps = {

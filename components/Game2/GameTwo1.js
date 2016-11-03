@@ -81,6 +81,9 @@ class GameTwo1 extends Component {
         {
           tweenType: "hop",
           startY: startTop,
+          endY: startTop,
+          yTo: startTop - 70,
+          duration: 1000,
           loop: false,
         }
       );
@@ -116,6 +119,9 @@ class GameTwo1 extends Component {
     tweenInitial = {
        tweenType: "hop",
        startY: startTop,
+       endY: startTop,
+       yTo: startTop - 70,
+       duration: 1000,
        loop: false,
     };
     // keeps creature onscreen during trials when character animations are playing
@@ -191,6 +197,7 @@ class GameTwo1 extends Component {
   componentDidMount() {
     // mammal character goes out first
     this.setState({animation: "walk", creatureKey1: Math.random()});
+    console.warn('here');
   }
 
   // clear timeouts on unmounting
