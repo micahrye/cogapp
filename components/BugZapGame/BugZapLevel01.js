@@ -51,6 +51,7 @@ class BugZapLevel01 extends React.Component {
 
   componentWillMount () {
     if (this.props.route.trialNumber != undefined) {
+      console.warn(this.props.route.trialNumber);
       this.trialNumber = this.props.route.trialNumber + 1;
       if (this.trialNumber > LEVEL1A_TRIAL) {
         this.directionMaySwitch = true;
@@ -162,6 +163,7 @@ class BugZapLevel01 extends React.Component {
     }
   }
 
+  // level 2 has timeouts
   bugTapTimeout () {
     console.warn('here');
     // this will change once we have the jumping on/off the lily pad going
@@ -227,16 +229,16 @@ class BugZapLevel01 extends React.Component {
   goToNextTrial () {
     this.nextTrialTimeout = setTimeout (() => {
       this.props.navigator.replace({
-        id: 'NextTrial',
-        getId: this.getCurrId,
+        id: 'BugZapLevel01',
+        // getId: this.getCurrId,
         trialNumber: this.trialNumber,
       });
     }, 2500);
   }
 
-  getCurrId () {
-    return 'BugZapLevel01';
-  }
+  // getCurrId () {
+  //   return 'BugZapLevel01';
+  // }
 
   onBugPress (whichBug) {
     if (this.loadingContent || this.bugPressed) {
