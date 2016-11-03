@@ -92,7 +92,7 @@ class BubblePopGame extends React.Component {
 
   // random time for background bubbles to be on screen, between 2 and 6 seconds
   getRandomDuration () {
-    return (Math.floor(Math.random() *  (4000)) + 2000) * this.scale.width;
+    return (Math.floor(Math.random() *  (4000)) + 2000) * this.scale.screenWidth;
   }
 
   onTweenFinish (characterUID) {
@@ -125,8 +125,8 @@ class BubblePopGame extends React.Component {
     const startTop = FOUTAIN_LOCATION.top - (bubbleDeminsions * 0.7);
 
     bubbleSize = {
-      width: bubbleDeminsions * this.scale.width,
-      height: bubbleDeminsions * this.scale.width,
+      width: Math.floor(bubbleDeminsions * this.scale.image),
+      height: Math.floor(bubbleDeminsions * this.scale.image),
     };
     const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     const minusOrPlus = plusOrMinus > 0 ? -1 : 1;
@@ -145,7 +145,7 @@ class BubblePopGame extends React.Component {
       startXY: [startLeft, startTop],
       xTo: locSequence,
       yTo: [-bubbleDeminsions],
-      duration: createTargetBubble ? 4000 * this.scale.width : this.getRandomDuration(),
+      duration: createTargetBubble ? 4000 * this.scale.screenWidth : this.getRandomDuration(),
       loop: false,
     };
 
@@ -173,8 +173,8 @@ class BubblePopGame extends React.Component {
       this.targetBubble.uid = uid;
       this.targetBubble.tweenOptions = backgroundBubbleTween;
       this.targetBubble.coordinates = {
-        top: startTop * this.scale.height,
-        left: startLeft * this.scale.width,
+        top: startTop * this.scale.screenHeight,
+        left: startLeft * this.scale.screenWidth,
       };
       this.targetBubble.size = bubbleSize;
       this.setState({targetBubbleActive: true});
@@ -190,8 +190,8 @@ class BubblePopGame extends React.Component {
           onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           loopAnimation={true}
           coordinates={{
-            top: startTop * this.scale.height,
-            left: startLeft * this.scale.width}}
+            top: startTop * this.scale.screenHeight,
+            left: startLeft * this.scale.screenWidth}}
           size={bubbleSize}
         />
       );
@@ -206,9 +206,9 @@ class BubblePopGame extends React.Component {
     this.food.tweenOptions = {
       tweenType: 'sine-wave',
       startXY: [startX, startY],
-      xTo: [150 * this.scale.width],
-      yTo: [500 * this.scale.height],
-      duration: 1000 * this.scale.width,
+      xTo: [150 * this.scale.screenWidth],
+      yTo: [500 * this.scale.screenHeight],
+      duration: 1000 * this.scale.screenWidth,
       loop: false,
     };
 
@@ -216,8 +216,8 @@ class BubblePopGame extends React.Component {
     this.food.uid = randomstring({length: 7});
     this.food.name = 'can';
     this.food.character = canCharacter;
-    this.food.location = {top: startY * this.scale.height, left:startX * this.scale.width};
-    this.food.size = {width: 109 * this.scale.width, height: 116 * this.scale.height};
+    this.food.location = {top: startY * this.scale.screenHeight, left:startX * this.scale.screenWidth};
+    this.food.size = {width: 109 * this.scale.screenWidth, height: 116 * this.scale.screenHeight};
     this.setState({showFood: true});
 
     clearInterval(this.eatInterval)
@@ -293,11 +293,11 @@ class BubblePopGame extends React.Component {
               animationFrameIndex={[0]}
               loopAnimation={true}
               coordinates={{
-                top: 100 * this.scale.height,
-                left: 1077 * this.scale.width}}
+                top: 100 * this.scale.screenHeight,
+                left: 1077 * this.scale.screenWidth}}
               size={{
-                width: 230 * this.scale.width,
-                height: 210 * this.scale.height}}
+                width: Math.floor(214 * this.scale.image),
+                height: Math.floor(189 * this.scale.image)}}
               rotate={[{rotateY:'180deg'}]}
               onPress={() => this.leverPress()}
               onPressIn={() => this.leverPressIn()}
@@ -310,10 +310,10 @@ class BubblePopGame extends React.Component {
                 characterUID={randomstring({length: 7})}
                 animationFrameIndex={this.state.bubbleAnimationIndex}
                 loopAnimation={true}
-                coordinates={{top: 400 * this.scale.height,
-                  left: 40 * this.scale.width}}
-                size={{ width: 300 * this.scale.width,
-                  height: 285 * this.scale.height}}
+                coordinates={{top: 400 * this.scale.screenHeight,
+                  left: 40 * this.scale.screenWidth}}
+                size={{ width: Math.floor(300 * this.scale.image),
+                  height: Math.floor(285 * this.scale.image)}}
               />
             : null}
 
@@ -322,10 +322,10 @@ class BubblePopGame extends React.Component {
               characterUID={this.characterUIDs.omnivore}
               animationFrameIndex={this.state.omnivoreAnimationIndex}
               loopAnimation={false}
-              coordinates={{top: (400-80) * this.scale.height,
-                left: 40 * this.scale.width}}
-              size={{ width: 300 * this.scale.width,
-                height: 285 * this.scale.height}}
+              coordinates={{top: (400-80) * this.scale.screenHeight,
+                left: 40 * this.scale.screenWidth}}
+              size={{ width: Math.floor(300 * this.scale.image),
+                height: Math.floor(285 * this.scale.screenHeight)}}
               rotate={[{rotateY:'180deg'}]}
             />
 
