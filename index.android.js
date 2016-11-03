@@ -77,13 +77,12 @@ AnimatedTest
     } else if (route.id === 'BubblePop') {
       return <Scene><BubblePop navigator={navigator} route={route}/></Scene>;
     } else if (route.id === 'BubblePopGame') {
-      return <Scene>
+      return (
         <BubblePopGame
           navigator={navigator}
           route={route}
           scale={this.scale}
-        />
-      </Scene>;
+        />);
     } else if (route.id === 'GameOverPage') {
       return <GameOverPage navigator={navigator} route={route}/>;
     } else if (route.id === 'NextGamePage') {
