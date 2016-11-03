@@ -8,9 +8,9 @@ import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
 // import characters for AnimatedSprite to use
-// import frogCharacter from '../../sprites/frogLite/frogLiteCharacter';
+import frogCharacter from '../../sprites/frog02/frogCharacter';
 import bugCharacter from '../../sprites/bugLite/bugLiteCharacter';
-import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
+// import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
 import AnimatedSprite from "../AnimatedSprite/AnimatedSprite";
 import signCharacter from "../../sprites/sign/signCharacter";
 
@@ -36,8 +36,9 @@ class BugZapLevel01 extends React.Component {
     this.directionMaySwitch = false;
     this.fps = 8;
     this.showOtherBugSign = false;
-    this.blue = [9];
-    this.red = [10];
+    this.idle = [0];
+    // this.blue = [9];
+    // this.red = [10];
     this.characterOnScreen = false;
     this.state = {
       bugTweenOptions: null,
@@ -95,14 +96,14 @@ class BugZapLevel01 extends React.Component {
     this.character.style = {opacity: 0};
     this.fps = 20;
     this.setState({
-      characterAnimationIndex: [1,2,3,4,5,6,9],
+      characterAnimationIndex: [1,2,3,4,5,6,8],
     });    // reset characters to default state
     this.setDefaultAnimationState = setTimeout(() => {
       this.fps = 8;
       this.character.style = {opacity: 1};
       this.loadingContent = false;
       this.setState({
-        characterAnimationIndex: this.blue,
+        characterAnimationIndex: this.idle,
       });
     }, 1000);
   }
@@ -298,13 +299,13 @@ class BugZapLevel01 extends React.Component {
   render () {
     return (
       <Image
-        source={require('../../backgrounds/Game_1_Background_1280.png')}
+        source={require('../../backgrounds/BugZap_Background_1280.png')}
         style={styles.backgroundImage} >
 
       <AnimatedSprite
         key={this.state.characterKey}
         characterUID={'character'}
-        character={omnivoreLite}
+        character={frogCharacter}
         coordinates={{top: SCREEN_HEIGHT + 100,
           left: this.characterPos}}
         size={{
