@@ -12,18 +12,20 @@ import TimerMixin from 'react-timer-mixin';
 import randomstring from 'random-string';
 
 import AnimatedSprite from '../AnimatedSprite/AnimatedSprite';
-import omnivoreLite from '../../sprites/omnivoreLite/omnivoreLite';
+// game characters
+import monsterCharacter from '../../sprites/monster02/monsterCharacter';
 import goatLiteCharacter from '../../sprites/goatLite/goatLiteCharacter';
-import mammalLiteCharacter from '../../sprites/mammalLite/mammalLiteCharacter';
-import lever from '../../sprites/lever/leverCharacter';
+import dogCharacter from '../../sprites/dog/dogCharacter';
+// foods
 import appleCharacter from "../../sprites/apple/appleCharacter";
 import grassCharacter from "../../sprites/grass/grassCharacter";
 import canCharacter from "../../sprites/can/canCharacter";
 import bugfoodCharacter from "../../sprites/bugfood/bugfoodCharacter";
-
+// props
+import lever from '../../sprites/lever/leverCharacter';
 import signCharacter from '../../sprites/sign/signCharacter';
-
-import { omnivoreUtils } from './omnivoreUtils';
+// utils
+import { omnivoreUtils as monsterUtils } from './omnivoreUtils';
 
 const SCREEN_WIDTH = require('Dimensions').get('window').width;
 const SCREEN_HEIGHT = require('Dimensions').get('window').height;
@@ -38,17 +40,17 @@ class MatchByColorGameLevel01 extends React.Component {
     super(props);
     // customizable function for dropping food/signs into the frame
     this.state = {
-      omnivoreAnimationIndex: [0],
+      monsterAnimationIndex: [0],
       goatAnimationIndex: [0],
       mammalAnimationIndex: [0],
-      tweenOmnivore: false,
+      tweenMonster: false,
       loadContent: false,
       dropFood: false,
       signsVisable: false,
       foodDisplayed: false,
     };
 
-    this.omnivore = {tweenOptions: {}};
+    this.monster = {tweenOptions: {}};
     this.goat = {tweenOptions: {}};
     this.mammal = {tweenOptions: {}};
     this.leftSign = {tweenOptions: {}};
@@ -70,12 +72,12 @@ class MatchByColorGameLevel01 extends React.Component {
   componentWillMount () {
     this.characterUIDs = {
       lever: randomstring({ length: 7 }),
-      omnivore: randomstring({ length: 7 }),
+      monster: randomstring({ length: 7 }),
       goat: randomstring({ length: 7 }),
       mammal: randomstring({ length: 7 }),
     };
     this.setState({
-      omnivoreAnimationIndex: [0,1,2,3,4,5,6,7],
+      monsterAnimationIndex: [0,1,2,3,4,5,6,7],
       goatAnimationIndex: [0,1,2,3,4,5,6,7],
       mammalAnimationIndex: [0,1,2,3,4,5,6],
       loadContent: true,
@@ -84,7 +86,7 @@ class MatchByColorGameLevel01 extends React.Component {
     });
     this.setDefaultAnimationState = setTimeout(() => {
       this.setState({
-        omnivoreAnimationIndex: [0],
+        monsterAnimationIndex: [0],
         goatAnimationIndex: [0],
         mammalAnimationIndex: [0],
         loadContent: false,
@@ -117,8 +119,8 @@ class MatchByColorGameLevel01 extends React.Component {
 
   onTweenFinish (characterUID) {
     switch (characterUID) {
-      case this.characterUIDs.omnivore:
-        this.setState({omnivoreAnimationIndex: omnivoreUtils.normalIndx});
+      case this.characterUIDs.monster:
+        this.setState({monsterAnimationIndex: monsterUtils.normalIndx});
         break;
     }
   }
@@ -154,23 +156,23 @@ class MatchByColorGameLevel01 extends React.Component {
     }
 
     // creature enter from left
-    this.omnivore.tweenOptions = this.makeMoveTween([-300, 400], [150, 400]);
+    this.monster.tweenOptions = this.makeMoveTween([-300, 400], [150, 400]);
     // this.goat.tweenOptions = this.makeMoveTween([-300, 400], [150, 400]);
 
     this.initializeMoveDownTweensForSignsAndFoods();
 
-    this.omnivore.loopAnimation = true;
+    this.monster.loopAnimation = true;
     // this.goat.loopAnimation = true;
 
     this.setState({
-      omnivoreAnimationIndex: omnivoreUtils.walkIndx,
-      tweenOmnivore: true,
+      monsterAnimationIndex: monsterUtils.walkIndx,
+      tweenMonster: true,
       signsVisable: true},
       () => {
         this.refs.leftSign.startTween();
         this.refs.middleSign.startTween();
         this.refs.rightSign.startTween();
-        this.refs.omnivoreRef.startTween();
+        this.refs.monsterRef.startTween();
         // then interval to make food appear on sign.
         clearInterval(this.showFoodInterval);
         this.showFoodInterval = setInterval(() => {
@@ -237,11 +239,11 @@ class MatchByColorGameLevel01 extends React.Component {
 
     clearInterval(this.eatInterval);
     this.eatInterval = setInterval(() => {
-      this.omnivore.loopAnimation = false;
+      this.monster.loopAnimation = false;
       // this.goat.loopAnimation = false;
       this.setState({
         dropFood: false,
-        omnivoreAnimationIndex: omnivoreUtils.eatIndx,
+        monsterAnimationIndex: monsterUtils.eatIndx,
       }, () => {
         this.liftSigns();
       });
@@ -253,8 +255,8 @@ class MatchByColorGameLevel01 extends React.Component {
   liftSigns () {
     this.initializeMoveUpTweensForSignsAndFoods();
 
-    this.omnivore.tweenOptions = this.makeMoveTween([150, 400], [1280, 400], 2000);
-    this.omnivore.loopAnimation = true;
+    this.monster.tweenOptions = this.makeMoveTween([150, 400], [1280, 400], 2000);
+    this.monster.loopAnimation = true;
 
     // this.goat.tweenOptions = this.makeMoveTween([150, 400], [1280, 400], 2000);
     // this.goat.loopAnimation = true;
@@ -263,15 +265,15 @@ class MatchByColorGameLevel01 extends React.Component {
     clearInterval(this.signInterval);
     this.signInterval = setInterval(() => {
       this.setState({
-        omnivoreAnimationIndex: omnivoreUtils.walkIndx,
-        tweenOmnivore: true,
+        monsterAnimationIndex: monsterUtils.walkIndx,
+        tweenMonster: true,
         signsVisable: false,
         foodDisplayed: false,
       }, () => {
         this.refs.leftSign.startTween();
         this.refs.middleSign.startTween();
         this.refs.rightSign.startTween();
-        this.refs.omnivoreRef.startTween();
+        this.refs.monsterRef.startTween();
       });
       clearInterval(this.signInterval);
     }, 1500);
@@ -393,17 +395,17 @@ class MatchByColorGameLevel01 extends React.Component {
           : null}
 
           <AnimatedSprite
-            ref={'omnivoreRef'}
-            character={omnivoreLite}
-            characterUID={this.characterUIDs.omnivore}
+            ref={'monsterRef'}
+            character={monsterCharacter}
+            characterUID={this.characterUIDs.monster}
             style={{opacity: 1}}
-            animationFrameIndex={this.state.omnivoreAnimationIndex}
-            loopAnimation={this.omnivore.loopAnimation}
-            coordinates={{top: 420 * this.scale.height,
+            animationFrameIndex={this.state.monsterAnimationIndex}
+            loopAnimation={this.monster.loopAnimation}
+            coordinates={{top: 400 * this.scale.height,
               left: -300 * this.scale.width}}
-            size={{ width: 300 * this.scale.width, height: 285 * this.scale.height}}
+            size={{ width: 330 * this.scale.width, height: 330 * this.scale.height}}
             rotate={[{rotateY:'180deg'}]}
-            tweenOptions={this.omnivore.tweenOptions}
+            tweenOptions={this.monster.tweenOptions}
             tweenStart={'fromCode'}
             onTweenFinish={(characterUID) => this.onTweenFinish(characterUID)}
           />
