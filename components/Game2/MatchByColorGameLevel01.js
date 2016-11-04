@@ -27,9 +27,6 @@ import signCharacter from '../../sprites/sign/signCharacter';
 // utils
 import { omnivoreUtils as monsterUtils } from './omnivoreUtils';
 
-const SCREEN_WIDTH = require('Dimensions').get('window').width;
-const SCREEN_HEIGHT = require('Dimensions').get('window').height;
-
 const LEFT = 0;
 const MIDDLE = 1;
 const RIGHT = 2;
@@ -139,8 +136,8 @@ class MatchByColorGameLevel01 extends React.Component {
   }
 
   initializeMoveDownTweensForSignsAndFoods () {
-    this.leftSign.tweenOptions = this.makeMoveTween([350, -300], [350, 0], 800);
-    this.middleSign.tweenOptions = this.makeMoveTween([550, -300], [550, 0], 900);
+    this.leftSign.tweenOptions = this.makeMoveTween([350, -300], [350, 0], 1000);
+    this.middleSign.tweenOptions = this.makeMoveTween([550, -300], [550, 0], 1000);
     this.rightSign.tweenOptions = this.makeMoveTween([750, -300], [750, 0], 1000);
   }
 
@@ -225,15 +222,17 @@ class MatchByColorGameLevel01 extends React.Component {
     }
     const foodDropTime = 800;
     const coords = this.foodDisplayAtLocation();
+    // this will depend on the character [left, top]
+    const endLocation = [300, 540];
     switch (this.targetFoodPosition) {
       case LEFT:
-        this.foodDrop('leftFood', [coords.leftLeft, 150], [300, 520], foodDropTime);
+        this.foodDrop('leftFood', [coords.leftLeft, 150], endLocation, foodDropTime);
         break;
       case MIDDLE:
-        this.foodDrop('middleFood', [coords.middleLeft, 150], [300, 520], foodDropTime);
+        this.foodDrop('middleFood', [coords.middleLeft, 150], endLocation, foodDropTime);
         break;
       case RIGHT:
-        this.foodDrop('rightFood', [coords.rightLeft, 150], [300, 520], foodDropTime);
+        this.foodDrop('rightFood', [coords.rightLeft, 150], endLocation, foodDropTime);
         break;
     }
 
