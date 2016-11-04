@@ -90,7 +90,7 @@ AnimatedTest
     } else if (route.id === 'BugZapLoading') {
       return <Scene><BugZapLoading navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZapLevel01') {
-      return <Scene><BugZapLevel01 navigator={navigator} route={route} /></Scene>;
+      return <BugZapLevel01 navigator={navigator} route={route} scale={this.scale}/>;
     } else if (route.id === 'BugZap') {
       return <Scene><BugZap navigator={navigator} route={route} /></Scene>;
     } else if (route.id === 'BugZap1') {

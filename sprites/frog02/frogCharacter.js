@@ -10,7 +10,7 @@ const frogCharacter = {
     require('./frog_eat02.png'),
     require('./frog_celebrate01.png'),
     require('./frog_celebrate02.png'),
-    require('./frog_disgust01.png'),
+    require('./frog_disgust_01.png'),
   ],
 };
 
